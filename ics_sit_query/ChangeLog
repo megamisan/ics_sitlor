@@ -1,3 +1,8 @@
-2011-12-08 In Cite Solution  <technique@in-cite.net>
+2012-01-20 Tsi Yang <tsi@in-cite.net>
+	* Initial SVN import
+	* Feature: Data interfaces for Filter, Query, QueryService, Sorting and string transformation.
+	* Feature: Abstract classes for common data: base Data, Accomodation.
+	* Feature: Helper class for sending user error / warning / notice through PHP error system.
 
+2011-12-08 Tsi Yang <tsi@in-cite.net>
 	* initial code generated with kickstarter

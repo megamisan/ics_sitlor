@@ -1,3 +1,9 @@
-2011-12-08 In Cite Solution  <technique@in-cite.net>
+2012-01-20 Tsi Yang <tsi@in-cite.net>
+	* Initial SVN import
+	* Feature: Available filters: EndAvailable, EndDate, EndValid, NoDate, NotAvailable, Reference, StartAvailable, StartDate, StartValid, Title, Type, Zip.
+	* Feature: Available containers: AbstractList, CategoryList, CriterionList, TermList, TypeList, ValuedTermList, ValuedTermTupleList.
+	* Feature: Available basic elements: Category, Criterion, Term, Type.
+	* Feature: Static data managers: CriterionFactory, NomenclatureFactory.
 
+2011-12-08 Tsi Yang <tsi@in-cite.net>
 	* initial code generated with kickstarter
