@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>flexform</type>
+		<description>Language labels for plugin flexform &quot;tx_icssitlorquery_pi1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="general">General</label>
+			<label index="template">Template</label>
+			<label index="url">Url</label>
+			<label index="login">Login</label>
+			<label index="password">Password</label>
+			<label index="page">Page</label>
+			<label index="size">Size (default: 20)</label>
+			<label index="what_to_display">What to display</label>
+			<label index="hotel_list">Hotel (list)</label>
+			<label index="hotel_single">Hotel (single)</label>
+			<label index="hotel_search">Hotel (search)</label>
+			<label index="camping_youth_hostel_list">Camping and youth hostel (list)</label>
+			<label index="camping_youth_hostel_single">Camping and youth hostel (single)</label>
+			<label index="camping_youth_hostel_search">Camping and youth hostel (search)</label>
+			<label index="strange_accomodation_list">Strange accomodation (list)</label>
+			<label index="strange_accomodation_single">Strange accomodation (single)</label>
+			<label index="strange_accomodation_search">Strange accomodation (search)</label>
+			<label index="cottage_guesthouse_list">Holliday cottage and guesthouse (list)</label>
+			<label index="cottage_guesthouse_single">Holliday cottage and guesthouse (single)</label>
+			<label index="cottage_guesthouse_search">Holliday cottage and guesthouse (search)</label>
+			<label index="restaurant_list">Restaurant (list)</label>
+			<label index="restaurant_single">Restaurant (single)</label>
+			<label index="restaurant_search">Restaurant (search)</label>
+			<label index="event_list">Event (list)</label>
+			<label index="event_single">Event (single)</label>
+			<label index="event_search">Event (search)</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="general">Général</label>
+			<label index="template">Template</label>
+			<label index="url">Url</label>
+			<label index="login">Identifiant</label>
+			<label index="password">Pwkey</label>
+			<label index="page">Page</label>
+			<label index="size">Enregistrements par page</label>
+			<label index="what_to_display">Mode</label>
+			<label index="hotel_list">Hôtel (liste)</label>
+			<label index="hotel_single">Hôtel (fiche)</label>
+			<label index="hotel_search">Hôtel (recherche)</label>
+			<label index="camping_youth_hostel_list">Camping et auberge de jeunesse (liste)</label>
+			<label index="camping_youth_hostel_single">Camping et auberge de jeunesse (fiche)</label>
+			<label index="camping_youth_hostel_search">Camping et auberge de jeunesse (recherche)</label>
+			<label index="strange_accomodation_list">Hébergement insolite (liste)</label>
+			<label index="strange_accomodation_single">Hébergement insolite (fiche)</label>
+			<label index="strange_accomodation_search">Hébergement insolite (recherche)</label>
+			<label index="cottage_guesthouse_list">Gîtes et chambres d'hôtes (liste)</label>
+			<label index="cottage_guesthouse_single">Gîtes et chambres d'hôtes (fiche)</label>
+			<label index="cottage_guesthouse_search">Gîtes et chambres d'hôtes (recherche)</label>
+			<label index="restaurant_list">Restaurant (liste)</label>
+			<label index="restaurant_single">Restaurant (fiche)</label>
+			<label index="restaurant_search">Restaurant (recherche)</label>
+			<label index="event_list">Agenda (liste)</label>
+			<label index="event_single">Agenda (fiche)</label>
+			<label index="event_search">Agenda (recherche)</label>
+		</languageKey>
+	</data>
+</T3locallang>

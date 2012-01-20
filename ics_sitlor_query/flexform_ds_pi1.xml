@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+	<meta>
+       <langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<main>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:general</sheetTitle>
+				</TCEforms>
+				<el>
+					<template>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:template</label>
+						   <config>
+								<type>input</type>
+								<eval>trim</eval>
+								<default></default>
+								<wizards type="array">
+									<_PADDING>2</_PADDING>
+									<link type="array">
+										<type>popup</type>
+										<title>Link</title>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?what_to_display=wizard&amp;act=file</script>
+										<params type="array">
+											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
+											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+						</TCEforms>
+					</template>
+					<url>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:url</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+							</config>
+						</TCEforms>
+					</url>
+					<login>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:login</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</login>
+					<password>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:password</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</password>
+					<page>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:page</label>
+							<config>
+								<type>input</type>
+								<eval>num</eval>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</page>
+					<size>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:size</label>
+							<config>
+								<type>input</type>
+								<eval>num</eval>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</size>
+					<what_to_display>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array"></numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:hotel_list</numIndex>
+										<numIndex index="1">HOTEL_LIST</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:hotel_single</numIndex>
+										<numIndex index="1">HOTEL_SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:hotel_search</numIndex>
+										<numIndex index="1">HOTEL_SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:camping_youth_hostel_list</numIndex>
+										<numIndex index="1">CAMPING_YOUTH_HOSTEL_LIST</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:camping_youth_hostel_single</numIndex>
+										<numIndex index="1">CAMPING_YOUTH_HOSTEL_SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="6" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:camping_youth_hostel_search</numIndex>
+										<numIndex index="1">CAMPING_YOUTH_HOSTEL_SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="7" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:strange_accomodation_list</numIndex>
+										<numIndex index="1">STRANGE_ACCOMODATION_LIST</numIndex>
+									</numIndex>
+									<numIndex index="8" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:strange_accomodation_single</numIndex>
+										<numIndex index="1">STRANGE_ACCOMODATION_SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="9" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:strange_accomodation_search</numIndex>
+										<numIndex index="1">STRANGE_ACCOMODATION_SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="10" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:cottage_guesthouse_list</numIndex>
+										<numIndex index="1">COTTAGE_GUESTHOUSE_LIST</numIndex>
+									</numIndex>
+									<numIndex index="11" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:cottage_guesthouse_single</numIndex>
+										<numIndex index="1">COTTAGE_GUESTHOUSE_SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="12" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:cottage_guesthouse_search</numIndex>
+										<numIndex index="1">COTTAGE_GUESTHOUSE_SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="13" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:restaurant_list</numIndex>
+										<numIndex index="1">RESTAURANT_LIST</numIndex>
+									</numIndex>
+									<numIndex index="14" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:restaurant_single</numIndex>
+										<numIndex index="1">RESTAURANT_SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="15" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:restaurant_search</numIndex>
+										<numIndex index="1">RESTAURANT_SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="16" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:event_list</numIndex>
+										<numIndex index="1">EVENT_LIST</numIndex>
+									</numIndex>
+									<numIndex index="17" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:event_single</numIndex>
+										<numIndex index="1">EVENT_SINGLE</numIndex>
+									</numIndex>
+									<numIndex index="18" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:event_search</numIndex>
+										<numIndex index="1">EVENT_SEARCH</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+							</config>
+						</TCEforms>
+					</what_to_display>
+				</el>
+			</ROOT>
+		</main>
+	</sheets>
+</T3DataStructure>

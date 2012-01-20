@@ -1,0 +1,17 @@
+plugin.tx_icssitlorquery_pi1 {
+	login = 2000205
+	password = f84bfd3ba101f3aa61b16fc06ca27e29
+	url = http://www.sitlor.fr/XML/exploitation/listeproduits.asp
+	nomenclatureUrl = http://www.sitlor.fr/XML/exploitation/listenomenc.asp
+	criterionUrl = http://www.sitlor.fr/XML/exploitation/listecrit.asp
+
+	# Mode to display : list, single, search
+	mode = list
+	
+	# Category of data: accomodataion, restaurant, event
+	dataCategory = 
+	# Category of accomodation: hotel, camping, youth_hostel, strange, holliday_cottage, guesthouse
+	accomodationCategory = 
+	
+	error_stdWrap = <p class="error">|</>
+}
