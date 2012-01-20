@@ -147,15 +147,15 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
  	}
 	
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
-		if (($indexPhoto = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionID::$photos)) !== false) {
+		if (($indexPhoto = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
 			$cObj = t3lib_div::makeInstance('tslib_cObj');
 			$valuedTerm->Value = $cObj->cImage($valuedTerm->Value, array()); // TODO: Picture object
 			// CriterionUtils::addToTupleList($list, $element, $elIndex, $searchIndex, $searchedID)
-			// $list=$this->Illustration; $element=$valuedTerm; $elIndex=0; $searchedIndex=1; $searchedId=tx_icssitlorquery_CriterionID::$creditPhotos[$indexPhoto]
+			// $list=$this->Illustration; $element=$valuedTerm; $elIndex=0; $searchedIndex=1; $searchedId=tx_icssitlorquery_CriterionUtils::$creditPhotos[$indexPhoto]
 			$tuple_exists = false;
 			for ($i=0; $i<$this->Illustration->Count(); $i++) {
 				$tuple = $this->Illustration->Get($i);
-				if ($tuple->Item2->ID == tx_icssitlorquery_CriterionID::$creditPhotos[$indexPhoto]) {//TODO: Test existance Item2.
+				if ($tuple->Item2->ID == tx_icssitlorquery_CriterionUtils::$creditPhotos[$indexPhoto]) {//TODO: Test existance Item2.
 					$tuple_exists = true;
 					$tuple->Set(0, $valuedTerm);
 					$this->Illustration->Set($i, $tuple);
@@ -169,12 +169,12 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			}			
 			
 		}
-		if (($indexCredit = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionID::$creditPhotos)) !== false) {
-			// $list=$this->Illustration; $element=$valuedTerm; $elIndex=1; $searchedIndex=0; $searchedId=tx_icssitlorquery_CriterionID::$photos[$indexCredit]
+		if (($indexCredit = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
+			// $list=$this->Illustration; $element=$valuedTerm; $elIndex=1; $searchedIndex=0; $searchedId=tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]
 			$tuple_exists = false;
 			for ($i=0; $i<$this->Illustration->Count(); $i++) {
 				$tuple = $this->Illustration->Get($i);
-				if ($tuple->Item1->ID == tx_icssitlorquery_CriterionID::$photos[$indexCredit]) {//TODO: Test existance Item1.
+				if ($tuple->Item1->ID == tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]) {//TODO: Test existance Item1.
 					$tuple_exists = true;
 					$tuple->Set(1, $valuedTerm);
 					$this->Illustration->Set($i, $tuple);
@@ -191,8 +191,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		
 	public static function getRequiredCriteria() {
 		return array_merge(
-			tx_icssitlorquery_CriterionID::$photos, 
-			tx_icssitlorquery_CriterionID::$creditPhotos
+			tx_icssitlorquery_CriterionUtils::$photos, 
+			tx_icssitlorquery_CriterionUtils::$creditPhotos
 		);
 	}
 	
