@@ -146,18 +146,26 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		}
  	}
 	
+	/** 
+	 * Set criterion
+	 *
+	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($indexPhoto = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
-			$cObj = t3lib_div::makeInstance('tslib_cObj');
-			$valuedTerm->Value = $cObj->cImage($valuedTerm->Value, array()); // TODO: Picture object
-
+			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
 			CriterionUtils::addToTupleList($this->Illustration, $valuedTerm, 0, 1, tx_icssitlorquery_CriterionUtils::$creditPhotos[$indexPhoto]);
 		}
 		if (($indexCredit = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
 			CriterionUtils::addToTupleList($this->Illustration, $valuedTerm, 1, 0, tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]);
 		}
 	}
-		
+	
+	/**
+	 * Retrieves required criteria
+	 *
+	 * @return mixed : Array of criteria IDs
+	 */
 	public static function getRequiredCriteria() {
 		return array_merge(
 			tx_icssitlorquery_CriterionUtils::$photos, 

@@ -37,7 +37,8 @@
  */
 
 class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
-	public $Uri;
+	private $uri;
+	private static $conf = array();
 	
 	/**
 	 * Constructor
@@ -45,53 +46,48 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 * @param	string $uri
 	 */
 	public function __construct(string $uri) {
+		$this->uri = $uri;
 	}
 
-	/**
-	 * Convert object to display as string
-	 * @return string
-	 */
-	public function __toString() {
-	}
-
-	/**
-	 * Convert tslib_cObj to display as string
-	 *
-	 * @param	tslib_cObj $cObj
-	 *
-	 * @return string
-	 */
-	public function toString(tslib_cObj $cObj) {
-	}
-	
-	/**
-	 * Convert conf to display as string
-	 *
-	 * @param	array $conf
-	 *
-	 * @return string
-	 */
-	public function toString(array $conf) {
-	}
-
-	/**
-	 * Convert tslib_cObj and conf to display as string
-	 *
-	 * @param	tslib_cObj $cObj
-	 * @param	array $conf
-	 *
-	 * @return string
-	 */
-	public function toString(tslib_cObj $cObj, array $conf) {
-	}
-	
 	/**
 	 * Set default
 	 *
 	 * @param	array $conf
 	 * @return void
 	 */
-	public function SetDefault(array $conf) {
+	public function SetDefaultConf(array $conf) {
+		self::$conf = $conf;
 	}
 	
+	/**
+	 * Convert object to display as string
+	 * @return string
+	 */
+	public function __toString() {
+		$numargs = func_num_args();		
+		if ($numargs==0) {
+			return $this->toStringConf(self::$conf);
+		
+		// $numargs >0
+		$args = func_get_args();
+		if (is_array($args[0]))
+			return $this->toStringConf(array_merge(self::$conf, $args[0]));
+		
+		if ($args[0] instanceof tslib_cObj) {
+			if ($numargs==1)
+				return toStringCObj($args[0], self::$conf);
+			return toStringCObj($args[0], array_merge(self::$conf, $args[1]));
+		}
+		
+		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
+	}
+	
+	private function toStringConf(array $conf) {
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		return $this->toStringCObj($cObj, $conf);
+	}
+	
+	private function toStringCObj(tslib_cObj $cObj, array $conf) {
+		return $cObj->stdWrap_current($this->uri, $conf);
+	}		
 }
