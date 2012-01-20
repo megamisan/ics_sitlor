@@ -38,6 +38,7 @@
 
 class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjConf {
 	private $count;
+	private $tag;
 	private $items = array();
 	
 	/**
@@ -49,7 +50,9 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	public function __construct($count, $tag='') {
 		$this->count = $count;
 		$this->tag = $tag;
-		// TODO: init index items
+		for ($i=0; $i<$this->count; $i++) {
+			$this->items[$i] = null;
+		}
 	}
 
 	/**
@@ -63,19 +66,31 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	}
 	
 	public function __get($name) {
-		if (substr($name, 0, 4) == 'Item') { // TODO: Check item number ; strlen >= 5
-			return $this->Get(intval(substr($name, 4)) - 1);
+		if ($name=='Count')
+			return $this->count;
+
+		if ((strlen($name)>=5) && (substr($name, 0, 4)=='Item')) {
+			$numItem = substr($name, 4);
+			if (is_numeric($numItem) && $numItem>0)
+				return $this->Get(intval($numItem) - 1);
+			else 
+				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
 		} else {
 			tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
 		}
 	}
 	
 	public function __set($name, $value) {
-		if (substr($name,0,4) == 'Item') { // TODO: Check item number
-			if ($value instanceof tx_icssitlorquery_ValuedTerm)
-				$this->Set(intval(substr($name, 4)) - 1, $value);
-			else 
-				erreur;
+		if ((strlen($name)>=5) && (substr($name,0,4)=='Item')) {
+			$numItem = substr($name, 4);
+			if (is_numeric($numItem) && $numItem>0) {
+				if ($value instanceof tx_icssitlorquery_ValuedTerm)
+					$this->Set(intval($numItem) - 1, $value);
+				else
+					tx_icssitquery_debug::warning('Item ' . $name . '\'s value must be an instance of tx_icssitlorquery_ValuedTerm.');
+			} else {
+				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);
+			}
 		} else {
 			tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);
 		}		
@@ -87,8 +102,8 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * @param	int $number
 	 * @return ValuedTerm
 	 */
-	public function Get($number) { // Count property
-		if ($number<$this->count) // TODO: check <0
+	public function Get($number) {
+		if ($number<$this->count && $number>=0)
 			return $this->items[$number];
 		else
 			tx_icssitquery_debug::warning('Index out of range for ValuedTermTuple. Only ' . $this->count . ' items against ' . $number . ' requested via __get().');
