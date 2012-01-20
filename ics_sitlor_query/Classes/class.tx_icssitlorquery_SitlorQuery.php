@@ -108,7 +108,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if (!empty($this->fields))
 			$params['leschamps'] = utf8_decode(implode(',', $this->fields));
 		if (!empty($this->criteria)) {
-			$params['lescritex'] = utf8_decode(implode('|', $this->criteria));
+			$params['lescritex'] = utf8_decode(implode(',', $this->criteria));
 		}
 		$params['rfrom'] = utf8_decode($this->start);
 		$params['rto'] = utf8_decode($this->end);

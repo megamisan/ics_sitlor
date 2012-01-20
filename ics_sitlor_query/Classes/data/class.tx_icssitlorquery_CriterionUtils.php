@@ -65,19 +65,19 @@ class tx_icssitlorquery_CriterionUtils {
 	/**
 	 * Add element in tuple list
 	 *
-	 * @param	tx_icssitlorquery_elementTupleList $list
+	 * @param	tx_icssitlorquery_ValuedTermTuple $list
 	 * @param	tx_icssitlorquery_element $element
 	 * @param	int $elIndex
 	 * @param	int $searchIndex
 	 * @param	int $searchedID
 	 *
 	 */
-	public static function addToTupleList(tx_icssitlorquery_elementTupleList $list, tx_icssitlorquery_element $element, $elIndex, $searchIndex, $searchedID) {
-	//$elIndex=0; $searchedIndex=1
+	public static function addToTupleList(tx_icssitlorquery_ValuedTermTuple $list, tx_icssitlorquery_element $element, $elIndex, $searchIndex, $searchedID) {
 		$tuple_exists = false;
 		for ($i=0; $i<$list->Count(); $i++) {
 			$tuple = $list->Get($i);
-			if ($tuple->Item2->ID == $searchedID) {//TODO: Test existance Item2.
+			$item = $tuple->Get($searchIndex);
+			if (isset($item) && $item->ID == $searchedID) {
 				$tuple_exists = true;
 				$tuple->Set($elIndex, $element);
 				$list->Set($i, $tuple);
@@ -85,7 +85,7 @@ class tx_icssitlorquery_CriterionUtils {
 			}
 		}
 		if (!$tuple_exists) {
-			$tuple = makeInstance('tx_icssitlorquery_elementTuple', 2);
+			$tuple = makeInstance('tx_icssitlorquery_ValuedTermTuple', 2);
 			$tuple->Set(elIndex, $element);
 			$list->Add($tuple);
 		}			
