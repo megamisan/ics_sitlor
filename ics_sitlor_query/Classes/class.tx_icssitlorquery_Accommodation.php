@@ -32,6 +32,8 @@
  */
 
 class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation {
+	private $roadNumber = '';
+	private $roadName = '';
 
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
@@ -100,14 +102,36 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
+			case 'COMMENTAIRE':
+				$this->Description = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
 			case 'TYPE_DE_PRODUIT':
 				$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(intval($reader->readString())));
 				$this->Type = $types->Get(0);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
-			case 'COMMENTAIRE':
-				$this->Description = $reader->readString();
+			case 'ADRPROD_NUM_VOIE' :
+				$this->roadNumber = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				$this->Address = $this->roadNumber . ' ' . $this->roadName;
+				break;
+				
+			case 'ADRPROD_LIB_VOIE' :
+				$this->roadName = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				$this->Address = $this->roadNumber . ' ' . $this->roadName;
+				break;
+				
+			case 'ADRPROD_CP' :
+				$this->Zip = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPROD_LIBELLE_COMMUNE' :
+				$this->City = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -158,6 +182,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		}
 		if (($indexCredit = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
 			CriterionUtils::addToTupleList($this->Illustration, $valuedTerm, 1, 0, tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]);
+		}
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
+			$this->RatingStar = $valuedTerm;
 		}
 	}
 	
