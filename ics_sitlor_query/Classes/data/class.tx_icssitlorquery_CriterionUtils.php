@@ -31,7 +31,11 @@
  */
 
 class tx_icssitlorquery_CriterionUtils {
-	//-- Photos
+	/*******************************************************
+	 *
+	 * Photos - ILlustrations
+	 *
+	 *******************************************************/
 	const PHOTO = 736000294;
 	const PHOTO2 = 736001142;
 	const PHOTO3 = 736001115;
@@ -91,4 +95,10 @@ class tx_icssitlorquery_CriterionUtils {
 		}			
 	}
 	
+	/*******************************************************
+	 *
+	 * Accomodation's category - Rating star
+	 *
+	 *******************************************************/
+	const RATINGSTAR = 736000089;
 }
