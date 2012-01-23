@@ -135,6 +135,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 					case 'sit_liste':
 						$accomodation = t3lib_div::makeInstance('tx_icssitlorquery_Accomodation');
 						$accomodation->parseXML($reader);
+						t3lib_div::devLog('Accomodation', 'ics_sitlor_query', 0, array($accomodation));
 						$accomodations[] = $accomodation;
 						break;
 						
@@ -144,7 +145,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
-		t3lib_div::devLog('Accomodation', 'ics_sitlor_query', 0, $accomodations);
+		t3lib_div::devLog('Accomodations count', 'ics_sitlor_query', 0, array(count($accomodations)));
 		return $accomodations;
 	}
 
