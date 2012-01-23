@@ -32,9 +32,12 @@
  */
 
 class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation {
-	private $roadNumber = '';
-	private $roadName = '';
-
+	private $tmpAddress = array(
+		'number' => '',
+		'street' => '',
+		'extra' => ''
+	);
+	
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 	}
@@ -82,6 +85,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			}
 			$reader->read();
 		}
+		$this->Address = t3lib_div::makeInstance('tx_icssitlorquery_Address', $this->tmpAddress['number'], $this->tmpAddress['street'], $this->tmpAddress['extra']);
 	}
 	
 	/**
@@ -113,17 +117,20 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				break;
 
 			case 'ADRPROD_NUM_VOIE' :
-				$this->roadNumber = $reader->readString();
+				$this->tmpAddress['number'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				$this->Address = $this->roadNumber . ' ' . $this->roadName;
 				break;
 				
 			case 'ADRPROD_LIB_VOIE' :
-				$this->roadName = $reader->readString();
+				$this->tmpAddress['street'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				$this->Address = $this->roadNumber . ' ' . $this->roadName;
 				break;
-				
+
+			case 'ADRPEC_COMPL_ADRESSE':
+				$this->tmpAddress['extra'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
 			case 'ADRPROD_CP' :
 				$this->Zip = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -175,23 +182,23 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
-		if (($indexPhoto = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
+		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
 			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
-			CriterionUtils::addToTupleList(
+			tx_icssitlorquery_CriterionUtils::addToTupleList(
 				$this->Illustration, 
 				$valuedTerm, 
 				0, 
 				1, 
-				tx_icssitlorquery_CriterionUtils::$creditPhotos[$indexPhoto]
+				tx_icssitlorquery_CriterionUtils::$creditPhotos[$index]
 			);
 		}
-		if (($indexCredit = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
-			CriterionUtils::addToTupleList(
+		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
+			tx_icssitlorquery_CriterionUtils::addToTupleList(
 				$this->Illustration, 
 				$valuedTerm, 
 				1, 
 				0, 
-				tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]
+				tx_icssitlorquery_CriterionUtils::$photos[$index]
 			);
 		}
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {

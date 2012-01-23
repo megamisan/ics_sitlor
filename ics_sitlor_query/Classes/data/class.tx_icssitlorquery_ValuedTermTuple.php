@@ -41,6 +41,8 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	private $tag;
 	private $items = array();
 	
+	private static $lConf = array();
+	
 	/**
 	 * Constructor
 	 *
@@ -55,16 +57,6 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		}
 	}
 
-	/**
-	 * Set default
-	 *
-	 * @param	string $tag
-	 * @param	array $conf
-	 * @return void
-	 */
-	public static function SetDefaultConf($tag, array $conf) {
-	}
-	
 	public function __get($name) {
 		if ($name=='Count')
 			return $this->count;
@@ -124,13 +116,23 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	}
 
 	/**
+	 * Set default
+	 *
+	 * @param	array $conf
+	 * @return void
+	 */
+	public function SetDefaultConf(array $conf) {
+		self::$lConf = $conf;
+	}
+
+	/**
 	 * Convert object to display as string
 	 * @return string
 	 */
 	public function __toString() {
 		$confDefault = array();
 		$numargs = func_num_args();		
-		if ($numargs==0) {
+		if ($numargs==0)
 			return $this->toStringConf($confDefault);
 		
 		// $numargs >0
@@ -147,12 +149,20 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
 	}
 	
-	private function toStringConf(array $conf) {
-		// create local, call toStringCObj.
-		return 'ValuedTermTuples';
+	public function toString() {
+		return $this->toStringConf(self::$lConf);
 	}
 	
-	private function toStringCObj(tslib_cObj $cObj, array $conf) {
+	public function toStringConf(array $conf) {
+		$cObj = t3lib_div::makeIsntance('tslib_cObj');
+		return $this->toStringObjConf($cObj, $conf);
+	}
+	
+	public function toStringObj(tslib_cObj $cObj) {
+		return $this->toStringObjConf($cObj, self::$lConf);
+	}
+	
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'ValuedTermTuples';
 	}	
 }
