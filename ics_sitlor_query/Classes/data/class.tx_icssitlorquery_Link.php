@@ -45,57 +45,38 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	 * @param	string $url
 	 */
 	public function __construct($url) {
+		$this->url = $url;
 	}
 
-	/**
-	 * Convert object to display as string
-	 * @return string
-	 */
-	public function __toString() {
-	}
-
-	public function toString() {
-	}
-	/**
-	 * Convert tslib_cObj to display as string
-	 *
-	 * @param	tslib_cObj $cObj
-	 *
-	 * @return string
-	 */
-	public function toStringObj(tslib_cObj $cObj) {
-	}
-	
-	/**
-	 * Convert conf to display as string
-	 *
-	 * @param	array $conf
-	 *
-	 * @return string
-	 */
-	public function toStringConf(array $conf) {
-	}
-
-	/**
-	 * Convert tslib_cObj and conf to display as string
-	 *
-	 * @param	tslib_cObj $cObj
-	 * @param	array $conf
-	 *
-	 * @return string
-	 */
-	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
-	}
-	
 	/**
 	 * Set default
 	 *
-	 * @param	string $tag
 	 * @param	array $conf
 	 * @return void
 	 */
-	public function SetDefault($tag, array $conf) {
+	public function SetDefaultConf(array $conf) {
+		self::$lConf = $conf;
 	}
 	
+	public function __toString() {
+		return $this->toString();
+	}
+	
+	public function toString() {
+		return $this->toStringConf(self::$lConf);
+	}
+	
+	public function toStringConf(array $conf) {
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		return $this->toStringObjConf($cObj, $conf);
+	}
+	
+	public function toStringObj(tslib_cObj $cObj) {
+		return toStringObjConf($cObj, self::$lConf);
+	}
+	
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
+		return 'Link toString is not yet implemented.';
+	}
 	
 }

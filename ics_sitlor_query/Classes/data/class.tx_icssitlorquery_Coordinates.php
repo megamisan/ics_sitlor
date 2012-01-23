@@ -39,9 +39,18 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	private $latitude;
 	private $longitude;
 	
+	public function __construct($latitude, $longitude) {
+		if (!is_float($latitude) || !is_float($longitude))
+			throw new Exception('Coordinates latitude and longitude must be float.');
+		$this->latitude = $latitude;
+		$this->longitude = $longitude;
+	}
+	
 	public function __toString() {
+		return $this->toString();
 	}
 	
 	public function toString() {
+		return 'Coordinates toString is not implemented.';
 	}
 }

@@ -24,7 +24,7 @@
 
 
 /**
- * Interface 'IdFilter' for the 'ics_sitlor_query' extension.
+ * class 'IdFilter' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -32,6 +32,19 @@
  */
 
 class tx_icssitlorquery_IdFilter implements tx_icssitquery_IFilter {
+	private $value;
+	
+	/*
+	 * Constructor
+	 *
+	 * @param	int $value : ID
+	 */
+	public function __construct($value) {
+		if (!is_int($value))
+			throw new Exception('tx_icssitlorquery_IdFilter constructor expected integer value.');
+		$this->value = $value;
+	}
+	
 	/**
 	 * Apply filter
 	 *
@@ -40,5 +53,6 @@ class tx_icssitlorquery_IdFilter implements tx_icssitquery_IFilter {
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
+		$query->setParameter('idFilter', $this->value);
 	}
 }

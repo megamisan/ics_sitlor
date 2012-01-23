@@ -105,13 +105,16 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
 		
-		//NOTA : si idFilter, on demande un fullAccomodation
-		
-		$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
-		
+		$full = false;
 		foreach ($this->filters as $filter) {
+			if ($filter instanceof tx_icssitlorquery_IdFilter)
+				$full = true;
 			$filter->apply($this->query);
-		}		
+		}
+		if ($full)
+			$this->query->setCriteria(tx_icssitlorquery_FullAccomodation::getRequiredCriteria());
+		else
+			$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
 		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
 		
@@ -133,7 +136,10 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			if ($reader->nodeType == XMLReader::ELEMENT) {
 				switch ($reader->name) {
 					case 'sit_liste':
-						$accomodation = t3lib_div::makeInstance('tx_icssitlorquery_Accomodation');
+						if ($full)
+							$accomodation = t3lib_div::makeInstance('tx_icssitlorquery_FullAccomodation');
+						else
+							$accomodation = t3lib_div::makeInstance('tx_icssitlorquery_Accomodation');
 						$accomodation->parseXML($reader);
 						t3lib_div::devLog('Accomodation', 'ics_sitlor_query', 0, array($accomodation));
 						$accomodations[] = $accomodation;

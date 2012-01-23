@@ -32,7 +32,7 @@
  */
 
 class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation {
-	private $tmpAddress = array(
+	protected $tmpAddress = array(
 		'number' => '',
 		'street' => '',
 		'extra' => ''
@@ -85,7 +85,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			}
 			$reader->read();
 		}
-		$this->Address = t3lib_div::makeInstance('tx_icssitlorquery_Address', $this->tmpAddress['number'], $this->tmpAddress['street'], $this->tmpAddress['extra']);
+		$this->afterParseXML();
 	}
 	
 	/**
@@ -204,6 +204,15 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
 			$this->RatingStar = $valuedTerm;
 		}
+	}
+	
+	protected function afterParseXML() {
+		$this->Address = t3lib_div::makeInstance(
+			'tx_icssitlorquery_Address', 
+			$this->tmpAddress['number'], 
+			$this->tmpAddress['street'], 
+			$this->tmpAddress['extra']
+		);
 	}
 	
 	/**

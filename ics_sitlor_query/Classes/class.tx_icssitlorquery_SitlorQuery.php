@@ -126,6 +126,10 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$params['lentit'] = utf8_decode(self::$entity);
 		$pnames[] = 'lentidad';
 		$pvalues[] = self::$entity;
+		if (in_array('idFilter', $filterArray)) {
+			$pnames[] = 'elproducto';
+			$pvalues[] = $this->filters['idFilter'];
+		}
 		if ($this->table=='small' || $this->table=='complete') {
 			$this->addQuery('entity', self::$entity);
 			if (in_array('gender', $filterArray) && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
