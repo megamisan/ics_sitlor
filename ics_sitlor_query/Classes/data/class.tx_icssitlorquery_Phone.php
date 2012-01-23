@@ -24,34 +24,28 @@
 
 
 /**
- * Class 'tx_icssitlorquery_Address' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitlorquery_Phone' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
  
-class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
-	private $number = '';
-	private $street = '';
-	private $extra = '';
-	private $zip = '';
-	private $city = '';
+class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
+	private $phone1 = '';
+	private $phone2 = '';
 	
 	private static $lConf = array();
 	
 	/**
 	 * Constructor
 	 *
-	 * @param	string $number : Street number
-	 * @param	string $street : Street name
-	 * @param	string $extra : Complement of address
-	 *
+	 * @param	string $phone1
+	 * @param	string $phone2
 	 */
-	public function __construct($number='', $street='', $extra='', $zip='', $city='') {
-		$this->number = $number;
-		$this->street = $street;
-		$this->extra = $extra;
+	public function __construct($phone1, $phone2) {
+		$this->phone1 = $phone1;
+		$this->phone2 = $phone2;
 	}
 	
 	/**
@@ -82,7 +76,7 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 	}
 	
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
-		return 'Address';
+		return 'Phone toString is not yet implemented';
 	}		
 
 }

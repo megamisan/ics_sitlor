@@ -83,23 +83,23 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Check login, password, urls
 		if (!$this->conf['login']) {
 			tx_icssitlorquery_Debug::error('Login is required.');
-			return $this->pi_wrapInBaseClass($this->pi->pi_getLL('data_not_available', 'Can not reach data', true));
+			return $this->pi_wrapInBaseClass($this->pi_getLL('data_not_available', 'Can not reach data', true));
 		}
 		if (!$this->conf['password']) {
 			tx_icssitlorquery_Debug::error('Password is required.');
-			return $this->pi_wrapInBaseClass($this->pi->pi_getLL('data_not_available', 'Can not reach data', true));
+			return $this->pi_wrapInBaseClass($this->pi_getLL('data_not_available', 'Can not reach data', true));
 		}
 		if (!$this->conf['url']) {
 			tx_icssitlorquery_Debug::error('Url is required.');
-			return $this->pi_wrapInBaseClass($this->pi->pi_getLL('data_not_available', 'Can not reach data', true));
+			return $this->pi_wrapInBaseClass($this->pi_getLL('data_not_available', 'Can not reach data', true));
 		}
 		if (!$this->conf['nomenclatureUrl']) {
 			tx_icssitlorquery_Debug::error('Nomenclature url is required.');
-			return $this->pi_wrapInBaseClass($this->pi->pi_getLL('data_not_available', 'Can not reach data', true));
+			return $this->pi_wrapInBaseClass($this->pi_getLL('data_not_available', 'Can not reach data', true));
 		}
 		if (!$this->conf['criterionUrl']) {
 			tx_icssitlorquery_Debug::error('Criterion url is required.');
-			return $this->pi_wrapInBaseClass($this->pi->pi_getLL('data_not_available', 'Can not reach data', true));
+			return $this->pi_wrapInBaseClass($this->pi_getLL('data_not_available', 'Can not reach data', true));
 		}
 
 		// Initialize query, connection
@@ -109,25 +109,49 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		tx_icssitlorquery_CriterionFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['criterionUrl']);
 		
 		// Render data
-		$modes = t3lib_div::trimExplode(',', $this->conf['mode'], true);
-		foreach ($modes as $mode) {
-			$mode = (string) strtoupper(trim($mode));
-			switch ($mode) {
-				case 'LIST' :
-					$content .= $this->renderDataList();
-				break;
+		// $modes = t3lib_div::trimExplode(',', $this->conf['mode'], true);
+		// foreach ($modes as $mode) {
+			// $mode = (string) strtoupper(trim($mode));
+			// switch ($mode) {
+				// case 'LIST' :
+					// $content .= $this->renderDataList();
+				// break;
 				
-				case 'SINGLE':
-					$content .= $this->renderDataSingle();
-				break;
+				// case 'SINGLE':
+					// $content .= $this->renderDataSingle();
+				// break;
 				
-				case 'SEARCH':
-					$content .= $this->renderDataSearch();
-				break;
+				// case 'SEARCH':
+					// $content .= $this->renderDataSearch();
+				// break;
 				
-				default:
-			}
+				// default:
+			// }
+		// }
+
+		// try {
+			// $types = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(4000002, 4000003, 4000012));
+		// } catch (Exception $e) {
+			// tx_icssitquery_Debug::error('Retrieves Type for HOTEL failed : ' . $e);
+		// }
+		// $typeFilter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+		// $this->queryService->addFilter($typeFilter);
+
+		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', mktime(0,0,0,1,1,2000));
+		$this->queryService->addFilter($StartDateFilter);
+
+		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000259);
+		$this->queryService->addFilter($idFilter);
+
+		try {
+			$accomodations = $this->queryService->getAccomodations($this->sortingProvider);
+		} catch (Exception $e) {
+			tx_icssitquery_Debug::error('Retrieves Accomodation proccess failed : ' . $e);
 		}
+		if (empty($accomodations))
+			$content = $this->pi_getLL('no_data', 'There is any Accomodations', true);
+		else 
+			$content = 'There are ' . count($accomodations) . ' accomodation(s).';
 		
 		return $this->pi_wrapInBaseClass($content);
     }

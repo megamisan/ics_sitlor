@@ -211,7 +211,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			'tx_icssitlorquery_Address', 
 			$this->tmpAddress['number'], 
 			$this->tmpAddress['street'], 
-			$this->tmpAddress['extra']
+			$this->tmpAddress['extra'],
+			$this->Zip,
+			$this->City
 		);
 	}
 	

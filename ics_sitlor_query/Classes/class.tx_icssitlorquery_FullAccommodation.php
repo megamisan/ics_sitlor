@@ -31,7 +31,11 @@
  */
 
 class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation {
-	private $phone;
+	private $phone = null;
+	private $tmpPhone = array(
+		'phone1' => '', 
+		'phone2' => ''
+	);
 	private $fax;
 	private $email;
 	private $webSite;
@@ -39,6 +43,29 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $coordinates = null;
 	private $latitude = 0;
 	private $longitude = 0;
+	
+	private $providerName = null;
+	private $tmpProviderName = array(
+		'title' => '',
+		'firstname' => '',
+		'lastname' => ''
+	);
+	private $providerAddress = null;
+	private $tmpProviderAddress = array(
+		'number' => '',
+		'street' => '',
+		'extra' => '',
+		'zip' => '',
+		'city' => ''
+	);
+	private $providerPhone = null;
+	private $tmpProviderPhone = array(
+		'phone1' => '', 
+		'phone2' => ''
+	);
+	private $providerFax;
+	private $providerEmail;
+	private $providerWebSite = null;
 	
 	public function __construct() {
 		parent::__construct();
@@ -63,6 +90,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	public function __get($name) {
 		switch ($name) {
+			//-- IDENTITITY
 			case 'Phone':
 				return $this->phone;
 			case 'Fax':
@@ -71,8 +99,24 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->email;
 			case 'WebSite':
 				return $this->webSite;
+			
+			//-- COORDINATES
 			case 'Coordinates':
 				return $this->coordinates;
+			
+			//-- PROVIDER
+			case 'ProviderName':
+				return $this->providerC;
+			case 'ProviderAddress':
+				return $this->providerAddress;
+			case 'ProviderPhone':
+				return $this->providerPhone;
+			case 'ProviderFax':
+				return $this->providerFax;
+			case 'ProviderEmail':
+				return $this->providerEmail;
+			case 'ProviderWebSite':
+				return $this->providerWebSite;
 				
 			default : 
 				return parent::__get($name);
@@ -90,18 +134,57 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
+			//-- IDENTITY
 			case 'Phone':
+				if (!$value instanceof tx_icssitlorquery_Phone)
+					throw new Exception('Phone value must be an instance of tx_icssitlorquery_Phone.');
 				$this->phone = $value;
 				break;
 			case 'Fax':
-				$this->fax = $value;;
+				$this->fax = $value;
+				break;
 			case 'Email':
 				$this->email = $value;
+				break;
 			case 'WebSite':
+				if (!$value instanceof tx_icssitlorquery_Link)
+					throw new Exception('WebSite value must be an instance of tx_icssitlorquery_Link.');
 				$this->webSite = $value;
+				break;
+				
+			//-- COORDINATES
 			case 'Coordinates':
 				$this->coordinates = $value;
 				break;
+				
+			//-- PROVIDER
+			case 'ProviderName':
+				if (!$value instanceof tx_icssitlorquery_Name)
+					throw new Exception('ProviderName value must be an instance of tx_icssitlorquery_Name.');
+				$this->providerName = $value;
+				break;
+			case 'ProviderAddress':
+				if (!$value instanceof tx_icssitlorquery_Address)
+					throw new Exception('ProviderAddress value must be an instance of tx_icssitlorquery_Address.');
+				$this->providerAddress = $value;
+				break;
+			case 'ProviderPhone':
+				if (!$value instanceof tx_icssitlorquery_Phone)
+					throw new Exception('ProviderPhone value must be an instance of tx_icssitlorquery_Phone.');
+				$this->providerPhone = $value;
+				break;
+			case 'ProviderFax':
+				$this->providerFax = $value;
+				break;
+			case 'ProviderEmail':
+				$this->providerEmail = $value;
+				break;
+			case 'ProviderWebSite':
+				if (!$value instanceof tx_icssitlorquery_Link)
+					throw new Exception('ProviderWebSite value must be an instance of tx_icssitlorquery_Link.');
+				$this->providerWebSite = $value;
+				break;
+			
 			default : 
 				parent::__set($name, $value);
 		}		
@@ -114,8 +197,14 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
+			//-- IDENTITY
 			case 'ADRPROD_TEL':
-				$this->Phone =  $reader->readString();
+				$this->tmpPhone['phone1'] =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPROD_TEL2':
+				$this->tmpPhone['phone2'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
@@ -136,6 +225,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
+			//-- COORDINATES
 			case 'LATITUDE':
 				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -146,13 +236,104 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
+			//-- PROVIDER
+			case 'PREST_CIVILITE':
+				$this->tmpProviderName['title'] =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+			
+			case 'PREST_NOM_RESP':
+				$this->tmpProviderName['firstname'] =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+			
+			case 'PREST_PRENOM_RESP':
+				$this->tmpProviderName['lastname'] =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPREST_NUM_VOIE' :
+				$this->tmpProviderAddress['number'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPREST_LIB_VOIE' :
+				$this->tmpProviderAddress['street'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPREST_COMPL_ADRESSE':
+				$this->tmpProviderAddress['zip'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPREST_CP' :
+				$this->tmpProviderAddress['city'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPREST_LIBELLE_COMMUNE' :
+				$this->tmpProviderAddress['street'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPREST_TEL':
+				$this->tmpProviderPhone['phone1'] =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPREST_TEL2':
+				$this->tmpProviderPhone['phone2'] =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPREST_FAX':
+				$this->ProviderFax =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPREST_EMAIL':
+				$this->ProviderEmail =  $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
+			case 'ADRPREST_URL':
+				$url = $reader->readString();
+				// TODO : Check whether url is valid url
+				// $this->ProviderWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
 			default:
 				parent::readElement($reader);
 		}
 	}
 	
 	protected function afterParseXML() {
+		$this->Phone = t3lib_div::makeInstance(
+			'tx_icssitlorquery_Phone',
+			$this->tmpPhone['phone1'], 
+			$this->tmpPhone['phone2']
+		);
 		$this->Coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
+		$this->ProviderName = t3lib_div::makeInstance(
+			'tx_icssitlorquery_Name', 
+			$this->tmpProviderName['title'], 
+			$this->tmpProviderName['firstname'],
+			$this->tmpProviderName['lastname']
+		);
+		$this->ProviderAddress = t3lib_div::makeInstance(
+			'tx_icssitlorquery_Address', 
+			$this->tmpProviderAddress['number'], 
+			$this->tmpProviderAddress['street'], 
+			$this->tmpProviderAddress['extra']
+		);
+		$this->ProviderPhone = t3lib_div::makeInstance(
+			'tx_icssitlorquery_Phone', 
+			$this->tmpProviderPhone['phone1'], 
+			$this->tmpProviderPhone['phone2']
+		);
+		
 		parent::afterParseXML();
 	}
 }
