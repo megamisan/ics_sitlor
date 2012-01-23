@@ -41,4 +41,7 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	
 	public function __toString() {
 	}
+	
+	public function toString() {
+	}
 }

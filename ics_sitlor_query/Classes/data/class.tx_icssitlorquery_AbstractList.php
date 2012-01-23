@@ -141,4 +141,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 		return implode($separator, $this->elements);
 	}
 	
+	public function toString() {
+	}
+	
 }

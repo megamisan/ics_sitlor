@@ -38,7 +38,7 @@
 
 class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	private $uri;
-	private static $conf = array();
+	private static $lConf = array();
 	
 	/**
 	 * Constructor
@@ -56,7 +56,7 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 * @return void
 	 */
 	public function SetDefaultConf(array $conf) {
-		self::$conf = $conf;
+		self::$lConf = $conf;
 	}
 	
 	/**
@@ -65,29 +65,37 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 */
 	public function __toString() {
 		$numargs = func_num_args();		
-		if ($numargs==0) {
-			return $this->toStringConf(self::$conf);
+		if ($numargs==0)
+			return $this->toStringConf(self::$lConf);
 		
 		// $numargs >0
 		$args = func_get_args();
 		if (is_array($args[0]))
-			return $this->toStringConf(array_merge(self::$conf, $args[0]));
+			return $this->toStringConf(array_merge(self::$lConf, $args[0]));
 		
 		if ($args[0] instanceof tslib_cObj) {
 			if ($numargs==1)
-				return toStringCObj($args[0], self::$conf);
-			return toStringCObj($args[0], array_merge(self::$conf, $args[1]));
+				return toStringObj($args[0], self::$lConf);
+			return toStringObj($args[0], array_merge(self::$lConf, $args[1]));
 		}
 		
 		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
 	}
 	
-	private function toStringConf(array $conf) {
+	public function toString() {
+		return $this->uri;
+	}
+	
+	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		return $this->toStringCObj($cObj, $conf);
 	}
 	
-	private function toStringCObj(tslib_cObj $cObj, array $conf) {
+	public function toStringObj(tslib_cObj $cObj) {
+		return toStringObjConf($cObj, self::$lConf);
+	}
+	
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return $cObj->stdWrap_current($this->uri, $conf);
 	}		
 }

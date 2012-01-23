@@ -82,7 +82,6 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			}
 			$reader->read();
 		}
-		return $accomodation;
 	}
 	
 	/**
@@ -153,7 +152,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	protected function parseCriteria(XMLReader $reader) {
 		$reader->read();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
-			if( $xmlreader->nodeType == XMLReader::ELEMENT ){
+			if($reader->nodeType == XMLReader::ELEMENT){
 				switch ($reader->name) {
 					case 'Crit':
 						if (!$reader->isEmptyElement) {
@@ -178,10 +177,22 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($indexPhoto = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
 			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
-			CriterionUtils::addToTupleList($this->Illustration, $valuedTerm, 0, 1, tx_icssitlorquery_CriterionUtils::$creditPhotos[$indexPhoto]);
+			CriterionUtils::addToTupleList(
+				$this->Illustration, 
+				$valuedTerm, 
+				0, 
+				1, 
+				tx_icssitlorquery_CriterionUtils::$creditPhotos[$indexPhoto]
+			);
 		}
 		if (($indexCredit = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
-			CriterionUtils::addToTupleList($this->Illustration, $valuedTerm, 1, 0, tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]);
+			CriterionUtils::addToTupleList(
+				$this->Illustration, 
+				$valuedTerm, 
+				1, 
+				0, 
+				tx_icssitlorquery_CriterionUtils::$photos[$indexCredit]
+			);
 		}
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
 			$this->RatingStar = $valuedTerm;
@@ -194,10 +205,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return mixed : Array of criteria IDs
 	 */
 	public static function getRequiredCriteria() {
-		return array_merge(
-			tx_icssitlorquery_CriterionUtils::$photos, 
-			tx_icssitlorquery_CriterionUtils::$creditPhotos
-		);
+		$criteria = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
+		$criteria = array_merge($criteria, array(tx_icssitlorquery_CriterionUtils::RATINGSTAR));
+		return $criteria;
 	}
 	
 }

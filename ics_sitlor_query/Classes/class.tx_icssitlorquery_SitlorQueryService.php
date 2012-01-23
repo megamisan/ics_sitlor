@@ -144,6 +144,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
+		t3lib_div::devLog('Accomodation', 'ics_sitlor_query', 0, $accomodations);
 		return $accomodations;
 	}
 

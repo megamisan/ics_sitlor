@@ -39,5 +39,5 @@ interface tx_icssitquery_IToStringConf extends tx_icssitquery_IToString {
 	 *
 	 * @return string
 	 */
-	public function toString(array $conf);
+	public function toStringConf(array $conf);
 }

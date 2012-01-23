@@ -54,6 +54,8 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	public function __toString() {
 	}
 
+	public function toString() {
+	}
 	/**
 	 * Convert tslib_cObj to display as string
 	 *
@@ -61,7 +63,7 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	 *
 	 * @return string
 	 */
-	public function toString(tslib_cObj $cObj) {
+	public function toStringObj(tslib_cObj $cObj) {
 	}
 	
 	/**
@@ -71,7 +73,7 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	 *
 	 * @return string
 	 */
-	public function toString(array $conf) {
+	public function toStringConf(array $conf) {
 	}
 
 	/**
@@ -82,7 +84,7 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	 *
 	 * @return string
 	 */
-	public function toString(tslib_cObj $cObj, array $conf) {
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 	}
 	
 	/**

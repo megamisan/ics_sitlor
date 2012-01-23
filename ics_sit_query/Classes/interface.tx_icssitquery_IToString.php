@@ -36,5 +36,5 @@ interface tx_icssitquery_IToString {
 	 * Convert object to display as string
 	 * @return string
 	 */
-	public function __toString();
+	public function toString();
 }

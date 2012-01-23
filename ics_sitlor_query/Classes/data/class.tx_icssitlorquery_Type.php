@@ -103,7 +103,10 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 	 * @return string
 	 */
 	public function __toString() {
-		return $this->name;
+		return $this->toString();
 	}
 	
+	public function toString() {
+		return $this->name;
+	}
 }

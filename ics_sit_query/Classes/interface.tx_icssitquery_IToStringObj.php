@@ -39,5 +39,5 @@ interface tx_icssitquery_IToStringObj extends tx_icssitquery_IToString {
 	 *
 	 * @return string
 	 */
-	public function toString(tslib_cObj $cObj);
+	public function toStringObj(tslib_cObj $cObj);
 }

@@ -113,6 +113,10 @@ class tx_icssitlorquery_Category implements tx_icssitquery_IToString {
 	 * @return string
 	 */
 	public function __toString() {
+		return $this->toString();
+	}
+	
+	public function toString() {
 		return $this->name;
 	}
 	

@@ -90,7 +90,7 @@ class tx_icssitlorquery_CriterionUtils {
 		}
 		if (!$tuple_exists) {
 			$tuple = makeInstance('tx_icssitlorquery_ValuedTermTuple', 2);
-			$tuple->Set(elIndex, $element);
+			$tuple->Set($elIndex, $element);
 			$list->Add($tuple);
 		}			
 	}
@@ -100,5 +100,5 @@ class tx_icssitlorquery_CriterionUtils {
 	 * Accomodation's category - Rating star
 	 *
 	 *******************************************************/
-	const RATINGSTAR = 736000089;
+	const RATINGSTAR = 736000015;
 }

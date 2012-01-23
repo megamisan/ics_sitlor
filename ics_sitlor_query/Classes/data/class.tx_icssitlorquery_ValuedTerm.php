@@ -40,6 +40,8 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	private $term;		// tx_icssitlorquery_Term
 	private $value;
 	
+	private static $lConf = array();
+	
 	/**
 	 * Private constructor ?
 	 *
@@ -56,11 +58,11 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	public static function FromXML(XMLReader $reader) {
 		$valuedTerm = new tx_icssitlorquery_ValuedTerm();
 		
-		$valuedTerm->criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(intval($reader->getAttribut('CLEF_CRITERE')));
+		$valuedTerm->criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(intval($reader->getAttribute('CLEF_CRITERE')));
 		$terms = tx_icssitlorquery_CriterionFactory::GetCriterionTerms($valuedTerm->Criterion);
 		for ($i=0; $i<$terms->Count(); $i++) {
 			$term = $terms->Get($i);
-			if ($term->ID == intval($reader->getAttribut('CLEF_MODA'))) {
+			if ($term->ID == intval($reader->getAttribute('CLEF_MODA'))) {
 				$valuedTerm->term = $term;
 				break;
 			}
@@ -121,7 +123,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 * @return void
 	 */
 	public static function SetDefaultConf(array $conf) {
-		// TODO : self::$conf = $conf;
+		self::$lConf = $conf;
 	}
 	
 	/**
@@ -130,7 +132,12 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 */
 	public function __toString() {
 		// TODO : cObj local
+		// Test number of args and call appropriate function 
+		
+		return $this->toString();
 	}
 
+	public function toString() {
+	}
 	
 }
