@@ -263,17 +263,17 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				break;
 
 			case 'ADRPREST_COMPL_ADRESSE':
-				$this->tmpProviderAddress['zip'] = $reader->readString();
+				$this->tmpProviderAddress['extra'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPREST_CP' :
-				$this->tmpProviderAddress['city'] = $reader->readString();
+				$this->tmpProviderAddress['zip'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
 			case 'ADRPREST_LIBELLE_COMMUNE' :
-				$this->tmpProviderAddress['street'] = $reader->readString();
+				$this->tmpProviderAddress['city'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -326,7 +326,9 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			'tx_icssitlorquery_Address', 
 			$this->tmpProviderAddress['number'], 
 			$this->tmpProviderAddress['street'], 
-			$this->tmpProviderAddress['extra']
+			$this->tmpProviderAddress['extra'],
+			$this->tmpProviderAddress['zip'], 
+			$this->tmpProviderAddress['city']
 		);
 		$this->ProviderPhone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone', 

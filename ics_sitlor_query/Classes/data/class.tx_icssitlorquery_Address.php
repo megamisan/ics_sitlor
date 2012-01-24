@@ -52,6 +52,8 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 		$this->number = $number;
 		$this->street = $street;
 		$this->extra = $extra;
+		$this->zip = $zip;
+		$this->city = $city;
 	}
 	
 	/**
