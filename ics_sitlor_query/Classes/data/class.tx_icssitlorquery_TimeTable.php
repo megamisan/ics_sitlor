@@ -40,10 +40,37 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	private $end;	// timestamp
 	private $comment;
 	
+	private $timeEntries = array();
+	
+	private static $lConf = array();
+	
 	/**
 	 * Private constructor
 	 */
-	private function __construct() {};
+	private function __construct() {
+	}
+
+	/**
+	 * Retrieves properties
+	 *
+	 * @param	string $name : Property's name
+	 *
+	 * @return mixed : name 's value
+	 */
+	public function __get($name) {
+		switch ($name) {
+			case 'Start':
+				return $this->start;
+			case 'End':
+				return $this->end;
+			case 'Comment':
+				return $this->comment;
+			case 'TimeEntries':
+				return $this->timeEntries;
+			default:
+				tx_icssitquery_debug::notice('Undefined TimeTable property via __get(): ' . $name);
+		}
+	}
 	
 	/**
 	 * Retrieves TimeTable
@@ -51,65 +78,237 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 * @param	XMLReader $reader : Reader to the parsed document
 	 */
 	public static function FromXML(XMLReader $reader) {
+		$timeTable = new tx_icssitlorquery_TimeTable();
+		$timeEntry = array(
+			1 => null,
+			2 => null,
+			3 => null,
+			4 => null,
+			5 => null,
+			6 => null,
+			7 => null,
+		);
+		$reader->read();
+		while ($reader->nodeType != XMLReader::END_ELEMENT) {
+			if($reader->nodeType == XMLReader::ELEMENT){
+				switch ($reader->name) {
+					case 'DATE_DEBUT':
+						if ($start = $reader->readString()) {
+							list($day, $month, $year) = explode('/', $start);
+							$timeTable->start = mktime(0,0,0,$month,$day,$year);
+						}
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+
+					case 'DATE_FIN':
+						if ($end = $reader->readString()) {
+							list($day, $month, $year) = explode('/', $end);
+							$timeTable->end = mktime(0,0,0,$month,$day,$year);
+						}
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+
+					case 'COMMENTAIRE':
+						$timeTable->comment = $reader->readString();
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+
+					case 'LUNDI_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[1]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'LUNDI_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[1]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'LUNDI_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[1]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'LUNDI_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[1]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					case 'MARDI_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[2]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'MARDI_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[2]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'MARDI_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[2]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'MARDI_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[2]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					case 'MERCREDI_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[3]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'MERCREDI_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[3]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'MERCREDI_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[3]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'MERCREDI_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[3]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					case 'JEUDI_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[4]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'JEUDI_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[4]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'JEUDI_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[4]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'JEUDI_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[4]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					case 'VENDREDI_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[5]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'VENDREDI_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[5]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'VENDREDI_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[5]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'VENDREDI_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[5]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					case 'SAMEDI_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[6]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'SAMEDI_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[6]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'SAMEDI_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[6]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'SAMEDI_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[6]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					case 'DIMANCHE_AM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[7]['am']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'DIMANCHE_AM_A':
+						if ($time = $reader->readString())
+							$timeEntry[7]['am']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'DIMANCHE_PM_DE':
+						if ($time = $reader->readString())
+							$timeEntry[7]['pm']['start'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+					case 'DIMANCHE_PM_A':
+						if ($time = $reader->readString())
+							$timeEntry[7]['pm']['end'] = strtotime($time);
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+						break;
+						
+					default:
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+				}
+			}
+			$reader->read();
+		}
+		
+		foreach ($timeEntry as $day=>$entry) {
+			if (isset($entry['am'])) {
+				$end = isset($entry['am']['end'])? $entry['am']['end']: 0;
+				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $end, false);
+			}
+			if (isset($entry['pm'])) {
+				$end = isset($entry['pm']['end'])? $entry['pm']['end']: 0;
+				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $end, true);
+			}
+		}
+
+		return $timeTable;
 	}
 	
 	/**
-	 * Set default conf
+	 * Set default
 	 *
 	 * @param	array $conf
+	 * @return void
 	 */
-	public static function setDefaultConf(array $conf) {
+	public function SetDefaultConf(array $conf) {
+		self::$lConf = $conf;
 	}
 	
-	/**
-	 * Retrieves properties
-	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return name 's value
-	 */
-	public function __get($name) { // TODO: Entries
-		switch ($name) 	{
-			case 'Start':
-				return $this->start;
-			case 'End':
-				return $this->end;
-			case 'Comment':
-				return $this->comment;
-			default :
-				tx_icssitquery_debug::notice('Undefined property of TimeTable via __get(): ' . $name);
-		}
-	}
-	
-	/**
-	 * Convert object to display as string
-	 * @return string
-	 */
 	public function __toString() {
-		$confDefault = array();
-		$numargs = func_num_args();		
-		if ($numargs==0) {
-			return $this->toStringConf($confDefault);
-		
-		// $numargs >0
-		$args = func_get_args();
-		if (is_array($args[0]))
-			return $this->toStringConf($args[0]);
-		
-		if ($args[0] instanceof tslib_cObj) {
-			if ($numargs==1)
-				return toStringCObj($args[0], $confDefault);
-			return toStringCObj($args[0], $args[1]);
-		}
-		
-		tx_icssitquery_debug::warning('Can not convert TimeTable to string, args :' . $args);
+		return $this->toString();
 	}
 	
-	private function toStringConf(array $conf) {
-		return 'Timetable';
+	public function toString() {
+		return $this->toStringConf(self::$lConf);
 	}
 	
-	private function toStringCObj(tslib_cObj $cObj, array $conf) {
-		return 'Timetable';
+	public function toStringConf(array $conf) {
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		return $this->toStringObjConf($cObj, $conf);
 	}
+	
+	public function toStringObj(tslib_cObj $cObj) {
+		return toStringObjConf($cObj, self::$lConf);
+	}
+	
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
+		return 'TimeTable toString is not yet implemented';
+	}		
 }

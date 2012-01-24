@@ -67,7 +67,13 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $providerEmail;
 	private $providerWebSite = null;
 	
+	private $timeTable = null;
+	
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
+		$this->TimeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 		parent::__construct();
 	}
 
@@ -106,7 +112,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			
 			//-- PROVIDER
 			case 'ProviderName':
-				return $this->providerC;
+				return $this->providerName;
 			case 'ProviderAddress':
 				return $this->providerAddress;
 			case 'ProviderPhone':
@@ -117,7 +123,11 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->providerEmail;
 			case 'ProviderWebSite':
 				return $this->providerWebSite;
-				
+
+			//-- TIMETABLE
+			case 'TimeTable':
+				return $this->timeTable;
+			
 			default : 
 				return parent::__get($name);
 		}
@@ -185,6 +195,13 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$this->providerWebSite = $value;
 				break;
 			
+			//-- TIMETABLE
+			case 'TimeTable':
+				if (!$value instanceof tx_icssitlorquery_TimeTableList)
+					throw new Exception('Timetable value must be an instance of tx_icssitlorquery_TimeTableList.');
+				$this->timeTable = $value;
+				break;
+			
 			default : 
 				parent::__set($name, $value);
 		}		
@@ -214,7 +231,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				break;
 				
 			case 'ADRPROD_EMAIL':
-				$this->Email =  $reader->readString();
+				$email =  $reader->readString();
+				$this->Email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
@@ -293,22 +311,56 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				break;
 				
 			case 'ADRPREST_EMAIL':
-				$this->ProviderEmail =  $reader->readString();
+				$email =  $reader->readString();
+				$this->ProviderEmail = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
 			case 'ADRPREST_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
-				// $this->ProviderWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				$this->ProviderWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+			
+			//-- TIMETABLE
+			case 'HORAIRES':
+				$this->parseTimeTable($reader);
+				break;
+			
 			default:
 				parent::readElement($reader);
 		}
 	}
 	
+	/**
+	 * Parse the current XML node in the XMLReader
+	 * Parse TimeTable
+	 *
+	 * @param	XMLReader $reader : Reader to the parsed document
+	 */
+	private function parseTimeTable(XMLReader $reader) {
+		$reader->read();
+		while ($reader->nodeType != XMLReader::END_ELEMENT) {
+			if($reader->nodeType == XMLReader::ELEMENT){
+				switch ($reader->name) {
+					case 'Horaire':
+						if ($timeTable = tx_icssitlorquery_TimeTable::FromXML($reader))
+							$this->TimeTable->Add($timeTable);
+						break;
+
+					default:
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+				}
+			}
+			$reader->read();
+		}
+	}
+	
+	/**
+	 * Process after parsing the current XML node in the XMLReader
+	 *
+	 */
 	protected function afterParseXML() {
 		$this->Phone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone',
