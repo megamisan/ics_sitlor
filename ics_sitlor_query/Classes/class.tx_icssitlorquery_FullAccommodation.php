@@ -79,14 +79,18 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $motorCoachPark;
 	private $opening24_24;
 	
+	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
+	
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
+		parent::__construct();
+		
 		$this->timeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->reservationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
-		parent::__construct();
+		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -149,6 +153,9 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->motorCoachPark;
 			case 'Opening24_24':
 				return $this->opening24_24;
+			
+			case 'CurrentSingleClientsRate':
+				return $this->currentSingleClientsRate;
 			
 			default : 
 				return parent::__get($name);
@@ -327,6 +334,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->motorCoachPark = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::OPENING_24_24)
 			$this->opening24_24 = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
+			$this->currentSingleClientsRate->Add($valuedTerm);
 	}
 	
 	/**
@@ -379,6 +388,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			tx_icssitlorquery_CriterionUtils::RECEPTION_GROUP,
 			tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK,
 			tx_icssitlorquery_CriterionUtils::OPENING_24_24,
+			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}

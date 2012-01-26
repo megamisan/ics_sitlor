@@ -116,4 +116,11 @@ class tx_icssitlorquery_CriterionUtils {
 	const RECEPTION_GROUP = 736000142;
 	const MOTORCOACH_PARK = 736000014;
 	const OPENING_24_24 = 736000325;
+	
+	/*******************************************************
+	 *
+	 * Price
+	 *
+	 *******************************************************/	
+	const CURRENT_SINGLE_CLIENTS_RATE = 4000010;
 }
