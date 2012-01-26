@@ -121,7 +121,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			//-- COORDINATES
 			case 'Coordinates':
 				return $this->coordinates;
-			
+
 			//-- PROVIDER
 			case 'ProviderName':
 				return $this->providerName;
@@ -139,7 +139,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			//-- TIMETABLE
 			case 'TimeTable':
 				return $this->timeTable;
-			
+
 			//-- RECEPTION
 			case 'ReceptionLanguage':
 				return $this->receptionLanguage;
@@ -159,7 +159,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->motorCoachPark;
 			case 'Opening24_24':
 				return $this->opening24_24;
-			
+
 			case 'CurrentSingleClientsRate':
 				return $this->currentSingleClientsRate;			
 			case 'ComfortRoom':
@@ -168,7 +168,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->hotelEquipement;
 			case 'HotelService':
 				return $this->hotelService;
-			
+
 			default : 
 				return parent::__get($name);
 		}
@@ -187,52 +187,52 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$this->tmpPhone['phone1'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_TEL2':
 				$this->tmpPhone['phone2'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_FAX':
 				$this->fax =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_EMAIL':
 				$email = $reader->readString();
 				$this->email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
 				$this->webSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			//-- COORDINATES
 			case 'LATITUDE':
 				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'LONGITUDE':
 				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			//-- PROVIDER
 			case 'PREST_CIVILITE':
 				$this->tmpProviderName['title'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-			
+
 			case 'PREST_NOM_RESP':
 				$this->tmpProviderName['firstname'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-			
+
 			case 'PREST_PRENOM_RESP':
 				$this->tmpProviderName['lastname'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -242,7 +242,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$this->tmpProviderAddress['number'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPREST_LIB_VOIE' :
 				$this->tmpProviderAddress['street'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -257,7 +257,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$this->tmpProviderAddress['zip'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPREST_LIBELLE_COMMUNE' :
 				$this->tmpProviderAddress['city'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -267,35 +267,35 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$this->tmpProviderPhone['phone1'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPREST_TEL2':
 				$this->tmpProviderPhone['phone2'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPREST_FAX':
 				$this->providerFax =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPREST_EMAIL':
 				$email = $reader->readString();
 				$this->providerEmail = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPREST_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
 				$this->providerWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-			
+
 			//-- TIMETABLE
 			case 'HORAIRES':
 				$this->parseTimeTable($reader);
 				break;
-			
+
 			default:	//-- CRITERION and other
 				parent::readElement($reader);
 		}
@@ -325,6 +325,11 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		}
 	}
 	
+	/** 
+	 * Set criterion
+	 *
+	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		parent::setCriterion($valuedTerm);
 
@@ -361,6 +366,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 *
 	 */
 	protected function afterParseXML() {
+		parent::afterParseXML();
 		$this->phone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone',
 			$this->tmpPhone['phone1'], 
@@ -386,8 +392,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->tmpProviderPhone['phone1'], 
 			$this->tmpProviderPhone['phone2']
 		);
-		
-		parent::afterParseXML();
 	}
 
 	/**
