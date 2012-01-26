@@ -123,4 +123,13 @@ class tx_icssitlorquery_CriterionUtils {
 	 *
 	 *******************************************************/	
 	const CURRENT_SINGLE_CLIENTS_RATE = 4000010;
+	
+	/*******************************************************
+	 *
+	 * Hotel
+	 *
+	 *******************************************************/	
+	const COMFORT_ROOM = 736000018;
+	const HOTEL_EQUIPMENT = 736000019;
+	const HOTEL_SERVICE = 736000020;
 }

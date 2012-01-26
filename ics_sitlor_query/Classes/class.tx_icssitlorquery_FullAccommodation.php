@@ -80,6 +80,9 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $opening24_24;
 	
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
+	private $comfortRoom;			// tx_icssitlorquery_ValuedTermList
+	private $hotelEquipement;		// tx_icssitlorquery_ValuedTermList
+	private $hotelService;			// tx_icssitlorquery_ValuedTermList
 	
 	/**
 	 * Constructor
@@ -91,6 +94,9 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->reservationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->comfortRoom = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->hotelEquipement = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->hotelService = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -155,7 +161,13 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->opening24_24;
 			
 			case 'CurrentSingleClientsRate':
-				return $this->currentSingleClientsRate;
+				return $this->currentSingleClientsRate;			
+			case 'ComfortRoom':
+				return $this->comfortRoom;
+			case 'HotelEquipement':
+				return $this->hotelEquipement;
+			case 'HotelService':
+				return $this->hotelService;
 			
 			default : 
 				return parent::__get($name);
@@ -336,6 +348,12 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->opening24_24 = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
 			$this->currentSingleClientsRate->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::COMFORT_ROOM)
+			$this->comfortRoom->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::HOTEL_EQUIPMENT)
+			$this->hotelEquipement->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::HOTEL_SERVICE)
+			$this->hotelService->Add($valuedTerm);
 	}
 	
 	/**
@@ -389,6 +407,9 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK,
 			tx_icssitlorquery_CriterionUtils::OPENING_24_24,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
+			tx_icssitlorquery_CriterionUtils::COMFORT_ROOM,
+			tx_icssitlorquery_CriterionUtils::HOTEL_EQUIPMENT,
+			tx_icssitlorquery_CriterionUtils::HOTEL_SERVICE,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}
