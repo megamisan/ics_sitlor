@@ -67,12 +67,38 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $providerEmail;
 	private $providerWebSite = null;
 
+	private $class;					// tx_icssitlorquery_ValuedTermList
+	
+	private $receptionLanguage;		// tx_icssitlorquery_ValuedTermList
+	private $menuLanguage;			// tx_icssitlorquery_ValuedTermList
+	private $pets;
+	private $allowedPets;
+	private $allowedGroup;
+	private $allowedGroupNumber;	// tx_icssitlorquery_ValuedTermList
+	private $motorCoachPark;
+	private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
+	
+	private $capacity;				// tx_icssitlorquery_ValuedTermList
+	
+	private $currentSaleFormula;			// tx_icssitlorquery_ValuedTermList
+	private $currentCartePrice;				// tx_icssitlorquery_ValuedTermList
+	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
+	
 	
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->class = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->menuLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->allowedGroupNumber = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->serviceOpen = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->capacity = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentSaleFormula = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentCartePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -111,7 +137,41 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->providerEmail;
 			case 'ProviderWebSite':
 				return $this->providerWebSite;
-				
+			
+			//-- CLASS
+			case 'Class':
+				return $this->class;
+
+			//-- RECEPTION
+			case 'ReceptionLanguage':
+				return $this->receptionLanguage;
+			case 'MenuLanguage':
+				return $this->menuLanguage;
+			case 'Pets':
+				return $this->pets;
+			case 'AllowedPets':
+				return $this->allowedPets;
+			case 'AllowedGroup':
+				return $this->allowedGroup;
+			case 'AllowedGroupNumber':
+				return $this->allowedGroupNumber;
+			case 'MotorCoachPark':
+				return $this->motorCoachPark;
+			case 'serviceOpen':
+				return $this->serviceOpen;
+			
+			//-- CAPACITY
+			case 'Capacity':
+				return $this->capacity;
+			
+			//-- PRICE
+			case 'CurrentSaleFormula':
+				return $this->currentSaleFormula;
+			case 'CurrentCartePrice':
+				return $this->currentCartePrice;
+			case 'CurrentMenuPrice':
+				return $this->currentMenuPrice;
+			
 			default : 
 				return parent::__get($name);
 		}
@@ -245,6 +305,32 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		parent::setCriterion($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RESTAURANT_CLASS)
+			$this->class->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RECEPTION_LANGUAGE)
+			$this->receptionLanguage->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MENU_LANGUAGE)
+			$this->menuLanguage->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::PETS)
+			$this->pets = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_PETS)
+			$this->allowedPets = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP)
+			$this->allowedGroup = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP_NUMBER)
+			$this->allowedGroupNumber->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK)
+			$this->motorCoachPark = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::SERVICEOPEN)
+			$this->serviceOpen->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY)
+			$this->capacity->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA)
+			$this->currentSaleFormula->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE)
+			$this->currentCartePrice->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE)
+			$this->currentMenuPrice->Add($valuedTerm);
 	}
 
 	/**
@@ -287,6 +373,19 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	 */
 	public static function getRequiredCriteria() {
 		$criteria = array(
+			tx_icssitlorquery_CriterionUtils::RESTAURANT_CLASS,
+			tx_icssitlorquery_CriterionUtils::RECEPTION_LANGUAGE,
+			tx_icssitlorquery_CriterionUtils::MENU_LANGUAGE,
+			tx_icssitlorquery_CriterionUtils::PETS,
+			tx_icssitlorquery_CriterionUtils::ALLOWED_PETS,
+			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP,
+			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP_NUMBER,
+			tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK,
+			tx_icssitlorquery_CriterionUtils::SERVICEOPEN,
+			tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY,
+			tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA,
+			tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE,
+			tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}

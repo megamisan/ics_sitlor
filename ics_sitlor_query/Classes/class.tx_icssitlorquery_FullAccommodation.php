@@ -75,7 +75,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $pets;
 	private $allowedPets;
 	private $allowedGroup;
-	private $receptionGroup;
+	private $receptionGroup;	// tx_icssitlorquery_ValuedTermList
 	private $motorCoachPark;
 	private $opening24_24;
 	
@@ -93,6 +93,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		$this->timeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->reservationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->receptionGroup = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->comfortRoom = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->hotelEquipement = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
@@ -346,7 +347,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP)
 			$this->allowedGroup = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RECEPTION_GROUP)
-			$this->receptionGroup = $valuedTerm;
+			$this->receptionGroup->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK)
 			$this->motorCoachPark = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::OPENING_24_24)
