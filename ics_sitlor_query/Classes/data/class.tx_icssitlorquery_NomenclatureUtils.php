@@ -22,35 +22,25 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
-
 /**
- * Class 'tx_icssitlorquery_CategoryFilter' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitlorquery_NomenclatureUtils' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
 
-class tx_icssitlorquery_CategoryFilter implements tx_icssitquery_IFilter {
-	private $value;
+class tx_icssitlorquery_NomenclatureUtils {
+	const HOTEL = 4000002;				// Type "Hôtel"
+	const HOTEL_RESTAURANT = 4000003;	// Type "Hôtel - hôtel restaurant"
+	const FURNISHED = 4000012;			// Type "Meublé"
+	static $hotel = array(
+		self::HOTEL,
+		self::HOTEL_RESTAURANT,
+		self::FURNISHED,
+	);
 	
-	/**
-	 * Constructor
-	 *
-	 * @param	string $value : The category
-	 */
-	public function __construct(tx_icssitlorquery_CategoryList $value) {
-		$this->value = $value;
-	}
+	const RESTAURANT = 4000007;	// Category "Restauration"
 	
-	/**
-	 * Apply filter
-	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
-	 */
-	function apply(tx_icssitquery_IQuery $query) {
-		$query->setParameter('category', $this->value);
-	}
+	const EVENT = 736001150;	// Type "Forme d'animation / manifestation"
 }

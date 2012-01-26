@@ -31,5 +31,15 @@
  */
 
 class tx_icssitlorquery_FullRestaurant extends Restaurant {
+	/**
+	 * Retrieves required criteria
+	 *
+	 * @return mixed : Array of criteria IDs
+	 */
+	public static function getRequiredCriteria() {
+		$criteria = array(
+		);
+		return array_merge(parent::getRequiredCriteria(), $criteria);
+	}
 	
 }

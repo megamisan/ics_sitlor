@@ -142,7 +142,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				break;
 
 			case 'CRITERES':
-				$this->parseCriteria($reader);
+				if (!$reader->isEmptyElement)
+					$this->parseCriteria($reader);
 				break;
 
 			default :
@@ -206,6 +207,10 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		}
 	}
 	
+	/**
+	 * Process after parsing the current XML node in the XMLReader
+	 *
+	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Address', 
