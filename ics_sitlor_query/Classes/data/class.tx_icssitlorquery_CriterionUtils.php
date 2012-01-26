@@ -104,8 +104,16 @@ class tx_icssitlorquery_CriterionUtils {
 	
 	/*******************************************************
 	 *
-	 * Common data
+	 * Reception
 	 *
 	 *******************************************************/
-	
+	const RECEPTION_LANGUAGE = 736000079;
+	const RESERVATION_LANGUAGE = 736000005;
+	const MOBILITY_IMPAIRED = 736000131;
+	const PETS = 736001106;
+	const ALLOWED_PETS = 736000010;
+	const ALLOWED_GROUP = 736000012;
+	const RECEPTION_GROUP = 736000142;
+	const MOTORCOACH_PARK = 736000014;
+	const OPENING_24_24 = 736000325;
 }

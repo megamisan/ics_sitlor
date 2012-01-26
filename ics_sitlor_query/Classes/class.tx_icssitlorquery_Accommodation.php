@@ -223,9 +223,11 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return mixed : Array of criteria IDs
 	 */
 	public static function getRequiredCriteria() {
-		$criteria = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
-		$criteria = array_merge($criteria, array(tx_icssitlorquery_CriterionUtils::RATINGSTAR));
-		return $criteria;
+		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
+		$criteria = array(
+			tx_icssitlorquery_CriterionUtils::RATINGSTAR
+		);
+		return array_merge($criteriaPhotos, $criteria);
 	}
 	
 }

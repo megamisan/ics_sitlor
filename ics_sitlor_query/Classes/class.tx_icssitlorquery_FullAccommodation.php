@@ -69,22 +69,24 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	
 	private $timeTable = null;
 	
+	private $receptionLanguage;		// tx_icssitlorquery_ValuedTermList
+	private $reservationLanguage;	// tx_icssitlorquery_ValuedTermList
+	private $mobilityImpaired;
+	private $pets;
+	private $allowedPets;
+	private $allowedGroup;
+	private $receptionGroup;
+	private $motorCoachPark;
+	private $opening24_24;
+	
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->TimeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
+		$this->timeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
+		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->reservationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		parent::__construct();
-	}
-
-	/**
-	 * Retrieves required criteria
-	 *
-	 * @return mixed : Array of criteria IDs
-	 */
-	public static function getRequiredCriteria() {
-		$criteria = parent::getRequiredCriteria();
-		return $criteria;
 	}
 
 	/**
@@ -128,83 +130,30 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			case 'TimeTable':
 				return $this->timeTable;
 			
+			//-- RECEPTION
+			case 'ReceptionLanguage':
+				return $this->receptionLanguage;
+			case 'ReservationLanguage':
+				return $this->reservationLanguage;
+			case 'MobilityImpaired':
+				return $this->mobilityImpaired;
+			case 'Pets':
+				return $this->pets;
+			case 'AllowedPets':
+				return $this->allowedPets;
+			case 'AllowedGroup':
+				return $this->allowedGroup;
+			case 'ReceptionGroup':
+				return $this->receptionGroup;
+			case 'MotorCoachPark':
+				return $this->motorCoachPark;
+			case 'Opening24_24':
+				return $this->opening24_24;
+			
 			default : 
 				return parent::__get($name);
 		}
 		
-	}	
-
-	/**
-	 * Set name
-	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
-	 */
-	public function __set($name, $value) {
-		switch ($name) {
-			//-- IDENTITY
-			case 'Phone':
-				if (!$value instanceof tx_icssitlorquery_Phone)
-					throw new Exception('Phone value must be an instance of tx_icssitlorquery_Phone.');
-				$this->phone = $value;
-				break;
-			case 'Fax':
-				$this->fax = $value;
-				break;
-			case 'Email':
-				$this->email = $value;
-				break;
-			case 'WebSite':
-				if (!$value instanceof tx_icssitlorquery_Link)
-					throw new Exception('WebSite value must be an instance of tx_icssitlorquery_Link.');
-				$this->webSite = $value;
-				break;
-				
-			//-- COORDINATES
-			case 'Coordinates':
-				$this->coordinates = $value;
-				break;
-				
-			//-- PROVIDER
-			case 'ProviderName':
-				if (!$value instanceof tx_icssitlorquery_Name)
-					throw new Exception('ProviderName value must be an instance of tx_icssitlorquery_Name.');
-				$this->providerName = $value;
-				break;
-			case 'ProviderAddress':
-				if (!$value instanceof tx_icssitlorquery_Address)
-					throw new Exception('ProviderAddress value must be an instance of tx_icssitlorquery_Address.');
-				$this->providerAddress = $value;
-				break;
-			case 'ProviderPhone':
-				if (!$value instanceof tx_icssitlorquery_Phone)
-					throw new Exception('ProviderPhone value must be an instance of tx_icssitlorquery_Phone.');
-				$this->providerPhone = $value;
-				break;
-			case 'ProviderFax':
-				$this->providerFax = $value;
-				break;
-			case 'ProviderEmail':
-				$this->providerEmail = $value;
-				break;
-			case 'ProviderWebSite':
-				if (!$value instanceof tx_icssitlorquery_Link)
-					throw new Exception('ProviderWebSite value must be an instance of tx_icssitlorquery_Link.');
-				$this->providerWebSite = $value;
-				break;
-			
-			//-- TIMETABLE
-			case 'TimeTable':
-				if (!$value instanceof tx_icssitlorquery_TimeTableList)
-					throw new Exception('Timetable value must be an instance of tx_icssitlorquery_TimeTableList.');
-				$this->timeTable = $value;
-				break;
-			
-			default : 
-				parent::__set($name, $value);
-		}		
 	}	
 
 	/**
@@ -226,20 +175,20 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				break;
 				
 			case 'ADRPROD_FAX':
-				$this->Fax =  $reader->readString();
+				$this->fax =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
 			case 'ADRPROD_EMAIL':
-				$email =  $reader->readString();
-				$this->Email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
+				$email = $reader->readString();
+				$this->email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
 			case 'ADRPROD_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
-				$this->WebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				$this->webSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
@@ -306,20 +255,20 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				break;
 				
 			case 'ADRPREST_FAX':
-				$this->ProviderFax =  $reader->readString();
+				$this->providerFax =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
 			case 'ADRPREST_EMAIL':
-				$email =  $reader->readString();
-				$this->ProviderEmail = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
+				$email = $reader->readString();
+				$this->providerEmail = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
 			case 'ADRPREST_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
-				$this->ProviderWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				$this->providerWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 			
@@ -328,7 +277,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$this->parseTimeTable($reader);
 				break;
 			
-			default:
+			default:	//-- CRITERION and other
 				parent::readElement($reader);
 		}
 	}
@@ -346,7 +295,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				switch ($reader->name) {
 					case 'Horaire':
 						if ($timeTable = tx_icssitlorquery_TimeTable::FromXML($reader))
-							$this->TimeTable->Add($timeTable);
+							$this->timeTable->Add($timeTable);
 						break;
 
 					default:
@@ -357,24 +306,47 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		}
 	}
 	
+	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
+		parent::setCriterion($valuedTerm);
+
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RECEPTION_LANGUAGE)
+			$this->receptionLanguage->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RESERVATION_LANGUAGE)
+			$this->reservationLanguage->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED)
+			$this->mobilityImpaired = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::PETS)
+			$this->pets = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_PETS)
+			$this->allowedPets = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP)
+			$this->allowedGroup = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RECEPTION_GROUP)
+			$this->receptionGroup = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK)
+			$this->motorCoachPark = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::OPENING_24_24)
+			$this->opening24_24 = $valuedTerm;
+	}
+	
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
 	 */
 	protected function afterParseXML() {
-		$this->Phone = t3lib_div::makeInstance(
+		$this->phone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone',
 			$this->tmpPhone['phone1'], 
 			$this->tmpPhone['phone2']
 		);
-		$this->Coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
-		$this->ProviderName = t3lib_div::makeInstance(
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
+		$this->providerName = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Name', 
 			$this->tmpProviderName['title'], 
 			$this->tmpProviderName['firstname'],
 			$this->tmpProviderName['lastname']
 		);
-		$this->ProviderAddress = t3lib_div::makeInstance(
+		$this->providerAddress = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Address', 
 			$this->tmpProviderAddress['number'], 
 			$this->tmpProviderAddress['street'], 
@@ -382,7 +354,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->tmpProviderAddress['zip'], 
 			$this->tmpProviderAddress['city']
 		);
-		$this->ProviderPhone = t3lib_div::makeInstance(
+		$this->providerPhone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone', 
 			$this->tmpProviderPhone['phone1'], 
 			$this->tmpProviderPhone['phone2']
@@ -390,4 +362,26 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		
 		parent::afterParseXML();
 	}
+
+	/**
+	 * Retrieves required criteria
+	 *
+	 * @return mixed : Array of criteria IDs
+	 */
+	public static function getRequiredCriteria() {
+		$criteria = array(
+			tx_icssitlorquery_CriterionUtils::RECEPTION_LANGUAGE,
+			tx_icssitlorquery_CriterionUtils::RESERVATION_LANGUAGE,
+			tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED,
+			tx_icssitlorquery_CriterionUtils::PETS,
+			tx_icssitlorquery_CriterionUtils::ALLOWED_PETS,
+			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP,
+			tx_icssitlorquery_CriterionUtils::RECEPTION_GROUP,
+			tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK,
+			tx_icssitlorquery_CriterionUtils::OPENING_24_24,
+		);
+		return array_merge(parent::getRequiredCriteria(), $criteria);
+	}
+
+
 }

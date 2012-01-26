@@ -140,7 +140,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', mktime(0,0,0,1,1,2000));
 		$this->queryService->addFilter($StartDateFilter);
 
-		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000259);
+		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000521);
+		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000259);
+		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000115);
 		$this->queryService->addFilter($idFilter);
 
 		try {
