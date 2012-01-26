@@ -269,12 +269,10 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 		
 		foreach ($timeEntry as $day=>$entry) {
 			if (isset($entry['am'])) {
-				$end = isset($entry['am']['end'])? $entry['am']['end']: 0;
-				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $end, false);
+				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $entry['am']['end'], false);
 			}
 			if (isset($entry['pm'])) {
-				$end = isset($entry['pm']['end'])? $entry['pm']['end']: 0;
-				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $end, true);
+				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['pm']['start'], $entry['pm']['end'], true);
 			}
 		}
 
