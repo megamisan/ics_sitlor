@@ -27,13 +27,13 @@
  * Class 'tx_icssitlorquery_Phone' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
+ * @author	Pierrick Caillon <pierrick@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
 
 class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
-	private $phone1 = '';
-	private $phone2 = '';
+	private $phone = '';
 
 	private static $lConf = array();
 
@@ -44,9 +44,8 @@ class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 	 * @param	string		$phone2
 	 * @return	void
 	 */
-	public function __construct($phone1, $phone2) {
-		$this->phone1 = $phone1;
-		$this->phone2 = $phone2;
+	public function __construct($phone) {
+		$this->phone = $phone;
 	}
 
 	/**

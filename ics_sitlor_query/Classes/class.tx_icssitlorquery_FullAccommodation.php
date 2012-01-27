@@ -31,11 +31,7 @@
  */
 
 class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation {
-	private $phone = null;
-	private $tmpPhone = array(
-		'phone1' => '',
-		'phone2' => ''
-	);
+	private $phones = null;
 	private $fax;
 	private $email;
 	private $webSite;
@@ -58,11 +54,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		'zip' => '',
 		'city' => ''
 	);
-	private $providerPhone = null;
-	private $tmpProviderPhone = array(
-		'phone1' => '',
-		'phone2' => ''
-	);
+	private $providerPhones = null;
 	private $providerFax;
 	private $providerEmail;
 	private $providerWebSite = null;
@@ -90,6 +82,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	public function __construct() {
 		parent::__construct();
 
+		$this->phones = array();
+		$this->providerPhones = array();
 		$this->timeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->reservationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
@@ -110,8 +104,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	public function __get($name) {
 		switch ($name) {
 			//-- IDENTITITY
-			case 'Phone':
-				return $this->phone;
+			case 'Phones':
+				return $this->phones;
 			case 'Fax':
 				return $this->fax;
 			case 'Email':
@@ -128,8 +122,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->providerName;
 			case 'ProviderAddress':
 				return $this->providerAddress;
-			case 'ProviderPhone':
-				return $this->providerPhone;
+			case 'ProviderPhones':
+				return $this->providerPhones;
 			case 'ProviderFax':
 				return $this->providerFax;
 			case 'ProviderEmail':
@@ -185,17 +179,26 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		switch ($reader->name) {
 			//-- IDENTITY
 			case 'ADRPROD_TEL':
-				$this->tmpPhone['phone1'] =  $reader->readString();
+				array_unshift($this->phones, t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_TEL2':
-				$this->tmpPhone['phone2'] =  $reader->readString();
+				array_push($this->phones, t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_FAX':
-				$this->fax =  $reader->readString();
+				$this->fax = t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -265,17 +268,26 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				break;
 
 			case 'ADRPREST_TEL':
-				$this->tmpProviderPhone['phone1'] =  $reader->readString();
+				array_unshift($this->providerPhones, t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPREST_TEL2':
-				$this->tmpProviderPhone['phone2'] =  $reader->readString();
+				array_push($this->providerPhones, t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPREST_FAX':
-				$this->providerFax =  $reader->readString();
+				$this->providerFax = t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -368,11 +380,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
-		$this->phone = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Phone',
-			$this->tmpPhone['phone1'],
-			$this->tmpPhone['phone2']
-		);
 		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
 		$this->providerName = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Name',
@@ -387,11 +394,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->tmpProviderAddress['extra'],
 			$this->tmpProviderAddress['zip'],
 			$this->tmpProviderAddress['city']
-		);
-		$this->providerPhone = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Phone',
-			$this->tmpProviderPhone['phone1'],
-			$this->tmpProviderPhone['phone2']
 		);
 	}
 
