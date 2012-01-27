@@ -7,7 +7,7 @@
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
-*  it under the Types of the GNU General Public License as published by
+*  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
 *
@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_Type' for the 'ics_sitlor_query' extension.
+ * Represents a Type.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -41,7 +42,7 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 	private $count;
 
 	/**
-	 * Private constructor ?
+	 * Initializes the object. Not callable from external code.
 	 *
 	 * @return	void
 	 */
@@ -49,10 +50,10 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves Type from XML
+	 * Reads a Type from its XML representation.
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
-	 * @return Type
+	 * @param	XMLReader		$reader: The XML reader on the root element of the Type.
+	 * @return	tx_icssitlorquery_Type		The parsed type instance.
 	 */
 	public static function FromXML(XMLReader $reader) {
 		$type = new tx_icssitlorquery_Type();
@@ -63,11 +64,9 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 					case 'TYPE':
 						$type->id = intval($reader->readString());
 						break;
-
 					case 'NomType':
 						$type->name = $reader->readString();
 						break;
-
 					case 'CpteType':
 						$type->count = intval($reader->readString());
 						break;
@@ -80,10 +79,10 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @return name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) 	{
@@ -94,23 +93,24 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 			case 'Count':
 				return $this->count;
 			default :
-				tx_icssitquery_debug::notice('Undefined property of Type via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Use the name of this type.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->name;

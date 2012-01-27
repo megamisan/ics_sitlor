@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_CriterionList' for the 'ics_sitlor_query' extension.
+ * Represents a list of criterion.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -39,9 +40,10 @@
 class tx_icssitlorquery_CriterionList extends tx_icssitlorquery_AbstractList {
 
 	/**
-	 * Constructor
+	 * Initializes the list.
+	 * Optionaly copy the elements from another list.
 	 *
-	 * @param	tx_icssitlorquery_CriterionList $source
+	 * @param	tx_icssitlorquery_CriterionList $source: The source list to copy. Optional.
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_CriterionList $source=null) {
@@ -49,9 +51,9 @@ class tx_icssitlorquery_CriterionList extends tx_icssitlorquery_AbstractList {
 	}
 
 	/**
-	 * Add element in the list
+	 * Adds an element to the list.
 	 *
-	 * @param	tx_icssitlorquery_Criterion		$element : The element to add
+	 * @param	tx_icssitlorquery_Criterion		$element: Element to add.
 	 * @return	void
 	 */
 	public function Add(tx_icssitlorquery_Criterion $element) {
@@ -59,9 +61,10 @@ class tx_icssitlorquery_CriterionList extends tx_icssitlorquery_AbstractList {
 	}
 
 	/**
-	 * Remove element in the list
+	 * Removes an element from the list.
+	 * Only the first occurence is removed.
 	 *
-	 * @param	tx_icssitlorquery_Criterion		$element : The element to remove
+	 * @param	tx_icssitlorquery_Criterion		$element: Element to remove.
 	 * @return	void
 	 */
 	public function Remove(tx_icssitlorquery_Criterion $element) {
@@ -69,10 +72,11 @@ class tx_icssitlorquery_CriterionList extends tx_icssitlorquery_AbstractList {
 	}
 
 	/**
-	 * Set element at positon
+	 * Defines an element in the list.
+	 * The position must exists.
 	 *
-	 * @param	int $position
-	 * @param	tx_icssitlorquery_Criterion $element
+	 * @param	int		$position: Position of the element to define.
+	 * @param	tx_icssitlorquery_Criterion		$element: Element to define.
 	 * @return	void
 	 */
 	public function Set($position, tx_icssitlorquery_Criterion $element) {

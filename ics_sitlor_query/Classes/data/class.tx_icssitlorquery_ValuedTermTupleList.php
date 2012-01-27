@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_ValuedTermTupleList' for the 'ics_sitlor_query' extension.
+ * Represents a list of valued term tuple.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -39,9 +40,10 @@
 class tx_icssitlorquery_ValuedTermTupleList extends tx_icssitlorquery_AbstractList {
 
 	/**
-	 * Constructor
+	 * Initializes the list.
+	 * Optionaly copy the elements from another list.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTermTupleList $source
+	 * @param	tx_icssitlorquery_ValuedTermTupleList $source: The source list to copy. Optional.
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_ValuedTermTupleList $source=null) {
@@ -49,30 +51,33 @@ class tx_icssitlorquery_ValuedTermTupleList extends tx_icssitlorquery_AbstractLi
 	}
 
 	/**
-	 * Add element in the list
+	 * Adds an element to the list.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTermTuple $element : The element to add
-	 * @return void
+	 * @param	tx_icssitlorquery_ValuedTermTuple		$element: Element to add.
+	 * @return	void
 	 */
 	public function Add(tx_icssitlorquery_ValuedTermTuple $element) {
 		parent::_Add($element);
 	}
 
 	/**
-	 * Remove element in the list
+	 * Removes an element from the list.
+	 * Only the first occurence is removed.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTermTuple $element : The element to remove
-	 * @return void
+	 * @param	tx_icssitlorquery_ValuedTermTuple		$element: Element to remove.
+	 * @return	void
 	 */
 	public function Remove(tx_icssitlorquery_ValuedTermTuple $element) {
 		parent::_Remove($element);
 	}
 
 	/**
-	 * Set element at positon
+	 * Defines an element in the list.
+	 * The position must exists.
 	 *
-	 * @param	int $position
-	 * @param	tx_icssitlorquery_ValuedTermTuple $element
+	 * @param	int		$position: Position of the element to define.
+	 * @param	tx_icssitlorquery_ValuedTermTuple		$element: Element to define.
+	 * @return	void
 	 */
 	public function Set($position, tx_icssitlorquery_ValuedTermTuple $element) {
 		parent::_Set($position, $element);

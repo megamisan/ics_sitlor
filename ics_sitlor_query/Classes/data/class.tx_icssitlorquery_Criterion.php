@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_Criterion' for the 'ics_sitlor_query' extension.
+ * Represents a Criterion.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -42,7 +43,7 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 	private $type;
 
 	/**
-	 * Private constructor ?
+	 * Initializes the object. Not callable from external code.
 	 *
 	 * @return	void
 	 */
@@ -50,9 +51,11 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves Criterion from XML
+	 * Reads a Criterion from its XML representation.
 	 *
-	 * @return Criterion
+	 * @param	XMLReader		$reader: The XML reader on the root element of the Criterion.
+	 * @param	tx_icssitlorquery_TermList		$terms: The terms list where to put the inner parsed terms.
+	 * @return	tx_icssitlorquery_Criterion		The parsed criterion instance.
 	 */
 	public static function FromXML(XMLReader $reader, tx_icssitlorquery_TermList $terms) {
 		$criterion = new tx_icssitlorquery_Criterion();
@@ -91,10 +94,10 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @return name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) 	{
@@ -109,24 +112,24 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 			case 'Modalites':
 				return tx_icssitlorquery_CriterionFactory::GetCriterionTerms($this);
 			default :
-				tx_icssitquery_debug::notice('Undefined property of Criterion via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
-
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Use the name of this criterion.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->name;

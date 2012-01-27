@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_Term' for the 'ics_sitlor_query' extension.
+ * Represents a Term.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -42,7 +43,7 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 	private $order;
 
 	/**
-	 * Private constructor ?
+	 * Initializes the object. Not callable from external code.
 	 *
 	 * @return	void
 	 */
@@ -50,10 +51,10 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves Term from XML
+	 * Reads a Term from its XML representation.
 	 *
-	 * @param	tx_icssitquery_TypeList $types
-	 * @return Term
+	 * @param	XMLReader		$reader: The XML reader on the root element of the Term.
+	 * @return	tx_icssitlorquery_Term		The parsed term instance.
 	 */
 	public static function FromXML(XMLReader $reader) {
 		$term = new tx_icssitlorquery_Term();
@@ -82,10 +83,10 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @return name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) 	{
@@ -98,26 +99,26 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 			case 'Count':
 				return $this->count;
 			default :
-				tx_icssitquery_debug::notice('Undefined property of Term via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Use the name of this term.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->name;
 	}
-
 }

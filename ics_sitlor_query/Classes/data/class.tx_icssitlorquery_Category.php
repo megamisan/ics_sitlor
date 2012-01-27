@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_Category' for the 'ics_sitlor_query' extension.
+ * Represents a Category.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -41,7 +42,7 @@ class tx_icssitlorquery_Category implements tx_icssitquery_IToString {
 	private $count;
 
 	/**
-	 * Private constructor ?
+	 * Initializes the object. Not callable from external code.
 	 *
 	 * @return	void
 	 */
@@ -49,10 +50,11 @@ class tx_icssitlorquery_Category implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves Category from XML
+	 * Reads a Category from its XML representation.
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
-	 * @return Category
+	 * @param	XMLReader		$reader: The XML reader on the root element of the Category.
+	 * @param	tx_icssitlorquery_TypeList		$types: The type list where to put the inner parsed types.
+	 * @return	tx_icssitlorquery_Category		The parsed category instance.
 	 */
 	public static function FromXML(XMLReader $reader, tx_icssitlorquery_TypeList $types) {
 		$category = new tx_icssitlorquery_Category();
@@ -64,22 +66,21 @@ class tx_icssitlorquery_Category implements tx_icssitquery_IToString {
 						$category->id = intval($reader->readString());
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-
 					case 'NomCat':
 						$category->name = $reader->readString();
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-
-					case 'CpteCcat' :
+					case 'CpteCcat':
 						$category->count = intval($reader->readString());
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-
 					case 'Types':
 						if ($type = tx_icssitlorquery_Type::FromXML($reader)) {
 							$types->Add($type);
 						}
 						break;
+					default :
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
 			}
 			$reader->read();
@@ -88,11 +89,10 @@ class tx_icssitlorquery_Category implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) 	{
@@ -105,23 +105,24 @@ class tx_icssitlorquery_Category implements tx_icssitquery_IToString {
 			case 'Types':
 				return tx_icssitlorquery_NomenclatureFactory::getCategoryTypes($this);
 			default :
-				tx_icssitquery_debug::notice('Undefined property of Category via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Use the name of this category.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->name;

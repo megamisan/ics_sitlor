@@ -7,7 +7,7 @@
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
-*  it under the ValuedTerms of the GNU General Public License as published by
+*  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
 *
@@ -30,6 +30,7 @@
 
 /**
  * Class 'tx_icssitlorquery_ValuedTerm' for the 'ics_sitlor_query' extension.
+ * Represents a ValuedTerm.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -43,7 +44,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	private static $lConf = array();
 
 	/**
-	 * Private constructor ?
+	 * Initializes the object. Not callable from external code.
 	 *
 	 * @return	void
 	 */
@@ -51,10 +52,10 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves ValuedTerm from XML
+	 * Reads a ValuedTerm from its XML representation.
 	 *
-	 * @param	tx_icssitquery_ValuedTermList $ValuedTerms
-	 * @return ValuedTerm
+	 * @param	XMLReader		$reader: The XML reader on the root element of the ValuedTerm.
+	 * @return	tx_icssitlorquery_ValuedTerm		The parsed valued term instance.
 	 */
 	public static function FromXML(XMLReader $reader) {
 		$valuedTerm = new tx_icssitlorquery_ValuedTerm();
@@ -75,10 +76,10 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @return name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) 	{
@@ -89,7 +90,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 			case 'Value':
 				return $this->value;
 			default :
-				tx_icssitquery_debug::notice('Undefined property of ValuedTerm via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
@@ -110,7 +111,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 				$this->value = $value;
 				break;
 			default :
-				tx_icssitquery_debug::notice('Undefined property of ValuedTerm via __set(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
@@ -126,9 +127,9 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		// TODO : cObj local
@@ -138,11 +139,10 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 	}
-
 }
