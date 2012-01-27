@@ -31,6 +31,19 @@
  */
 
 class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
+	private $phone = null;
+	private $tmpPhone = array(
+		'phone1' => '', 
+		'phone2' => ''
+	);
+	private $fax;
+	private $email;
+	private $webSite;
+
+	private $coordinates = null;
+	private $latitude = 0;
+	private $longitude = 0;
+	
 	/**
 	 * Constructor
 	 */
