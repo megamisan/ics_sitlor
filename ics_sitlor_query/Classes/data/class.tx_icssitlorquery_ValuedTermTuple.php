@@ -70,7 +70,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 
 		if ((strlen($name)>=5) && (substr($name, 0, 4)=='Item')) {
 			$numItem = substr($name, 4);
-			if (is_numeric($numItem) && $numItem>0)
+			if (is_numeric($numItem) && $numItem<=$this->count && $numItem>0)
 				return $this->Get(intval($numItem) - 1);
 			else
 				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
@@ -89,7 +89,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	public function __set($name, $value) {
 		if ((strlen($name)>=5) && (substr($name,0,4)=='Item')) {
 			$numItem = substr($name, 4);
-			if (is_numeric($numItem) && $numItem>0) {
+			if (is_numeric($numItem) && $numItem<=$this->count && $numItem>0) {
 				$this->Set(intval($numItem) - 1, $value);
 			} else {
 				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);

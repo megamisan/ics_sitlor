@@ -38,8 +38,6 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		'extra' => ''
 	);
 
-	private $timeTable;
-	
 	/** 
 	 * Constructor
 	 */
@@ -57,9 +55,6 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'TimeTable':
-				return $this->timeTable;
-				
 			default : 
 				return parent::__get($name);
 		}
@@ -76,10 +71,6 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			case 'TimeTable':
-				$this->timeTable = $value;
-				break;
-				
 			default : 
 				parent::__set($name, $value);
 		}		
@@ -235,7 +226,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				switch ($reader->name) {
 					case 'Horaire':
 						if ($timeTable = tx_icssitlorquery_TimeTable::FromXML($reader))
-							$this->timeTable->Add($timeTable);
+							$this->TimeTable->Add($timeTable);
 						break;
 
 					default:
@@ -269,7 +260,6 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
-			tx_icssitlorquery_CriterionUtils::RATINGSTAR
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

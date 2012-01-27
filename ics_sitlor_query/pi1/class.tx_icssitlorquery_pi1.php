@@ -129,6 +129,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			// }
 		// }
 
+		
+		/*
+		//-- TEST ACCOMODATAION
 		// try {
 			// $types = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(4000002, 4000003, 4000012));
 		// } catch (Exception $e) {
@@ -137,9 +140,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// $typeFilter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
 		// $this->queryService->addFilter($typeFilter);
 
+
 		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', mktime(0,0,0,1,1,2000));
 		$this->queryService->addFilter($StartDateFilter);
-
 		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000521);
 		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000259);
 		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000115);
@@ -154,7 +157,60 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$content = $this->pi_getLL('no_data', 'There is any Accomodations', true);
 		else 
 			$content = 'There are ' . count($accomodations) . ' accomodation(s).';
+		*/
 		
+		/*
+		//-- TEST RESTAURANT
+		// try {
+			// $cats = tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::RESTAURANT));
+		// } catch (Exception $e) {
+			// tx_icssitquery_Debug::error('Retrieves Category for RESTAURANT failed : ' . $e);
+		// }
+		// $catFilter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $cats);
+		// $this->queryService->addFilter($catFilter);
+		
+		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000148 );
+		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000553  );
+		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000041   );		
+		$this->queryService->addFilter($idFilter);
+		
+		try {
+			$restaurants = $this->queryService->getRestaurants($this->sortingProvider);
+		} catch (Exception $e) {
+			tx_icssitquery_Debug::error('Retrieves Restaurant proccess failed : ' . $e);
+		}
+		if (empty($restaurants))
+			$content = $this->pi_getLL('no_data', 'There is any Restaurants', true);
+		else 
+			$content = 'There are ' . count($restaurants) . ' restaurant(s).';
+		*/
+		
+		//-- TEST EVENT
+		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', mktime(0,0,0,1,1,2000));
+		$this->queryService->addFilter($StartDateFilter);
+			// TODO : filtre critère
+		// $genderFilter = t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::EVENT);
+		// $this->queryService->addFilter($genderFilter);
+		// try {
+			// $crits = tx_icssitlorquery_CriterionFactory::GetCriteria(array(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT));
+		// } catch (Exception $e) {
+			// tx_icssitquery_Debug::error('Retrieves criterion for EVENT failed : ' . $e);
+		// }
+		// $critFilter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $crits);
+		// $this->queryService->addFilter($critFilter);
+		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737003810);		
+		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737005878 );		
+		$this->queryService->addFilter($idFilter);
+		try {
+			$events = $this->queryService->getEvents($this->sortingProvider);
+		} catch (Exception $e) {
+			tx_icssitquery_Debug::error('Retrieves Event proccess failed : ' . $e);
+		}
+		if (empty($events))
+			$content = $this->pi_getLL('no_data', 'There is any Events', true);
+		else 
+			$content = 'There are ' . count($events) . ' event(s).';
+			
 		return $this->pi_wrapInBaseClass($content);
     }
 	

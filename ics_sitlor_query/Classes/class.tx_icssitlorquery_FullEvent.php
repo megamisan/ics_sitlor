@@ -44,11 +44,17 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	private $latitude = 0;
 	private $longitude = 0;
 
+	private $kindOfEvent;
+	private $typeEvent;
+	private $information;	// tx_icssitlorquery_ValuedTermList
+	private $festival;
+	
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->information = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -74,6 +80,15 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 			case 'Coordinates':
 				return $this->coordinates;
 
+			case 'KindOfEvent':
+				return $this->kindOfEvent;
+			case 'TypeEvent':
+				return $this->typeEvent;
+			case 'Information':
+				return $this->information;
+			case 'Festival':
+				return $this->festival;
+				
 			default : 
 				return parent::__get($name);
 		}
@@ -164,6 +179,14 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		parent::setCriterion($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT)
+			$this->kindOfEvent = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::TYPE_EVENT)
+			$this->typeEvent = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION)
+			$this->information->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL)
+			$this->festival = $valuedTerm;
 	}
 	
 	/**
@@ -187,6 +210,10 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	public static function getRequiredCriteria() {
 		$criteria = array(
+			tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT,
+			tx_icssitlorquery_CriterionUtils::TYPE_EVENT,
+			tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION,
+			tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}	

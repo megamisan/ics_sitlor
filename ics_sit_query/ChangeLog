@@ -1,3 +1,6 @@
+2012-01-27 Tsi Yang <tsi@in-cite.net>
+	* Feature : Implementation of AbstractEvent
+
 2012-01-27 Pierrick Caillon <pierrick@in-cite.net>
 	* Comments: Added missing PHPdoc (partially).
 	* Comments: Corrected some comments.
