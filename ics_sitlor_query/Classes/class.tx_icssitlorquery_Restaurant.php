@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,8 +39,9 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	);
 
 	/**
-	 * Constructor
+	 * Initializes the restaurant.
 	 *
+	 * @return	void
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
@@ -48,39 +49,38 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Retrieves a property.
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @param	string		$name Requested property name.
+	 * @return	mixed		The requested property's value.
 	 */
 	public function __get($name) {
 		switch ($name) {
-			default : 
+			default :
 				return parent::__get($name);
 		}
-		
-	}	
-	
+
+	}
+
 	/**
-	 * Set name
+	 * Defines a property.
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
+	 * @param	string		$name Defined property name.
+	 * @param	mixed		$value The new value for the property.
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			default : 
+			default :
 				parent::__set($name, $value);
-		}		 
-	}	
+		}
+	}
 
 	/**
-	 * Parse the current XML node in the XMLReader
+	 * Parses the current XML node in the XMLReader.
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader Reader to the parsed document.
+	 * @return	void
 	 */
 	public function parseXML(XMLReader $reader) {
 		$reader->read();
@@ -92,11 +92,12 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 		}
 		$this->afterParseXML();
 	}
-	
+
 	/**
-	 * Read the current XML element in the XMLReader
+	 * Reads the current XML element in the XMLReader.
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader Reader to the parsed document.
+	 * @return	void
 	 */
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
@@ -104,12 +105,12 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 				$this->ID = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
-			case 'NOM':	
+
+			case 'NOM':
 				$this->Name = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'COMMENTAIRE':
 				$this->Description = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -125,7 +126,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 				$this->tmpAddress['number'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_LIB_VOIE' :
 				$this->tmpAddress['street'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -155,12 +156,12 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 		}
 	}
-	
+
 	/**
-	 * Parse the current XML node in the XMLReader
-	 * Parse criteria
+	 * Parses the criteria XML node in the XMLReader.
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader Reader to the parsed document.
+	 * @return	void
 	 */
 	protected function parseCriteria(XMLReader $reader) {
 		$reader->read();
@@ -173,37 +174,38 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 							$this->setCriterion($valuedTerm);
 						}
 						break;
-						
+
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
 			}
 			$reader->read();
 		}
- 	}	
+ 	}
 
-	/** 
-	 * Set criterion
+	/**
+	 * Sets a criterion.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm Valued term to associate.
+	 * @return	void
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
 			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
-				$this->Illustration, 
-				$valuedTerm, 
-				0, 
-				1, 
+				$this->Illustration,
+				$valuedTerm,
+				0,
+				1,
 				tx_icssitlorquery_CriterionUtils::$creditPhotos[$index]
 			);
 		}
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
-				$this->Illustration, 
-				$valuedTerm, 
-				1, 
-				0, 
+				$this->Illustration,
+				$valuedTerm,
+				1,
+				0,
 				tx_icssitlorquery_CriterionUtils::$photos[$index]
 			);
 		}
@@ -211,26 +213,27 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 			$this->ChainAndLabel->Add($valuedTerm);
 		}
 	}
-	
+
 	/**
-	 * Process after parsing the current XML node in the XMLReader
+	 * Processes after parsing the current XML node in the XMLReader.
 	 *
+	 * @return	void
 	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address', 
-			$this->tmpAddress['number'], 
-			$this->tmpAddress['street'], 
+			'tx_icssitlorquery_Address',
+			$this->tmpAddress['number'],
+			$this->tmpAddress['street'],
 			$this->tmpAddress['extra'],
 			$this->Zip,
 			$this->City
 		);
 	}
-	
+
 	/**
-	 * Retrieves required criteria
+	 * Retrieves required criteria.
 	 *
-	 * @return mixed : Array of criteria IDs
+	 * @return	array		Criterion IDs.
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
@@ -239,5 +242,5 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}
-	
+
 }

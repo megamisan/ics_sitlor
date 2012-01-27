@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,13 +39,15 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	private $start;	// timestamp
 	private $end;	// timestamp
 	private $comment;
-	
+
 	private $timeEntries = array();
-	
+
 	private static $lConf = array();
-	
+
 	/**
 	 * Private constructor
+	 *
+	 * @return	void
 	 */
 	private function __construct() {
 	}
@@ -54,7 +56,6 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 * Retrieves properties
 	 *
 	 * @param	string $name : Property's name
-	 *
 	 * @return mixed : name 's value
 	 */
 	public function __get($name) {
@@ -71,11 +72,12 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 				tx_icssitquery_debug::notice('Undefined TimeTable property via __get(): ' . $name);
 		}
 	}
-	
+
 	/**
 	 * Retrieves TimeTable
 	 *
 	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @return	void
 	 */
 	public static function FromXML(XMLReader $reader) {
 		$timeTable = new tx_icssitlorquery_TimeTable();
@@ -133,7 +135,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[1]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					case 'MARDI_AM_DE':
 						if ($time = $reader->readString())
 							$timeEntry[2]['am']['start'] = strtotime($time);
@@ -154,7 +156,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[2]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					case 'MERCREDI_AM_DE':
 						if ($time = $reader->readString())
 							$timeEntry[3]['am']['start'] = strtotime($time);
@@ -175,7 +177,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[3]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					case 'JEUDI_AM_DE':
 						if ($time = $reader->readString())
 							$timeEntry[4]['am']['start'] = strtotime($time);
@@ -196,7 +198,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[4]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					case 'VENDREDI_AM_DE':
 						if ($time = $reader->readString())
 							$timeEntry[5]['am']['start'] = strtotime($time);
@@ -217,7 +219,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[5]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					case 'SAMEDI_AM_DE':
 						if ($time = $reader->readString())
 							$timeEntry[6]['am']['start'] = strtotime($time);
@@ -238,7 +240,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[6]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					case 'DIMANCHE_AM_DE':
 						if ($time = $reader->readString())
 							$timeEntry[7]['am']['start'] = strtotime($time);
@@ -259,14 +261,14 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$timeEntry[7]['pm']['end'] = strtotime($time);
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
-						
+
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
 			}
 			$reader->read();
 		}
-		
+
 		foreach ($timeEntry as $day=>$entry) {
 			if (isset($entry['am'])) {
 				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $entry['am']['end'], false);
@@ -278,7 +280,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 
 		return $timeTable;
 	}
-	
+
 	/**
 	 * Set default
 	 *
@@ -288,25 +290,53 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	public function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		return $this->toStringObjConf($cObj, $conf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'TimeTable toString is not yet implemented';
-	}		
+	}
 }

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,7 +37,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		'street' => '',
 		'extra' => ''
 	);
-	
+
 	/** 
 	 * Constructor
 	 */
@@ -54,12 +54,12 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 */
 	public function __get($name) {
 		switch ($name) {
-			default : 
+			default :
 				return parent::__get($name);
 		}
-		
-	}	
-	
+
+	}
+
 	/**
 	 * Set name
 	 *
@@ -70,11 +70,11 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			default : 
+			default :
 				parent::__set($name, $value);
-		}		
-	}	
-	
+		}
+	}
+
 	/**
 	 * Parse the current XML node in the XMLReader
 	 *
@@ -90,7 +90,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		}
 		$this->afterParseXML();
 	}
-	
+
 	/**
 	 * Read the current XML element in the XMLReader
 	 *
@@ -102,12 +102,12 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				$this->ID = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
-			case 'NOM':	
+
+			case 'NOM':
 				$this->Name = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'COMMENTAIRE':
 				$this->Description = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -123,7 +123,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				$this->tmpAddress['number'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_LIB_VOIE' :
 				$this->tmpAddress['street'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -138,7 +138,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				$this->Zip = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_LIBELLE_COMMUNE' :
 				$this->City = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -153,7 +153,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 		}
 	}
-			
+
 	/**
 	 * Parse the current XML node in the XMLReader
 	 * Parse criteria
@@ -171,7 +171,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 							$this->setCriterion($valuedTerm);
 						}
 						break;
-						
+
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
@@ -179,8 +179,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$reader->read();
 		}
  	}
-	
-	/** 
+
+	/**
 	 * Set criterion
 	 *
 	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
@@ -189,19 +189,19 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
 			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
-				$this->Illustration, 
-				$valuedTerm, 
-				0, 
-				1, 
+				$this->Illustration,
+				$valuedTerm,
+				0,
+				1,
 				tx_icssitlorquery_CriterionUtils::$creditPhotos[$index]
 			);
 		}
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
-				$this->Illustration, 
-				$valuedTerm, 
-				1, 
-				0, 
+				$this->Illustration,
+				$valuedTerm,
+				1,
+				0,
 				tx_icssitlorquery_CriterionUtils::$photos[$index]
 			);
 		}
@@ -209,26 +209,26 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->RatingStar = $valuedTerm;
 		}
 	}
-	
+
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
 	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address', 
-			$this->tmpAddress['number'], 
-			$this->tmpAddress['street'], 
+			'tx_icssitlorquery_Address',
+			$this->tmpAddress['number'],
+			$this->tmpAddress['street'],
 			$this->tmpAddress['extra'],
 			$this->Zip,
 			$this->City
 		);
 	}
-	
+
 	/**
 	 * Retrieves required criteria
 	 *
-	 * @return mixed : Array of criteria IDs
+	 * @return array equired criterion identifiers for object construction.
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
@@ -237,5 +237,5 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}
-	
+
 }

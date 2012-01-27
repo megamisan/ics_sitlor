@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,14 +39,15 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 	private $id;
 	private $name;
 	private $count;
-	
+
 	/**
 	 * Private constructor ?
 	 *
+	 * @return	void
 	 */
 	private function __construct() {
 	}
-	
+
 	/**
 	 * Retrieves Type from XML
 	 *
@@ -62,11 +63,11 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 					case 'TYPE':
 						$type->id = intval($reader->readString());
 						break;
-						
+
 					case 'NomType':
 						$type->name = $reader->readString();
 						break;
-						
+
 					case 'CpteType':
 						$type->count = intval($reader->readString());
 						break;
@@ -82,7 +83,6 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 	 * Retrieves properties
 	 *
 	 * @param	string $name : Property's name
-	 *
 	 * @return name 's value
 	 */
 	public function __get($name) {
@@ -97,15 +97,21 @@ class tx_icssitlorquery_Type implements tx_icssitquery_IToString {
 				tx_icssitquery_debug::notice('Undefined property of Type via __get(): ' . $name);
 		}
 	}
-	
+
 	/**
 	 * Convert object to display as string
+	 *
 	 * @return string
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->name;
 	}

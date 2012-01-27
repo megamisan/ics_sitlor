@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -43,7 +43,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	private $coordinates = null;
 	private $latitude = 0;
 	private $longitude = 0;
-	
+
 	/**
 	 * Constructor
 	 */

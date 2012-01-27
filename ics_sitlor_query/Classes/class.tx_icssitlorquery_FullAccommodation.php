@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@
 class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation {
 	private $phone = null;
 	private $tmpPhone = array(
-		'phone1' => '', 
+		'phone1' => '',
 		'phone2' => ''
 	);
 	private $fax;
@@ -43,7 +43,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $coordinates = null;
 	private $latitude = 0;
 	private $longitude = 0;
-	
+
 	private $providerName = null;
 	private $tmpProviderName = array(
 		'title' => '',
@@ -60,15 +60,15 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	);
 	private $providerPhone = null;
 	private $tmpProviderPhone = array(
-		'phone1' => '', 
+		'phone1' => '',
 		'phone2' => ''
 	);
 	private $providerFax;
 	private $providerEmail;
 	private $providerWebSite = null;
-	
+
 	private $timeTable = null;
-	
+
 	private $receptionLanguage;		// tx_icssitlorquery_ValuedTermList
 	private $reservationLanguage;	// tx_icssitlorquery_ValuedTermList
 	private $mobilityImpaired;
@@ -78,18 +78,18 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $receptionGroup;	// tx_icssitlorquery_ValuedTermList
 	private $motorCoachPark;
 	private $opening24_24;
-	
+
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
 	private $comfortRoom;			// tx_icssitlorquery_ValuedTermList
 	private $hotelEquipement;		// tx_icssitlorquery_ValuedTermList
 	private $hotelService;			// tx_icssitlorquery_ValuedTermList
-	
+
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		parent::__construct();
-		
+
 		$this->timeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->reservationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
@@ -118,7 +118,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->email;
 			case 'WebSite':
 				return $this->webSite;
-			
+
 			//-- COORDINATES
 			case 'Coordinates':
 				return $this->coordinates;
@@ -162,7 +162,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->opening24_24;
 
 			case 'CurrentSingleClientsRate':
-				return $this->currentSingleClientsRate;			
+				return $this->currentSingleClientsRate;
 			case 'ComfortRoom':
 				return $this->comfortRoom;
 			case 'HotelEquipement':
@@ -170,11 +170,11 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			case 'HotelService':
 				return $this->hotelService;
 
-			default : 
+			default :
 				return parent::__get($name);
 		}
-		
-	}	
+
+	}
 
 	/**
 	 * Read the current XML element in the XMLReader
@@ -301,7 +301,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				parent::readElement($reader);
 		}
 	}
-	
+
 	/**
 	 * Parse the current XML node in the XMLReader
 	 * Parse TimeTable
@@ -325,8 +325,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$reader->read();
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Set criterion
 	 *
 	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
@@ -361,7 +361,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::HOTEL_SERVICE)
 			$this->hotelService->Add($valuedTerm);
 	}
-	
+
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
@@ -370,27 +370,27 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		parent::afterParseXML();
 		$this->phone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone',
-			$this->tmpPhone['phone1'], 
+			$this->tmpPhone['phone1'],
 			$this->tmpPhone['phone2']
 		);
 		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
 		$this->providerName = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Name', 
-			$this->tmpProviderName['title'], 
+			'tx_icssitlorquery_Name',
+			$this->tmpProviderName['title'],
 			$this->tmpProviderName['firstname'],
 			$this->tmpProviderName['lastname']
 		);
 		$this->providerAddress = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address', 
-			$this->tmpProviderAddress['number'], 
-			$this->tmpProviderAddress['street'], 
+			'tx_icssitlorquery_Address',
+			$this->tmpProviderAddress['number'],
+			$this->tmpProviderAddress['street'],
 			$this->tmpProviderAddress['extra'],
-			$this->tmpProviderAddress['zip'], 
+			$this->tmpProviderAddress['zip'],
 			$this->tmpProviderAddress['city']
 		);
 		$this->providerPhone = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Phone', 
-			$this->tmpProviderPhone['phone1'], 
+			'tx_icssitlorquery_Phone',
+			$this->tmpProviderPhone['phone1'],
 			$this->tmpProviderPhone['phone2']
 		);
 	}

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,6 +41,13 @@ class tx_icssitquery_Debug {
 			E_USER_ERROR);
 	}
 
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$message: ...
+	 * @param	[type]		$backlevel: ...
+	 * @return	[type]		...
+	 */
 	public static function warning($message, $backlevel = 0) {
 		$trace = debug_backtrace();
 		trigger_error(
@@ -50,6 +57,13 @@ class tx_icssitquery_Debug {
 			E_USER_WARNING);
 	}
 
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$message: ...
+	 * @param	[type]		$backlevel: ...
+	 * @return	[type]		...
+	 */
 	public static function notice($message, $backlevel = 0) {
 		$trace = debug_backtrace();
 		trigger_error(

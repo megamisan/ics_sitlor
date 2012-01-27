@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,14 +40,15 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 	private $name;
 	private $class;
 	private $type;
-	
+
 	/**
 	 * Private constructor ?
 	 *
+	 * @return	void
 	 */
 	private function __construct() {
 	}
-	
+
 	/**
 	 * Retrieves Criterion from XML
 	 *
@@ -62,7 +63,7 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 					case 'CRITERE':
 						$criterion->id = intval($reader->readString());
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;					
+						break;
 					case 'CRITERE_NOM':
 						$criterion->name = $reader->readString();
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -70,7 +71,7 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 					case 'CRITERE_TYPEVAL':
 						$criterion->type = intval($reader->readString());
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;					
+						break;
 					case 'CRITERE_CLASSE':
 						$criterion->class = intval($reader->readString());
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -80,7 +81,7 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 							$terms->Add($term);
 						}
 						break;
-					default : 
+					default :
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
 			}
@@ -89,11 +90,10 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 		return $criterion;
 	}
 
-		/**
+	/**
 	 * Retrieves properties
 	 *
 	 * @param	string $name : Property's name
-	 *
 	 * @return name 's value
 	 */
 	public function __get($name) {
@@ -107,23 +107,29 @@ class tx_icssitlorquery_Criterion implements tx_icssitquery_IToString {
 			case 'Class':
 				return $this->class;
 			case 'Modalites':
-				return tx_icssitlorquery_CriterionFactory::GetCriterionTerms($this);			
+				return tx_icssitlorquery_CriterionFactory::GetCriterionTerms($this);
 			default :
 				tx_icssitquery_debug::notice('Undefined property of Criterion via __get(): ' . $name);
 		}
 	}
 
-	
+
 	/**
 	 * Convert object to display as string
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->name;
 	}
-	
+
 }

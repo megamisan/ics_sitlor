@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,22 +30,18 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 
 	private $login;		// The login
 	private $password;	// The password
 	private $url;		// The url
-	
 	private $start = 1;	// Begin of page
 	private $end = 20;	// End of page
-	
 	private $filters = array();	// Associative array
 	private $queryParams = array();
-	
 	static private $outputList = array(	// SITLOR Output value
-		'xml' => '1', 
-		'csv' => '3', 
+		'xml' => '1',
+		'csv' => '3',
 		'pdf' => '5'
 	);
 	private $output = 'xml';	// Output type
@@ -74,35 +70,33 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	private $scheme = 'WEBACCESS';
 	private $query = array();
 	static private $entity = '737';
-	
 	static private $startDate;
 	static private $endDate = '01/01/2100 23:59:59';
-	
+
 	/**
-	 * Constructor
+	 * Initializes service access.
 	 *
-	 * @param	string $login : The login
-	 * @param	string $password : The password
-	 * @param	string $url : The url
-	 *
+	 * @param	string		$login User identifier
+	 * @param	string		$password User password
+	 * @param	string		$url SITLOR service URL
+	 * @return	void
 	 */
 	function __construct($login, $password, $url) {
 		$this->login = $login;
 		$this->password = $password;
 		$this->url = $url;
 	}
-	
-	
+
 	/**
-	 * Execute the query
+	 * Executes the query.
 	 *
-	 * @return void
+	 * @return	void
 	 */
 	public function execute() {
 		$params = array();
 		$params['user']	= utf8_decode($this->login);
 		$params['pwkey'] = utf8_decode($this->password);
-		
+
 		// Format params
 		$params['typsor'] = utf8_decode(self::$outputList[$this->output]);
 		if (!empty($this->fields))
@@ -118,7 +112,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		//-- End of Format params
 
 		$this->setQuery($this->table);
-		
+
 		// Filter on params
 		$filterArray = array_keys($this->filters);
 		$pnames = array();
@@ -161,45 +155,40 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$this->makeValidFilter($pnames, $pvalues, $filterArray);
 			$this->makeAvailableFilter($pnames, $pvalues, $filterArray);
 		}
-		
+
 		//-- End of Filter on params
-		
+
 		$params['PNAMES'] = utf8_decode(implode(',', $pnames));
 		$params['PVALUES'] = utf8_decode(implode(',', $pvalues));
 		// $params['sql'] = utf8_decode(implode(' ', $this->query));
 		// $params['urlnames'] = 'sql';
-		
+
 		$urlQuery = $this->url . '?' . http_build_query($params);
 		t3lib_div::devLog('Url', 'ics_sitlor_query', 0, array(urldecode($urlQuery)));
 		return tx_icssitlorquery_XMLTools::getXMLDocument($urlQuery);
 	}
-	
-	
+
 	/**
-	 * Set page
+	 * Sets result page.
 	 *
-	 * @param	int $number : Number of the page
-	 * @param	int $size : Size of element
-	 *
-	 * @return void
+	 * @param	int		$number Page number.
+	 * @param	int		$size Elements per page.
+	 * @return	void
 	 */
 	public function setPage($number, $size) {
 		if (!is_int($number) || $number<1)
 			tx_icssitquery_Debug::error('Number of page is not positive int other than 0.');
-		
 		if (!is_int($size) || $size<1)
 			tx_icssitquery_Debug::error('Size of element is not positive int other than 0.');
-		
 		$this->start = (($number * $size) +1) -$size;
 		$this->end = ($number * $size);
 	}
-	
+
 	/**
-	 * Set parameter
+	 * Sets a parameter.
 	 *
-	 * @param	string $name : Parameter's name
-	 * @param	string $value : Parameter's value
-	 *
+	 * @param	string		$name Parameter name
+	 * @param	string		$value Parameter value
 	 * @return void
 	 */
 	public function setParameter($name, $value) {
@@ -220,11 +209,12 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$this->filters[$name] = $value;
 		}
 	}
-	
+
 	/**
-	 * Set output
+	 * Sets output type.
 	 *
-	 * @param	string $value : The output xml, csv, pdf
+	 * @param	string		$value The output type. See self::$outputList.
+	 * @return	void
 	 */
 	public function setOutput($value) {
 		$value = strtolower($value);
@@ -233,47 +223,52 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		else
 			tx_icssitquery_Debug::warning('Output ' . $value . ' is undefined.');
 	}
-	
+
 	/**
-	 * Set fields
+	 * Sets fields.
 	 *
-	 * @param	string array $fields : array of fieldnames
+	 * @param	array		$fields Field names.
+	 * @return	void
 	 */
 	public function setFields(array $fields) {
 		$this->fields = $fields;
 	}
-	
+
 	/**
-	 * Add field
+	 * Adds a field.
 	 *
-	 * @param	string $field : Fieldname
+	 * @param	string	$field Fieldname.
+	 * @return	void
 	 */
 	public function addField($field=null) {
 		$this->fields[] = $field;
 	}
 
 	/**
-	 * Set criteria
+	 * Sets criteria.
 	 *
-	 * @param	int array $criteria : Array of criteria IDs
+	 * @param	array		$criteria IDs of criterion.
+	 * @return	void
 	 */
 	public function setCriteria(array $criteria) {
 		$this->criteria = $criteria;
 	}
-	
+
 	/**
-	 * Add Criterion
+	 * Adds a criterion.
 	 *
-	 * @param	int $criterion : Criterion ID
+	 * @param	int		$criterion Criterion ID.
+	 * @return	void
 	 */
 	public function addCriterion($criterion) {
 		$this->criteria[] = $criterion;
 	}
-	
+
 	/**
-	 * Set table
+	 * Sets table.
 	 *
-	 * @param	string $value : The table
+	 * @param	string		$value The table to query.
+	 * @return	void
 	 */
 	public function setTable($value) {
 		$value = strtolower($value);
@@ -282,66 +277,69 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		else
 			tx_icssitquery_Debug::warning('Table "' . $value . '" is undefined.');
 	}
-	
+
 	/**
-	 * Set the sql query
+	 * Sets the sql query.
 	 *
-	 * @param	string $table : The table to query
+	 * @param	string		$table The table to query.
+	 * @return	void
 	 */
 	private function setQuery($table) {
 		if ($table == 'small' || $table == 'complete') {
 			$this->query['select'] = 'SELECT DISTINCT PPPP.Produit AS CLEF';
 			$this->query['from'] = 'FROM COMMUNS.PRODUIT_RECH PPPP INNER JOIN "' . $this->scheme . '"."Produits" PPX ON PPPP.PRODUIT = PPX."Produit"';
-			$this->query['where'] = 'WHERE pppp.internet=\'Y\'';		
+			$this->query['where'] = 'WHERE pppp.internet=\'Y\'';
 		}
 	}
-	
+
 	/**
-	 * Add on sql query
+	 * Adds on sql query.
 	 *
-	 * @param	string $name : Name
-	 * @param	mixed $value
+	 * @param	string		$name Name.
+	 * @param	mixed		$value Value.
+	 * @return	void
 	 */
 	private function addQuery($name, $value) {
 		if ($name=='entity') {
 			$this->query['where'] .= ' AND PPX."Entité gestionnaire"= ' . $value;
 		}
-	
+
 		if ($name=='gender') {
 			// Nothing to do because not use
 		}
-		
+
 		if ($name=='category') {
 			$this->query['from'] .= ' INNER JOIN  (
-	select  TYP."Type", TYP."Catégorie 1" "Catégorie 1" from  "' . $this->scheme . '"."Types de produits" TYP 
-  union all 
-	select  TYP."Type", TYP."Catégorie 2" "Catégorie 1" from  "' . $this->scheme . '"."Types de produits" TYP 
+	select  TYP."Type", TYP."Catégorie 1" "Catégorie 1" from  "' . $this->scheme . '"."Types de produits" TYP
+  union all
+	select  TYP."Type", TYP."Catégorie 2" "Catégorie 1" from  "' . $this->scheme . '"."Types de produits" TYP
  ) TYP ON PPPP.TYPE = TYP."Type"';
 			$this->query['where'] .= ' AND  TYP."Catégorie 1" in (' . $value . ')';
 		}
-		
+
 		if ($name=='type') {
 			$this->query['where'] .= ' AND  TYPE in (' . $value . ')';
 		}
-		
+
 		if ($name=='date') {
 			$this->query['from'] .= ' inner JOIN "' . $this->scheme . '"."Horaires" HORAIR ON PPPP.Produit = HORAIR."Produit"';
 			$this->query['where'] .= 'AND  NOT (HORAIR."Au" < To_date(\'' . $value[0] . '\',\'DD/MM/YYYY HH24:MI:SS\') OR HORAIR."Du" > To_date(\'' . $value[1] . '\',\'DD/MM/YYYY HH24:MI:SS\')) AND HORAIR.MARQUAGE<>1';
 		}
-		
+
 		if ($name=='valid') {
 		}
 
 		if ($name=='available') {
 		}
-		
+
 	}
-	
+
 	/**
-	 * Make filter on category
+	 * Makes a filter on category.
 	 *
-	 * @param	array $pnames
-	 * @param	array $pvalues
+	 * @param	array&		$pnames Parameters names.
+	 * @param	array&		$pvalues Parameters values.
+	 * @return	void
 	 */
 	private function makeCategoryFilter(array &$pnames, array &$pvalues) {
 		$catIDs = array();
@@ -357,12 +355,13 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$this->addQuery('category', implode(',', $catIDs));
 		}
 	}
-	
+
 	/**
-	 * Make filter on Type
+	 * Makes a filter on Type.
 	 *
-	 * @param	array $pnames
-	 * @param	array $pvalues
+	 * @param	array&		$pnames Parameters names.
+	 * @param	array&		$pvalues Parameters values.
+	 * @return	void
 	 */
 	private function makeTypeFilter(array &$pnames, array &$pvalues) {
 		$typeIDs = array();
@@ -378,7 +377,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$this->addQuery('type', implode(',', $typeIDs));
 		}
 	}
-	
+
 	/**
 	 * Make filter on Criterion
 	 *
@@ -402,11 +401,12 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	}
 	
 	/**
-	 * Make filter on Date
+	 * Makes filters on Date.
 	 *
-	 * @param	array $pnames
-	 * @param	array $pvalues
-	 * @param	array $filterArray
+	 * @param	array&		$pnames Parameters names.
+	 * @param	array&		$pvalues Parameters values.
+	 * @param	array		$filterArray Filters to use.
+	 * @return	void
 	 */
 	private function makeDateFilter(array &$pnames, array &$pvalues, array $filterArray) {
 		if (in_array('startDate', $filterArray) && $this->filters['startDate']) {
@@ -434,15 +434,16 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		}
 		if (in_array('noDate', $filterArray) && $this->filters['noDate']) {
 			$params['tshor'] = utf8_decode('Y');
-		}		
+		}
 	}
-	
+
 	/**
-	 * Make filter on Valid Date
+	 * Makes filters on Valid Date.
 	 *
-	 * @param	array $pnames
-	 * @param	array $pvalues
-	 * @param	array $filterArray
+	 * @param	array&		$pnames Parameters names.
+	 * @param	array&		$pvalues Parameters values.
+	 * @param	array		$filterArray Filters to use.
+	 * @return	void
 	 */
 	private function makeValidFilter(array &$pnames, array &$pvalues, array $filterArray) {
 		if (in_array('startValid', $filterArray) && $this->filters['startValid']) {
@@ -467,15 +468,16 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			}
 			$pvalues[] = $endDate;
 			$this->addQuery('valid', array($startDate, $endDate));
-		}			
+		}
 	}
-	
+
 	/**
-	 * Make filter on Available Date
+	 * Makes filters on Available Date.
 	 *
-	 * @param	array $pnames
-	 * @param	array $pvalues
-	 * @param	array $filterArray
+	 * @param	array&		$pnames Parameters names.
+	 * @param	array&		$pvalues Parameters values.
+	 * @param	array		$filterArray Filters to use.
+	 * @return	void
 	 */
 	private function makeAvailableFilter(array &$pnames, array &$pvalues, array $filterArray) {
 		if (in_array('startAvailable', $filterArray) && $this->filters['startAvailable']) {
@@ -505,5 +507,5 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$params['tsdispo'] = utf8_decode('Y');
 		}
 	}
-	
+
 }

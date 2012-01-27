@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
- 
+
 abstract class tx_icssitquery_AbstractRestaurant extends tx_icssitquery_AbstractData{
 	private $type;		// Type of restaurant
 	private $category;	// Category of restaurant
@@ -38,13 +38,12 @@ abstract class tx_icssitquery_AbstractRestaurant extends tx_icssitquery_Abstract
 	private $city;		// City
 	private $illustration;	// Illustration of restaurant
 	private $chainAndLabel;	// Restaurant chain or label
-	
+
 	/**
 	 * Retrieves properties
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @param	string		$name : Property's name
+	 * @return	mixed		: name 's value
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -62,18 +61,17 @@ abstract class tx_icssitquery_AbstractRestaurant extends tx_icssitquery_Abstract
 				return $this->illustration;
 			case 'ChainAndLabel':
 				return $this->chainAndLabel;
-			default : 
+			default :
 				return parent::__get($name);
 		}
 	}
-	
+
 	/**
 	 * Set name
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
+	 * @param	string		$name : Property's name
+	 * @param	mixed		$value : Property's value
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
@@ -101,5 +99,5 @@ abstract class tx_icssitquery_AbstractRestaurant extends tx_icssitquery_Abstract
 			default :
 				parent::__set($name, $value);
 		}
-	}	
+	}
 }

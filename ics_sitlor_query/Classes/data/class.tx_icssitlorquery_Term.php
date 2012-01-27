@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,14 +40,15 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 	private $name;
 	private $count;
 	private $order;
-	
+
 	/**
 	 * Private constructor ?
 	 *
+	 * @return	void
 	 */
 	private function __construct() {
 	}
-	
+
 	/**
 	 * Retrieves Term from XML
 	 *
@@ -84,7 +85,6 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 	 * Retrieves properties
 	 *
 	 * @param	string $name : Property's name
-	 *
 	 * @return name 's value
 	 */
 	public function __get($name) {
@@ -101,17 +101,23 @@ class tx_icssitlorquery_Term implements tx_icssitquery_IToString {
 				tx_icssitquery_debug::notice('Undefined property of Term via __get(): ' . $name);
 		}
 	}
-	
+
 	/**
 	 * Convert object to display as string
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->name;
 	}
-	
+
 }

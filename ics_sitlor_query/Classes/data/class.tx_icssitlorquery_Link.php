@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,11 +38,12 @@
 
 class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	private $url;
-	
+
 	/**
 	 * Constructor
 	 *
 	 * @param	string $url
+	 * @return	void
 	 */
 	public function __construct($url) {
 		$this->url = $url;
@@ -51,32 +52,60 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	/**
 	 * Set default
 	 *
-	 * @param	array $conf
-	 * @return void
+	 * @param	array		$conf
+	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		return $this->toStringObjConf($cObj, $conf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'Link toString is not yet implemented.';
 	}
-	
+
 }

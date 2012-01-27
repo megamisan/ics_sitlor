@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@
 
 class tx_icssitlorquery_StartDateFilter implements tx_icssitquery_IFilter {
 	private $value=0;
-	
+
 	/**
 	 * Constructor
 	 *
@@ -45,7 +45,7 @@ class tx_icssitlorquery_StartDateFilter implements tx_icssitquery_IFilter {
 		else
 			tx_icssitquery_Debug::warning('Start date ' . $value . ' is not a timestamp.');
 	}
-	
+
 	/**
 	 * Apply filter
 	 *

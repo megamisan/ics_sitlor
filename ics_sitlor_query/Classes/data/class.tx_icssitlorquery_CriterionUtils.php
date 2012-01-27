@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@
 class tx_icssitlorquery_CriterionUtils {
 	/*******************************************************
 	 *
-	 * Photos - ILlustrations
+	 * Photos - Illustrations
 	 *
 	 *******************************************************/
 	const PHOTO = 736000294;
@@ -65,7 +65,7 @@ class tx_icssitlorquery_CriterionUtils {
 		self::CREDIT_PHOTO5,
 		self::CREDIT_PHOTO6,
 	);
-	
+
 	/**
 	 * Add element in tuple list
 	 *
@@ -74,7 +74,7 @@ class tx_icssitlorquery_CriterionUtils {
 	 * @param	int $elIndex
 	 * @param	int $searchIndex
 	 * @param	int $searchedID
-	 *
+	 * @return	void
 	 */
 	public static function addToTupleList(tx_icssitlorquery_ValuedTermTupleList $list, tx_icssitlorquery_ValuedTerm $element, $elIndex, $searchIndex, $searchedID) {
 		$tuple_exists = false;
@@ -92,9 +92,9 @@ class tx_icssitlorquery_CriterionUtils {
 			$tuple = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTuple', 2);
 			$tuple->Set($elIndex, $element);
 			$list->Add($tuple);
-		}			
+		}
 	}
-	
+
 	/*******************************************************
 	 *
 	 * Accomodation's category - Rating star
@@ -109,7 +109,7 @@ class tx_icssitlorquery_CriterionUtils {
 	 *******************************************************/
 	const CHAIN_LABEL = 736000119;
 	const RESTAURANT_CLASS = 736000114;
-	
+
 	/*******************************************************
 	 *
 	 * Reception
@@ -127,31 +127,31 @@ class tx_icssitlorquery_CriterionUtils {
 	const MOTORCOACH_PARK = 736000014;
 	const OPENING_24_24 = 736000325;
 	const SERVICEOPEN = 736000146;
-	
+
 	/*******************************************************
 	 *
 	 * Price
 	 *
-	 *******************************************************/	
+	 *******************************************************/
 	const CURRENT_SINGLE_CLIENTS_RATE = 4000010;
 	const CURRENT_SALE_FORMULA = 4000016;
 	const CURRENT_CARTE_PRICE = 4000017;
 	const CURRENT_MENU_PRICE = 4000018;
-	
+
 	/*******************************************************
 	 *
 	 * Hotel
 	 *
-	 *******************************************************/	
+	 *******************************************************/
 	const COMFORT_ROOM = 736000018;
 	const HOTEL_EQUIPMENT = 736000019;
 	const HOTEL_SERVICE = 736000020;
-	
+
 	/*******************************************************
 	 *
 	 * Restaurant
 	 *
-	 *******************************************************/	
+	 *******************************************************/
 	const RESTAURANT_CAPACITY = 736000151;
 	
 	/*******************************************************

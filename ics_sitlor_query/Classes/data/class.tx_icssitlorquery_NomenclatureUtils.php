@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,8 +39,8 @@ class tx_icssitlorquery_NomenclatureUtils {
 		self::HOTEL_RESTAURANT,
 		self::FURNISHED,
 	);
-	
+
 	const RESTAURANT = 4000007;	// Category "Restauration"
-	
+
 	const EVENT = 4000003 ;	// Genre "A voir/ A faire"
 }

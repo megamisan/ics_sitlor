@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
- 
+
 interface tx_icssitquery_IQuery {
 
 	/**
@@ -38,7 +38,7 @@ interface tx_icssitquery_IQuery {
 	 * @return void
 	 */
 	public function execute();
-	
+
 	/**
 	 * Set page
 	 *

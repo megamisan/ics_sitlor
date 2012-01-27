@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,7 +41,7 @@ class tx_icssitlorquery_TimeEntry{
 	private $start;	// int
 	private $end;	// int
 	private $isPM;	// bool
-	
+
 	public function __construct($dow, $start=0, $end=0, $isPM=false) {
 		if (!is_int($dow))
 			throw new Exception('Time entry Day of week must be integer.');

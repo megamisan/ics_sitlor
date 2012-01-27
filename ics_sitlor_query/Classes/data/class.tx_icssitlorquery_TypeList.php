@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -37,16 +37,17 @@
  */
 
 class tx_icssitlorquery_TypeList extends tx_icssitlorquery_AbstractList {
-	
+
 	/**
 	 * Constructor
 	 *
 	 * @param	tx_icssitlorquery_TypeList $source
+	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_TypeList $source=null) {
 		parent::__construct($source);
 	}
-	
+
 	/**
 	 * Add element in the list
 	 *
@@ -56,7 +57,7 @@ class tx_icssitlorquery_TypeList extends tx_icssitlorquery_AbstractList {
 	public function Add(tx_icssitlorquery_Type $element) {
 		parent::_Add($element);
 	}
-	
+
 	/**
 	 * Remove element in the list
 	 *
@@ -66,15 +67,16 @@ class tx_icssitlorquery_TypeList extends tx_icssitlorquery_AbstractList {
 	public function Remove(tx_icssitlorquery_Type $element) {
 		parent::_Remove($element);
 	}
-		
+
 	/**
 	 * Set element at positon
 	 *
 	 * @param	int $position
 	 * @param	tx_icssitlorquery_Type $element
+	 * @return	void
 	 */
 	public function Set($position, tx_icssitlorquery_Type $element) {
 		parent::_Set($position, $element);
 	}
-	
+
 }

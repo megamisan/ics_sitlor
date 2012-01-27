@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,16 +39,17 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	private $criterion;	// tx_icssitlorquery_Criterion
 	private $term;		// tx_icssitlorquery_Term
 	private $value;
-	
+
 	private static $lConf = array();
-	
+
 	/**
 	 * Private constructor ?
 	 *
+	 * @return	void
 	 */
 	private function __construct() {
 	}
-	
+
 	/**
 	 * Retrieves ValuedTerm from XML
 	 *
@@ -57,7 +58,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 */
 	public static function FromXML(XMLReader $reader) {
 		$valuedTerm = new tx_icssitlorquery_ValuedTerm();
-		
+
 		$valuedTerm->criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(intval($reader->getAttribute('CLEF_CRITERE')));
 		$terms = tx_icssitlorquery_CriterionFactory::GetCriterionTerms($valuedTerm->Criterion);
 		for ($i=0; $i<$terms->Count(); $i++) {
@@ -69,7 +70,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 		}
 		$valuedTerm->value = $reader->readString();
 		tx_icssitlorquery_XMLTools::skipChildren($reader);
-		
+
 		return $valuedTerm;
 	}
 
@@ -77,7 +78,6 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 * Retrieves properties
 	 *
 	 * @param	string $name : Property's name
-	 *
 	 * @return name 's value
 	 */
 	public function __get($name) {
@@ -92,13 +92,12 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 				tx_icssitquery_debug::notice('Undefined property of ValuedTerm via __get(): ' . $name);
 		}
 	}
-	
+
 	/**
 	 * Set name
 	 *
 	 * @param	string $name : Property's name
 	 * @param	mixed : Property's value
-	 *
 	 * @return void
 	 */
 	public function __set($name, $value) {
@@ -114,8 +113,8 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 				tx_icssitquery_debug::notice('Undefined property of ValuedTerm via __set(): ' . $name);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Set default conf
 	 *
@@ -125,19 +124,25 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	public static function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
-	
+
 	/**
 	 * Convert object to display as string
+	 *
 	 * @return string
 	 */
 	public function __toString() {
 		// TODO : cObj local
-		// Test number of args and call appropriate function 
-		
+		// Test number of args and call appropriate function
+
 		return $this->toString();
 	}
 
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 	}
-	
+
 }

@@ -37,7 +37,8 @@ class tx_icssitlorquery_XMLTools {
 	 * The method MUST be called only when the reader is on an Element node.
 	 * After the call, the reader is on the corresponding EndElement node or not moved.
 	 *
-	 * @param XMLReader $reader The reader to manipulate.
+	 * @param	XMLReader		$reader The reader to manipulate.
+	 * @return	void
 	 */
 	public static function SkipChildren(XMLReader $reader) {
 		if (!$reader->isEmptyElement) {
@@ -52,12 +53,11 @@ class tx_icssitlorquery_XMLTools {
 	}
 
 	/**
-	 * Place reader on root element
+	 * Places reader on the root element.
 	 *
-	 * @param	XMLReader $reader
-	 * @param	string $name : Node name
-	 *
-	 * @return boolean : TRUE wether node is reached, otherwise FALSE
+	 * @param	XMLReader		$reader
+	 * @param	string		$name Expected node name
+	 * @return	boolean		Wether the expected node is found.
 	 */
 	public static function XMLMoveToRootElement(XMLReader $reader, $name) {
 		$reader->read();
@@ -68,12 +68,11 @@ class tx_icssitlorquery_XMLTools {
 	}
 
 	/**
-	 * Retrieves XML document
+	 * Retrieves XML document.
 	 *
-	 * @param	string $url : Url to open
-	 * @param	int $timeout
-	 *
-	 * @return string : The XML content
+	 * @param	string		$url Url to query.
+	 * @param	int		$timeout Maximum time to wait for the answer.
+	 * @return	string		Content of the document.
 	 */
 	public static function getXMLDocument($url, $timeout=5) {
 		$old_timeout = ini_set('default_socket_timeout', $timeout);
@@ -83,13 +82,13 @@ class tx_icssitlorquery_XMLTools {
 		ini_set('default_socket_timeout', $old_timeout);
 		stream_set_timeout($handle, $timeout);
 		stream_set_blocking($handle, false);
-		$status = stream_get_meta_data ($handle);		
-		while ((!feof($handle)) && (!$status['timed_out'])) { 
-			$xmlContent .= fgets($handle, 1024); 
-			$status = stream_get_meta_data($handle); 
-			ob_flush; 
-			flush(); 
-        }		
+		$status = stream_get_meta_data ($handle);
+		while ((!feof($handle)) && (!$status['timed_out'])) {
+			$xmlContent .= fgets($handle, 1024);
+			$status = stream_get_meta_data($handle);
+			ob_flush;
+			flush();
+        }
 		fclose($handle);
 
         if ($status['timed_out'])
@@ -97,5 +96,5 @@ class tx_icssitlorquery_XMLTools {
 
 		return $xmlContent;
 	}
-	
+
 }

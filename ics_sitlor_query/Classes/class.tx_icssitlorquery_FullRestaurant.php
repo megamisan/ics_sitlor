@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,7 +33,7 @@
 class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $phone = null;
 	private $tmpPhone = array(
-		'phone1' => '', 
+		'phone1' => '',
 		'phone2' => ''
 	);
 	private $fax;
@@ -60,7 +60,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	);
 	private $providerPhone = null;
 	private $tmpProviderPhone = array(
-		'phone1' => '', 
+		'phone1' => '',
 		'phone2' => ''
 	);
 	private $providerFax;
@@ -68,7 +68,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $providerWebSite = null;
 
 	private $class;					// tx_icssitlorquery_ValuedTermList
-	
+
 	private $receptionLanguage;		// tx_icssitlorquery_ValuedTermList
 	private $menuLanguage;			// tx_icssitlorquery_ValuedTermList
 	private $pets;
@@ -77,16 +77,18 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $allowedGroupNumber;	// tx_icssitlorquery_ValuedTermList
 	private $motorCoachPark;
 	private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
-	
+
 	private $capacity;				// tx_icssitlorquery_ValuedTermList
-	
+
 	private $currentSaleFormula;			// tx_icssitlorquery_ValuedTermList
 	private $currentCartePrice;				// tx_icssitlorquery_ValuedTermList
 	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
-	
-	
+
+
 	/**
-	 * Constructor
+	 * Initializes the FullRestaurant.
+	 *
+	 * @return	void
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -104,7 +106,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	/**
 	 * Retrieves properties
 	 *
-	 * @param	string $name : Property's name
+	 * @param	string		$name : Property's name
 	 *
 	 * @return mixed : name 's value
 	 */
@@ -137,7 +139,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->providerEmail;
 			case 'ProviderWebSite':
 				return $this->providerWebSite;
-			
+
 			//-- CLASS
 			case 'Class':
 				return $this->class;
@@ -159,11 +161,11 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->motorCoachPark;
 			case 'serviceOpen':
 				return $this->serviceOpen;
-			
+
 			//-- CAPACITY
 			case 'Capacity':
 				return $this->capacity;
-			
+
 			//-- PRICE
 			case 'CurrentSaleFormula':
 				return $this->currentSaleFormula;
@@ -171,8 +173,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->currentCartePrice;
 			case 'CurrentMenuPrice':
 				return $this->currentMenuPrice;
-			
-			default : 
+
+			default :
 				return parent::__get($name);
 		}
 	}
@@ -189,36 +191,36 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				$this->tmpPhone['phone1'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_TEL2':
 				$this->tmpPhone['phone2'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_FAX':
 				$this->fax =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_EMAIL':
 				$email = $reader->readString();
 				$this->email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
 				$this->webSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-			
+
 			//-- COORDINATES
 			case 'LATITUDE':
 				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'LONGITUDE':
 				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -298,7 +300,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		}
 	}
 
-	/** 
+	/**
 	 * Set criterion
 	 *
 	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
@@ -341,31 +343,31 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		parent::afterParseXML();
 		$this->phone = t3lib_div::makeInstance(
 			'tx_icssitlorquery_Phone',
-			$this->tmpPhone['phone1'], 
+			$this->tmpPhone['phone1'],
 			$this->tmpPhone['phone2']
 		);
 		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
 		$this->providerName = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Name', 
-			$this->tmpProviderName['title'], 
+			'tx_icssitlorquery_Name',
+			$this->tmpProviderName['title'],
 			$this->tmpProviderName['firstname'],
 			$this->tmpProviderName['lastname']
 		);
 		$this->providerAddress = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address', 
-			$this->tmpProviderAddress['number'], 
-			$this->tmpProviderAddress['street'], 
+			'tx_icssitlorquery_Address',
+			$this->tmpProviderAddress['number'],
+			$this->tmpProviderAddress['street'],
 			$this->tmpProviderAddress['extra'],
-			$this->tmpProviderAddress['zip'], 
+			$this->tmpProviderAddress['zip'],
 			$this->tmpProviderAddress['city']
 		);
 		$this->providerPhone = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Phone', 
-			$this->tmpProviderPhone['phone1'], 
+			'tx_icssitlorquery_Phone',
+			$this->tmpProviderPhone['phone1'],
 			$this->tmpProviderPhone['phone2']
 		);
 	}
-	
+
 	/**
 	 * Retrieves required criteria
 	 *
@@ -389,5 +391,5 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}
-	
+
 }

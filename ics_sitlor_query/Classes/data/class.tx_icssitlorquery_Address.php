@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,23 +30,25 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
- 
+
 class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 	private $number = '';
 	private $street = '';
 	private $extra = '';
 	private $zip = '';
 	private $city = '';
-	
+
 	private static $lConf = array();
-	
+
 	/**
 	 * Constructor
 	 *
 	 * @param	string $number : Street number
 	 * @param	string $street : Street name
 	 * @param	string $extra : Complement of address
-	 *
+	 * @param	[type]		$zip: ...
+	 * @param	[type]		$city: ...
+	 * @return	[type]		...
 	 */
 	public function __construct($number='', $street='', $extra='', $zip='', $city='') {
 		$this->number = $number;
@@ -55,36 +57,64 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 		$this->zip = $zip;
 		$this->city = $city;
 	}
-	
+
 	/**
 	 * Set default
 	 *
 	 * @param	array $conf
-	 * @return void
+	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		return $this->toStringObjConf($cObj, $conf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'Address';
-	}		
+	}
 
 }

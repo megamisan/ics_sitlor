@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -33,21 +33,21 @@
 
 class tx_icssitlorquery_ZipFilter implements tx_icssitquery_IFilter {
 	private $value;
-	
+
 	/**
 	 * Constructor
 	 *
-	 * @param	string $value : The zip
+	 * @param	string		$value : The zip
+	 * @return	void
 	 */
 	public function __construct($value) {
 		$this->value = $value;
 	}
 
 	/**
-	 * Apply filter
+	 * Applies filter.
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
+	 * @param	tx_icssitquery_IQuery		$query The query to apply the filter to.
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,11 +39,12 @@
 class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	private $uri;
 	private static $lConf = array();
-	
+
 	/**
 	 * Constructor
 	 *
 	 * @param	string $uri
+	 * @return	void
 	 */
 	public function __construct($uri) {
 		$this->uri = $uri;
@@ -53,49 +54,73 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 * Set default
 	 *
 	 * @param	array $conf
-	 * @return void
+	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
-	
+
 	/**
 	 * Convert object to display as string
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	public function __toString() {
-		$numargs = func_num_args();		
+		$numargs = func_num_args();
 		if ($numargs==0)
 			return $this->toStringConf(self::$lConf);
-		
+
 		// $numargs >0
 		$args = func_get_args();
 		if (is_array($args[0]))
 			return $this->toStringConf(array_merge(self::$lConf, $args[0]));
-		
+
 		if ($args[0] instanceof tslib_cObj) {
 			if ($numargs==1)
 				return toStringObj($args[0], self::$lConf);
 			return toStringObj($args[0], array_merge(self::$lConf, $args[1]));
 		}
-		
+
 		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->uri;
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		return $this->toStringCObj($cObj, $conf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return $cObj->stdWrap_current($this->uri, $conf);
-	}		
+	}
 }

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,12 +29,12 @@
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
- 
+
 abstract class tx_icssitquery_AbstractData {
 	private $id; // Data's ID
 	private $name; // Data's Name
 	private $description; // Data's Description
-	
+
 	/**
 	 * Retrieves properties
 	 *
@@ -68,15 +68,15 @@ abstract class tx_icssitquery_AbstractData {
 			case 'ID':
 				$this->id = $value;
 			break;
-			
+
 			case 'Name':
 				$this->name = $value;
 			break;
-			
+
 			case 'Description':
 				$this->description = $value;
 			break;
-			
+
 			default :
 				tx_icssitquery_debug::notice('Undefined property via __set(): ' . $name);
 		}

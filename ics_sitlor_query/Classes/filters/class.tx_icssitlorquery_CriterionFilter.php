@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,6 +38,7 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 	 * Constructor
 	 *
 	 * @param	string $value : The criterion
+	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_CriterionList $value) {
 		$this->value = $value;
@@ -47,8 +48,7 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 	 * Apply filter
 	 *
 	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('criterion', $this->value);

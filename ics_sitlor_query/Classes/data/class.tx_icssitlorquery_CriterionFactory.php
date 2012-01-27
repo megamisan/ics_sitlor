@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -46,11 +46,11 @@ class tx_icssitlorquery_CriterionFactory {
 	private static $hash;
 	private static $cacheInstance;
 	private static $lifetime = 0;
-	
-	/** 
+
+	/**
 	 * Fetch values
 	 *
-	 * @return boolean
+	 * @return	boolean
 	 */
 	private static function FetchValues() {
 		$params = array(
@@ -78,7 +78,7 @@ class tx_icssitlorquery_CriterionFactory {
 			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR nomenclature.');
 			return false;
 		}
-		
+
 		$reader->read();
 		$elements = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
@@ -88,12 +88,12 @@ class tx_icssitlorquery_CriterionFactory {
 						$terms = t3lib_div::makeInstance('tx_icssitlorquery_TermList');
 						if ($criterion = tx_icssitlorquery_Criterion::FromXML($reader, $terms)) {
 							$elements[] = array(
-								$criterion, 
+								$criterion,
 								$terms
 							);
 						}
 						break;
-					
+
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
@@ -102,12 +102,14 @@ class tx_icssitlorquery_CriterionFactory {
 		}
 
 		self::$cacheInstance->set(self::$hash, serialize($elements), array(), self::$lifetime);
-		
+
 		return $elements;
 	}
-	
-	/** 
+
+	/**
 	 * Load from cache
+	 *
+	 * @return	void
 	 */
 	private static function LoadFromCache() {
 		t3lib_cache::initializeCachingFramework();
@@ -121,9 +123,9 @@ class tx_icssitlorquery_CriterionFactory {
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['icssitlorquery_cache']['options']
             );
         }
-		
+
 		self::$criteria = t3lib_div::makeInstance('tx_icssitlorquery_CriterionList');
-		
+
 		self::$hash = md5(self::$url . self::$login . self::$password);
 		if (!self::$cacheInstance->has(self::$hash))
 			self::FetchValues();
@@ -135,12 +137,13 @@ class tx_icssitlorquery_CriterionFactory {
 		foreach ($all as $element) {
 			self::$criteria->Add($element[0]);
 			self::$criteriaTerms[$element[0]->ID] = $element[1];
-		}		
+		}
 	}
-	
+
 	/**
 	 * Initialize the factory
 	 *
+	 * @return	void
 	 */
 	private static function initialize() {
 		if (!self::$login || !self::$password || !self::$url)
@@ -148,15 +151,15 @@ class tx_icssitlorquery_CriterionFactory {
 
 		if (isset(self::$criteria))
 			return;
-		
-		self::LoadFromCache();			
+
+		self::LoadFromCache();
 	}
-	
+
 	/**
 	 * Retrieves Criterion
 	 *
-	 * @param	int $id : id of criterion
-	 * @return Criterion
+	 * @param	int		$id : id of criterion
+	 * @return	Criterion
 	 */
 	public static function GetCriterion($id) {
 		self::initialize();
@@ -168,12 +171,12 @@ class tx_icssitlorquery_CriterionFactory {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Retrieves CriterionList
 	 *
-	 * @param	int array $ids : ids of criteria
-	 * @return CriterionList
+	 * @param	int		array $ids : ids of criteria
+	 * @return	CriterionList
 	 */
 	public static function GetCriteria(array $ids) {
 		self::initialize();
@@ -186,17 +189,17 @@ class tx_icssitlorquery_CriterionFactory {
 		}
 		return $criteria;
 	}
-		
+
 	/**
 	 * Retrieves CriterionList
 	 *
-	 * @return CriterionList
+	 * @return	CriterionList
 	 */
 	public static function GetAllCriteria() {
 		self::initialize();
 		return self::$criteria;
 	}
-	
+
 	/**
 	 * Retrieves Terms from criterion
 	 *
@@ -207,20 +210,21 @@ class tx_icssitlorquery_CriterionFactory {
 		self::initialize();
 		return self::$criteriaTerms[$criterion->ID];
 	}
-		
+
 	/**
 	 * Set connection parameters
 	 *
 	 * @param	string $login
 	 * @param	string $password
 	 * @param	string $url
+	 * @return	void
 	 */
 	public static function SetConnectionParameters($login, $password, $url) {
 		self::$criteria = null;
 		self::$criteriaTerms = array();
-		
+
 		self::$login = $login;
 		self::$password = $password;
-		self::$url = $url;		
-	}	
+		self::$url = $url;
+	}
 }

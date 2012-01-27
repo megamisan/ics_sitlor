@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -40,14 +40,15 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	private $count;
 	private $tag;
 	private $items = array();
-	
+
 	private static $lConf = array();
-	
+
 	/**
 	 * Constructor
 	 *
 	 * @param	int $count
 	 * @param	string $tag
+	 * @return	void
 	 */
 	public function __construct($count, $tag='') {
 		$this->count = $count;
@@ -57,6 +58,12 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		}
 	}
 
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$name: ...
+	 * @return	[type]		...
+	 */
 	public function __get($name) {
 		if ($name=='Count')
 			return $this->count;
@@ -65,29 +72,33 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 			$numItem = substr($name, 4);
 			if (is_numeric($numItem) && $numItem>0)
 				return $this->Get(intval($numItem) - 1);
-			else 
+			else
 				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
 		} else {
 			tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
 		}
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$name: ...
+	 * @param	[type]		$value: ...
+	 * @return	[type]		...
+	 */
 	public function __set($name, $value) {
 		if ((strlen($name)>=5) && (substr($name,0,4)=='Item')) {
 			$numItem = substr($name, 4);
 			if (is_numeric($numItem) && $numItem>0) {
-				if ($value instanceof tx_icssitlorquery_ValuedTerm)
-					$this->Set(intval($numItem) - 1, $value);
-				else
-					tx_icssitquery_debug::warning('Item ' . $name . '\'s value must be an instance of tx_icssitlorquery_ValuedTerm.');
+				$this->Set(intval($numItem) - 1, $value);
 			} else {
 				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);
 			}
 		} else {
 			tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);
-		}		
+		}
 	}
-	
+
 	/**
 	 * Retrieves ValuedTerm
 	 *
@@ -100,7 +111,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		else
 			tx_icssitquery_debug::warning('Index out of range for ValuedTermTuple. Only ' . $this->count . ' items against ' . $number . ' requested via __get().');
 	}
-	
+
 	/**
 	 * Set ValuedTerm
 	 *
@@ -127,42 +138,66 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 
 	/**
 	 * Convert object to display as string
+	 *
 	 * @return string
 	 */
 	public function __toString() {
 		$confDefault = array();
-		$numargs = func_num_args();		
+		$numargs = func_num_args();
 		if ($numargs==0)
 			return $this->toStringConf($confDefault);
-		
+
 		// $numargs >0
 		$args = func_get_args();
 		if (is_array($args[0]))
 			return $this->toStringConf($args[0]);
-		
+
 		if ($args[0] instanceof tslib_cObj) {
 			if ($numargs==1)
 				return toStringCObj($args[0], $confDefault);
 			return toStringCObj($args[0], $args[1]);
 		}
-		
+
 		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeIsntance('tslib_cObj');
 		return $this->toStringObjConf($cObj, $conf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return $this->toStringObjConf($cObj, self::$lConf);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
+	 * @return	[type]		...
+	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'ValuedTermTuples';
-	}	
+	}
 }

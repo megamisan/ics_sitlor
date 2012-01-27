@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryService {
 	private $login;		// The login
 	private $password;	// The password
@@ -38,73 +37,70 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	private $page;		// The page
 	private $pageSize;	// The page size
 	private $filters = array();	// Array of IFilters
-			
+
 	/**
-	 * Constructor
+	 * Initializes service access.
 	 *
-	 * @param	string $login : The login
-	 * @param	string $password : The password
-	 * @param	string $url : The url
-	 *
+	 * @param	string		$login User identifier
+	 * @param	string		$password User password
+	 * @param	string		$url SITLOR service URL
+	 * @return	void
 	 */
 	function __construct($login, $password, $url) {
 		$this->login = $login;
 		$this->password = $password;
-		$this->url = $url;		
+		$this->url = $url;
 	}
-	
-	
-	
+
 	/**
-	 * Set pager
+	 * Sets pager position.
 	 *
-	 * @param	int $page : The page
-	 * @param	int $size : Size of elements
+	 * @param	int $page Page number.
+	 * @param	int $size Number of element per page.
 	 *
-	 * @return void	 
+	 * @return void
 	 */
 	public function setPager($page, $size) { // TODO: Type checking (int)
 		$this->page = $page;
 		$this->pageSize = $size;
 	}
-	
+
 	/**
-	 * Reset filters
+	 * Resets added filters.
 	 *
-	 * @return void
+	 * @return	void
 	 */
 	public function resetFilters() {
 		$this->filters = array();
 	}
-	
+
 	/**
-	 * Add filter
+	 * Adds a filter.
 	 *
-	 * @param	IFilter $filter : The filter
+	 * @param	IFilter		$filter Filter to use.
+	 * @return	void
 	 */
 	public function addFilter(tx_icssitquery_IFilter $filter) {
 		$this->filters[] = $filter;
 	}
-	
+
 	/**
-	 * Retrieves the last query
+	 * Retrieves the last query.
 	 *
-	 * @return IQuery
+	 * @return tx_icssitquery_IQuery		The last executed query.
 	 */
 	public function getLastQuery() {
 		return $this->query;
 	}
-	
+
 	/**
-	 * Retrieves Accomodations
+	 * Retrieves accomodations.
 	 *
-	 * @param	ISortingProvider $sorting : The sorting
-	 *
-	 * @return mixed : array of Accomodations
+	 * @param	ISortingProvider		$sorting Sorting provider to use.
+	 * @return	array		The accomodations found by the API.
 	 */
 	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
-		
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
@@ -117,7 +113,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
 		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
-		
+
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
 
@@ -144,7 +140,6 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 						t3lib_div::devLog('Accomodation', 'ics_sitlor_query', 0, array($accomodation));
 						$accomodations[] = $accomodation;
 						break;
-						
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
@@ -156,15 +151,13 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	}
 
 	/**
-	 * Retrieves Restaurants
+	 * Retrieves restaurants.
 	 *
-	 * @param	ISortingProvider $sorting : The sorting
-	 *
-	 * @return mixed : array of Restaurants
+	 * @param	ISortingProvider		$sorting Sorting provider to use.
+	 * @return	array		The restaurants found by the API.
 	 */
 	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
-		
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
@@ -177,7 +170,6 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setCriteria(tx_icssitlorquery_Restaurant::getRequiredCriteria());
 		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
-		
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
 
@@ -204,7 +196,6 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 						t3lib_div::devLog('Restaurant', 'ics_sitlor_query', 0, array($restaurant));
 						$restaurants[] = $restaurant;
 						break;
-						
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
@@ -214,13 +205,13 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		t3lib_div::devLog('Restaurants count', 'ics_sitlor_query', 0, array(count($restaurants)));
 		return $restaurants;
 	}
-	
+
 	/**
-	 * Retrieves Events
+	 * Retrieves events.
 	 *
-	 * @param	ISortingProvider $sorting : The sorting
+	 * @param	ISortingProvider		$sorting Sorting provider to use.
 	 *
-	 * @return mixed : array of Events
+	 * @return	array		The accomodations found by the API.
 	 */
 	public function getEvents(tx_icssitquery_ISortingProvider $sorting) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
@@ -274,5 +265,4 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		t3lib_div::devLog('Events count', 'ics_sitlor_query', 0, array(count($events)));
 		return $events;
 	}
-
 }

@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
- 
+
 interface tx_icssitquery_IQueryService {
 	/**
 	 * Set pager
@@ -37,31 +37,31 @@ interface tx_icssitquery_IQueryService {
 	 * @param	int $page : The page
 	 * @param	int $size : Size of elements
 	 *
-	 * @return void	 
+	 * @return void
 	 */
 	public function setPager($page, $size);
-	
+
 	/**
 	 * Reset filters
 	 *
 	 * @return void
 	 */
 	public function resetFilters();
-	
+
 	/**
 	 * Add filter
 	 *
 	 * @param	IFilter $filter : The filter
 	 */
 	public function addFilter(tx_icssitquery_IFilter $filter);
-	
+
 	/**
 	 * Retrieves the last query
 	 *
 	 * @return IQuery
 	 */
 	public function getLastQuery();
-	
+
 	/**
 	 * Retrieves Accomodations
 	 *
@@ -70,7 +70,7 @@ interface tx_icssitquery_IQueryService {
 	 * @return mixed : array of Accomodations
 	 */
 	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting);
-	
+
 	/**
 	 * Retrieves Restaurants
 	 *
@@ -79,7 +79,7 @@ interface tx_icssitquery_IQueryService {
 	 * @return mixed : array of Restaurants
 	 */
 	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting);
-	
+
 	/**
 	 * Retrieves Events
 	 *

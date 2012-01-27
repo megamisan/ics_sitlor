@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -39,10 +39,12 @@
 abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToString {
 
 	private $elements = array();	// Array of stdClass
-	
+
 	/**
 	 * Constructor
 	 *
+	 * @param	[type]		$tx_icssitlorquery_AbstractList $source: ...
+	 * @return	void
 	 */
 	protected function __construct(tx_icssitlorquery_AbstractList $source = null) {
 		if (isset($source)) {
@@ -52,7 +54,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 			// }
 		}
 	}
-	
+
 	/**
 	 * Add element in the list
 	 *
@@ -62,7 +64,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	protected function _Add($element) {
 		$this->elements[] = $element;
 	}
-	
+
 	/**
 	 * Remove element in the list
 	 *
@@ -72,7 +74,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	protected function _Remove($element) {
 		$this->removeAt(array_search($element, $this->elements));
 	}
-	
+
 	/**
 	 * Remove element at position
 	 *
@@ -86,12 +88,11 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 		}
 		array_splice($this->elements, $position, 1);
 	}
-	
+
 	/**
 	 * Retrieves
 	 *
 	 * @param	int $position: The position of element
-	 *
 	 * @return stdClass
 	 */
 	public function Get($position) {
@@ -103,12 +104,13 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 			return null;
 		return $this->elements[$position];
 	}
-	
+
 	/**
 	 * Set element at positon
 	 *
 	 * @param	int $position
 	 * @param	stdClass $element
+	 * @return	void
 	 */
 	protected function _Set($position, $element) {
 		if (!is_int($position) || $position<0 || $position >= count($this->elements)) {
@@ -117,31 +119,37 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 		}
 		$this->elements[$position] = $element;
 	}
-	
+
 	/**
 	 * Retrieves size of list
 	 *
-	 * @return int The size of list
+	 * @return	int		The size of list
 	 */
 	public function Count() {
 		return count($this->elements);
 	}
-	
+
 	/**
 	 * Convert object to display as string
-	 * @return string
+	 *
+	 * @return	string
 	 */
 	public function __toString() {
 		$separator = ',';
-		
+
 		$args = func_get_args();
 		if (!empty($args) && is_string($args[0])) {
 			$separator = $args[0];
 		}
 		return implode($separator, $this->elements);
 	}
-	
+
+	/**
+	 * [Describe function...]
+	 *
+	 * @return	[type]		...
+	 */
 	public function toString() {
 	}
-	
+
 }

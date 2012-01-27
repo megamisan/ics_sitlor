@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -38,6 +38,7 @@ class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
 	 * Constructor
 	 *
 	 * @param	int $value
+	 * @return	void
 	 */
 	public function __construct($value) {
 		if (!is_int($value))
@@ -49,8 +50,7 @@ class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
 	 * Apply filter
 	 *
 	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('gender', $this->value);

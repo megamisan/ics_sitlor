@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 In Cite Solution <technique@in-cite.net>
+*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,23 +30,23 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
- 
+
 class tx_icssitlorquery_RestaurantSortingProvider implements tx_icssitquery_ISortingProvider {
 
 	/**
 	 * Constructor
 	 *
+	 * @return	void
 	 */
 	function __construct() {
 	}
-	
-	
-	
+
+
+
 	/**
-	 * Apply sorting
+	 * Applies sorting.
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
+	 * @param	tx_icssitquery_IQuery		$query The query the apply the provider to.
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
