@@ -38,13 +38,52 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		'extra' => ''
 	);
 	
+	private $timeTable;
+	
 	/** 
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
+		$this->TimeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 	}
 
+	/**
+	 * Retrieves properties
+	 *
+	 * @param	string $name : Property's name
+	 *
+	 * @return mixed : name 's value
+	 */
+	public function __get($name) {
+		switch ($name) {
+			case 'TimeTable':
+				return $this->timeTable;
+				
+			default : 
+				return parent::__get($name);
+		}
+		
+	}	
+	
+	/**
+	 * Set name
+	 *
+	 * @param	string $name : Property's name
+	 * @param	mixed : Property's value
+	 *
+	 * @return void
+	 */
+	public function __set($name, $value) {
+		switch ($name) {
+			case 'TimeTable':
+				$this->timeTable = $value;
+				break;
+				
+			default : 
+				parent::__set($name, $value);
+		}		
+	}	
 	
 	/**
 	 * Parse the current XML node in the XMLReader
@@ -120,6 +159,11 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 					$this->parseCriteria($reader);
 				break;
 
+			//-- TIMETABLE
+			case 'HORAIRES':
+				$this->parseTimeTable($reader);
+				break;
+
 			default :
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 		}
@@ -175,6 +219,30 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				0, 
 				tx_icssitlorquery_CriterionUtils::$photos[$index]
 			);
+		}
+	}
+	
+	/**
+	 * Parse the current XML node in the XMLReader
+	 * Parse TimeTable
+	 *
+	 * @param	XMLReader $reader : Reader to the parsed document
+	 */
+	private function parseTimeTable(XMLReader $reader) {
+		$reader->read();
+		while ($reader->nodeType != XMLReader::END_ELEMENT) {
+			if($reader->nodeType == XMLReader::ELEMENT){
+				switch ($reader->name) {
+					case 'Horaire':
+						if ($timeTable = tx_icssitlorquery_TimeTable::FromXML($reader))
+							$this->timeTable->Add($timeTable);
+						break;
+
+					default:
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+				}
+			}
+			$reader->read();
 		}
 	}
 	
