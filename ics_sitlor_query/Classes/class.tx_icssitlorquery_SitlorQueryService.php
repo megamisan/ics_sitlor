@@ -122,12 +122,12 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		$reader->XML($xmlContent);
 
 		if (!tx_icssitlorquery_XMLTools::XMLMoveToRootElement($reader, 'LEI')) {
-			tx_icssitquery_Debug::error('Invalid response from SITLOR nomenclature.');
+			tx_icssitquery_Debug::error('Invalid response from SITLOR.');
 			return false;
 		}
 		$reader->read();
 		if (!$reader->next('Resultat')) {
-			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR nomenclature.');
+			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
 			return false;
 		}
 		$reader->read();
@@ -223,6 +223,56 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * @return mixed : array of Events
 	 */
 	public function getEvents(tx_icssitquery_ISortingProvider $sorting) {
+		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
+		
+		$full = false;
+		foreach ($this->filters as $filter) {
+			if ($filter instanceof tx_icssitlorquery_IdFilter)
+				$full = true;
+			$filter->apply($this->query);
+		}
+		if ($full)
+			$this->query->setCriteria(tx_icssitlorquery_FullEvent::getRequiredCriteria());
+		else
+			$this->query->setCriteria(tx_icssitlorquery_Event::getRequiredCriteria());
+		$this->query->setPage($this->page, $this->pageSize);
+		$xmlContent = $this->query->execute();
+		
+		$reader = new XMLReader();
+		$reader->XML($xmlContent);
+
+		if (!tx_icssitlorquery_XMLTools::XMLMoveToRootElement($reader, 'LEI')) {
+			tx_icssitquery_Debug::error('Invalid response from SITLOR.');
+			return false;
+		}
+		$reader->read();
+		if (!$reader->next('Resultat')) {
+			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
+			return false;
+		}
+		$reader->read();
+		$events = array();
+		while ($reader->nodeType != XMLReader::END_ELEMENT) {
+			if ($reader->nodeType == XMLReader::ELEMENT) {
+				switch ($reader->name) {
+					case 'sit_liste':
+						if ($full)
+							$event = t3lib_div::makeInstance('tx_icssitlorquery_FullEvent');
+						else
+							$event = t3lib_div::makeInstance('tx_icssitlorquery_Event');
+						$event->parseXML($reader);
+						t3lib_div::devLog('Event', 'ics_sitlor_query', 0, array($event));
+						$events[] = $event;
+						break;
+						
+					default:
+						tx_icssitlorquery_XMLTools::skipChildren($reader);
+				}
+			}
+			$reader->read();
+		}
+		t3lib_div::devLog('Events count', 'ics_sitlor_query', 0, array(count($events)));
+		return $events;
 	}
 
 }

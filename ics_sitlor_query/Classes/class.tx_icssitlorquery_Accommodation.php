@@ -38,6 +38,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		'extra' => ''
 	);
 	
+	/** 
+	 * Constructor
+	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 	}

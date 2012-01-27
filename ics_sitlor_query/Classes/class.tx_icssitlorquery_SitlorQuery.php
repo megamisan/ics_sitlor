@@ -133,13 +133,17 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if ($this->table=='small' || $this->table=='complete') {
 			$this->addQuery('entity', self::$entity);
 			if (in_array('gender', $filterArray) && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
-				// Nothing to do because not apply
+				$pnames[] = 'elgendro';
+				$pvalues[] = $this->filters['gender'];
 			}
 			if (in_array('category', $filterArray) && (!in_array('type', $filterArray))) {
 				$this->makeCategoryFilter($pnames, $pvalues);
 			}
 			if (in_array('type', $filterArray)) {
 				$this->makeTypeFilter($pnames, $pvalues);
+			}
+			if (in_array('criterion', $filterArray)) {
+				$this->makeCriterionFilter($pnames, $pvalues);
 			}
 			if (in_array('title', $filterArray)) {
 				$pnames[] = 'elnombre';
@@ -206,6 +210,10 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				break;
 			case 'category':
 					if ($value instanceof tx_icssitlorquery_CategoryList)
+						$this->filters[$name][] = $value;
+				break;
+			case 'criterion':
+					if ($value instanceof tx_icssitlorquery_CriterionList)
 						$this->filters[$name][] = $value;
 				break;
 			default:
@@ -368,6 +376,28 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$pnames[] = 'eltypo';
 			$pvalues[] = implode('|', $typeIDs);
 			$this->addQuery('type', implode(',', $typeIDs));
+		}
+	}
+	
+	/**
+	 * Make filter on Criterion
+	 *
+	 * @param	array $pnames
+	 * @param	array $pvalues
+	 */
+	private function makeCriterionFilter(array &$pnames, array &$pvalues) {
+		$criterionIDs = array();
+		foreach ($this->filters['criterion'] as $criterionList) {
+			for ($i=0; $i<$criterionList->Count(); $i++) {
+				$criterion = $criterionList->Get($i);
+				$criterionIDs[] = $criterion->ID;
+			}
+		}
+		if (!empty($criterionIDs)) {
+			foreach ($criterionIDs as $key=>$criterion) {
+				$pnames[] = 'elcriterio' . $key;
+				$pvalues[] = $criterion;
+			}
 		}
 	}
 	
