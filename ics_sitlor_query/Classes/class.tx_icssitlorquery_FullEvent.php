@@ -159,6 +159,12 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
+		$this->phone = t3lib_div::makeInstance(
+			'tx_icssitlorquery_Phone',
+			$this->tmpPhone['phone1'], 
+			$this->tmpPhone['phone2']
+		);
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
 	}
 
 	/**
