@@ -49,12 +49,16 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	private $information;	// tx_icssitlorquery_ValuedTermList
 	private $festival;
 	
+	private $currentFree;
+	private $currentBasePrice;	// tx_icssitlorquery_ValuedTermList
+	
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
 		parent::__construct();
 		$this->information = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentBasePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -88,6 +92,11 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 				return $this->information;
 			case 'Festival':
 				return $this->festival;
+				
+			case 'CurrentFree':
+				return $this->currentFree;
+			case 'CurrentBasePrice':
+				return $this->currentBasePrice;
 				
 			default : 
 				return parent::__get($name);
@@ -187,6 +196,10 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 			$this->information->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL)
 			$this->festival = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_FREE)
+			$this->currentFree = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_BASE_PRICE)
+			$this->currentBasePrice->Add($valuedTerm);
 	}
 	
 	/**
@@ -214,6 +227,8 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 			tx_icssitlorquery_CriterionUtils::TYPE_EVENT,
 			tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION,
 			tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL,
+			tx_icssitlorquery_CriterionUtils::CURRENT_FREE,
+			tx_icssitlorquery_CriterionUtils::CURRENT_BASE_PRICE,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}	

@@ -163,5 +163,7 @@ class tx_icssitlorquery_CriterionUtils {
 	const TYPE_EVENT = 736001148;
 	const COMPLEMENTARY_INFORMATION = 736001151;
 	const LORRAINE_FESTIVAL = 736001149;
+	const CURRENT_FREE = 4000003;
+	const CURRENT_BASE_PRICE = 4000004;
 
 }
