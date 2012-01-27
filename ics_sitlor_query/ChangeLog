@@ -1,4 +1,33 @@
+2012-01-26 Tsi Yang <tsi@in-cite.net>
+	* Fix: FullAccomodation::receptionGroup must be a list.
+	* Feature: Implemented FullRestaurant like FullAccomodation.
+	* Feature: Implemented restaurant querying in SitlorQueryService.
+	* Feature: Implemented Restaurant using Accomodation as template.
+	* Feature: Added NomenclatureUtils for shared values.
+	* Feature: Added more information to request for in FullAccomodation.
+	* Feature: Initialization of TimeEntry objects.
+	* Fix: TimeTable pm entries creation was using values from am entries. 
+
+2012-01-24 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added TimeTable implementation and usage in FullAccomodation.
+	* Fix: Added missing field initializers in Address constructor.
+
+2012-01-23 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added Phone and Name objects. And their usage in [Full]Accomodation.
+	* Fix: ToString interface in Link object.
+	* Feature: Implemented FullAccomodation and usage selection in query and service with IdFilter.
+	* Feature: Added Address object and usage in Accomodation.
+	* Fix: Missing static method and visibility in ValuedTermTuple.
+	* Fix: Incorrect declaration and call in CriterionUtils::addToTupleList.
+	* Fix: Incorrect declaration for the ToString interfaces and its usage.
+	* Feature: Address parsing in Accomodation.
+
 2012-01-20 Tsi Yang <tsi@in-cite.net>
+	* Fix: Replaced tslib_cObj::cImage call with Picture object instanciation in Accomodation.
+	* Feature: Initialization and rendering choice for Picture.
+	* Feature: Implemented TODO in ValuedTermTuple.
+	* Refactor: Moved illustration field modifications in Accomodation to CriterionUtils.
+	* Name change: Class CriterionID to CriterionUtils.
 	* Initial SVN import
 	* Feature: Available filters: EndAvailable, EndDate, EndValid, NoDate, NotAvailable, Reference, StartAvailable, StartDate, StartValid, Title, Type, Zip.
 	* Feature: Available containers: AbstractList, CategoryList, CriterionList, TermList, TypeList, ValuedTermList, ValuedTermTupleList.

@@ -1,3 +1,9 @@
+2012-01-26 Tsi Yang <tsi@in-cite.net>
+	* Feature: Implementation of AbstractRestaurant.
+
+2012-01-23 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Ajusted ToString interface declaration to be more PHP-like.
+
 2012-01-20 Tsi Yang <tsi@in-cite.net>
 	* Initial SVN import
 	* Feature: Data interfaces for Filter, Query, QueryService, Sorting and string transformation.
