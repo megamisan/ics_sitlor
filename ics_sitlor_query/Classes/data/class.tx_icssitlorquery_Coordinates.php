@@ -47,6 +47,24 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	}
 
 	/**
+	 * Obtains a property. PHP magic function.
+	 *
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
+	 */
+	public function __get($name) {
+		switch ($name) 	{
+			case 'Latitude':
+				return $this->latitude;
+			case 'Longitude':
+				return $this->longitude;
+			default :
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
+		}
+	}
+
+	
+	/**
 	 * [Describe function...]
 	 *
 	 * @return	[type]		...

@@ -1,3 +1,6 @@
+2012-01-30 Tsi Yang <tsi@in-cite.net>
+	* Feature : Added getter on Picture, Phone, Name, LInk, Coordinates, Address
+
 2012-01-27 Tsi Yang <tsi@in-cite.net>
 	* Feature: Implemented Event querying in SitlorQueryService
 	* Feature: Implemented Event using Accomodation as template

@@ -59,6 +59,30 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
+	 * Obtains a property. PHP magic function.
+	 *
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
+	 */
+	public function __get($name) {
+		switch ($name) 	{
+			case 'Number':
+				return $this->number;
+			case 'Street':
+				return $this->street;
+			case 'Extra':
+				return $this->extra;
+			case 'Zip':
+				return $this->zip;
+			case 'City':
+				return $this->city;
+			default :
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
+		}
+	}
+	
+	
+	/**
 	 * Set default
 	 *
 	 * @param	array $conf

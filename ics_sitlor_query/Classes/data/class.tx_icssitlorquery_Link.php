@@ -50,6 +50,21 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
+	 * Obtains a property. PHP magic function.
+	 *
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
+	 */
+	public function __get($name) {
+		switch ($name) 	{
+			case 'Url':
+				return $this->url;
+			default :
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
+		}
+	}
+	
+	/**
 	 * Set default
 	 *
 	 * @param	array		$conf

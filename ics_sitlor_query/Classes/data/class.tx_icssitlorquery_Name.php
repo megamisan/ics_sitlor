@@ -53,6 +53,25 @@ class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
+	 * Obtains a property. PHP magic function.
+	 *
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
+	 */
+	public function __get($name) {
+		switch ($name) 	{
+			case 'Title':
+				return $this->title;
+			case 'Firstname':
+				return $this->firstname;
+			case 'Lastname':
+				return $this->lastname;
+			default :
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
+		}
+	}
+
+	/**
 	 * Set default
 	 *
 	 * @param	array		$conf
