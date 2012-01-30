@@ -211,6 +211,13 @@ class tx_icssitlorquery_CriterionFactory {
 		return self::$criteriaTerms[$criterion->ID];
 	}
 
+	/**
+	 * Retrieves Criterion Term
+	 *
+	 * @param	tx_icssitlorquery_Criterion $criterion
+	 * @param	int $termID : ID Term
+	 * @return Term
+	 */
 	public static function GetCriterionTerm(tx_icssitlorquery_Criterion $criterion, $termID) {
 		if (!is_int($termID))
 			throw new Exception('Term ID must be integer.');
