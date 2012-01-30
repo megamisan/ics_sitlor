@@ -60,7 +60,12 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 *
 	 * @return void
 	 */
-	public function setPager($page, $size) { // TODO: Type checking (int)
+	public function setPager($page, $size) {
+		if (!is_int($page))
+			throw new Exception('Page number must be integer.');
+		if (!is_int($size))
+			throw new Exception('Number of element must be integer');
+			
 		$this->page = $page;
 		$this->pageSize = $size;
 	}

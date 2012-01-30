@@ -111,8 +111,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$params['SCHEMA'] = utf8_decode($this->scheme);
 		//-- End of Format params
 
-		$this->setQuery($this->table);
-
 		// Filter on params
 		$filterArray = array_keys($this->filters);
 		$pnames = array();
@@ -125,7 +123,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$pvalues[] = $this->filters['idFilter'];
 		}
 		if ($this->table=='small' || $this->table=='complete') {
-			$this->addQuery('entity', self::$entity);
 			if (in_array('gender', $filterArray) && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
 				$pnames[] = 'elgendro';
 				$pvalues[] = $this->filters['gender'];
@@ -160,8 +157,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 
 		$params['PNAMES'] = utf8_decode(implode(',', $pnames));
 		$params['PVALUES'] = utf8_decode(implode(',', $pvalues));
-		// $params['sql'] = utf8_decode(implode(' ', $this->query));
-		// $params['urlnames'] = 'sql';
 
 		$urlQuery = $this->url . '?' . http_build_query($params);
 		t3lib_div::devLog('Url', 'ics_sitlor_query', 0, array(urldecode($urlQuery)));
@@ -279,62 +274,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	}
 
 	/**
-	 * Sets the sql query.
-	 *
-	 * @param	string		$table The table to query.
-	 * @return	void
-	 */
-	private function setQuery($table) {
-		if ($table == 'small' || $table == 'complete') {
-			$this->query['select'] = 'SELECT DISTINCT PPPP.Produit AS CLEF';
-			$this->query['from'] = 'FROM COMMUNS.PRODUIT_RECH PPPP INNER JOIN "' . $this->scheme . '"."Produits" PPX ON PPPP.PRODUIT = PPX."Produit"';
-			$this->query['where'] = 'WHERE pppp.internet=\'Y\'';
-		}
-	}
-
-	/**
-	 * Adds on sql query.
-	 *
-	 * @param	string		$name Name.
-	 * @param	mixed		$value Value.
-	 * @return	void
-	 */
-	private function addQuery($name, $value) {
-		if ($name=='entity') {
-			$this->query['where'] .= ' AND PPX."Entité gestionnaire"= ' . $value;
-		}
-
-		if ($name=='gender') {
-			// Nothing to do because not use
-		}
-
-		if ($name=='category') {
-			$this->query['from'] .= ' INNER JOIN  (
-	select  TYP."Type", TYP."Catégorie 1" "Catégorie 1" from  "' . $this->scheme . '"."Types de produits" TYP
-  union all
-	select  TYP."Type", TYP."Catégorie 2" "Catégorie 1" from  "' . $this->scheme . '"."Types de produits" TYP
- ) TYP ON PPPP.TYPE = TYP."Type"';
-			$this->query['where'] .= ' AND  TYP."Catégorie 1" in (' . $value . ')';
-		}
-
-		if ($name=='type') {
-			$this->query['where'] .= ' AND  TYPE in (' . $value . ')';
-		}
-
-		if ($name=='date') {
-			$this->query['from'] .= ' inner JOIN "' . $this->scheme . '"."Horaires" HORAIR ON PPPP.Produit = HORAIR."Produit"';
-			$this->query['where'] .= 'AND  NOT (HORAIR."Au" < To_date(\'' . $value[0] . '\',\'DD/MM/YYYY HH24:MI:SS\') OR HORAIR."Du" > To_date(\'' . $value[1] . '\',\'DD/MM/YYYY HH24:MI:SS\')) AND HORAIR.MARQUAGE<>1';
-		}
-
-		if ($name=='valid') {
-		}
-
-		if ($name=='available') {
-		}
-
-	}
-
-	/**
 	 * Makes a filter on category.
 	 *
 	 * @param	array&		$pnames Parameters names.
@@ -352,7 +291,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if (!empty($catIDs)) {
 			$pnames[] = 'alcat';
 			$pvalues[] = implode('|', $catIDs);
-			$this->addQuery('category', implode(',', $catIDs));
 		}
 	}
 
@@ -374,7 +312,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if (!empty($typeIDs)) {
 			$pnames[] = 'eltypo';
 			$pvalues[] = implode('|', $typeIDs);
-			$this->addQuery('type', implode(',', $typeIDs));
 		}
 	}
 
@@ -430,7 +367,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$endDate = self::$endDate;
 			}
 			$pvalues[] = $endDate;
-			$this->addQuery('date', array($startDate, $endDate));
 		}
 		if (in_array('noDate', $filterArray) && $this->filters['noDate']) {
 			$params['tshor'] = utf8_decode('Y');
@@ -467,7 +403,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$endDate = self::$endValid;
 			}
 			$pvalues[] = $endDate;
-			$this->addQuery('valid', array($startDate, $endDate));
 		}
 	}
 
@@ -501,7 +436,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$endDate = self::$endAvailable;
 			}
 			$pvalues[] = $endDate;
-			$this->addQuery('available', array($startDate, $endDate));
 		}
 		if (in_array('noAvailable', $filterArray) && $this->filters['noAvailable']) {
 			$params['tsdispo'] = utf8_decode('Y');
