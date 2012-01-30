@@ -31,11 +31,7 @@
  */
 
 class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
-	private $phone = null;
-	private $tmpPhone = array(
-		'phone1' => '', 
-		'phone2' => ''
-	);
+	private $phones = null;
 	private $fax;
 	private $email;
 	private $webSite;
@@ -57,6 +53,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	public function __construct() {
 		parent::__construct();
+		$this->phones = array();
 		$this->information = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentBasePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
@@ -71,8 +68,8 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	public function __get($name) {
 		switch ($name) {
 			//-- IDENTITITY
-			case 'Phone':
-				return $this->phone;
+			case 'Phones':
+				return $this->phones;
 			case 'Fax':
 				return $this->fax;
 			case 'Email':
@@ -113,17 +110,26 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 		switch ($reader->name) {
 			//-- IDENTITY
 			case 'ADRPROD_TEL':
-				$this->tmpPhone['phone1'] =  $reader->readString();
+				array_unshift($this->phones, t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_TEL2':
-				$this->tmpPhone['phone2'] =  $reader->readString();
+				array_push($this->phones, t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_FAX':
-				$this->fax =  $reader->readString();
+				$this->fax = t3lib_div::makeInstance(
+					'tx_icssitlorquery_Phone',
+					$reader->readString()
+				);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -208,11 +214,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
-		$this->phone = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Phone',
-			$this->tmpPhone['phone1'], 
-			$this->tmpPhone['phone2']
-		);
 		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
 	}
 

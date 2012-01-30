@@ -33,9 +33,7 @@
 abstract class tx_icssitquery_AbstractEvent extends tx_icssitquery_AbstractData{
 	private $type;		// Type of event
 	private $category;	// Category of event
-	private $address;	// Address of event
-	private $zip;		// Location zip
-	private $city;		// City
+	private $address;	// Address of accomodation: an object Address with street, zip, city, ...
 	private $illustration;	// Illustration of event
 	private $timeTable;		// Schedule of event
 
@@ -54,10 +52,6 @@ abstract class tx_icssitquery_AbstractEvent extends tx_icssitquery_AbstractData{
 				return $this->category;
 			case 'Address':
 				return $this->address;
-			case 'Zip';
-				return $this->zip;
-			case 'City':
-				return $this->city;
 			case 'Illustration':
 				return $this->illustration;
 			case 'TimeTable':
@@ -85,12 +79,6 @@ abstract class tx_icssitquery_AbstractEvent extends tx_icssitquery_AbstractData{
 			break;
 			case 'Address':
 				$this->address = $value;
-			break;
-			case 'Zip':
-				$this->zip = $value;
-			break;
-			case 'City':
-				$this->city = $value;
 			break;
 			case 'Illustration':
 				$this->illustration = $value;

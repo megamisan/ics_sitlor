@@ -33,9 +33,7 @@
 abstract class tx_icssitquery_AbstractAccomodation extends tx_icssitquery_AbstractData{
 	private $type;		// Type of accomodation
 	private $category;	// Category of accomodation
-	private $address;	// Address of accomodation
-	private $zip;		// Location zip
-	private $city;		// City
+	private $address;	// Address of accomodation: an object Address with street, zip, city, ...
 	private $illustration;	// Illustration of accomodation
 	private $ratingStar;	// Accomodation rating with stars
 
@@ -54,10 +52,6 @@ abstract class tx_icssitquery_AbstractAccomodation extends tx_icssitquery_Abstra
 				return $this->category;
 			case 'Address':
 				return $this->address;
-			case 'Zip';
-				return $this->zip;
-			case 'City':
-				return $this->city;
 			case 'Illustration':
 				return $this->illustration;
 			case 'RatingStar':
@@ -85,12 +79,6 @@ abstract class tx_icssitquery_AbstractAccomodation extends tx_icssitquery_Abstra
 			break;
 			case 'Address':
 				$this->address = $value;
-			break;
-			case 'Zip':
-				$this->zip = $value;
-			break;
-			case 'City':
-				$this->city = $value;
 			break;
 			case 'Illustration':
 				$this->illustration = $value;

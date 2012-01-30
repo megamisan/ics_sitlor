@@ -35,7 +35,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	protected $tmpAddress = array(
 		'number' => '',
 		'street' => '',
-		'extra' => ''
+		'extra' => '',
+		'zip' => '',
+		'city' => '',
 	);
 
 	/** 
@@ -135,12 +137,12 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				break;
 
 			case 'ADRPROD_CP' :
-				$this->Zip = $reader->readString();
+				$this->tmpAddress['zip'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_LIBELLE_COMMUNE' :
-				$this->City = $reader->readString();
+				$this->tmpAddress['city'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -220,8 +222,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->tmpAddress['number'],
 			$this->tmpAddress['street'],
 			$this->tmpAddress['extra'],
-			$this->Zip,
-			$this->City
+			$this->tmpAddress['zip'],
+			$this->tmpAddress['city']
 		);
 	}
 
