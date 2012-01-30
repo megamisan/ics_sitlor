@@ -81,15 +81,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 */
 	public static function FromXML(XMLReader $reader) {
 		$timeTable = new tx_icssitlorquery_TimeTable();
-		$timeEntry = array(
-			1 => null,
-			2 => null,
-			3 => null,
-			4 => null,
-			5 => null,
-			6 => null,
-			7 => null,
-		);
+		$timeEntry = array();
 		$reader->read();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
 			if($reader->nodeType == XMLReader::ELEMENT){
@@ -270,12 +262,10 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 		}
 
 		foreach ($timeEntry as $day=>$entry) {
-			if (isset($entry['am'])) {
-				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $entry['am']['end'], false);
-			}
-			if (isset($entry['pm'])) {
-				$timeTable->timeEntries[$day][] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['pm']['start'], $entry['pm']['end'], true);
-			}
+			if (isset($entry['am']))
+				$timeTable->timeEntries[] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $entry['am']['end'], false);
+			if (isset($entry['pm']))
+				$timeTable->timeEntries[] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['pm']['start'], $entry['pm']['end'], true);
 		}
 
 		return $timeTable;
