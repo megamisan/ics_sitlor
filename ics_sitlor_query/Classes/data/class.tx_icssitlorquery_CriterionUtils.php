@@ -127,6 +127,7 @@ class tx_icssitlorquery_CriterionUtils {
 	const MOTORCOACH_PARK = 736000014;
 	const OPENING_24_24 = 736000325;
 	const SERVICEOPEN = 736000146;
+	const OPENDAY = 736001020;
 
 	/*******************************************************
 	 *
@@ -144,8 +145,10 @@ class tx_icssitlorquery_CriterionUtils {
 	 *
 	 *******************************************************/
 	const COMFORT_ROOM = 736000018;
+	const WIFI = 155;	// Term of Criterion COMFORT_ROOM
 	const HOTEL_EQUIPMENT = 736000019;
 	const HOTEL_SERVICE = 736000020;
+	const STRANGE_ACCOMODATION = 4000099;
 
 	/*******************************************************
 	 *
@@ -166,4 +169,9 @@ class tx_icssitlorquery_CriterionUtils {
 	const CURRENT_FREE = 4000003;
 	const CURRENT_BASE_PRICE = 4000004;
 
+	
+	
+	
+	
+	const OTNANCY2011 = 737000028;
 }

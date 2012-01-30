@@ -31,6 +31,11 @@
  */
 
 class tx_icssitlorquery_NomenclatureUtils {
+	/*******************************************************
+	 *
+	 * Accomodation
+	 *
+	 *******************************************************/
 	const HOTEL = 4000002;				// Type "Hôtel"
 	const HOTEL_RESTAURANT = 4000003;	// Type "Hôtel - hôtel restaurant"
 	const FURNISHED = 4000012;			// Type "Meublé"
@@ -39,8 +44,31 @@ class tx_icssitlorquery_NomenclatureUtils {
 		self::HOTEL_RESTAURANT,
 		self::FURNISHED,
 	);
-
+	
+	const HOLLIDAY_CAMPSITE = 4000007;	// Type
+	const CATEGORIZED_CAMPSITE = 4000004;	// TYpe
+	const FARM_CAMPING = 4000006;	// Type
+	const YOUTH_HOSTEL = 4000071;	// Type
+	static $campingAndYouthHostel = array(
+		self::HOLLIDAY_CAMPSITE,
+		self::CATEGORIZED_CAMPSITE,
+		self::FARM_CAMPING,
+		self::YOUTH_HOSTEL,
+	);
+	const GUESTHOUSE = 4000001;
+	
+	
+	/*******************************************************
+	 *
+	 * Restaurant
+	 *
+	 *******************************************************/
 	const RESTAURANT = 4000007;	// Category "Restauration"
 
+	/*******************************************************
+	 *
+	 * Event
+	 *
+	 *******************************************************/
 	const EVENT = 4000003 ;	// Genre "A voir/ A faire"
 }

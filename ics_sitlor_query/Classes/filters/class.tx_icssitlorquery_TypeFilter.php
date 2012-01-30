@@ -32,15 +32,18 @@
  */
 
 class tx_icssitlorquery_TypeFilter implements tx_icssitquery_IFilter {
-	private $value;
+	private $value = array();
 
 	/**
 	 * Constructor
 	 *
 	 * @param	tx_icssitlorquery_TypeList $value : The TypeList
 	 */
-	public function __construct(tx_icssitlorquery_TypeList $value) {
-		$this->value = $value;
+	public function __construct(tx_icssitlorquery_TypeList $types) {
+		for ($i=0; $i<$types->Count(); $i++) {
+			$type = $types->Get($i);
+			$this->value[] = $type->ID;
+		}
 	}
 
 	/**

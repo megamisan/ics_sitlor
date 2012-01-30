@@ -32,6 +32,19 @@
  */
 
 class tx_icssitlorquery_KeywordFilter implements tx_icssitquery_IFilter {
+	private $value;
+
+	/**
+	 * Constructor
+	 *
+	 * @param	string $value : Keywords
+	 */
+	public function __construct($value) {
+		if (!is_string($value))
+			throw new Exception('Keywords must be string.');
+		$this->value = $value;
+	}
+	
 	/**
 	 * Apply filter
 	 *
@@ -40,5 +53,6 @@ class tx_icssitlorquery_KeywordFilter implements tx_icssitquery_IFilter {
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
+		$query->setParameter('keyword', $this->value);
 	}
 }

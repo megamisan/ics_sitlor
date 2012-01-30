@@ -32,15 +32,18 @@
  */
 
 class tx_icssitlorquery_CategoryFilter implements tx_icssitquery_IFilter {
-	private $value;
+	private $value =  array();
 
 	/**
 	 * Constructor
 	 *
 	 * @param	string $value : The category
 	 */
-	public function __construct(tx_icssitlorquery_CategoryList $value) {
-		$this->value = $value;
+	public function __construct(tx_icssitlorquery_CategoryList $categories) {
+		for ($i=0; $i<$categories->Count(); $i++) {
+			$category = $categories->Get($i);
+			$this->value[] = $category->ID;
+		}
 	}
 
 	/**

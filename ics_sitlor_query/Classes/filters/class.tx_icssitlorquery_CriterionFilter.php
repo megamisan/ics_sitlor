@@ -37,11 +37,19 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Constructor
 	 *
-	 * @param	string $value : The criterion
+	 * @param	tx_icssitlorquery_CriterionList $criterion : The criterion
+	 * @param	tx_icssitlorquery_TermList $terms : Criterion terms
 	 * @return	void
 	 */
-	public function __construct(tx_icssitlorquery_CriterionList $value) {
-		$this->value = $value;
+	public function __construct(tx_icssitlorquery_CriterionList $criterion, tx_icssitlorquery_TermList $terms=null) {
+		if (isset($terms)) {
+			$termIDs = array();
+			for ($i=0; $i<$terms->Count(); $i++) {
+				$term = $terms->Get($i);
+				$termIDs[] = $term->ID;
+			}
+		}
+		$this->value = array($criterion->ID,$termIDs);
 	}
 	
 	/**

@@ -123,6 +123,10 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$pvalues[] = $this->filters['idFilter'];
 		}
 		if ($this->table=='small' || $this->table=='complete') {
+			if (in_array('keyword', $filterArray)) {
+				$pnames[] = 'libtext=' . $this->filters['keyword'];
+			}
+		
 			if (in_array('gender', $filterArray) && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
 				$pnames[] = 'elgendro';
 				$pvalues[] = $this->filters['gender'];
@@ -183,24 +187,30 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * Sets a parameter.
 	 *
 	 * @param	string		$name Parameter name
-	 * @param	string		$value Parameter value
+	 * @param	mixed		$value Parameter value
 	 * @return void
 	 */
 	public function setParameter($name, $value) {
+		if (!is_string($name))
+			throw new Exception('Parameter\'s name must be string.');
+			
 		switch ($name) {
-			case 'type':
-					if ($value instanceof tx_icssitlorquery_TypeList)
-						$this->filters[$name][] = $value;
+			case 'type':	// Type is an int array of types IDs
+					if (!isset($this->filters[$name]))
+						$this->filters[$name] = array();
+					$this->filters[$name] = array_merge($this->filters[$name], array_diff($value, $this->filters[$name]));
 				break;
-			case 'category':
-					if ($value instanceof tx_icssitlorquery_CategoryList)
-						$this->filters[$name][] = $value;
+			case 'category':	// Category is an int array of categories IDs
+					if (!isset($this->filters[$name]))
+						$this->filters[$name] = array();
+					$this->filters[$name] = array_merge($this->filters[$name], array_diff($value, $this->filters[$name]));
 				break;
-			case 'criterion':
-					if ($value instanceof tx_icssitlorquery_CriterionList)
-						$this->filters[$name][] = $value;
+			case 'criterion':	// Criterion is an array of pair values (criterionID, array of termIDs)
+					$this->filters[$name][] = $value;
 				break;
 			default:
+				// $value is a string
+				// $name is : gender, criterion, idFilter, title, keyword, startDate, endDate, startAvailable, endAvailable, startValid, endValid, noDate, openDay, reference, zip
 				$this->filters[$name] = $value;
 		}
 	}
@@ -281,17 +291,8 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @return	void
 	 */
 	private function makeCategoryFilter(array &$pnames, array &$pvalues) {
-		$catIDs = array();
-		foreach ($this->filters['category'] as $categoryList) {
-			for ($i=0; $i<$categoryList->Count(); $i++) {
-				$category = $categoryList->Get($i);
-				$catIDs[] = $category->ID;
-			}
-		}
-		if (!empty($catIDs)) {
-			$pnames[] = 'alcat';
-			$pvalues[] = implode('|', $catIDs);
-		}
+		$pnames[] = 'alcat';
+		$pvalues[] = implode('|', $this->filters['category']);
 	}
 
 	/**
@@ -302,17 +303,8 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @return	void
 	 */
 	private function makeTypeFilter(array &$pnames, array &$pvalues) {
-		$typeIDs = array();
-		foreach ($this->filters['type'] as $typeList) {
-			for ($i=0; $i<$typeList->Count(); $i++) {
-				$type = $typeList->Get($i);
-				$typeIDs[] = $type->ID;
-			}
-		}
-		if (!empty($typeIDs)) {
-			$pnames[] = 'eltypo';
-			$pvalues[] = implode('|', $typeIDs);
-		}
+		$pnames[] = 'eltypo';
+		$pvalues[] = implode('|', $this->filters['type']);
 	}
 
 	/**
@@ -322,19 +314,15 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @param	array $pvalues
 	 */
 	private function makeCriterionFilter(array &$pnames, array &$pvalues) {
-		$criterionIDs = array();
-		foreach ($this->filters['criterion'] as $criterionList) {
-			for ($i=0; $i<$criterionList->Count(); $i++) {
-				$criterion = $criterionList->Get($i);
-				$criterionIDs[] = $criterion->ID;
+		foreach ($this->filters['criterion'] as $key=>$criterionTerms) {
+			$pnames[] = 'elcriterio' . $key;
+			$pvalues[] = $criterionTerms[0];
+			if (is_array($criterionTerms[1]) && !empty($criterionTerms[1])) {
+				$pnames[] = 'modalidad' . $key;
+				$pvalues[] = $criterionTerms[1];
 			}
 		}
-		if (!empty($criterionIDs)) {
-			foreach ($criterionIDs as $key=>$criterion) {
-				$pnames[] = 'elcriterio' . $key;
-				$pvalues[] = $criterion;
-			}
-		}
+		
 	}
 	
 	/**
@@ -437,7 +425,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			}
 			$pvalues[] = $endDate;
 		}
-		if (in_array('noAvailable', $filterArray) && $this->filters['noAvailable']) {
+		if (in_array('notAvailable', $filterArray) && $this->filters['notAvailable']) {
 			$params['tsdispo'] = utf8_decode('Y');
 		}
 	}
