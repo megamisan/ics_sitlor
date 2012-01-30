@@ -61,14 +61,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 		$valuedTerm = new tx_icssitlorquery_ValuedTerm();
 
 		$valuedTerm->criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(intval($reader->getAttribute('CLEF_CRITERE')));
-		$terms = tx_icssitlorquery_CriterionFactory::GetCriterionTerms($valuedTerm->Criterion);
-		for ($i=0; $i<$terms->Count(); $i++) {
-			$term = $terms->Get($i);
-			if ($term->ID == intval($reader->getAttribute('CLEF_MODA'))) {
-				$valuedTerm->term = $term;
-				break;
-			}
-		}
+		$valuedTerm->term = tx_icssitlorquery_CriterionFactory::GetCriterionTerm($valuedTerm->Criterion, intval($reader->getAttribute('CLEF_MODA')));
 		$valuedTerm->value = $reader->readString();
 		tx_icssitlorquery_XMLTools::skipChildren($reader);
 

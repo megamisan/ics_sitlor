@@ -1,4 +1,7 @@
 2012-01-30 Tsi Yang <tsi@in-cite.net>
+	* Refactor : Retrieved Criterion Term in CriterionFactory
+
+2012-01-30 Tsi Yang <tsi@in-cite.net>
 	* Feature : Added getter on Picture, Phone, Name, LInk, Coordinates, Address
 
 2012-01-27 Tsi Yang <tsi@in-cite.net>

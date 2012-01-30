@@ -211,6 +211,21 @@ class tx_icssitlorquery_CriterionFactory {
 		return self::$criteriaTerms[$criterion->ID];
 	}
 
+	public static function GetCriterionTerm(tx_icssitlorquery_Criterion $criterion, $termID) {
+		if (!is_int($termID))
+			throw new Exception('Term ID must be integer.');
+			
+		self::initialize();
+		$terms = self::$criteriaTerms[$criterion->ID];
+		for ($i=0; $i<$terms->Count(); $i++) {
+			$term = $terms->Get($i);
+			if ($term->ID == $termID) {
+				return $term;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Set connection parameters
 	 *
