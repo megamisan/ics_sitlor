@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>SIT template search</title>
+</head>
+<body>
+
+<h1>Templates</h1>
+
+<!--  ###TEMPLATE_SEARCH### start-->
+	<div class="###PREFIXID###_search">
+		<div class="###PREFIXID###_searchForm">
+			###SEARCH_FORM###
+		</div>
+		<div class="###PREFIXID###_results">
+			###RESULT_LIST###
+		</div>
+	</div>
+<!--  ###TEMPLATE_SEARCH### end-->
+
+
+
+<!-- ###TEMPLATE_SEARCH_FORM### start-->
+	<form action="###ACTION_URL###"  method="get">
+		<fieldset class="###PREFIXID###_mainSearch">
+			###KEYWORD###
+			###HOTEL_TYPE###
+			###RESTAURANT_CATEGORY###
+			###CULINARY_SPECIALITY###
+			###DATE###
+		</fieldset>
+		<fieldset class="###PREFIXID###_searchMore">
+			###HOTEL_EQUIPMENT###
+			###OPENDAY###
+			###NOFEE###
+		</fieldset>
+		<fieldset class="###PREFIXID###_submitSearchForm">
+			<input type="submit" value="###SUBMIT###" />
+		</fieldset>
+	</form>
+<!-- ###TEMPLATE_SEARCH_FORM### end-->
+
+
+
+<!-- ###SEARCH_KEYWORD### start-->
+	<label for="search_keyword">###KEYWORD###</label>
+	<input type="text" name="keyword" id="search_keyword" value=""/>
+<!-- ###SEARCH_KEYWORD### end-->
+
+
+<!-- ###SEARCH_HOTEL_TYPE### start-->
+	<label for="search_hotelType">###HOTEL_TYPE###</label>
+	<ul class="###PREFIXID###_checkList">
+		<!-- ###TYPE_ITEM### -->
+		<li class="###PREFIXID###_checkListItem">
+			<input type="checkbox" ###SELECTED### name="hotelType" id="search_hotelType" value="HOTEL_TYPE_VALUE###" />
+		</li>
+		<!-- ###TYPE_ITEM### -->
+	</ul>
+<!-- ###SEARCH_HOTEL_TYPE### end-->
+
+
+<!-- ###SEARCH_RESTAURANT_CATEGORY### start-->
+	<label for="search_restaurantCategory">###RESTAURANT_CATEGORY###</label>
+	<ul class="###PREFIXID###_checkList">
+		<!-- ###CATEGORY_ITEM### -->
+		<li class="###PREFIXID###_checkListItem">
+			<input type="checkbox" ###SELECTED### name="restaurantCategory" id="search_restaurantCategory" value="RESTAURANT_CATEGORY_VALUE###" />
+		</li>
+		<!-- ###CATEGORY_ITEM### -->
+	</ul>
+<!-- ###SEARCH_RESTAURANT_CATEGORY### end-->
+
+
+<!-- ###SEARCH_CULINARY_SPECIALITY### start-->
+	<label for="search_culinarySpeciality">###CULINARY_SPECIALITY###</label>
+	<ul class="###PREFIXID###_checkList">
+		<!-- ###SPECIALITY_ITEM### -->
+		<li class="###PREFIXID###_checkListItem">
+			<input type="checkbox" ###SELECTED### name="culinarySpeciality" id="search_culinarySpeciality" value="CULINARY_SPECIALITY_VALUE###" />
+		</li>
+		<!-- ###SPECIALITY_ITEM### -->
+	</ul>
+<!-- ###SEARCH_CULINARY_SPECIALITY### end-->
+
+
+<!-- ###SEARCH_DATE### start-->
+	<label for="search_startDate">###STARTDATE###</label>
+	<input type="text" name="startDate" id="search_startDate" value=""/>
+
+	<label for="search_endDate">###ENDDATE###</label>
+	<input type="text" name="endDate" id="search_endDate" value=""/>
+<!-- ###SEARCH_DATE### end-->
+
+
+<!-- ###SEARCH_HOTEL_EQUIPMENT### start-->
+	<label for="search_hotelEquipment">###HOTEL_EQUIPMENT###</label>
+	<ul class="###PREFIXID###_checkList">
+		<!-- ###EQUIPEMENT_ITEM### -->
+		<li class="###PREFIXID###_checkListItem">
+			<input type="checkbox" ###SELECTED### name="hotelEquipment" id="search_hotelEquipment" value="###HOTEL_EQUIPMENT_VALUE###"/>
+		</li>
+		<!-- ###EQUIPEMENT_ITEM### -->
+	</ul>
+<!-- ###SEARCH_HOTEL_EQUIPMENT### end-->
+
+
+<!-- ###SEARCH_OPENDAY### start-->
+	<label for="search_openDay">###OPENDAY###</label>
+	<select class="###PREFIXID###_select" id="search_openDay">
+		<!-- ###OPENDAY_ITEM### -->
+		<option class="###PREFIXID###_selectOption" value="###OPENDAY_VALUE###" ###SELECTED###>###OPENDAY_LABEL###</option>
+		<!-- ###OPENDAY_ITEM### -->
+	</select>
+<!-- ###SEARCH_OPENDAY### end-->
+
+
+<!-- ###SEARCH_NOFEE### start-->
+	<label for="search_noFee">###NOFEE###</label>
+	<input type="checkbox" ###SELECTED### name="noFee" id="search_noFee" value="###NOFEE_VALUE###"/>
+<!-- ###SEARCH_NOFEE### end-->
+
+</body>
+</html>
