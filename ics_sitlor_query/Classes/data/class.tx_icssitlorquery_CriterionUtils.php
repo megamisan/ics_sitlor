@@ -174,4 +174,5 @@ class tx_icssitlorquery_CriterionUtils {
 	
 	
 	const OTNANCY2011 = 737000028;
+	const OTNANCY2012 = 737000029;
 }
