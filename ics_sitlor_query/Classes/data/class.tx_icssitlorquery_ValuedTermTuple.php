@@ -177,7 +177,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * @return	[type]		...
 	 */
 	public function toStringConf(array $conf) {
-		$cObj = t3lib_div::makeIsntance('tslib_cObj');
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		return $this->toStringObjConf($cObj, $conf);
 	}
 
