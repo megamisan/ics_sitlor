@@ -32,12 +32,23 @@
  */
 
 class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_ISortingProvider {
+	private $name;
+	private $order;
 
 	/**
 	 * Constructor
 	 *
+	 * @param	string $name
+	 * @param	boolean $ascOrder
 	 */
-	function __construct() {
+	function __construct($name, $ascOrder=true) {
+		if (!is_string($name))
+			throw new Exception('Type must be a string.');
+		if (!is_bool($ascOrder))
+			throw new Exception('');
+			
+		$this->name = $name;
+		$this->order = $ascOrder? 'ASC' : 'DESC';
 	}
 
 
@@ -50,6 +61,7 @@ class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_IS
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
+		$query->setParameters($this->name, $this->order);
 	}
 
 }

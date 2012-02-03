@@ -81,7 +81,7 @@ class tx_icssitlorquery_CriterionUtils {
 		for ($i=0; $i<$list->Count(); $i++) {
 			$tuple = $list->Get($i);
 			$item = $tuple->Get($searchIndex);
-			if (isset($item) && $item->ID == $searchedID) {
+			if (isset($item) && $item->Criterion->ID == $searchedID) {
 				$tuple_exists = true;
 				$tuple->Set($elIndex, $element);
 				$list->Set($i, $tuple);

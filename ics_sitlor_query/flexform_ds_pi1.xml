@@ -61,16 +61,32 @@
 							</config>
 						</TCEforms>
 					</password>
-					<page>
+					<what_to_display>
 						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:page</label>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display</label>
 							<config>
-								<type>input</type>
-								<eval>num</eval>
-								<size>5</size>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array"></numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:search</numIndex>
+										<numIndex index="1">SEARCH</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:list</numIndex>
+										<numIndex index="1">LIST</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:single</numIndex>
+										<numIndex index="1">SINGLE</numIndex>
+									</numIndex>
+								</items>
+								<size>4</size>
+								<minitems>0</minitems>
+								<maxitems>3</maxitems>
 							</config>
 						</TCEforms>
-					</page>
+					</what_to_display>
 					<size>
 						<TCEforms>
 							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:size</label>
@@ -81,84 +97,34 @@
 							</config>
 						</TCEforms>
 					</size>
-					<what_to_display>
+				</el>
+			</ROOT>
+		</main>
+		<paramSelect>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSelect</sheetTitle>
+				</TCEforms>
+				<el>
+					<dataGroup>
 						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display</label>
-							<config>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup</label>
+							<onChange>reload</onChange>
+							<config type="array">
 								<type>select</type>
 								<items type="array">
 									<numIndex index="0" type="array"></numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:hotel_list</numIndex>
-										<numIndex index="1">HOTEL_LIST</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_accomodation</numIndex>
+										<numIndex index="1">ACCOMODATION</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:hotel_single</numIndex>
-										<numIndex index="1">HOTEL_SINGLE</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_restaurant</numIndex>
+										<numIndex index="1">RESTAURANT</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:hotel_search</numIndex>
-										<numIndex index="1">HOTEL_SEARCH</numIndex>
-									</numIndex>
-									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:camping_youth_hostel_list</numIndex>
-										<numIndex index="1">CAMPING_YOUTH_HOSTEL_LIST</numIndex>
-									</numIndex>
-									<numIndex index="5" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:camping_youth_hostel_single</numIndex>
-										<numIndex index="1">CAMPING_YOUTH_HOSTEL_SINGLE</numIndex>
-									</numIndex>
-									<numIndex index="6" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:camping_youth_hostel_search</numIndex>
-										<numIndex index="1">CAMPING_YOUTH_HOSTEL_SEARCH</numIndex>
-									</numIndex>
-									<numIndex index="7" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:strange_accomodation_list</numIndex>
-										<numIndex index="1">STRANGE_ACCOMODATION_LIST</numIndex>
-									</numIndex>
-									<numIndex index="8" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:strange_accomodation_single</numIndex>
-										<numIndex index="1">STRANGE_ACCOMODATION_SINGLE</numIndex>
-									</numIndex>
-									<numIndex index="9" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:strange_accomodation_search</numIndex>
-										<numIndex index="1">STRANGE_ACCOMODATION_SEARCH</numIndex>
-									</numIndex>
-									<numIndex index="10" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:cottage_guesthouse_list</numIndex>
-										<numIndex index="1">COTTAGE_GUESTHOUSE_LIST</numIndex>
-									</numIndex>
-									<numIndex index="11" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:cottage_guesthouse_single</numIndex>
-										<numIndex index="1">COTTAGE_GUESTHOUSE_SINGLE</numIndex>
-									</numIndex>
-									<numIndex index="12" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:cottage_guesthouse_search</numIndex>
-										<numIndex index="1">COTTAGE_GUESTHOUSE_SEARCH</numIndex>
-									</numIndex>
-									<numIndex index="13" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:restaurant_list</numIndex>
-										<numIndex index="1">RESTAURANT_LIST</numIndex>
-									</numIndex>
-									<numIndex index="14" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:restaurant_single</numIndex>
-										<numIndex index="1">RESTAURANT_SINGLE</numIndex>
-									</numIndex>
-									<numIndex index="15" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:restaurant_search</numIndex>
-										<numIndex index="1">RESTAURANT_SEARCH</numIndex>
-									</numIndex>
-									<numIndex index="16" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:event_list</numIndex>
-										<numIndex index="1">EVENT_LIST</numIndex>
-									</numIndex>
-									<numIndex index="17" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:event_single</numIndex>
-										<numIndex index="1">EVENT_SINGLE</numIndex>
-									</numIndex>
-									<numIndex index="18" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:event_search</numIndex>
-										<numIndex index="1">EVENT_SEARCH</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_event</numIndex>
+										<numIndex index="1">EVENT</numIndex>
 									</numIndex>
 								</items>
 								<size>1</size>
@@ -166,9 +132,84 @@
 								<maxitems>1</maxitems>
 							</config>
 						</TCEforms>
-					</what_to_display>
+					</dataGroup>
+					<!-- ###SUBDATAGROUP### -->
+					<OTNancySubscriber>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:OTNancySubscriber</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</OTNancySubscriber>
 				</el>
 			</ROOT>
-		</main>
+		</paramSelect>
+		<paramSorting>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
+				</TCEforms>
+				<el>
+					<sortName>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName</label>
+							<config type="array">
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array"></numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_random</numIndex>
+										<numIndex index="1">RANDOM</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_alpha</numIndex>
+										<numIndex index="1">ALPHA</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_price</numIndex>
+										<numIndex index="1">PRICE</numIndex>
+									</numIndex>
+									<numIndex index="4" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_rating</numIndex>
+										<numIndex index="1">RATING</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_date</numIndex>
+										<numIndex index="1">DATE</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+							</config>
+						</TCEforms>
+					</sortName>
+					<sortOrder>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortOrder</label>
+							<config type="array">
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array"></numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortOrder_asc</numIndex>
+										<numIndex index="1">asc</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortOrder_desc</numIndex>
+										<numIndex index="1">desc</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+							</config>
+						</TCEforms>
+					</sortOrder>
+				</el>
+			</ROOT>
+		</paramSorting>
 	</sheets>
 </T3DataStructure>

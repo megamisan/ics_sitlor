@@ -74,7 +74,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 	private $currentSaleFormula;			// tx_icssitlorquery_ValuedTermList
 	private $currentCartePrice;				// tx_icssitlorquery_ValuedTermList
-	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
+	// private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
 
 
 	/**
@@ -94,7 +94,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		$this->capacity = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentSaleFormula = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentCartePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
-		$this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		// $this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -153,7 +153,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->allowedGroupNumber;
 			case 'MotorCoachPark':
 				return $this->motorCoachPark;
-			case 'serviceOpen':
+			case 'ServiceOpen':
 				return $this->serviceOpen;
 
 			//-- CAPACITY
@@ -165,8 +165,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->currentSaleFormula;
 			case 'CurrentCartePrice':
 				return $this->currentCartePrice;
-			case 'CurrentMenuPrice':
-				return $this->currentMenuPrice;
+			// case 'CurrentMenuPrice':
+				// return $this->currentMenuPrice;
 
 			default :
 				return parent::__get($name);
@@ -343,8 +343,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			$this->currentSaleFormula->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE)
 			$this->currentCartePrice->Add($valuedTerm);
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE)
-			$this->currentMenuPrice->Add($valuedTerm);
+		// if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE)
+			// $this->currentMenuPrice->Add($valuedTerm);
 	}
 
 	/**
@@ -389,7 +389,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA,
 			tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE,
-			tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE,
+			// tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}

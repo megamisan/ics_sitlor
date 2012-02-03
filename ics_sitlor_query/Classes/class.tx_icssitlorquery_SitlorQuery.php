@@ -35,10 +35,13 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	private $login;		// The login
 	private $password;	// The password
 	private $url;		// The url
+	
 	private $start = 1;	// Begin of page
 	private $end = 20;	// End of page
+	
 	private $filters = array();	// Associative array
-	private $queryParams = array();
+	private $sortings = array();
+	
 	static private $outputList = array(	// SITLOR Output value
 		'xml' => '1',
 		'csv' => '3',
@@ -152,9 +155,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$pnames[] = 'elzipo';
 				$pvalues[] = implode('|', $this->filters['zip']);
 			}
-			$this->makeDateFilter($pnames, $pvalues, $filterArray);
-			$this->makeValidFilter($pnames, $pvalues, $filterArray);
-			$this->makeAvailableFilter($pnames, $pvalues, $filterArray);
+			$this->makeDateFilter($params, $pnames, $pvalues, $filterArray);
+			$this->makeValidFilter($params, $pnames, $pvalues, $filterArray);
+			$this->makeAvailableFilter($params, $pnames, $pvalues, $filterArray);
 		}
 
 		//-- End of Filter on params
@@ -195,6 +198,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			throw new Exception('Parameter\'s name must be string.');
 			
 		switch ($name) {
+			// Filters parameters
 			case 'type':	// Type is an int array of types IDs
 					if (!isset($this->filters[$name]))
 						$this->filters[$name] = array();
@@ -208,10 +212,39 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			case 'criterion':	// Criterion is an array of pair values (criterionID, array of termIDs)
 					$this->filters[$name][] = $value;
 				break;
-			default:
-				// $value is a string
-				// $name is : gender, criterion, idFilter, title, keyword, startDate, endDate, startAvailable, endAvailable, startValid, endValid, noDate, openDay, reference, zip
+			case 'idFilter':
+			case 'title':
+			case 'keyword':
+			case 'gender':
+			case 'startDate':
+			case 'endDate':
+			case 'noDate':
+			case 'startAvailable':
+			case 'endAvailable':
+			case 'notAvailable':
+			case 'startValid':
+			case 'endValid':
+			case 'reference':
+			case 'zip':
 				$this->filters[$name] = $value;
+				break;
+			
+			// Sorting parameters
+			case 'randomSorting':
+			case 'alphaSorting':
+			case 'titleSorting':
+			case 'ratingStarSorting':
+			case 'ratingEarsOfCornSorting':
+			case 'minDualRoomSorting':
+			case 'currentWeeklyPriceSorting':
+			case 'labelChainSorting':
+			case 'adultMenuSorting':
+			case 'dateSorting':
+				$this->sortings[$name] = $value;
+				break;
+			
+			default:
+				tx_icssitquery_Debug::warning('Undefined parameter in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
@@ -333,7 +366,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @param	array		$filterArray Filters to use.
 	 * @return	void
 	 */
-	private function makeDateFilter(array &$pnames, array &$pvalues, array $filterArray) {
+	private function makeDateFilter(array &$params, array &$pnames, array &$pvalues, array $filterArray) {
 		if (in_array('startDate', $filterArray) && $this->filters['startDate']) {
 			$params['leshoraires'] = utf8_decode(date('d/m/Y', $this->filters['startDate']));
 		}
@@ -369,7 +402,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @param	array		$filterArray Filters to use.
 	 * @return	void
 	 */
-	private function makeValidFilter(array &$pnames, array &$pvalues, array $filterArray) {
+	private function makeValidFilter(array &$params, array &$pnames, array &$pvalues, array $filterArray) {
 		if (in_array('startValid', $filterArray) && $this->filters['startValid']) {
 			$params['lesvalid'] = utf8_decode(date('d/m/Y', $this->filters['startValid']));
 		}
@@ -402,7 +435,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @param	array		$filterArray Filters to use.
 	 * @return	void
 	 */
-	private function makeAvailableFilter(array &$pnames, array &$pvalues, array $filterArray) {
+	private function makeAvailableFilter(array &$params, array &$pnames, array &$pvalues, array $filterArray) {
 		if (in_array('startAvailable', $filterArray) && $this->filters['startAvailable']) {
 			$params['lesdispos'] = utf8_decode(date('d/m/Y', $this->filters['startAvailable']));
 		}

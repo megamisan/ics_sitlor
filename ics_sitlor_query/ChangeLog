@@ -1,3 +1,13 @@
+2012-02-03 Tsi Yang <tsi@in-cite.net>
+	* Feature: HTML render
+	* Refactor: Reworked call to HTML render
+	* Refactor: Data price on Accomodation not on FullAccomodation
+	* Refactor: Data price on Restaurant not on FullRestaurant
+	* Fix: Params pass by reference
+	* Feature: Added data in Nomenclature factory
+	* Fix: Bug on CriterionUtils addToTupleList
+	* Fix: Bug on ValuedTerm
+
 2012-01-30 Tsi Yang <tsi@in-cite.net>
 	* Refactor : Retrieved Criterion Term in CriterionFactory
 

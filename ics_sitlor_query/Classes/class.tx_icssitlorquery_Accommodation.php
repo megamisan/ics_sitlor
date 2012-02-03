@@ -40,11 +40,14 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		'city' => '',
 	);
 
+	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
+	
 	/** 
 	 * Constructor
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
+		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -56,6 +59,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'CurrentSingleClientsRate':
+				return $this->currentSingleClientsRate;
 			default :
 				return parent::__get($name);
 		}
@@ -210,6 +215,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
 			$this->RatingStar = $valuedTerm;
 		}
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
+			$this->currentSingleClientsRate->Add($valuedTerm);
 	}
 
 	/**
@@ -235,7 +242,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
-			tx_icssitlorquery_CriterionUtils::RATINGSTAR
+			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
+			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

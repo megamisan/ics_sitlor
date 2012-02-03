@@ -40,6 +40,8 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 		'city' => '',
 	);
 
+	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
+
 	/**
 	 * Initializes the restaurant.
 	 *
@@ -48,6 +50,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->ChainAndLabel = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -58,6 +61,8 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'CurrentMenuPrice':
+				return $this->currentMenuPrice;
 			default :
 				return parent::__get($name);
 		}
@@ -214,6 +219,8 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CHAIN_LABEL) {
 			$this->ChainAndLabel->Add($valuedTerm);
 		}
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE)
+			$this->currentMenuPrice->Add($valuedTerm);
 	}
 
 	/**
@@ -241,6 +248,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
 			tx_icssitlorquery_CriterionUtils::CHAIN_LABEL,
+			tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

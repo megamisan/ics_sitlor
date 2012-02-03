@@ -41,10 +41,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
     var $scriptRelPath = 'pi1/class.tx_icssitlorquery_pi1.php';    // Path to this script relative to the extension dir.
     var $extKey        = 'ics_sitlor_query';    // The extension key.
 	
-	var $templateFile = 'typo3conf/ext/ics_sitlor_query/res/template.html';
+	var $templateFiles = array(
+		'search' => 'typo3conf/ext/ics_sitlor_query/res/template_search.html',
+		'results' => 'typo3conf/ext/ics_sitlor_query/res/template_results.html',
+		'map' => 'typo3conf/ext/ics_sitlor_query/res/template_map.html',
+		'detail' => 'typo3conf/ext/ics_sitlor_query/res/template_detail.html',
+	);
 	
 	var $defaultPage = 1;
 	var $defaultSize = 20;
+	
 	
     
     /**
@@ -61,22 +67,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
         $this->pi_USER_INT_obj = 1;    // Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_initPIflexForm();
     
-		//--
-        $content='
-            <strong>This is a few paragraphs:</strong><br />
-            <p>This is line 1</p>
-            <p>This is line 2</p>
-    
-            <h3>This is a form:</h3>
-            <form action="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'" method="POST">
-                <input type="text" name="'.$this->prefixId.'[input_field]" value="'.htmlspecialchars($this->piVars['input_field']).'">
-                <input type="submit" name="'.$this->prefixId.'[submit_button]" value="'.htmlspecialchars($this->pi_getLL('submit_button_label')).'">
-            </form>
-            <br />
-            <p>You can click here to '.$this->pi_linkToPage('get to this page again',$GLOBALS['TSFE']->id).'</p>
-        ';
-		//--
-		
 		// Initialize the plugin
 		$this->init();
 		
@@ -101,116 +91,29 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			tx_icssitlorquery_Debug::error('Criterion url is required.');
 			return $this->pi_wrapInBaseClass($this->pi_getLL('data_not_available', 'Can not reach data', true));
 		}
-
+		
 		// Initialize query, connection
 		$this->setQueryService($this->conf['login'], $this->conf['password'], $this->conf['url']);
 		$this->setSortingProvider();
 		tx_icssitlorquery_NomenclatureFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['nomenclatureUrl']);
 		tx_icssitlorquery_CriterionFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['criterionUrl']);
-		
-		// Render data
-		// $modes = t3lib_div::trimExplode(',', $this->conf['mode'], true);
-		// foreach ($modes as $mode) {
-			// $mode = (string) strtoupper(trim($mode));
-			// switch ($mode) {
-				// case 'LIST' :
-					// $content .= $this->renderDataList();
-				// break;
-				
-				// case 'SINGLE':
-					// $content .= $this->renderDataSingle();
-				// break;
-				
-				// case 'SEARCH':
-					// $content .= $this->renderDataSearch();
-				// break;
-				
-				// default:
-			// }
-		// }
 
-		
-		/*
-		//-- TEST ACCOMODATAION
-		// try {
-			// $types = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(4000002, 4000003, 4000012));
-		// } catch (Exception $e) {
-			// tx_icssitquery_Debug::error('Retrieves Type for HOTEL failed : ' . $e);
-		// }
-		// $typeFilter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
-		// $this->queryService->addFilter($typeFilter);
-
-
-		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', mktime(0,0,0,1,1,2000));
-		$this->queryService->addFilter($StartDateFilter);
-		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000521);
-		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000259);
-		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000115);
-		$this->queryService->addFilter($idFilter);
-
-		try {
-			$accomodations = $this->queryService->getAccomodations($this->sortingProvider);
-		} catch (Exception $e) {
-			tx_icssitquery_Debug::error('Retrieves Accomodation proccess failed : ' . $e);
+		foreach ($this->codes as $theCode) {
+			$theCode = (string)strtoupper(trim($theCode));
+			switch($theCode) {
+				case 'SEARCH':
+				case 'LIST':
+					$content .= $this->displayList();
+					break;
+				case 'SINGLE':
+					if ($this->sitlor_uid)
+						$content .= $this->displaySingle();
+					break;
+				default:
+					tx_icssitlorquery_Debug::warning('The code ' . $theCode . ' is not defined.');
+			}
 		}
-		if (empty($accomodations))
-			$content = $this->pi_getLL('no_data', 'There is any Accomodations', true);
-		else 
-			$content = 'There are ' . count($accomodations) . ' accomodation(s).';
-		*/
 		
-		/*
-		//-- TEST RESTAURANT
-		// try {
-			// $cats = tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::RESTAURANT));
-		// } catch (Exception $e) {
-			// tx_icssitquery_Debug::error('Retrieves Category for RESTAURANT failed : ' . $e);
-		// }
-		// $catFilter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $cats);
-		// $this->queryService->addFilter($catFilter);
-		
-		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000148 );
-		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000553  );
-		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737000041   );		
-		$this->queryService->addFilter($idFilter);
-		
-		try {
-			$restaurants = $this->queryService->getRestaurants($this->sortingProvider);
-		} catch (Exception $e) {
-			tx_icssitquery_Debug::error('Retrieves Restaurant proccess failed : ' . $e);
-		}
-		if (empty($restaurants))
-			$content = $this->pi_getLL('no_data', 'There is any Restaurants', true);
-		else 
-			$content = 'There are ' . count($restaurants) . ' restaurant(s).';
-		*/
-		
-		//-- TEST EVENT
-		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', mktime(0,0,0,1,1,2000));
-		$this->queryService->addFilter($StartDateFilter);
-			// TODO : filtre critère
-		// $genderFilter = t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::EVENT);
-		// $this->queryService->addFilter($genderFilter);
-		// try {
-			// $crits = tx_icssitlorquery_CriterionFactory::GetCriteria(array(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT));
-		// } catch (Exception $e) {
-			// tx_icssitquery_Debug::error('Retrieves criterion for EVENT failed : ' . $e);
-		// }
-		// $critFilter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $crits);
-		// $this->queryService->addFilter($critFilter);
-		// $idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737003810);		
-		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', 737005878 );		
-		$this->queryService->addFilter($idFilter);
-		try {
-			$events = $this->queryService->getEvents($this->sortingProvider);
-		} catch (Exception $e) {
-			tx_icssitquery_Debug::error('Retrieves Event proccess failed : ' . $e);
-		}
-		if (empty($events))
-			$content = $this->pi_getLL('no_data', 'There is any Events', true);
-		else 
-			$content = 'There are ' . count($events) . ' event(s).';
-			
 		return $this->pi_wrapInBaseClass($content);
     }
 	
@@ -220,49 +123,74 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return void
 	 */
 	function init () {
-	
 		// Get template code
-		$templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'templateFile', 'main');
-		$this->conf['templateFile'] = $templateFile? $templateFile: $this->conf['templateFile'];
-		$this->conf['templateFile'] = $this->conf['templateFile']? $this->conf['templateFile']: $this->templateFile;
-		$this->templateCode = $this->cObj->fileResource($this->conf['templateFile']);
+		$templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template', 'main');
+		$templateFile = $templateFile? $templateFile: $this->conf['template'];
+		if ($templateFile) {
+			$this->templateCode = $this->cObj->fileResource($templateFile);
+		} else {
+			$this->templateCode = $this->cObj->fileResource($this->templateFiles['search'])
+				. $this->cObj->fileResource($this->templateFiles['results'])
+				. $this->cObj->fileResource($this->templateFiles['map'])
+				. $this->cObj->fileResource($this->templateFiles['detail']);
+		}
 		
+		// Get login
+		$url = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'url', 'main');
+		$this->conf['url'] = $url? $url: $this->conf['url'];
+		
+		$login = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'login', 'main');
+		$this->conf['login'] = $login? $login: $this->conf['login'];		
+		
+		$password = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'password', 'main');
+		$this->conf['password'] = $password? $password: $this->conf['password'];
+				
 		// Get mode
-		if (isset($this->piVars['mode'])) {
-			$mode = $this->piVars['mode'];
-		}
+		$codes = array();
+		if (isset($this->piVars['mode']))
+			$codes[] = $this->piVars['mode'];
 		if (isset($this->piVars['showUid'])) {
-			$this->conf['showUid'] = $this->piVars['showUid'];
-			$mode = 'SINGLE';
+			$this->sitlor_uid = $this->piVars['showUid'];
+			$codes = array_merge($codes, array('SINGLE'));
 		}
-		if (isset($this->piVars['dataCategory'])) {
-			$dataCategory = $this->piVars['dataCategory'];
-			if ($dataCategory == 'ACCOMODATAION')
-				$accomodationCategory = $this->piVars['accomodationCategory'];
-		}
-		if (!$mode || !$dataCategory || ($dataCategory == 'ACCOMODATAION' && !$accomodationCategory)) {
-			$this->initMode();
-		}
+		$modes = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'main'), true);
+		$this->codes = array_merge($codes, $modes);
 		
-		// Get page and page size
-		$page = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'page', 'main');
-		$this->conf['page'] = $page? $page: $this->conf['page'];
-		$this->conf['page'] = $this->conf['page']? $this->conf['page']: $this->defaultPage;
-		
+		// Get page size
 		$size = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'size', 'main');
 		$this->conf['size'] = $size? $size: $this->conf['size'];
 		$this->conf['size'] = $this->conf['size']? $this->conf['size']: $this->defaultSize;
 		
-		// Get login
-		$login = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'login', 'main');
-		$this->conf['login'] = $login? $login: $this->conf['login'];
+		if (isset($this->piVars['page']))
+			$this->conf['page'] = $this->piVars['page'];
+		if (!$this->conf['page'])
+			$this->conf['page'] = 1;
 		
-		$password = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'password', 'main');
-		$this->conf['password'] = $password? $password: $this->conf['password'];
+		// Get param select
+		$dataGroup = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'dataGroup', 'paramSelect');
+		$this->conf['dataGroup'] = $dataGroup? $dataGroup: $this->conf['dataGroup'];
+		$this->conf['dataGroup'] = (string)strtoupper(trim($this->conf['dataGroup']));
 		
-		$url = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'url', 'main');
-		$this->conf['url'] = $url? $url: $this->conf['url'];
-							
+		$subDataGroup = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subDataGroup', 'paramSelect');
+		$this->conf['subDataGroup'] = $subDataGroup? $subDataGroup: $this->conf['subDataGroup'];
+		$this->conf['subDataGroup'] = (string)strtoupper(trim($this->conf['subDataGroup']));
+		if (!$this->conf['subDataGroup'] && $this->conf['dataGroup']=='ACCOMODATION'){
+			$this->conf['subDataGroup'] = 'HOTEL';
+		}
+		$this->conf['subDataGroup'] = (string)strtoupper(trim($this->conf['subDataGroup']));
+		
+		$OTNancySubscriber = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancySubscriber', 'paramSelect');
+		$this->conf['OTNancyFilter'] = $OTNancySubscriber? $OTNancySubscriber: $this->conf['OTNancyFilter'];
+		$this->conf['OTNancyFilter'] = intval($this->conf['OTNancyFilter']);
+		
+		if (!$this->conf['startDateFilter'])
+			$this->conf['startDateFilter'] = '01/01/2000';
+		
+		// Get param sorting
+		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'paramSorting');
+		$this->conf['sortName'] = $sortName? $sortName: $this->conf['sortName'];
+		$sortOrder = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortOrder', 'paramSorting');
+		$this->conf['sortOrder'] = $sortOrder? $sortOrder: $this->conf['sortOrder'];
 	}
 	
 	/**
@@ -288,295 +216,340 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->sortingProvider = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider');
 	}
 	
-	/**
-	 * Initialize the mode
-	 *
-	 * @return void
-	 */
-	function initMode() {
-		$display = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'main');
-		switch($display) {
-			case 'HOTEL_LIST':
-				$mode = $mode? $mode: 'LIST';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'HOTEL';
-			break;
-			
-			case 'HOTEL_SINGLE':
-				$mode = $mode? $mode: 'SINGLE';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'HOTEL';
-			break;
-			
-			case 'HOTEL_SEARCH':
-				$mode = $mode? $mode: 'SEARCH';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'HOTEL';
-			break;
-			
-			case 'CAMPING_YOUTH_HOSTEL_LIST':
-				$mode = $mode? $mode: 'LIST';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'CAMPING, YOUTH_HOSTEL';
-			break;
-			
-			case 'CAMPING_YOUTH_HOSTEL_SINGLE':
-				$mode = $mode? $mode: 'SINGLE';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'CAMPING, YOUTH_HOSTEL';
-			break;
-			
-			case 'CAMPING_YOUTH_HOSTEL_SEARCH':
-				$mode = $mode? $mode: 'SEARCH';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'CAMPING, YOUTH_HOSTEL';
-			break;
-			
-			case 'STRANGE_ACCOMODATION_LIST':
-				$mode = $mode? $mode: 'LIST';
-				$dataCategory= $dataCategory? $dataCategory: 'ACCOMODATION';
-				$accomodationCategory = 'STRANGE';
-			break;
-			
-			case 'STRANGE_ACCOMODATION_SINGLE':
-				$mode = $mode? $mode: 'SINGLE';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'STRANGE';
-			break;
-			
-			case 'STRANGE_ACCOMODATION_SEARCH':
-				$mode = $mode? $mode: 'SEARCH';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'STRANGE';
-			break;
-			
-			case 'COTTAGE_GUESTHOUSE_LIST':
-				$mode = $mode? $mode: 'LIST';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'HOLLIDAY_COTTAGE, GUESTHOUSE';
-			break;
-			
-			case 'COTTAGE_GUESTHOUSE_SINGLE':
-				$mode = $mode? $mode: 'SINGLE';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'HOLLIDAY_COTTAGE, GUESTHOUSE';
-			break;
-			
-			case 'COTTAGE_GUESTHOUSE_SEARCH':
-				$mode = $mode? $mode: 'SEARCH';
-				$dataCategory= $dataCategory? $dataCategory:  'ACCOMODATION';
-				$accomodationCategory = 'HOLLIDAY_COTTAGE, GUESTHOUSE';
-			break;
-			
-			case 'RESTAURANT_LIST':
-				$mode = $mode? $mode: 'LIST';
-				$dataCategory= $dataCategory? $dataCategory:  'RESTAURANT';
-			break;
-			
-			case 'RESTAURANT_SINGLE':
-				$mode = $mode? $mode: 'SINGLE';
-				$dataCategory= $dataCategory? $dataCategory:  'RESTAURANT';
-			break;
-			
-			case 'RESTAURANT_SEARCH':
-				$mode = $mode? $mode: 'SEARCH';
-				$dataCategory= $dataCategory? $dataCategory:  'RESTAURANT';
-			break;
-			
-			case 'EVENT_LIST':
-				$mode = $mode? $mode: 'LIST';
-				$dataCategory= $dataCategory? $dataCategory:  'EVENT';
-			break;
-			
-			case 'EVENT_SINGLE':
-				$mode = $mode? $mode: 'SINGLE';
-				$dataCategory= $dataCategory? $dataCategory:  'EVENT';
-			break;
-			
-			case 'EVENT_SEARCH':
-				$mode = $mode? $mode: 'SEARCH';
-				$dataCategory= $dataCategory? $dataCategory:  'EVENT';
-			break;
-			
+
+	function displayList() {
+		// Set filter on date to get date data
+		list($day, $month, $year) = explode('/', $this->conf['startDateFilter']);
+		$startDate = mktime(0,0,0,$month,$day,$year);
+		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
+		$this->queryService->addFilter($StartDateFilter);
+		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
+		$this->queryService->addFilter($noDateFilter);
+
+		switch($this->conf['dataGroup']) {
+			case 'ACCOMODATION':
+				switch($this->conf['subDataGroup']) {
+					case 'HOTEL':
+						try {
+							$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$hotel);
+						} catch (Exception $e) {
+							tx_icssitquery_Debug::error('Retrieves type for hotel failed : ' . $e);
+						}
+						$typeFilter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+						$this->queryService->addFilter($typeFilter);
+						break;
+					case 'CAMPING_AND_YOUTHHOSTEL':
+						try {
+							$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$campingAndYouthHostel);
+						} catch (Exception $e) {
+							tx_icssitquery_Debug::error('Retrieves type for camping and youth hostel failed : ' . $e);
+						}
+						$typeFilter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+						$this->queryService->addFilter($typeFilter);
+						break;
+					case 'STRANGE':
+						try {
+							$criteria = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION));
+						} catch (Exception $e) {
+							tx_icssitquery_Debug::error('Retrieves criterion for strange accomodation failed : ' . $e);
+						}
+						$criterionFilter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criteria);
+						$this->queryService->addFilter($criterionFilter);
+						break;
+					case 'HOLLIDAY_COTTAGE_AND_GUESTHOUSE':
+						try {
+							$categories = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(
+								tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
+								tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
+							));
+						} catch (Exception $e) {
+							tx_icssitquery_Debug::error('Retrieves type for holliday cottage and guesthouse failed : ' . $e);
+						}
+						$categoryFilter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $categories);
+						$this->queryService->addFilter($categoryFilter);
+						break;
+					default:
+						tx_icssitlorquery_Debug::warning('Sub-Datagroup ' . $this->conf['subDataGroup'] . ' is not defined.');
+				}
+				try {
+					$elements = $this->queryService->getAccomodations($this->sortingProvider);
+				} catch (Exception $e) {
+					tx_icssitquery_Debug::error('Retrieves Accomodations proccess failed : ' . $e);
+				}
+				break;
+			case 'RESTAURANT':
+				// TODO : get restaurants
+				break;
+			case 'EVENT':
+			// TODO : get events
+				break;
 			default:
+				tx_icssitlorquery_Debug::warning('Datagroup ' . $dataGroup . ' is not defined.');
 		}
-		$this->conf['mode'] = $mode? $mode: $this->conf['mode'];
-		$this->conf['dataCategory'] = $dataCategory? $dataCategory: $this->conf['dataCategory'];
-		$this->conf['accomodationCategory'] = $accomodationCategory? $accomodationCategory: $this->conf['accomodationCategory'];
+		if (empty($elements))
+			return $this->renderListEmpty();
+			
+		return $this->renderList($elements);
 	}
 	
 	/**
-	 * Render data list
+	 * Display the single view of en element
 	 *
-	 * @return string : The data content
+	 * @return string : HTML content for single view
 	 */
-	function renderDataList() {
-		$categories = t3lib_div::trimExplode(',', $this->conf['dataCategory'], true);
-		foreach ($categories as $category) {
-			$category = (string) strtoupper(trim($category));
-			switch ($category) {
-				case 'ACCOMODATION' :
-					$content .= $this->renderAccomodationList();
+	function displaySingle() {
+		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', intval($this->sitlor_uid));
+		$this->queryService->addFilter($idFilter);
+		switch($this->conf['dataGroup']) {
+			case 'ACCOMODATION':
+				try {
+					$elements = $this->queryService->getAccomodations($this->sortingProvider);
+				} catch (Exception $e) {
+					tx_icssitquery_Debug::error('Retrieves Accomodations proccess failed : ' . $e);
+				}
 				break;
-				
-				case 'RESTAURANT' :
-					$content .= $this->renderRestaurantList();
+			case 'RESTAURANT':
+				try {
+					$elements = $this->queryService->getRestaurants($this->sortingProvider);
+				} catch (Exception $e) {
+					tx_icssitquery_Debug::error('Retrieves Restaurants proccess failed : ' . $e);
+				}
 				break;
-				
-				case 'EVENT' :
-					$content .= $this->renderEventList();
+			case 'EVENT':
+				try {
+					$elements = $this->queryService->getEvents($this->sortingProvider);
+				} catch (Exception $e) {
+					tx_icssitquery_Debug::error('Retrieves Events proccess failed : ' . $e);
+				}
 				break;
-				
-				default;
-			}
+			default:
+				tx_icssitlorquery_Debug::warning('Datagroup ' . $this->conf['dataGroup'] . ' is not defined.');
 		}
-		return $content;
+		return $this->renderDetail($element);
+	}
+	
+	/** 
+	 * Render empty list content
+	 *
+	 * @return string : HTML empty list content
+	 */
+	function renderListEmpty() {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_LIST_EMPTY###');
+		$markers = array();
+		return $this->cObj->substituteMarkerArray($template, $markers, '###|###', false, true);
 	}
 	
 	/**
-	 * Render data single
+	 * Render list content
 	 *
-	 * @return string : The data content
+	 * @param	array $elements : tx_icssitquery_AbstractData array
+	 * @return	string : HTML list content
 	 */
-	function renderDataSingle() {
-		$categories = t3lib_div::trimExplode(',', $this->conf['dataCategory'], true);
-		foreach ($categories as $category) {
-			$category = (string) strtoupper(trim($category));
-			switch ($category) {
-				case 'ACCOMODATION' :
-					$content .= $this->renderAccomodationSingle();
-				break;
-				
-				case 'RESTAURANT' :
-					$content .= $this->renderRestaurantSingle();
-				break;
-				
-				case 'EVENT' :
-					$content .= $this->renderEventSingle();
-				break;
-				
-				default;
-			}
+	function renderList(array $elements) {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_LIST###');
+		$subparts = array();
+		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
+		foreach ($elements as $element) {
+			$markers = array();
+			$locMarkers = array();
+			$locMarkers['GENERIC'] = $this->renderListItemGeneric($element, $markers);
+			$locMarkers['SPECIFIC'] = $this->renderListItemSpecific($element, $markers);
+			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
+			$subparts['###ITEM###'] .= $this->cObj->substituteMarkerArray($itemContent, $markers, '###|###');
 		}
-		return $content;
+		$markers = array(
+			'PREFIXID' => $this->prefixId,
+		);
+		$template = $this->cObj->substituteSubpartArray($template, $subparts);
+		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
 	
 	/**
-	 * Render data search
+	 * Render list item generic
 	 *
-	 * @return string : The search form
+	 * @param	object $element: tx_icssitquery_AbstractData like tx_icssitlorquery_Accomodation, tx_icssitlorquery_Restaurant or tx_icssitlorquery_Event
+	 * @param	array $markers: Markers array
+	 * @return string : HTML item list content
 	 */
-	function renderDataSearch() {
-		$categories = t3lib_div::trimExplode(',', $this->conf['dataCategory'], true);
-		foreach ($categories as $category) {
-			$category = (string) strtoupper(trim($category));
-			switch ($category) {
-				case 'ACCOMODATION' :
-					$content .= $this->renderAccomodationList();
-				break;
-				
-				case 'RESTAURANT' :
-					$content .= $this->renderRestaurantSearch();
-				break;
-				
-				case 'EVENT' :
-					$content .= $this->renderEventSearch();
-				break;
-				
-				default;
-			}
+	function renderListItemGeneric($element, &$markers) {
+		if (!($element instanceof tx_icssitquery_AbstractData))
+			return '';
+			
+		$locMarkers = array(
+			'ILLUSTRATION' => $element->Illustration,
+		);
+		$markers = array_merge($markers, $locMarkers);
+		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_GENERIC###');
+	}
+	
+	/**
+	 * Render list item specific
+	 *
+	 * @param	object $element: tx_icssitquery_AbstractData like tx_icssitlorquery_Accomodation, tx_icssitlorquery_Restaurant or tx_icssitlorquery_Event
+	 * @param	array $markers: Markers array
+	 * @return string : HTML item list content
+	 */
+	function renderListItemSpecific($element, &$markers) {
+		if (!($element instanceof tx_icssitquery_AbstractData))
+			return '';
+		
+		$locMarkers = array();
+		if ($element instanceof tx_icssitlorquery_Accomodation) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_ACCOMODATION###');
+			$locMarkers = array(
+				'TYPE' => $element->Type,
+				'TITLE' => $element->Name,
+				'DESCRIPTION' => $element->Description,
+				'PRICE' => $element->CurrentSingleClientsRate,
+				'RATINGSTAR' => $element->RatingStar,
+			);
 		}
-		return $content;
+		if ($element instanceof tx_icssitlorquery_Restaurant) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_RESTAURANT###');
+			$locMarkers = array(
+				'TYPE' => $element->Type,
+				'TITLE' => $element->Name,
+				'DESCRIPTION' => $element->Description,
+				'PRICE' => $element->CurrentMenuPrice,
+				'LABELCHAIN' => $element->LabelChain,
+			);
+		}
+		if ($element instanceof tx_icssitlorquery_Event) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
+			$locMarkers = array(
+				'TYPE' => $element->Type,
+				'TITLE' => $element->Name,
+				'DESCRIPTION' => $element->Description,
+				'DATE' => $element->TimeTable,
+			);
+		}
+		$markers = array_merge($markers, $locMarkers);
+		return $template;
 	}
 	
 	/**
-	 * Render accomodation list
+	 * Render detail content
 	 *
-	 * @return string : The list of accomodations
+	 * @param	$elements : tx_icssitquery_AbstractData like tx_icssitlorquery_Accomodation, tx_icssitlorquery_Restaurant or tx_icssitlorquery_Event
+	 * @return	string : HTML list content
 	 */
-	function renderAccomodationList() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_accomodationListRenderer');
-		return $renderer->main($this);
+	function renderDetail($element) {
+		if (!($element instanceof tx_icssitquery_AbstractData))
+			return '';
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL###');
+		$markers = array();
+		$locMarkers['GENERIC'] = $this->renderDetailGeneric($element, $markers);
+		$locMarkers['SPECIFIC'] = $this->renderDetailSpecific($element, $markers);
+		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
+		$template = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+
+		$markers = array(
+			'PREFIXID' => $this->prefixId,
+		);
+		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+		
+	}
+
+	/**
+	 * Render detail generic
+	 *
+	 * @param	object $element: tx_icssitquery_AbstractData like tx_icssitlorquery_Accomodation, tx_icssitlorquery_Restaurant or tx_icssitlorquery_Event
+	 * @param	array $markers: Markers array
+	 * @return string : HTML detail content
+	 */
+	function renderDetailGeneric($element, &$markers) {
+		if (!($element instanceof tx_icssitquery_AbstractData))
+			return '';
+		$locMarkers = array(
+			'TITLE' => $element->Name,
+			'TYPE' => $element->Type,
+			'ADDRESS' => $element->Address,
+			'PHONE' => $element->Phones,
+			'FAX' => $element->Fax,
+			'MAIL' => $element->Email,
+			'WEBSITE' => $element->WebSite,
+			'ILLUSTRATION' => $element->Illustration,
+			'DESCRIPTION' => $element->Description,
+			'COORDINATES' => $element->Coordinates,
+		);
+		$markers = array_merge($markers, $locMarkers);
+		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_GENERIC###');
 	}
 	
 	/**
-	 * Render accomodation detail
+	 * Render detail specific
 	 *
-	 * @return string : The detail of an accomodation
+	 * @param	object $element: tx_icssitquery_AbstractData like tx_icssitlorquery_Accomodation, tx_icssitlorquery_Restaurant or tx_icssitlorquery_Event
+	 * @param	array $markers: Markers array
+	 * @return string : HTML detail content
 	 */
-	function renderAccomodationSingle() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_accomodationSingleRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render accomodation search
-	 *
-	 * @return string : The search form content
-	 */
-	function renderAccomodationSearch() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_accomodationSearchRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render restaurant list
-	 *
-	 * @return string : The list of restaurants
-	 */
-	function renderRestaurantList() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_restaurantListRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render restaurant detail
-	 *
-	 * @return string : The detail of a restaurant
-	 */
-	function renderRestaurantSingle() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_restaurantSingleRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render restaurant search
-	 *
-	 * @return string : The search form content
-	 */
-	function renderRestaurantSearch() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_restaurantSearchRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render vent list
-	 *
-	 * @return string : The list of events
-	 */
-	function renderEventList() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_eventListRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render event detail
-	 *
-	 * @return string : The detail of a event
-	 */
-	function renderEventSingle() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_eventSingleRenderer');
-		return $renderer->main($this);		
-	}
-	
-	/**
-	 * Render event search
-	 *
-	 * @return string : The search form content
-	 */
-	function renderEventSearch() {
-		$renderer = t3lib_div::makeInstance('tx_icssitlorquery_eventSearchRenderer');
-		return $renderer->main($this);		
+	function renderDetailSpecific($element, &$markers) {
+		if (!($element instanceof tx_icssitquery_AbstractData))
+			return '';
+		
+		$locMarkers = array();
+		if ($element instanceof tx_icssitlorquery_Accomodation) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_ACCOMODATION###');
+			$locMarkers = array(
+				'PROVIDER_NAME' => $element->ProviderName,
+				'PROVIDER_ADDRESS' => $element->ProviderAddress,
+				'PROVIDER_PHONE' => $element->ProviderPhones,
+				'PROVIDER_FAX' => $element->ProviderFax,
+				'PROVIDER_MAIL' => $element->ProviderEmail,
+				'PROVIDER_WEBSITE' => $element->ProviderWebSite,
+				'TIMETABLE' => $element->TimeTable,
+				'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
+				'RESERVATION_LANGUAGE' => $element->ReservationLanguage,
+				'MOBILITY_IMPAIRED' => $element->MobilityImpaired,
+				'PETS' => $element->Pets,
+				'ALOWED_PETS' => $element->AllowedPets,
+				'ALLOWED_GROUP' => $element->AllowedGroup,
+				'RECEPTION_GROUP' => $element->ReceptionGroup,
+				'MOTORCOACH_PARK' => $element->MotorCoachPark,
+				'OPENING24_24' => $element->Opening24_24,
+				'SINGLE_CLIENT_PRICE' => $element->CurrentSingleClientsRate,
+				'COMFORT_ROOM' => $element->ComfortRoom,
+				'HOTEL_EQUIPMENT' => $element->HotelEquipement,
+				'HOTEL_SERVICE' => $element->HotelService,
+			);
+		}
+		if ($element instanceof tx_icssitlorquery_Restaurant) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_RESTAURANT###');
+			$locMarkers = array(
+				'PROVIDER_NAME' => $element->ProviderName,
+				'PROVIDER_ADDRESS' => $element->ProviderAddress,
+				'PROVIDER_PHONE' => $element->ProviderPhones,
+				'PROVIDER_FAX' => $element->ProviderFax,
+				'PROVIDER_MAIL' => $element->ProviderEmail,
+				'PROVIDER_WEBSITE' => $element->ProviderWebSite,
+				'RESTAURANT_CLASS' => $element->Class,
+				'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
+				'MENU_LANGUAGE' => $element->MenuLanguage,
+				'PETS' => $element->Pets,
+				'ALOWED_PETS' => $element->AllowedPets,
+				'ALLOWED_GROUP' => $element->AllowedGroup,
+				'ALLOWED_GROUP_NUMBER' => $element->AllowedGroupNumber,
+				'MOTORCOACH_PARK' => $element->MotorCoachPark,
+				'SERVICE_OPEN' => $element->ServiceOpen,
+				'CAPACITY' => $element->Capacity,
+				'SALE_FORMULA' => $element->CurrentSaleFormula,
+				'CARTE_PRICE' => $element->CurrentCartePrice,
+				'MENU_PRICE' => $element->CurrentMenuPrice,
+			);
+		}
+		if ($element instanceof tx_icssitlorquery_Event) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_EVENT###');
+			$locMarkers = array(
+				'KIND_EVENT' => $element->KindOfEvent,
+				'TYPE_EVENT' => $element->TypeEvent,
+				'INFORMATION' => $element->Information,
+				'FESTIVAL' => $element->Festival,
+				'FREE' => $element->CurrentFree,
+				'PRICE' => $element->CurrentBasePrice,
+			);
+		}
+		$markers = array_merge($markers, $locMarkers);
+		return $template;
 	}
 	
 }

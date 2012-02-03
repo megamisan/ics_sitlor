@@ -49,6 +49,9 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 * @return	void
 	 */
 	private function __construct() {
+		$this->criterion = null;
+		$this->term = null;
+		$this->value = null;
 	}
 
 	/**
@@ -137,5 +140,10 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
+		if (isset($this->value))
+			return $this->value;
+		if (isset($this->term))
+			return $this->term;
+		return $this->criterion;
 	}
 }
