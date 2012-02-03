@@ -35,15 +35,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	private $uri;
 	private static $lConf = array();
 
 	/**
-	 * Constructor
+	 * Initializes this image instance.
 	 *
-	 * @param	string $uri
+	 * @param	string		$uri: The image URI.
 	 * @return	void
 	 */
 	public function __construct($uri) {
@@ -66,9 +65,9 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * Set default
+	 * Sets default TypoScript configuration.
 	 *
-	 * @param	array $conf
+	 * @param	array		$conf: The new default configuration.
 	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
@@ -76,9 +75,9 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		$numargs = func_num_args();
@@ -100,40 +99,46 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Using default output settings.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->uri;
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
 	 *
-	 * @param	[type]		$array $conf: ...
-	 * @return	[type]		...
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		return $this->toStringCObj($cObj, $conf);
+		$cObj->start(array(), '');
+		return $this->toStringObjConf($cObj, $conf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return $cObj->stdWrap_current($this->uri, $conf);

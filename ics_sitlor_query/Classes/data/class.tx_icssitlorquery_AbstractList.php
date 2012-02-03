@@ -36,9 +36,9 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToString {
 	private $elements = array();	/**< List elements */
+	private $separator = ',';	/**< Default list separator for string representation. */
 
 	/**
 	 * Initializes the list.
@@ -149,7 +149,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		$separator = ',';
+		$separator = self::$separator;
 
 		$args = func_get_args();
 		if (!empty($args) && is_string($args[0])) {
@@ -158,4 +158,15 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 		return implode($separator, $this->elements);
 	}
 
+	/**
+	 * Defines the default element separator for string representation.
+	 *
+	 * @param	string		$separator The new separator.
+	 * @return	void
+	 */
+	public static function setSeparator($separator) {
+		if (is_string($separator)) {
+			self::$separator = $separator;
+		}
+	}
 }

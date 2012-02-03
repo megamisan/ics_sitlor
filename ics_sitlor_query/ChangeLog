@@ -1,3 +1,7 @@
+2012-02-03 Pierrick Caillon <pierrick@in-cite.net>
+	* Comments: Updated comments on some recurrent methods.
+	* Fix: Whitespace fix.
+
 2012-02-03 Tsi Yang <tsi@in-cite.net>
 	* Feature: HTML render
 	* Refactor: Reworked call to HTML render

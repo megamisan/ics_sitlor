@@ -21,6 +21,11 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ * Hint: use extdeveval to insert/update function index above.
+ */
 
 
 /**
@@ -30,7 +35,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 	private $number = '';
 	private $street = '';
@@ -41,16 +45,16 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 	private static $lConf = array();
 
 	/**
-	 * Constructor
+	 * Initializes the address.
 	 *
-	 * @param	string $number : Street number
-	 * @param	string $street : Street name
-	 * @param	string $extra : Complement of address
-	 * @param	[type]		$zip: ...
-	 * @param	[type]		$city: ...
-	 * @return	[type]		...
+	 * @param	string		$number: Street number.
+	 * @param	string		$street: Street name.
+	 * @param	string		$extra: Complement.
+	 * @param	string		$zip: Zip code. Optional.
+	 * @param	string		$city: City name. Optional.
+	 * @return	void
 	 */
-	public function __construct($number='', $street='', $extra='', $zip='', $city='') {
+	public function __construct($number, $street, $extra, $zip = null, $city = null) {
 		$this->number = $number;
 		$this->street = $street;
 		$this->extra = $extra;
@@ -80,12 +84,11 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
-	
-	
+
 	/**
-	 * Set default
+	 * Sets default TypoScript configuration.
 	 *
-	 * @param	array $conf
+	 * @param	array		$conf: The new default configuration.
 	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
@@ -93,49 +96,55 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Using default output settings.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
 	 *
-	 * @param	[type]		$array $conf: ...
-	 * @return	[type]		...
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start(array(), '');
 		return $this->toStringObjConf($cObj, $conf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'Address';

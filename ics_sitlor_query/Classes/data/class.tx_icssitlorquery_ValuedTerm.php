@@ -91,17 +91,17 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	}
 
 	/**
-	 * Set name
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 * @return void
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) 	{
 			case 'Criterion':
 			case 'Term':
-				tx_icssitquery_debug::notice('Read-only property of ValuedTerm via __set(): ' . $name);
+				tx_icssitquery_debug::notice('Read-only property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 				break;
 			case 'Value':
 				$this->value = $value;
@@ -111,12 +111,11 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 		}
 	}
 
-
 	/**
-	 * Set default conf
+	 * Sets default TypoScript configuration.
 	 *
-	 * @param	array $conf
-	 * @return void
+	 * @param	array		$conf: The new default configuration.
+	 * @return	void
 	 */
 	public static function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
@@ -136,6 +135,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 
 	/**
 	 * Converts this object to its string representation.
+	 * Using default output settings.
 	 *
 	 * @return	string		Representation of the object.
 	 */

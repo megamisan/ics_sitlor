@@ -53,10 +53,10 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @return mixed : name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -69,7 +69,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 			case 'TimeEntries':
 				return $this->timeEntries;
 			default:
-				tx_icssitquery_debug::notice('Undefined TimeTable property via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
@@ -272,59 +272,65 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * Set default
+	 * Sets default TypoScript configuration.
 	 *
-	 * @param	array $conf
-	 * @return void
+	 * @param	array		$conf: The new default configuration.
+	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Using default output settings.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
 	 *
-	 * @param	[type]		$array $conf: ...
-	 * @return	[type]		...
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start(array(), '');
 		return $this->toStringObjConf($cObj, $conf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'TimeTable toString is not yet implemented';

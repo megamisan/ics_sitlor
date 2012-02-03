@@ -67,7 +67,7 @@ class tx_icssitlorquery_CriterionUtils {
 	);
 
 	/**
-	 * Add element in tuple list
+	 * Adds an element in a tuple list, with an associated element.
 	 *
 	 * @param	tx_icssitlorquery_ValuedTermTupleList $list
 	 * @param	tx_icssitlorquery_ValuedTerm $element

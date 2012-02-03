@@ -21,6 +21,11 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ * Hint: use extdeveval to insert/update function index above.
+ */
 
 
 /**
@@ -31,17 +36,15 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 	private $phone = '';
 
 	private static $lConf = array();
 
 	/**
-	 * Constructor
+	 * Initializes this phone number.
 	 *
-	 * @param	string		$phone1
-	 * @param	string		$phone2
+	 * @param	string		$phone: Phone number, not formatted.
 	 * @return	void
 	 */
 	public function __construct($phone) {
@@ -74,49 +77,55 @@ class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Using default output settings.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
 	 *
-	 * @param	[type]		$array $conf: ...
-	 * @return	[type]		...
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start(array(), '');
 		return $this->toStringObjConf($cObj, $conf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObj(tslib_cObj $cObj) {
 		return toStringObjConf($cObj, self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'Phone toString is not yet implemented';

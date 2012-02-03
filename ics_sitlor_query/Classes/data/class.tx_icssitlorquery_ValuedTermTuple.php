@@ -35,7 +35,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjConf {
 	private $count;
 	private $tag;
@@ -59,10 +58,10 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	}
 
 	/**
-	 * [Describe function...]
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	[type]		$name: ...
-	 * @return	[type]		...
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		if ($name=='Count')
@@ -73,18 +72,18 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 			if (is_numeric($numItem) && $numItem<=$this->count && $numItem>0)
 				return $this->Get(intval($numItem) - 1);
 			else
-				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		} else {
-			tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __get(): ' . $name);
+			tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
 	/**
-	 * [Describe function...]
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	[type]		$name: ...
-	 * @param	[type]		$value: ...
-	 * @return	[type]		...
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		if ((strlen($name)>=5) && (substr($name,0,4)=='Item')) {
@@ -92,10 +91,10 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 			if (is_numeric($numItem) && $numItem<=$this->count && $numItem>0) {
 				$this->Set(intval($numItem) - 1, $value);
 			} else {
-				tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 			}
 		} else {
-			tx_icssitquery_debug::notice('Undefined property of ValuedTermTuple via __set(): ' . $name);
+			tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
 	}
 
@@ -109,7 +108,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		if ($number<$this->count && $number>=0)
 			return $this->items[$number];
 		else
-			tx_icssitquery_debug::warning('Index out of range for ValuedTermTuple. Only ' . $this->count . ' items against ' . $number . ' requested via __get().');
+			tx_icssitquery_debug::warning('Index out of range.');
 	}
 
 	/**
@@ -123,23 +122,23 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		if ($number<$this->count)
 			$this->items[$number] = $value;
 		else
-			tx_icssitquery_debug::warning('Index out of range for ValuedTermTuple. Only ' . $this->count . ' items against ' . $number . ' requested via __set().');
+			tx_icssitquery_debug::warning('Index out of range.');
 	}
 
 	/**
-	 * Set default
+	 * Sets default TypoScript configuration.
 	 *
-	 * @param	array $conf
-	 * @return void
+	 * @param	array		$conf: The new default configuration.
+	 * @return	void
 	 */
 	public function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
 
 	/**
-	 * Convert object to display as string
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return string
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		$confDefault = array();
@@ -162,40 +161,46 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Using default output settings.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return $this->toStringConf(self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
 	 *
-	 * @param	[type]		$array $conf: ...
-	 * @return	[type]		...
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringConf(array $conf) {
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start(array(), '');
 		return $this->toStringObjConf($cObj, $conf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObj(tslib_cObj $cObj) {
-		return $this->toStringObjConf($cObj, self::$lConf);
+		return toStringObjConf($cObj, self::$lConf);
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
 	 *
-	 * @param	[type]		$tslib_cObj $cObj, array $conf: ...
-	 * @return	[type]		...
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		return 'ValuedTermTuples';

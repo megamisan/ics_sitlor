@@ -63,20 +63,20 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 		}
 	}
 
-	
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation. PHP magic function.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
 		return $this->toString();
 	}
 
 	/**
-	 * [Describe function...]
+	 * Converts this object to its string representation.
+	 * Output longitude and lattitude separated by a comma.
 	 *
-	 * @return	[type]		...
+	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
 		return 'Coordinates toString is not implemented.';

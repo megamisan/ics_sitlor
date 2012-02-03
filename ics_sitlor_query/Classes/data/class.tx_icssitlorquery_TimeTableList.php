@@ -36,7 +36,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_TimeTableList extends tx_icssitlorquery_AbstractList {
 
 	/**
