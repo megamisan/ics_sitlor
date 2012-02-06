@@ -72,7 +72,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	);
 	private $scheme = 'WEBACCESS';
 	private $query = array();
-	static private $entity = '737';
+	private $entity = '737';
 	static private $startDate;
 	static private $endDate = '01/01/2100 23:59:59';
 
@@ -118,9 +118,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$filterArray = array_keys($this->filters);
 		$pnames = array();
 		$pvalues = array();
-		$params['lentit'] = utf8_decode(self::$entity);
+		$params['lentit'] = utf8_decode($this->entity);
 		$pnames[] = 'lentidad';
-		$pvalues[] = self::$entity;
+		$pvalues[] = $this->entity;
 		if (in_array('idFilter', $filterArray)) {
 			$pnames[] = 'elproducto';
 			$pvalues[] = $this->filters['idFilter'];
@@ -315,7 +315,28 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		else
 			tx_icssitquery_Debug::warning('Table "' . $value . '" is undefined.');
 	}
-
+	
+	/**
+	 * Set scheme
+	 *
+	 * @param	string $value: The scheme
+	 * @return	void
+	 */
+	public function setScheme($value) {
+		if (!in_array($value, self::$schemeList))
+			throw new Exception('The scheme ' . $value . 'is not defined.');
+		$this->scheme = $value;
+	}
+	
+	/**
+	 * Set entity
+	 *
+	 * @param	string $value : The entity
+	 */
+	public function setEntity($value) {
+		$this->entity = $value;
+	}
+	
 	/**
 	 * Makes a filter on category.
 	 *
