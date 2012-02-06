@@ -319,7 +319,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	/**
 	 * Set scheme
 	 *
-	 * @param	string $value: The scheme
+	 * @param	string 		$value The scheme
 	 * @return	void
 	 */
 	public function setScheme($value) {
@@ -331,7 +331,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	/**
 	 * Set entity
 	 *
-	 * @param	string $value : The entity
+	 * @param	string 		$value The entity
 	 */
 	public function setEntity($value) {
 		$this->entity = $value;

@@ -44,7 +44,7 @@
 
 <!-- ###SEARCH_KEYWORD### start-->
 	<label for="search_keyword">###KEYWORD###</label>
-	<input type="text" name="keyword" id="search_keyword" value=""/>
+	<input type="text" name="keyword" id="search_keyword" value="###PREFIXID###[search][keyword]"/>
 <!-- ###SEARCH_KEYWORD### end-->
 
 
@@ -53,7 +53,7 @@
 	<ul class="###PREFIXID###_checkList">
 		<!-- ###TYPE_ITEM### -->
 		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED### name="hotelType" id="search_hotelType" value="HOTEL_TYPE_VALUE###" />
+			<input type="checkbox" ###SELECTED### name="###PREFIXID###[search][hotelType]" id="search_hotelType" value="###HOTEL_TYPE_VALUE###" />
 		</li>
 		<!-- ###TYPE_ITEM### -->
 	</ul>
@@ -65,7 +65,7 @@
 	<ul class="###PREFIXID###_checkList">
 		<!-- ###CATEGORY_ITEM### -->
 		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED### name="restaurantCategory" id="search_restaurantCategory" value="RESTAURANT_CATEGORY_VALUE###" />
+			<input type="checkbox" ###SELECTED### name="###PREFIXID###[search][restaurantCategory]" id="search_restaurantCategory" value="RESTAURANT_CATEGORY_VALUE###" />
 		</li>
 		<!-- ###CATEGORY_ITEM### -->
 	</ul>
@@ -77,7 +77,7 @@
 	<ul class="###PREFIXID###_checkList">
 		<!-- ###SPECIALITY_ITEM### -->
 		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED### name="culinarySpeciality" id="search_culinarySpeciality" value="CULINARY_SPECIALITY_VALUE###" />
+			<input type="checkbox" ###SELECTED### name="###PREFIXID###[search][culinarySpeciality]" id="search_culinarySpeciality" value="CULINARY_SPECIALITY_VALUE###" />
 		</li>
 		<!-- ###SPECIALITY_ITEM### -->
 	</ul>
@@ -86,10 +86,10 @@
 
 <!-- ###SEARCH_DATE### start-->
 	<label for="search_startDate">###STARTDATE###</label>
-	<input type="text" name="startDate" id="search_startDate" value=""/>
+	<input type="text" name="###PREFIXID###[search][startDate]" id="search_startDate" value="###STARTDATE_VALUE###"/>
 
 	<label for="search_endDate">###ENDDATE###</label>
-	<input type="text" name="endDate" id="search_endDate" value=""/>
+	<input type="text" name="###PREFIXID###[search][endDate]" id="search_endDate" value="###ENDDATE_VALUE###"/>
 <!-- ###SEARCH_DATE### end-->
 
 

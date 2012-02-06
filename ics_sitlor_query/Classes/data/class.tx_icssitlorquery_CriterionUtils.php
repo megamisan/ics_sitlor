@@ -156,6 +156,14 @@ class tx_icssitlorquery_CriterionUtils {
 	 *
 	 *******************************************************/
 	const RESTAURANT_CAPACITY = 736000151;
+	const RCATEGORIE = 736000114;
+	const RCATEGORIE_FASTFOOD = 9;
+	const RCATEGORIE_ICECREAM_THEAHOUSE = 12;
+	const RCATEGORIE_CREPERIE = 3;
+	const FOREIGN_FOOD = 736000237;
+	const FOREIGN_FOOD_ASIAN = 11;
+	const FOREIGN_FOOD_SA = 8;
+	const FOREIGN_FOOD_ORIENTAL = 13;
 	
 	/*******************************************************
 	 *

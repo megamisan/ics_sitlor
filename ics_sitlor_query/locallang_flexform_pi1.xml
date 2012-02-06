@@ -38,6 +38,7 @@
 			<label index="sortOrder">Sort order</label>
 			<label index="sortOrder_asc">Ascendant</label>
 			<label index="sortOrder_desc">Descendant</label>
+			<label index="noDate">Include No date</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="general">Général</label>
@@ -72,6 +73,7 @@
 			<label index="sortOrder">Ordre de tri</label>
 			<label index="sortOrder_asc">Ascendant</label>
 			<label index="sortOrder_desc">Descendant</label>
+			<label index="noDate">Inclure fiches sans date</label>
 		</languageKey>
 	</data>
 </T3locallang>

@@ -38,7 +38,7 @@
  */
 abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToString {
 	private $elements = array();	/**< List elements */
-	private $separator = ',';	/**< Default list separator for string representation. */
+	private static $separator = ',';	/**< Default list separator for string representation. */
 
 	/**
 	 * Initializes the list.

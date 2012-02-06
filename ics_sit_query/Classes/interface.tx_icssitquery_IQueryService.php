@@ -69,7 +69,7 @@ interface tx_icssitquery_IQueryService {
 	 *
 	 * @return mixed : array of Accomodations
 	 */
-	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting);
+	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null);
 
 	/**
 	 * Retrieves Restaurants
@@ -78,7 +78,7 @@ interface tx_icssitquery_IQueryService {
 	 *
 	 * @return mixed : array of Restaurants
 	 */
-	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting);
+	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting=null);
 
 	/**
 	 * Retrieves Events
@@ -87,6 +87,6 @@ interface tx_icssitquery_IQueryService {
 	 *
 	 * @return mixed : array of Events
 	 */
-	public function getEvents(tx_icssitquery_ISortingProvider $sorting);
+	public function getEvents(tx_icssitquery_ISortingProvider $sorting=null);
 
 }

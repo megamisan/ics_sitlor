@@ -42,7 +42,7 @@ class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
 	 */
 	public function __construct($value) {
 		if (!is_int($value))
-			throw new Exception('Gender valeu filter must be integer.');
+			throw new Exception('Gender value filter must be integer.');
 		$this->value = $value;
 	}
 	

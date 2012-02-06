@@ -143,6 +143,15 @@
 							</config>
 						</TCEforms>
 					</OTNancySubscriber>
+					<noDate>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:noDate</label>
+							<config>
+								<type>input</type>
+								<size>2</size>
+							</config>
+						</TCEforms>
+					</noDate>
 				</el>
 			</ROOT>
 		</paramSelect>

@@ -38,6 +38,7 @@
 
 class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	private $url;
+	static $lConf = array();
 
 	/**
 	 * Initializes this link definition.

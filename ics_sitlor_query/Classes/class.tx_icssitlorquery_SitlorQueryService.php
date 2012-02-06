@@ -104,7 +104,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * @param	ISortingProvider		$sorting Sorting provider to use.
 	 * @return	array		The accomodations found by the API.
 	 */
-	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting) {
+	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
 		$full = false;
 		foreach ($this->filters as $filter) {
@@ -161,7 +161,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * @param	ISortingProvider		$sorting Sorting provider to use.
 	 * @return	array		The restaurants found by the API.
 	 */
-	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting) {
+	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting=null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
 		$full = false;
 		foreach ($this->filters as $filter) {
@@ -218,7 +218,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 *
 	 * @return	array		The accomodations found by the API.
 	 */
-	public function getEvents(tx_icssitquery_ISortingProvider $sorting) {
+	public function getEvents(tx_icssitquery_ISortingProvider $sorting=null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
 		
 		$full = false;
