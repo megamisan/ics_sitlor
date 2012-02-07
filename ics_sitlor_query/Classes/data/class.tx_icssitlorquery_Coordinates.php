@@ -39,6 +39,8 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	private $latitude;
 	private $longitude;
 
+	private static $lConf = array();
+
 	public function __construct($latitude, $longitude) {
 		if (!is_float($latitude) || !is_float($longitude))
 			throw new Exception('Coordinates latitude and longitude must be float.');
@@ -64,21 +66,87 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	}
 
 	/**
+	 * Sets default TypoScript configuration.
+	 *
+	 * @param	array		$conf: The new default configuration.
+	 * @return	void
+	 */
+	public function SetDefaultConf(array $conf) {
+		self::$lConf = $conf;
+	}
+
+	/**
 	 * Converts this object to its string representation. PHP magic function.
 	 *
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		return $this->toString();
+		switch (func_num_args()) {
+			case 0:
+				return $this->toString();
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
+		}
 	}
 
 	/**
 	 * Converts this object to its string representation.
-	 * Output longitude and lattitude separated by a comma.
+	 * Using default output settings.
 	 *
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		return 'Coordinates toString is not implemented.';
+		return $this->toStringConf(self::$lConf);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
+	 *
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringConf(array $conf) {
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start(array(), '');
+		return $this->toStringObjConf($cObj, $conf);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
+	 *
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringObj(tslib_cObj $cObj) {
+		return toStringObjConf($cObj, self::$lConf);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
+	 *
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$data = array(
+			'latitude' => $this->latitude,
+			'longitude' => $this->longitude,
+		);
+		$local_cObj->start($data, 'Coordinates');
+		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
+		return $local_cObj->stdWrap('', $conf);
 	}
 }

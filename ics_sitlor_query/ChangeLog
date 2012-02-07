@@ -1,3 +1,6 @@
+2012-02-07 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: Common toString implementations for data objects (except ValuedTerm and *Tuple).
+
 2012-02-03 Pierrick Caillon <pierrick@in-cite.net>
 	* Comments: Updated comments on some recurrent methods.
 	* Fix: Whitespace fix.
