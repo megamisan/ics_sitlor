@@ -134,6 +134,9 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	/**
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
+	 * Data fields:
+	 * * latitude: In decimal degrees.
+	 * * longitude: In decimal degrees.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.

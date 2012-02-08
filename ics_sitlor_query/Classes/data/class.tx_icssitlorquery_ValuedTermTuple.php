@@ -7,7 +7,7 @@
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
-*  it under the ValuedTermTuples of the GNU General Public License as published by
+*  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
 *
@@ -54,6 +54,9 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		$this->tag = $tag;
 		for ($i=0; $i<$this->count; $i++) {
 			$this->items[$i] = null;
+		}
+		if (!isset(self::$lConf[$this->tag])) {
+			self::$lConf[$this->tag] = array();
 		}
 	}
 
@@ -131,8 +134,8 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * @param	array		$conf: The new default configuration.
 	 * @return	void
 	 */
-	public function SetDefaultConf(array $conf) {
-		self::$lConf = $conf;
+	public function SetDefaultConf($tag, array $conf) {
+		self::$lConf[$tag] = $conf;
 	}
 
 	/**
@@ -141,23 +144,20 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		$confDefault = array();
-		$numargs = func_num_args();
-		if ($numargs==0)
-			return $this->toStringConf($confDefault);
-
-		// $numargs >0
-		$args = func_get_args();
-		if (is_array($args[0]))
-			return $this->toStringConf($args[0]);
-
-		if ($args[0] instanceof tslib_cObj) {
-			if ($numargs==1)
-				return toStringCObj($args[0], $confDefault);
-			return toStringCObj($args[0], $args[1]);
+		switch (func_num_args()) {
+			case 0:
+				return $this->toString();
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
 		}
-
-		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
 	}
 
 	/**
@@ -167,7 +167,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		return $this->toStringConf(self::$lConf);
+		return $this->toStringConf(self::$lConf[$this->tag]);
 	}
 
 	/**
@@ -191,18 +191,45 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * @return	string		Representation of the object.
 	 */
 	public function toStringObj(tslib_cObj $cObj) {
-		return toStringObjConf($cObj, self::$lConf);
+		return toStringObjConf($cObj, self::$lConf[$this->tag]);
 	}
 
 	/**
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
+	 * Data fields:
+	 * * item_n_: The value of an item. _n_ is the item number, starting at one (1).
+	 * * count: Number of items.
+	 * TypoScript special elements:
+	 * * item_n__conf: The rendering configuration of an item. _n_ is the item number, starting at one (1).
+	 *
+	 * @remarks The rendering is done in two pass. First, each item for which there
+	 * is a item_n__conf is rendered using default rendering for other items.
+	 * Finally, stdWrap is called on the updated data to give the final value.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
 	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
-		return 'ValuedTermTuples';
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$data = array(
+			'count' => $this->count,
+		);
+		for ($i = 0; $i < $this->count; $i++) {
+			$item = 'item' . ($i + 1);
+			$data[$item] = $this->items[$i];
+		}
+		$local_cObj->start($data, 'ValuedTermTuples');
+		for ($i = 0; $i < $this->count; $i++) {
+			$item = 'item' . ($i + 1);
+			if (($this->items[$i] != null) && isset($conf[$item . '_conf.'])) {
+				$data[$item] = $this->items[$i]->toStringObjConf($local_cObj, $conf[$item . '_conf.']);
+			}
+		}
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$local_cObj->start($data, 'ValuedTermTuples');
+		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
+		return $local_cObj->stdWrap('', $conf);
 	}
 }

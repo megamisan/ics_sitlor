@@ -1,3 +1,6 @@
+2012-02-08 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: toString implementation of ValuedTerm, ValuedTermTuple and Coordinates.
+
 2012-02-07 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Common toString implementations for data objects (except ValuedTerm and *Tuple).
 

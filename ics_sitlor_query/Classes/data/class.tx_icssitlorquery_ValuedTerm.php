@@ -127,10 +127,12 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		// TODO : cObj local
-		// Test number of args and call appropriate function
-
-		return $this->toString();
+		switch (func_num_args()) {
+			case 0:
+				return $this->toString();
+			default:
+				return call_user_func_array(array($this, 'toStringConf'), func_get_args());
+		}
 	}
 
 	/**
@@ -140,10 +142,50 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		if (isset($this->value))
-			return $this->value;
-		if (isset($this->term))
-			return $this->term;
-		return $this->criterion;
+		return $this->toStringConf(self::$lConf);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
+	 * Data fields:
+	 * * criterion: String representation of the criterion.
+	 * * criterionID: Id of the criterion.
+	 * * term: String representation of the term.
+	 * * termValue: Value of the term.
+	 * * value: Local value of the element, if applicable.
+	 * TypoScript special elements:
+	 * * value_conf: The rendering configuration of an item if it is an object
+	 *   implementing IToStringConf or IToStringObjConf.
+	 *
+	 * @remarks The rendering is done in two pass. First, the value is rendered
+	 * using its specified configuration and not configured data, if supported.
+	 * Finally, stdWrap is called on the updated data to give the final value.
+	 *
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringConf(array $conf) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$data = array(
+			'criterion' => $this->criterion,
+			'criterionId' => $this->criterion->ID,
+			'term' => $this->term,
+			'termValue' => $this->term->Value,
+			'value' => $this->value,
+			'valueType' => is_object($this->value) ? get_class($this->value) : gettype($this->value),
+		);
+		$local_cObj->start($data, 'ValuedTerm');
+		if (($this->value != null) && is_object($this->value) && isset($conf['value_conf.'])) {
+			if ($this->value instanceof IToStringObjConf) {
+				$data['value'] = $this->value->toStringObjConf($local_cObj, $conf);
+			}
+			else if ($this->value instanceof IToStringConf) {
+				$data['value'] = $this->value->toStringConf($conf);
+			}
+		}
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$local_cObj->start($data, 'ValuedTerm');
+		return $local_cObj->stdWrap('', $conf);
 	}
 }
