@@ -157,10 +157,13 @@ class tx_icssitlorquery_CriterionUtils {
 	 *******************************************************/
 	const RESTAURANT_CAPACITY = 736000151;
 	const RCATEGORIE = 736000114;
+		// Term of Criterion RCATEGORIE
 	const RCATEGORIE_FASTFOOD = 9;
 	const RCATEGORIE_ICECREAM_THEAHOUSE = 12;
 	const RCATEGORIE_CREPERIE = 3;
+	
 	const FOREIGN_FOOD = 736000237;
+		// Term of Criterion FOREIGN_FOOD
 	const FOREIGN_FOOD_ASIAN = 11;
 	const FOREIGN_FOOD_SA = 8;
 	const FOREIGN_FOOD_ORIENTAL = 13;
@@ -175,6 +178,10 @@ class tx_icssitlorquery_CriterionUtils {
 	const COMPLEMENTARY_INFORMATION = 736001151;
 	const LORRAINE_FESTIVAL = 736001149;
 	const CURRENT_FREE = 4000003;
+		// Term of Criterion CURRENT_FREE
+	const CURRENT_FREE_YES = 4000014;
+	const CURRENT_FREE_NO = 4000015;
+	
 	const CURRENT_BASE_PRICE = 4000004;
 
 	

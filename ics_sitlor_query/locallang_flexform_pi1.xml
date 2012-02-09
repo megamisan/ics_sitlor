@@ -49,9 +49,9 @@
 			<label index="page">Page</label>
 			<label index="size">Résultats par page (défaut : 20)</label>
 			<label index="what_to_display">Mode</label>
-			<label index="search">Recherche</label>
-			<label index="list">Liste</label>
-			<label index="single">Détail</label>
+			<label index="search">Formulaire de recherche avec liste de résultat (SEARCH)</label>
+			<label index="list">Vue liste standard (LIST)</label>
+			<label index="single">Vue fiche détaillée (SINGLE)</label>
 			<label index="paramSelect">Paramètre de sélection</label>
 			<label index="dataGroup">Groupe de données</label>
 			<label index="dataGroup_accomodation">Hébergement</label>
