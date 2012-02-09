@@ -171,7 +171,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 			'criterion' => $this->criterion,
 			'criterionId' => $this->criterion->ID,
 			'term' => $this->term,
-			'termValue' => $this->term->Value,
+			'termValue' => $this->term->Name,
 			'value' => $this->value,
 			'valueType' => is_object($this->value) ? get_class($this->value) : gettype($this->value),
 		);

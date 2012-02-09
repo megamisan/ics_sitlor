@@ -1,3 +1,6 @@
+2012-02-09 Tsi Yang <tsi@in-cite.net>
+	* Fix: Retrieved on Term undefined property
+
 2012-02-08 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: toString implementation of ValuedTerm, ValuedTermTuple and Coordinates.
 
