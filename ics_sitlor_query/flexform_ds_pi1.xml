@@ -155,7 +155,7 @@
 				</el>
 			</ROOT>
 		</paramSelect>
-		<paramSorting>
+		<!--<paramSorting>
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
@@ -219,6 +219,6 @@
 					</sortOrder>
 				</el>
 			</ROOT>
-		</paramSorting>
+		</paramSorting>-->
 	</sheets>
 </T3DataStructure>

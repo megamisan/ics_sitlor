@@ -64,12 +64,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	var $defaultSize = 20;
 
     /**
- * The main method of the PlugIn
- *
- * @param	string		$content: The PlugIn content
- * @param	array		$conf: The PlugIn configuration
- * @return	string		The content that is displayed on the website
- */
+	 * The main method of the PlugIn
+	 *
+	 * @param	string		$content: The PlugIn content
+	 * @param	array		$conf: The PlugIn configuration
+	 * @return	string		The content that is displayed on the website
+	 */
     function main($content, $conf) {
         $this->conf = $conf;
         $this->pi_setPiVarDefaults();
@@ -104,6 +104,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Initialize query, connection
 		$this->setConnection();
+		$this->setDefaultConf();
 
 		// Display mode
 		foreach ($this->codes as $theCode) {
@@ -165,14 +166,19 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Get mode
 		$codes = array();
-		if (isset($this->piVars['mode']))
-			$codes[] = $this->piVars['mode'];
+		$modes = array();
 		if (isset($this->piVars['showUid'])) {
 			$this->sitlor_uid = $this->piVars['showUid'];
-			$codes = array_merge($codes, array('SINGLE'));
+			$codes = array('SINGLE');
 		}
-		$modes = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'main'), true);
-		$codes = array_merge($codes, $modes);
+		if (isset($this->piVars['mode']))
+			$modes = array($this->piVars['mode']);
+		if (empty($mode))
+			$modes = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'main'), true);
+		if (empty($modes))
+			$modes = t3lib_div::trimExplode(',', $this->conf['modes'], true);
+		if (!empty($modes))
+			$codes = array_merge($codes, $modes);
 		$this->codes = array_unique($codes);
 
 		// Get page size
@@ -188,19 +194,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Get param select
 		if (isset($this->piVars['data']))
 			$dataGroup = $this->piVars['data'];
-		if (!$dataGroup) {
+		if (!$dataGroup)
 			$dataGroup = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'dataGroup', 'paramSelect');
-		}
 		$this->conf['dataGroup'] = $dataGroup? $dataGroup: $this->conf['dataGroup'];
-		$this->conf['dataGroup'] = (string)strtoupper(trim($this->conf['dataGroup']));
 
-		$subDataGroup = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subDataGroup', 'paramSelect');
+		if (isset($this->piVars['subDataGroup']))
+			$subDataGroup = $this->piVars['subDataGroup'];
+		if (!$subDataGroup)
+			$subDataGroup = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subDataGroup', 'paramSelect');
 		$this->conf['subDataGroup'] = $subDataGroup? $subDataGroup: $this->conf['subDataGroup'];
-		$this->conf['subDataGroup'] = (string)strtoupper(trim($this->conf['subDataGroup']));
-		if (!$this->conf['subDataGroup'] && $this->conf['dataGroup']=='ACCOMODATION'){
-			$this->conf['subDataGroup'] = 'HOTEL';
-		}
-		$this->conf['subDataGroup'] = (string)strtoupper(trim($this->conf['subDataGroup']));
 
 		$OTNancySubscriber = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancySubscriber', 'paramSelect');
 		$this->conf['filter.']['OTNancy'] = $OTNancySubscriber? $OTNancySubscriber: $this->conf['filter.']['OTNancy'];
@@ -236,6 +238,33 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		tx_icssitlorquery_CriterionFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['criterionUrl']);
 	}
 
+	/**
+	 * Sets default TypoScript configuration
+	 *
+	 * @return	void
+	 */
+	function setDefaultConf() {
+		tx_icssitlorquery_Address::SetDefaultConf($this->conf['defaultConf.']['Address.']);
+		tx_icssitlorquery_Phone::SetDefaultConf($this->conf['defaultConf.']['Phone.']);
+		tx_icssitlorquery_Link::SetDefaultConf($this->conf['defaultConf.']['Link.']);
+		tx_icssitlorquery_Name::SetDefaultConf($this->conf['defaultConf.']['Name.']);
+		tx_icssitlorquery_Coordinates::SetDefaultConf($this->conf['defaultConf.']['Coordinates.']);
+	}
+
+	/**
+	 * Render phones
+	 *
+	 * @param	array		$phones : Array of Phone
+	 * @return	string		The phones content
+	 */
+	function renderPhones($phones) {
+		return $this->cObj->stdWrap(implode($this->conf['renderConf.']['phones.']['separator'], $phones), $this->conf['renderConf.']['phones.']);
+	}
+	
+	function renderFax($fax) {
+		return $this->cObj->stdWrap($fax, $this->conf['renderConf.']['fax.']);
+	}
+	
 	/**
 	 * Display the list view of elements
 	 *
@@ -274,7 +303,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	function displaySingle() {
 		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', intval($this->sitlor_uid));
 		$this->queryService->addFilter($idFilter);
-		switch($this->conf['dataGroup']) {
+		$dataGroup = (string)strtoupper(trim($this->conf['dataGroup']));
+		switch($dataGroup) {
 			case 'ACCOMODATION':
 				$elements = $this->queryService->getAccomodations();
 				break;
@@ -311,7 +341,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', array($criterion)));
 		}
 
-		switch($this->conf['dataGroup']) {
+		$dataGroup = (string)strtoupper(trim($this->conf['dataGroup']));
+		switch($dataGroup) {
 			case 'ACCOMODATION':
 				switch($this->conf['subDataGroup']) {
 					case 'HOTEL':

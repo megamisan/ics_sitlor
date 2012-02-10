@@ -1,17 +1,105 @@
 plugin.tx_icssitlorquery_pi1 {
-	login = 2000205
-	password = f84bfd3ba101f3aa61b16fc06ca27e29
-	url = http://www.sitlor.fr/XML/exploitation/listeproduits.asp
-	nomenclatureUrl = http://www.sitlor.fr/XML/exploitation/listenomenc.asp
-	criterionUrl = http://www.sitlor.fr/XML/exploitation/listecrit.asp
+	sitlor {
+		login = {$plugin.tx_icssitlorquery.login}
+		password = {$plugin.tx_icssitlorquery.password}
+		url = {$plugin.tx_icssitlorquery.url}
+		nomenclatureUrl = {$plugin.tx_icssitlorquery.nomenclatureUrl}
+		criterionUrl = {$plugin.tx_icssitlorquery.criterionUrl}
+	}
 
-	# Mode to display : list, single, search
-	mode = list
+	# Template file
+	template = {$plugin.tx_icssitlorquery.template}
+
+	view {
+		# Mode to display : list, single, search
+		modes = {$plugin.tx_icssitlorquery.modes}
+		# Size
+		size = {$plugin.tx_icssitlorquery.size}
+		# Group of data: ACCOMODATION, RESTAURANT, EVENT
+		dataGroup = ACCOMODATION
+		# Category of accomodation: HOTEL, CAMPING_AND_YOUTHHOSTEL, STRANGE, HOLLIDAY_COTTAGE_AND_GUESTHOUSE
+		subDataGroup = 
+	}
 	
-	# Category of data: accomodataion, restaurant, event
-	dataCategory = 
-	# Category of accomodation: hotel, camping, youth_hostel, strange, holliday_cottage, guesthouse
-	accomodationCategory = 
+	# Select
+	filter {
+		OTNancy =
+		startDate = 01/01/2000
+		noDate = 1
+	}
 	
-	error_stdWrap = <p class="error">|</>
+	# Default primitive rendering
+	defaultConf {
+		Phone.field = phone
+		Address.cObject = COA
+		Address.cObject {
+			10 = TEXT
+			10 {
+				field = street
+				prepend = TEXT
+				prepend.if.isTrue.field = number
+				prepend.field = number
+				prepend.noTrimWrap = || |
+				wrap = |<br/>
+			}
+			20 = TEXT
+			20 {
+				if.isTrue.field = extra
+				field = extra
+				wrap = |<br/>
+			}
+			50 = TEXT
+			50 {
+				field = city
+				prepend = TEXT
+				prepend.if.isTrue.field = zip
+				prepend.field = zip
+				prepend.noTrimWrap = || |
+			}
+		}
+		Link {
+			typolink {
+				parameter.field = url
+			}
+		}
+		Name.cObject = COA
+		Name.cObject {
+			10 = TEXT
+			10 {
+				field = firstname
+				prepend = TEXT
+				prepend.if.isTrue.field = title
+				prepend.field = title
+				prepend.noTrimWrap = || |
+				wrap = | &nbsp;{field:lastname}
+				insertData = 1
+			}
+		}
+		#ValuedTermTuple
+		#Picture
+		Coordinates.cObject = COA
+		Coordinates.cObject {
+			10 = TEXT
+			10 {
+				field = latitude
+				noTrimWrap = |Latitude&nbsp;: ||
+			}
+			20 = TEXT
+			20 {
+				field = longitude
+				noTrimWrap = |&nbsp;&nbsp;Longitude&nbsp;: ||
+			}
+		}
+		#ValuedTerm
+	}
+	
+	# Render data
+	renderConf {
+		phones {
+			noTrimWrap = |Tél&nbsp;: ||
+			separator = <span class="phone_separator"> - </span>
+		}
+		fax.noTrimWrap = |Fax&nbsp;: ||
+	}
+	
 }

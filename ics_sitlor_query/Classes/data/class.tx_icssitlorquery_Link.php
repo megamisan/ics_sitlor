@@ -81,7 +81,20 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		return $this->toString();
+		switch (func_num_args()) {
+			case 0:
+				return $this->toString();
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
+		}
 	}
 
 	/**
@@ -121,13 +134,22 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	/**
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
+	 * Data fields:
+	 * * url: string.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
 	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
-		return 'Link toString is not yet implemented.';
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$data = array(
+			'url' => $this->url,
+		);
+		$local_cObj->start($data, 'Link');
+		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
+		return $local_cObj->stdWrap('', $conf);
 	}
+
 
 }

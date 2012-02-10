@@ -236,12 +236,12 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				break;
 
 			case 'PREST_NOM_RESP':
-				$this->tmpProviderName['firstname'] =  $reader->readString();
+				$this->tmpProviderName['lastname'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'PREST_PRENOM_RESP':
-				$this->tmpProviderName['lastname'] =  $reader->readString();
+				$this->tmpProviderName['firstname'] =  $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 

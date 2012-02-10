@@ -179,5 +179,4 @@ class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf {
 		return $local_cObj->stdWrap('', $conf);
 	}
 
-
 }

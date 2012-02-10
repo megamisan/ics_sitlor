@@ -1,4 +1,11 @@
 2012-02-10 Tsi Yang <tsi@in-cite.net>
+	* Feature: Set default conf for Phone,Address, Link, Name, Coordinates
+	* Feature: Rename single renderer function in shorter name. Explode render specific switch Accomodation, Restaurant and Event
+	* Comments: Added on markers
+	* Feature: Added file constants.txt
+	* Fix: Inversion on setting lastname and firstname in Accomodation and Restaurant
+
+2012-02-10 Tsi Yang <tsi@in-cite.net>
 	* Fix : Missing declaration "static" for method SetDefaultConf
 
 2012-02-09 Tsi Yang <tsi@in-cite.net>

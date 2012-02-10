@@ -62,8 +62,8 @@ class tx_icssitlorquery_SingleRenderer {
 			return '';
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL###');
 		$markers = array();
-		$locMarkers['GENERIC'] = $this->renderDetailGeneric($element, $markers);
-		$locMarkers['SPECIFIC'] = $this->renderDetailSpecific($element, $markers);
+		$locMarkers['GENERIC'] = $this->renderGeneric($element, $markers);
+		$locMarkers['SPECIFIC'] = $this->renderSpecific($element, $markers);
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
 		$template = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 
@@ -80,19 +80,25 @@ class tx_icssitlorquery_SingleRenderer {
 	 * @param	array&		$markers: Markers array
 	 * @return	string		HTML detail content
 	 */
-	function renderDetailGeneric($element, &$markers) {
+	private function renderGeneric($element, &$markers) {
 		if (!($element instanceof tx_icssitquery_AbstractData))
 			return '';
 		$locMarkers = array(
+				// Identity
+			'IDENTITY_LABEL' => $this->pi->pi_getLL('identity', 'Identity', true),
 			'TITLE' => $element->Name,
 			'TYPE' => $element->Type,
 			'ADDRESS' => $element->Address,
-			'PHONE' => $element->Phones,
-			'FAX' => $element->Fax,
+			'PHONE' => $this->pi->renderPhones($element->Phones),
+			'FAX' => $this->pi->renderFax($element->Fax),
 			'MAIL' => $element->Email,
 			'WEBSITE' => $element->WebSite,
 			'ILLUSTRATION' => $element->Illustration,
+				//Description
+			'DESCRIPTION_LABEL' => $this->pi->pi_getLL('description', 'Description', true),
 			'DESCRIPTION' => $element->Description,
+				// Coordinates
+			'COORDINATES_LABEL' => $this->pi->pi_getLL('coordinates', 'Coordinates', true),
 			'COORDINATES' => $element->Coordinates,
 		);
 		$markers = array_merge($markers, $locMarkers);
@@ -106,73 +112,132 @@ class tx_icssitlorquery_SingleRenderer {
 	 * @param	array&		$markers: Markers array
 	 * @return	string		HTML detail content
 	 */
-	function renderDetailSpecific($element, &$markers) {
+	private function renderSpecific($element, &$markers) {
 		if (!($element instanceof tx_icssitquery_AbstractData))
 			return '';
 
 		$locMarkers = array();
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_ACCOMODATION###');
-			$locMarkers = array(
-				'PROVIDER_NAME' => $element->ProviderName,
-				'PROVIDER_ADDRESS' => $element->ProviderAddress,
-				'PROVIDER_PHONE' => $element->ProviderPhones,
-				'PROVIDER_FAX' => $element->ProviderFax,
-				'PROVIDER_MAIL' => $element->ProviderEmail,
-				'PROVIDER_WEBSITE' => $element->ProviderWebSite,
-				'TIMETABLE' => $element->TimeTable,
-				'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
-				'RESERVATION_LANGUAGE' => $element->ReservationLanguage,
-				'MOBILITY_IMPAIRED' => $element->MobilityImpaired,
-				'PETS' => $element->Pets,
-				'ALOWED_PETS' => $element->AllowedPets,
-				'ALLOWED_GROUP' => $element->AllowedGroup,
-				'RECEPTION_GROUP' => $element->ReceptionGroup,
-				'MOTORCOACH_PARK' => $element->MotorCoachPark,
-				'OPENING24_24' => $element->Opening24_24,
-				'SINGLE_CLIENT_PRICE' => $element->CurrentSingleClientsRate,
-				'COMFORT_ROOM' => $element->ComfortRoom,
-				'HOTEL_EQUIPMENT' => $element->HotelEquipement,
-				'HOTEL_SERVICE' => $element->HotelService,
-			);
+			$locMarkers = $this->getMarkers_Accomodation($element);
 		}
 		if ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_RESTAURANT###');
-			$locMarkers = array(
-				'PROVIDER_NAME' => $element->ProviderName,
-				'PROVIDER_ADDRESS' => $element->ProviderAddress,
-				'PROVIDER_PHONE' => $element->ProviderPhones,
-				'PROVIDER_FAX' => $element->ProviderFax,
-				'PROVIDER_MAIL' => $element->ProviderEmail,
-				'PROVIDER_WEBSITE' => $element->ProviderWebSite,
-				'RESTAURANT_CLASS' => $element->Class,
-				'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
-				'MENU_LANGUAGE' => $element->MenuLanguage,
-				'PETS' => $element->Pets,
-				'ALOWED_PETS' => $element->AllowedPets,
-				'ALLOWED_GROUP' => $element->AllowedGroup,
-				'ALLOWED_GROUP_NUMBER' => $element->AllowedGroupNumber,
-				'MOTORCOACH_PARK' => $element->MotorCoachPark,
-				'SERVICE_OPEN' => $element->ServiceOpen,
-				'CAPACITY' => $element->Capacity,
-				'SALE_FORMULA' => $element->CurrentSaleFormula,
-				'CARTE_PRICE' => $element->CurrentCartePrice,
-				'MENU_PRICE' => $element->CurrentMenuPrice,
-			);
+			$locMarkers = $this->getMarkers_Restaurant($element);
 		}
 		if ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_EVENT###');
-			$locMarkers = array(
-				'KIND_EVENT' => $element->KindOfEvent,
-				'TYPE_EVENT' => $element->TypeEvent,
-				'INFORMATION' => $element->Information,
-				'FESTIVAL' => $element->Festival,
-				'FREE' => $element->CurrentFree,
-				'PRICE' => $element->CurrentBasePrice,
-			);
+			$locMarkers = $this->getMarkers_Event($element);
 		}
 		$markers = array_merge($markers, $locMarkers);
 		return $template;
 	}
 
+	/**
+	 * Retrieves Accomodation markers
+	 *
+	 * @param	tx_icssitlorquery_Accomodation	$element: Accomodation
+	 * @return	mixed	Markers array
+	 */
+	private function getMarkers_Accomodation($element) {
+		return array(
+				// Provider
+			'PROVIDER_LABEL' => $this->pi->pi_getLL('provider', 'Provider', true),
+			'PROVIDER_NAME' => $element->ProviderName,
+			'PROVIDER_ADDRESS' => $element->ProviderAddress,
+			'PROVIDER_PHONE' => $this->pi->renderPhones($element->ProviderPhones),
+			'PROVIDER_FAX' => $this->pi->renderFax($element->ProviderFax),
+			'PROVIDER_MAIL' => $element->ProviderEmail,
+			'PROVIDER_WEBSITE' => $element->ProviderWebSite,
+				// Timetable
+			'TIMETABLE_LABEL' => $this->pi->pi_getLL('timetable', 'Timetable', true),
+			'TIMETABLE' => $element->TimeTable,
+				// Rating
+			'HOTEL_RATING_LABEL' => $this->pi->pi_getLL('rating_star', 'Rating', true),
+			'HOTEL_RATING' => $element->RatingStar,
+				// Reception
+			'RECEPTION_LABEL' => $this->pi->pi_getLL('reception', 'Reception', true),
+			'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
+			'RESERVATION_LANGUAGE' => $element->ReservationLanguage,
+			'MOBILITY_IMPAIRED' => $element->MobilityImpaired,
+			'PETS' => $element->Pets,
+			'ALOWED_PETS' => $element->AllowedPets,
+			'ALLOWED_GROUP' => $element->AllowedGroup,
+			'RECEPTION_GROUP' => $element->ReceptionGroup,
+			'MOTORCOACH_PARK' => $element->MotorCoachPark,
+			'OPENING24_24' => $element->Opening24_24,
+				// Price
+			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
+			'SINGLE_CLIENT_PRICE' => $element->CurrentSingleClientsRate,
+				// Comfort room
+			'COMFORTROOM_LABEL' =>  $this->pi->pi_getLL('comfort_room', 'Comfort room', true),
+			'COMFORT_ROOM' => $element->ComfortRoom,
+				// Hotel equipment
+			'HOTEL_EQUIPMENT_LABEL' => $this->pi->pi_getLL('hotel_equipment', 'Hotel equipment', true),
+			'HOTEL_EQUIPMENT' => $element->HotelEquipement,
+				// Hotel service
+			'HOTEL_SERVICE_LABEL' => $this->pi->pi_getLL('hotel_service', 'Hotel service', true),
+			'HOTEL_SERVICE' => $element->HotelService,
+		);
+	}
+
+	/**
+	 * Retrieves Restaurant markers
+	 *
+	 * @param	tx_icssitlorquery_Restaurantn	$element: Restaurant
+	 * @return	mixed	Markers array
+	 */	
+	private function getMarkers_Restaurant($element) {
+		return array(
+				// Provider
+			'PROVIDER_LABEL' => $this->pi->pi_getLL('provider', 'Provider', true),
+			'PROVIDER_NAME' => $element->ProviderName,
+			'PROVIDER_ADDRESS' => $element->ProviderAddress,
+			'PROVIDER_PHONE' => $element->ProviderPhones,
+			'PROVIDER_FAX' => $element->ProviderFax,
+			'PROVIDER_MAIL' => $element->ProviderEmail,
+			'PROVIDER_WEBSITE' => $element->ProviderWebSite,
+				// Class
+			'RESTAURANT_CLASS_LABEL' => $this->pi->pi_getLL('restaurant_class', 'Class of restaurant', true),
+			'RESTAURANT_CLASS' => $element->Class,
+				// Reception
+			'RECEPTION_LABEL' => $this->pi->pi_getLL('reception', 'Reception', true),
+			'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
+			'MENU_LANGUAGE' => $element->MenuLanguage,
+			'PETS' => $element->Pets,
+			'ALOWED_PETS' => $element->AllowedPets,
+			'ALLOWED_GROUP' => $element->AllowedGroup,
+			'ALLOWED_GROUP_NUMBER' => $element->AllowedGroupNumber,
+			'MOTORCOACH_PARK' => $element->MotorCoachPark,
+			'SERVICE_OPEN' => $element->ServiceOpen,
+				// Capacity
+			'CAPACITY_LABEL' => $this->pi->pi_getLL('capacity', 'Capacity', true),
+			'CAPACITY' => $element->Capacity,
+				// Price
+			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
+			'SALE_FORMULA' => $element->CurrentSaleFormula,
+			'CARTE_PRICE' => $element->CurrentCartePrice,
+			'MENU_PRICE' => $element->CurrentMenuPrice,
+		);
+	}
+	
+	/**
+	 * Retrieves Event markers
+	 *
+	 * @param	tx_icssitlorquery_Event	$element: Event
+	 * @return	mixed	Markers array
+	 */
+	private function getMarkers_Event($element) {
+		return array(
+			'EVENT_INFORMATION' => $this->pi->pi_getLL('event_infos', 'Event informations', true),
+			'KIND_EVENT' => $element->KindOfEvent,
+			'TYPE_EVENT' => $element->TypeEvent,
+			'INFORMATION' => $element->Information,
+			'FESTIVAL' => $element->Festival,
+				// Price
+			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
+			'FREE' => $element->CurrentFree,
+			'PRICE' => $element->CurrentBasePrice,
+		);
+	}
 }

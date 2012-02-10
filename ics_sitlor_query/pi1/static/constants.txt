@@ -1,0 +1,22 @@
+plugin.tx_icssitlorquery {
+	# cat=plugin.tx_icssitlorquery/other/1; type=string; label= Login : SITLOR login
+	login =
+	# cat=plugin.tx_icssitlorquery/other/2; type=string; label= Password : SITLOR password
+	password =
+	# cat=plugin.tx_icssitlorquery/links/1; type=string; label= URL : SITLOR url
+	url = http://www.sitlor.fr/XML/exploitation/listeproduits.asp
+	# cat=plugin.tx_icssitlorquery/links/2; type=string; label= Nomenclature URL : SITLOR nomenclature url
+	nomenclatureUrl = http://www.sitlor.fr/XML/exploitation/listenomenc.asp
+	# cat=plugin.tx_icssitlorquery/links/3; type=string; label= Criterion URL : SITLOR criterion url
+	criterionUrl = http://www.sitlor.fr/XML/exploitation/listecrit.asp
+	
+	# cat=plugin.tx_icssitlorquery/file/1; type=string; label= Template : Template file
+	template =
+	
+	# cat=plugin.tx_icssitlorquery/other/3; type=string; label= Mode : Mode to display
+	modes = LIST
+	
+	# cat=plugin.tx_icssitlorquery/other/4; type=string; label= Size : Page size
+	size = 20
+	
+}

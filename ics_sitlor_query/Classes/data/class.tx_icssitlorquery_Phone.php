@@ -149,7 +149,7 @@ class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 		);
 		$local_cObj->start($data, 'Phone');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
-		return $local_cObj->stdWrap($data['phone'], $conf);
+		return $local_cObj->stdWrap('', $conf);
 	}
 
 }
