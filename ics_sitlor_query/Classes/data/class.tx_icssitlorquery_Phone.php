@@ -67,12 +67,12 @@ class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 	}
 
 	/**
-	 * Set default
+	 * Sets default TypoScript configuration.
 	 *
-	 * @param	array		$conf
+	 * @param	array		$conf: The new default configuration.
 	 * @return	void
 	 */
-	public function SetDefaultConf(array $conf) {
+	public static function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
 
@@ -82,7 +82,20 @@ class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		return $this->toString();
+		switch (func_num_args()) {
+			case 0:
+				return $this->toString();
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
+		}
 	}
 
 	/**
@@ -122,13 +135,21 @@ class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
 	/**
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
+	 * Data fields:
+	 * * phone: string.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
 	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
-		return 'Phone toString is not yet implemented';
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$data = array(
+			'phone' => $this->phone,
+		);
+		$local_cObj->start($data, 'Phone');
+		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
+		return $local_cObj->stdWrap($data['phone'], $conf);
 	}
 
 }

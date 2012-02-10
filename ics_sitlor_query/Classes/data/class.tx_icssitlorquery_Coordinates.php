@@ -71,7 +71,7 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	 * @param	array		$conf: The new default configuration.
 	 * @return	void
 	 */
-	public function SetDefaultConf(array $conf) {
+	public static function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
 

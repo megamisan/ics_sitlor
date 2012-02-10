@@ -1,3 +1,6 @@
+2012-02-10 Tsi Yang <tsi@in-cite.net>
+	* Fix : Missing declaration "static" for method SetDefaultConf
+
 2012-02-09 Tsi Yang <tsi@in-cite.net>
 	* Refactor: Reworked call to HTML render. Added classes to process view render.
 	* Feature: HTML render

@@ -277,7 +277,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 * @param	array		$conf: The new default configuration.
 	 * @return	void
 	 */
-	public function SetDefaultConf(array $conf) {
+	public static function SetDefaultConf(array $conf) {
 		self::$lConf = $conf;
 	}
 
