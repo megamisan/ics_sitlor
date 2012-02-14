@@ -200,7 +200,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				$valuedTerm,
 				0,
 				1,
-				tx_icssitlorquery_CriterionUtils::$creditPhotos[$index]
+				tx_icssitlorquery_CriterionUtils::$creditPhotos[$index],
+				'illustration'
 			);
 		}
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
@@ -209,7 +210,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				$valuedTerm,
 				1,
 				0,
-				tx_icssitlorquery_CriterionUtils::$photos[$index]
+				tx_icssitlorquery_CriterionUtils::$photos[$index],
+				'illustration'
 			);
 		}
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {

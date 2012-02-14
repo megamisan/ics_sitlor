@@ -93,10 +93,10 @@ class tx_icssitlorquery_SingleRenderer {
 			'FAX' => $this->pi->renderFax($element->Fax),
 			'MAIL' => $element->Email,
 			'WEBSITE' => $element->WebSite,
-			'ILLUSTRATION' => $element->Illustration,
+			'ILLUSTRATION' => $element->Illustration->__toString(' '),
 				//Description
 			'DESCRIPTION_LABEL' => $this->pi->pi_getLL('description', 'Description', true),
-			'DESCRIPTION' => $element->Description,
+			'DESCRIPTION' => nl2br(htmlspecialchars($element->Description)),
 				// Coordinates
 			'COORDINATES_LABEL' => $this->pi->pi_getLL('coordinates', 'Coordinates', true),
 			'COORDINATES' => $element->Coordinates,

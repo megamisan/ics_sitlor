@@ -75,8 +75,60 @@ plugin.tx_icssitlorquery_pi1 {
 				insertData = 1
 			}
 		}
-		#ValuedTermTuple
-		#Picture
+		ValuedTermTuple.illustration {
+			cObject = COA
+			cObject {
+				if.isTrue.field = item1
+				10 = TEXT
+				10.field = item1
+				10.wrap = <span class="image">|</span>
+				20 = TEXT
+				20.if.isTrue.field = item2
+				20.field = item2
+				20.wrap = <span class="copyright">|</span>
+			}
+			wrap = <div class="illustration">|</div>
+			item1_conf {
+				field = criterion
+				override.field = term
+				override.override.field = value
+				value_conf {
+					cObject = TEXT
+					cObject.value = <img />
+					addParams {
+						src =
+						src.field = url
+						title = illustration
+						title.append = CASE
+						title.append {
+							key.data = parentField:criterionId
+							736000294 = TEXT
+							736000294.value = 1
+							736001142 = TEXT
+							736001142.value = 2
+							736001115 = TEXT
+							736001115.value = 3
+							736001116 = TEXT
+							736001116.value = 4
+							4000060 = TEXT
+							4000060.value = 5
+							4000061 = TEXT
+							4000061.value = 6
+						}
+					}
+				}
+			}
+		}
+		Picture {
+			field = url
+			cObject = TEXT
+			cObject.value = <img />
+			addParams {
+				src =
+				src.field = url
+				title = illustration
+			}
+		}
 		Coordinates.cObject = COA
 		Coordinates.cObject {
 			10 = TEXT
@@ -90,7 +142,19 @@ plugin.tx_icssitlorquery_pi1 {
 				noTrimWrap = |&nbsp;&nbsp;Longitude&nbsp;: ||
 			}
 		}
-		#ValuedTerm
+		ValuedTerm {
+			field = criterion
+			override.field = term
+			override.override.field = value
+			value_conf {
+				cObject = CASE
+				cObject {
+					key.data = parentfield:valueType
+					tx_icssitlorquery_Picture = TEXT
+					tx_icssitlorquery_Picture.value = C'est une image
+				}
+			}
+		}
 	}
 	
 	# Render data

@@ -210,12 +210,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = '01/01/2000';
 
-		$noDate = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'noDate', 'paramSelect');
-		if ($noDate != '')
-			$this->conf['filter.']['noDate'] = $noDate;
-		if ($this->conf['filter.']['noDate'] === '')
-			$this->conf['filter.']['noDate'] = false;
-
 		// Get param sorting
 		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'paramSorting');
 		$this->conf['sortName'] = $sortName? $sortName: $this->conf['sortName'];
@@ -244,11 +238,28 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	function setDefaultConf() {
-		tx_icssitlorquery_Address::SetDefaultConf($this->conf['defaultConf.']['Address.']);
-		tx_icssitlorquery_Phone::SetDefaultConf($this->conf['defaultConf.']['Phone.']);
-		tx_icssitlorquery_Link::SetDefaultConf($this->conf['defaultConf.']['Link.']);
-		tx_icssitlorquery_Name::SetDefaultConf($this->conf['defaultConf.']['Name.']);
-		tx_icssitlorquery_Coordinates::SetDefaultConf($this->conf['defaultConf.']['Coordinates.']);
+		foreach ($this->conf['defaultConf.'] as $type => $conf) {
+			if ($type{strlen($type) - 1} != '.')
+				continue;
+			$type = substr($type, 0, -1);
+			$class = 'tx_icssitlorquery_' . $type;
+			if ($type == 'ValuedTermTuple') {
+				foreach ($conf as $tag => $subconf) {
+					if ($tag{strlen($tag) - 1} != '.')
+						continue;
+					$tag = substr($tag, 0, -1);
+					call_user_func(array($class, 'SetDefaultConf'), $tag, $conf);
+				}
+			}
+			else {
+				try {
+					call_user_func(array($class, 'SetDefaultConf'), $conf);
+				}
+				catch (Exception $e) {
+					t3lib_div::devLog($class . ' default conf', 'ics_sitlor_query', 0, $conf);
+				}
+			}
+		}
 	}
 
 	/**
@@ -301,6 +312,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	string		HTML content for single view
 	 */
 	function displaySingle() {
+		// Set filter on date to get date data
+		list($day, $month, $year) = explode('/', $this->conf['filter.']['startDate']);
+		$startDate = mktime(0,0,0,$month,$day,$year);
+		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
+		$this->queryService->addFilter($StartDateFilter);
+		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
+		$this->queryService->addFilter($noDateFilter);
+		
 		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', intval($this->sitlor_uid));
 		$this->queryService->addFilter($idFilter);
 		$dataGroup = (string)strtoupper(trim($this->conf['dataGroup']));
@@ -332,7 +351,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$startDate = mktime(0,0,0,$month,$day,$year);
 		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
 		$this->queryService->addFilter($StartDateFilter);
-		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', $this->conf['filter.']['noDate']);
+		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
 		$this->queryService->addFilter($noDateFilter);
 
 		// Set filter on OT Nancy

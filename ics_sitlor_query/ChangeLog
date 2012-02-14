@@ -1,4 +1,8 @@
 2012-02-10 Tsi Yang <tsi@in-cite.net>
+	* Feature: Managed tag on ValuedTermTuple
+	* Feature: Displaying ValuedTerm, ValuedTermTuple and Picture with default conf.
+
+2012-02-10 Tsi Yang <tsi@in-cite.net>
 	* Feature: Set default conf for Phone,Address, Link, Name, Coordinates
 	* Feature: Rename single renderer function in shorter name. Explode render specific switch Accomodation, Restaurant and Event
 	* Comments: Added on markers

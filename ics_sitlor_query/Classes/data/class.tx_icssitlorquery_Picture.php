@@ -80,22 +80,20 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		$numargs = func_num_args();
-		if ($numargs==0)
-			return $this->toStringConf(self::$lConf);
-
-		// $numargs >0
-		$args = func_get_args();
-		if (is_array($args[0]))
-			return $this->toStringConf(array_merge(self::$lConf, $args[0]));
-
-		if ($args[0] instanceof tslib_cObj) {
-			if ($numargs==1)
-				return toStringObj($args[0], self::$lConf);
-			return toStringObj($args[0], array_merge(self::$lConf, $args[1]));
+		switch (func_num_args()) {
+			case 0:
+				return $this->toString();
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
 		}
-
-		tx_icssitquery_debug::warning('Can not convert ValuedTermTuples to string, args :' . $args);
 	}
 
 	/**
@@ -105,7 +103,7 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		return $this->uri;
+		return $this->toStringConf(self::$lConf);
 	}
 
 	/**
@@ -135,12 +133,20 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	/**
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
+	 * Data fields:
+	 * * url: string.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
 	 * @return	string		Representation of the object.
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
-		return $cObj->stdWrap_current($this->uri, $conf);
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$data = array(
+			'url' => $this->uri,
+		);
+		$local_cObj->start($data, 'Picture');
+		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
+		return $local_cObj->stdWrap('', $conf);
 	}
 }

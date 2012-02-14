@@ -36,7 +36,7 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
+class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf {
 	private $criterion;	// tx_icssitlorquery_Criterion
 	private $term;		// tx_icssitlorquery_Term
 	private $value;
@@ -129,9 +129,9 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 	public function __toString() {
 		switch (func_num_args()) {
 			case 0:
-				return $this->toString();
+				return (string)$this->toString();
 			default:
-				return call_user_func_array(array($this, 'toStringConf'), func_get_args());
+				return (string)call_user_func_array(array($this, 'toStringConf'), func_get_args());
 		}
 	}
 
@@ -171,17 +171,17 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToString {
 			'criterion' => $this->criterion,
 			'criterionId' => $this->criterion->ID,
 			'term' => $this->term,
-			'termValue' => $this->term->Name,
+			'termValue' => $this->term->ID,
 			'value' => $this->value,
 			'valueType' => is_object($this->value) ? get_class($this->value) : gettype($this->value),
 		);
 		$local_cObj->start($data, 'ValuedTerm');
 		if (($this->value != null) && is_object($this->value) && isset($conf['value_conf.'])) {
-			if ($this->value instanceof IToStringObjConf) {
-				$data['value'] = $this->value->toStringObjConf($local_cObj, $conf);
+			if ($this->value instanceof tx_icssitquery_IToStringObjConf) {
+				$data['value'] = $this->value->toStringObjConf($local_cObj, $conf['value_conf.']);
 			}
-			else if ($this->value instanceof IToStringConf) {
-				$data['value'] = $this->value->toStringConf($conf);
+			else if ($this->value instanceof tx_icssitquery_IToStringConf) {
+				$data['value'] = $this->value->toStringConf($conf['value_conf.']);
 			}
 		}
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');

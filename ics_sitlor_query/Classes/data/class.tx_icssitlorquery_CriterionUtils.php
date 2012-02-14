@@ -76,7 +76,7 @@ class tx_icssitlorquery_CriterionUtils {
 	 * @param	int $searchedID
 	 * @return	void
 	 */
-	public static function addToTupleList(tx_icssitlorquery_ValuedTermTupleList $list, tx_icssitlorquery_ValuedTerm $element, $elIndex, $searchIndex, $searchedID) {
+	public static function addToTupleList(tx_icssitlorquery_ValuedTermTupleList $list, tx_icssitlorquery_ValuedTerm $element, $elIndex, $searchIndex, $searchedID, $tag) {
 		$tuple_exists = false;
 		for ($i=0; $i<$list->Count(); $i++) {
 			$tuple = $list->Get($i);
@@ -89,7 +89,7 @@ class tx_icssitlorquery_CriterionUtils {
 			}
 		}
 		if (!$tuple_exists) {
-			$tuple = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTuple', 2);
+			$tuple = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTuple', 2, $tag);
 			$tuple->Set($elIndex, $element);
 			$list->Add($tuple);
 		}
