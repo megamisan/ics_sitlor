@@ -117,9 +117,12 @@ class tx_icssitlorquery_SingleRenderer {
 			return '';
 
 		$locMarkers = array();
+		$subparts = array();
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_ACCOMODATION###');
-			$locMarkers = $this->getMarkers_Accomodation($element);
+			// $locMarkers = $this->renderAccomodation($element);
+			$this->renderAccomodation($element, $locMarkers, $subparts);
+			$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		}
 		if ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_RESTAURANT###');
@@ -139,8 +142,8 @@ class tx_icssitlorquery_SingleRenderer {
 	 * @param	tx_icssitlorquery_Accomodation	$element: Accomodation
 	 * @return	mixed	Markers array
 	 */
-	private function getMarkers_Accomodation($element) {
-		return array(
+	private function renderAccomodation($element, array &$markers, array &$subparts) {
+		$locMarkers = array(
 				// Provider
 			'PROVIDER_LABEL' => $this->pi->pi_getLL('provider', 'Provider', true),
 			'PROVIDER_NAME' => $element->ProviderName,
@@ -157,14 +160,23 @@ class tx_icssitlorquery_SingleRenderer {
 			'HOTEL_RATING' => $element->RatingStar,
 				// Reception
 			'RECEPTION_LABEL' => $this->pi->pi_getLL('reception', 'Reception', true),
+			'RECEPTION_LANGUAGE_LABEL' => $this->pi->pi_getLL('reception_language', 'Reception language', true),
 			'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
+			'RESERVATION_LANGUAGE_LABEL' => $this->pi->pi_getLL('reservation_language', 'Reservation language', true),
 			'RESERVATION_LANGUAGE' => $element->ReservationLanguage,
+			'MOBILITY_IMPAIRED_LABEL' => $this->pi->pi_getLL('mobility_impaired', 'Mobility impaired', true),
 			'MOBILITY_IMPAIRED' => $element->MobilityImpaired,
+			'PETS_LABEL' => $this->pi->pi_getLL('pets', 'Pets', true),
 			'PETS' => $element->Pets,
-			'ALOWED_PETS' => $element->AllowedPets,
+			'ALLOWED_PETS_LABEL' => $this->pi->pi_getLL('allowed_pets', 'Allowed pets', true),
+			'ALLOWED_PETS' => $element->AllowedPets,
+			'ALLOWED_GROUP_LABEL' => $this->pi->pi_getLL('allowed_group', 'Allowed group', true),
 			'ALLOWED_GROUP' => $element->AllowedGroup,
+			'RECEPTION_GROUP_LABEL' => $this->pi->pi_getLL('reception_group', 'Reception group', true),
 			'RECEPTION_GROUP' => $element->ReceptionGroup,
+			'MOTORCOACH_PARK_LABEL' => $this->pi->pi_getLL('motorcoach_park', 'Motorcoach park', true),
 			'MOTORCOACH_PARK' => $element->MotorCoachPark,
+			'OPENING24_24_LABEL' => $this->pi->pi_getLL('opening24_24', 'Opening 24/24', true),
 			'OPENING24_24' => $element->Opening24_24,
 				// Price
 			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
@@ -179,6 +191,28 @@ class tx_icssitlorquery_SingleRenderer {
 			'HOTEL_SERVICE_LABEL' => $this->pi->pi_getLL('hotel_service', 'Hotel service', true),
 			'HOTEL_SERVICE' => $element->HotelService,
 		);
+		
+		$markers = array_merge($markers, $locMarkers);
+		
+		if ($element->ReceptionLanguage->Count()<0)
+			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
+		if ($element->ReservationLanguage->Count()<0)
+			$subparts['###SUBPART_RESERVATION_LANGUAGE###'] = '';
+		if (!$element->MobilityImpaired)
+			$subparts['###SUBPART_MOBILITY_IMPAIRED###'] = '';
+		if (!$element->Pets)
+			$subparts['###SUBPART_PETS###'] = '';
+		if (!$element->AllowedPets)
+			$subparts['###SUBPART_ALLOWED_PETS###'] = '';
+		if (!$element->AllowedGroup)
+			$subparts['###SUBPART_ALLOWED_GROUP###'] = '';
+		if ($element->ReceptionGroup->Count()<0)
+			$subparts['###SUBPART_RECEPTION_GROUP###'] = '';
+		if (!$element->MotorCoachPark)
+			$subparts['###SUBPART_MOTORCOACH_PARK###'] = '';
+		if (!$element->Opening24_24)
+			$subparts['###SUBPART_OPENING24_24###'] = '';
+				
 	}
 
 	/**
@@ -205,7 +239,7 @@ class tx_icssitlorquery_SingleRenderer {
 			'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
 			'MENU_LANGUAGE' => $element->MenuLanguage,
 			'PETS' => $element->Pets,
-			'ALOWED_PETS' => $element->AllowedPets,
+			'ALLOWED_PETS' => $element->AllowedPets,
 			'ALLOWED_GROUP' => $element->AllowedGroup,
 			'ALLOWED_GROUP_NUMBER' => $element->AllowedGroupNumber,
 			'MOTORCOACH_PARK' => $element->MotorCoachPark,
