@@ -25,7 +25,6 @@ plugin.tx_icssitlorquery_pi1 {
 	filter {
 		OTNancy =
 		startDate = 01/01/2000
-		noDate = 1
 	}
 	
 	# Default primitive rendering
@@ -153,6 +152,29 @@ plugin.tx_icssitlorquery_pi1 {
 					tx_icssitlorquery_Picture = TEXT
 					tx_icssitlorquery_Picture.value = C'est une image
 				}
+			}
+		}
+		TimeTable.cObject = COA
+		TimeTable.cObject {
+			10 = TEXT
+			10 {
+				field = start
+				stdWrap.strftime = %d/%m/%Y
+				noTrimWrap = |Du&nbsp; ||
+			}
+			20 = TEXT
+			20 {
+				field = end
+				stdWrap.strftime = %d/%m/%Y
+				noTrimWrap = |&nbsp;Au&nbsp; ||
+			}
+			30 = TEXT
+			30 {
+			
+			}
+			40 = TEXT
+			40 {
+				field = comment
 			}
 		}
 	}

@@ -149,7 +149,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		$separator = self::$separator;
+		$separator = self::$separator;// si def valeur pour le type de liste courant sinon pour abstractlist
 
 		$args = func_get_args();
 		if (!empty($args) && is_string($args[0])) {
@@ -161,10 +161,12 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	/**
 	 * Defines the default element separator for string representation.
 	 *
-	 * @param	string		$separator The new separator.
+	 * @param	string		$separator: The new separator.
+	 * @param	string		$type: Type of list
 	 * @return	void
 	 */
-	public static function setSeparator($separator) {
+	public static function setSeparator($separator, $type=null) {// TODO: Rename setDefaultSeparator
+		// TODO : $type référence descendant d'AbstractList. null => AbstractList
 		if (is_string($separator)) {
 			self::$separator = $separator;
 		}

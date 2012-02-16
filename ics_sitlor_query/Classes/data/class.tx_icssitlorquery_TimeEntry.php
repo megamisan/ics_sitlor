@@ -24,7 +24,15 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   46: class tx_icssitlorquery_TimeEntry
+ *   52:     public function __construct($dow, $start=0, $end=0, $isPM=false)
+ *   68:     public function __get($name)
+ *
+ * TOTAL FUNCTIONS: 2
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -35,8 +43,7 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
-class tx_icssitlorquery_TimeEntry{
+class tx_icssitlorquery_TimeEntry implements IToStringObjConf {
 	private $dayOfWeek;	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
 	private $start;	// int
 	private $end;	// int
@@ -50,6 +57,27 @@ class tx_icssitlorquery_TimeEntry{
 		$this->start = $start;
 		$this->end = $end;
 		$this->isPM = $isPM;
+	}
+
+	/**
+	 * Obtains a property. PHP magic function.
+	 *
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
+	 */
+	public function __get($name) {
+		switch ($name) {
+			case 'DayOfWeek':
+				return $this->dayOfWeek;
+			case 'Start':
+				return $this->start;
+			case 'End':
+				return $this->end;
+			case 'IsPM':
+				return $this->isPM;
+			default:
+				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
+		}
 	}
 
 }
