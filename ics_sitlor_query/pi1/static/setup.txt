@@ -154,27 +154,75 @@ plugin.tx_icssitlorquery_pi1 {
 				}
 			}
 		}
-		TimeTable.cObject = COA
+		TimeTable.cObject = TEXT
 		TimeTable.cObject {
-			10 = TEXT
-			10 {
-				field = start
-				stdWrap.strftime = %d/%m/%Y
-				noTrimWrap = |Du&nbsp; ||
+			#preUserFunc = tx_icssitlorquery_TimeEntriesRenderer->renderTimeEntries
+			preUserFunc {
+				addMissingEntries = 1
+				head.wrap = <thead><tr><td></td>|</tr></thead>
+				headAM.override = Matin
+				headAM.wrap = <td colspan="2" id="morning">|</td>
+				headPM.override = Après-midi
+				headPM.wrap = <td colspan="2" id="afternoon">|</td>
+				body.wrap = <tbody>|</tbody>
+				row.wrap = <tr>|</tr>
+				rowAM.cObject = COA
+				rowAM.cObject {
+					10 = TEXT
+					10.value = Matin
+					10.innerWrap = <th>|</th>
+					10.addParams {
+						id =
+						id.field = open
+						id.strftime = %u
+						id.wrap = day|
+					}
+					20 = TEXT
+					20.field = open
+					20.strftime = %H:%M
+					20.innerWrap = <td>|</td>
+					20.addParams {
+						headers =
+						headers.cObject = COA
+						headers.cObject {
+							10 = TEXT
+							10.value = morning
+							10.noTrimWrap = || |
+							20 = TEXT
+							20.field = open
+							20.strftime = %u
+							20.wrap = day|
+						}
+					}
+					30 < .20
+					30.field = close
+					30.addParams.headers.10.value = afternoon
+				}
+				rowPM < .rowAM
+				rowPM.10 >
 			}
-			20 = TEXT
-			20 {
-				field = end
-				stdWrap.strftime = %d/%m/%Y
-				noTrimWrap = |&nbsp;Au&nbsp; ||
+			preCObject = COA
+			preCObject {
+				10 = TEXT
+				10 {
+					field = start
+					stdWrap.strftime = %d/%m/%Y
+					noTrimWrap = |Du ||
+				}
+				20 = TEXT
+				20 {
+					field = end
+					stdWrap.strftime = %d/%m/%Y
+					noTrimWrap = | au ||
+				}
+				wrap = <caption>|</caption>
 			}
-			30 = TEXT
-			30 {
-			
-			}
-			40 = TEXT
-			40 {
+			wrap = <table>|</table>
+			append = TEXT
+			append {
+				if.isTrue.field = comment
 				field = comment
+				wrap = <p>|</p>
 			}
 		}
 	}

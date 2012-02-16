@@ -43,11 +43,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_TimeEntry implements IToStringObjConf {
+
+class tx_icssitlorquery_TimeEntry implements tx_icssitquery_IToStringObjConf {
 	private $dayOfWeek;	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
 	private $start;	// int
 	private $end;	// int
 	private $isPM;	// bool
+
+	private static $lConf = array();
 
 	public function __construct($dow, $start=0, $end=0, $isPM=false) {
 		if (!is_int($dow))
@@ -80,4 +83,100 @@ class tx_icssitlorquery_TimeEntry implements IToStringObjConf {
 		}
 	}
 
+	/**
+	 * Sets default TypoScript configuration.
+	 *
+	 * @param	array		$conf: The new default configuration.
+	 * @return	void
+	 */
+	public static function SetDefaultConf(array $conf) {
+		self::$lConf = $conf;
+	}
+
+	/**
+	 * Converts this object to its string representation. PHP magic function.
+	 *
+	 * @return	string		Representation of the object.
+	 */
+	public function __toString() {
+		$args = func_get_args();
+		return (string)call_user_func_array(array($this, 'toString'), $args);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Using default output settings.
+	 *
+	 * @return	string		Representation of the object.
+	 */
+	public function toString() {
+		switch (func_num_args()) {
+			case 0:
+				return $this->toStringConf(self::$lConf);
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				$args = func_get_args();
+				return call_user_func_array(array($this, 'toStringObjConf'), $args);
+		}
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration.
+	 *
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringConf(array $conf) {
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start(array(), '');
+		return $this->toStringObjConf($cObj, $conf);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified content object.
+	 *
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringObj(tslib_cObj $cObj) {
+		return toStringObjConf($cObj, self::$lConf);
+	}
+
+	/**
+	 * Converts this object to its string representation.
+	 * Uses the specified TypoScript configuration and content object.
+	 * Data fields:
+	 * * open: Opening time as a timestamp. The date part use an arbitrary date with the entry's day of week.
+	 * * close: Closing time as a timestamp. The date part use an arbitrary date with the entry's day of week.
+	 * * isPM: Boolean, 0 for AM, 1 for PM.
+	 *
+	 * @param	tslib_cObj		$cobj: Content object used as parent.
+	 * @param	array		$conf: TypoScript configuration to use to render this object.
+	 * @return	string		Representation of the object.
+	 */
+	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
+		static $today = null;
+		if ($today == null) $today = getdate();
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$start = getdate($this->start);
+		$end = getdate($this->end);
+		$dayDiff = ($this->dayOfWeek % 7) - $today['wday'];
+		$data = array(
+			'open' => mktime($start['hours'], $start['minutes'], $start['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']),
+			'close' => mktime($end['hours'], $end['minutes'], $end['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']),
+			'isPM' => $this->isPM ? 1 : 0,
+		);
+		$local_cObj->start($data, 'TimeEntry');
+		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
+		return $local_cObj->stdWrap('', $conf);
+	}
 }

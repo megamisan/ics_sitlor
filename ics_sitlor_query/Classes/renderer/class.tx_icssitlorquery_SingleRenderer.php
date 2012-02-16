@@ -93,7 +93,7 @@ class tx_icssitlorquery_SingleRenderer {
 			'FAX' => $this->pi->renderFax($element->Fax),
 			'MAIL' => $element->Email,
 			'WEBSITE' => $element->WebSite,
-			'ILLUSTRATION' => $element->Illustration->__toString(' '),
+			'ILLUSTRATION' => $element->Illustration->toString(' '),
 				//Description
 			'DESCRIPTION_LABEL' => $this->pi->pi_getLL('description', 'Description', true),
 			'DESCRIPTION' => nl2br(htmlspecialchars($element->Description)),

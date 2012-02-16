@@ -127,12 +127,8 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		switch (func_num_args()) {
-			case 0:
-				return (string)$this->toString();
-			default:
-				return (string)call_user_func_array(array($this, 'toStringConf'), func_get_args());
-		}
+		$args = func_get_args();
+		return (string)call_user_func_array(array($this, 'toString'), $args);
 	}
 
 	/**
@@ -142,7 +138,13 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		return $this->toStringConf(self::$lConf);
+		switch (func_num_args()) {
+			case 0:
+				return $this->toStringConf(self::$lConf);
+			default:
+				$args = func_get_args();
+				return (string)call_user_func_array(array($this, 'toStringConf'), $args);
+		}
 	}
 
 	/**

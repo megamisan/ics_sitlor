@@ -35,7 +35,7 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
+class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToStringObjConf {
 	private $latitude;
 	private $longitude;
 
@@ -81,20 +81,8 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		switch (func_num_args()) {
-			case 0:
-				return $this->toString();
-			case 1:
-				$a1 = func_get_arg(0);
-				if (is_array($a1)) {
-					return $this->toStringConf($a1);
-				}
-				else if ($a1 instanceof tslib_cObj) {
-					return $this->toStringObj($a1);
-				}
-			default:
-				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
-		}
+		$args = func_get_args();
+		return (string)call_user_func_array(array($this, 'toString'), $args);
 	}
 
 	/**
@@ -104,7 +92,21 @@ class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToString {
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		return $this->toStringConf(self::$lConf);
+		switch (func_num_args()) {
+			case 0:
+				return $this->toStringConf(self::$lConf);
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				$args = func_get_args();
+				return call_user_func_array(array($this, 'toStringObjConf'), $args);
+		}
 	}
 
 	/**

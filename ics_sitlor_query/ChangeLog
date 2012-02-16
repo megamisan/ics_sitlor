@@ -1,24 +1,37 @@
-2012-02-10 Tsi Yang <tsi@in-cite.net>
-	* Feature: Managed tag on ValuedTermTuple
-	* Feature: Displaying ValuedTerm, ValuedTermTuple and Picture with default conf.
+2012-02-16 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: TimeEntry array rendering. Needed for TimeTable string representation configuration.
+	* Refactor: TimeTable XML parsing algorithm.
+	* Refactor: Replaced direct calls to __toString to calls to toString.
+	* Feature: toString implementation for TimeEntry.
+	* Refactor: In Address, Link, Name, Phone, Picture, TimeEntry, TimeTable, ValuedTerm, and ValuedTermTuple, moved arguments switch from __toString to toString and __toString call toString with passed arguments.
+
+2012-02-16 Tsi Yang <tsi@in-cite.net>
+	* Comments: TODO for default separator definition for each list type in AbstractList.
+	* Feature: TimeEntry getter.
+	* Feature: TimeTable global rendering configuration (partial).
+	* Feature: "Reception" template part in SingleRender.
+
+2012-02-14 Tsi Yang <tsi@in-cite.net>
+	* Refacture: Usage of the new string representation algorithm in Picture (Same as Phone, Address, ...).
+	* Bug fix: ValuedTerm::toStringObjConf not using the value_conf TS property when rendering the value.
+	* Bug fix: ValuedTerm::_toString not returning a string.
+	* Fix: Missing tag usage on ValuedTermTuple instanciation.
+	* Feature: Default static setup configuration for remaining objects.
+	* Refactor: Generic algorithm for default rendering configuration initialization in plugin.
 
 2012-02-10 Tsi Yang <tsi@in-cite.net>
-	* Feature: Set default conf for Phone,Address, Link, Name, Coordinates
-	* Feature: Rename single renderer function in shorter name. Explode render specific switch Accomodation, Restaurant and Event
-	* Comments: Added on markers
-	* Feature: Added file constants.txt
-	* Fix: Inversion on setting lastname and firstname in Accomodation and Restaurant
-
-2012-02-10 Tsi Yang <tsi@in-cite.net>
-	* Fix : Missing declaration "static" for method SetDefaultConf
+	* Feature: Default static setup configuration for some objects.
+	* Feature: Initialize default rendering configuration of object in plugin.
+	* Refactor: Renamed SingleRender::renderDetail* methods to render*.
+	* Refactor: Externalized markers filling for Accomodation, Restaurant and Event in separate methods.
+	* Feature: toString implementation of Phone, Address, Link, Name.
+	* Bug Fix: Lastname and Firstname XML parsing swapped in Accomodation and Restaurant.
+	* Feature: Added static configuration as constants.
+	* Fix: Missing "static" modifier in method signature for all instance of SetDefaultConf.
 
 2012-02-09 Tsi Yang <tsi@in-cite.net>
-	* Refactor: Reworked call to HTML render. Added classes to process view render.
-	* Feature: HTML render
-	* Comments: Added on CriterionUtils
-
-2012-02-09 Tsi Yang <tsi@in-cite.net>
-	* Fix: Retrieved on Term undefined property
+	* Refactor: Externalized rendering for each mode in plugin to one class per mode.
+	* Bug Fix: Usage of an undefined property in ValuedTerm::toStringConf.
 
 2012-02-08 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: toString implementation of ValuedTerm, ValuedTermTuple and Coordinates.
@@ -26,32 +39,46 @@
 2012-02-07 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Common toString implementations for data objects (except ValuedTerm and *Tuple).
 
+2012-02-06 Tsi Yang <tsi@in-cite.net>
+	* Feature: View implementation.
+	* Refactor: Added scheme and entity setters in SitlorQuery.
+
 2012-02-03 Pierrick Caillon <pierrick@in-cite.net>
 	* Comments: Updated comments on some recurrent methods.
 	* Fix: Whitespace fix.
 
 2012-02-03 Tsi Yang <tsi@in-cite.net>
-	* Feature: HTML render
-	* Refactor: Reworked call to HTML render
-	* Refactor: Data price on Accomodation not on FullAccomodation
-	* Refactor: Data price on Restaurant not on FullRestaurant
-	* Fix: Params pass by reference
-	* Feature: Added data in Nomenclature factory
-	* Fix: Bug on CriterionUtils addToTupleList
-	* Fix: Bug on ValuedTerm
+	* Refactor: Moved price from FullAccomodation to Accomodation.
+	* Refactor: Moved price from FullRestaurant to Restaurant.
+	* Bug Fix: CriterionUtils::addToTupleList.
+	* Refactor: Reworked plugin display algorithme and templates content.
+	* Feature: Dynamic creation of flexforms parameters.
+	* Refactor: Reworked plugin parameters in flexforms.
+
+2012-02-02 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Removed useless template file.
+	* Fix: Typo in ValuedTermTuple.
+
+2012-01-31 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added view templates.
 
 2012-01-30 Tsi Yang <tsi@in-cite.net>
-	* Refactor : Retrieved Criterion Term in CriterionFactory
-
-2012-01-30 Tsi Yang <tsi@in-cite.net>
-	* Feature : Added getter on Picture, Phone, Name, LInk, Coordinates, Address
+	* Refactor: Changed internal storage and usage for Criterion, Type and Category filters.
+	* Refactor: Deleted unneeded filters.
+	* Refactor: Changed Zip and City storage in Address.
+	* Refactor: Added missing typechecking in SitlorQuery and SitlorQueryService pagination setters.
+	* Refactor: Flattened internal TimeEntry array in TimeTable.
+	* Refactor: Implemented missing method CriterionFactory::GetCriterionTerm.
+	* Refactor: Replaced Term selection algorithm in ValuedTerm::fromXML by the call to CriterionFactory::GetCriterionTerm.
+	* Feature: Added getter on Picture, Phone, Name, Link, Coordinates, Address.
 
 2012-01-27 Tsi Yang <tsi@in-cite.net>
-	* Feature: Implemented Event querying in SitlorQueryService
-	* Feature: Implemented Event using Accomodation as template
-	* Feature: Implemented FullEvent like FullAccomodation
-	* Feature: Added CriterionFilter
-	* Feature: Added GenderFilter, get single ID (only use for event)
+	* Refactor: Ajusted value test in getter an setter of ValuedTermTuple.
+	* Feature: Implemented Event querying in SitlorQueryService.
+	* Feature: Implemented Event using Accomodation as template.
+	* Feature: Implemented FullEvent like FullAccomodation.
+	* Feature: Added CriterionFilter.
+	* Feature: Added GenderFilter. Select by ID, for events only.
 
 2012-01-27 Pierrick Caillon <pierrick@in-cite.net>
 	* Refactor: Reworked Phone object storage and usage.

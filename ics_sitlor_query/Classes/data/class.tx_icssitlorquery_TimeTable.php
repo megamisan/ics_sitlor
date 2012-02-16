@@ -80,8 +80,14 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 * @return	void
 	 */
 	public static function FromXML(XMLReader $reader) {
+		static $dayOfWeekByXMLName = null;
+		static $amPm = null;
+		static $openClose = null;
+		if ($dayOfWeekByXMLName == null) $dayOfWeekByXMLName = array_flip(array(1 => 'LUNDI', 'MARDI', 'MERCREDI', 'JEUDI', 'VENDREDI', 'SAMEDI', 'DIMANCHE'));
+		if ($amPm == null) $amPm = array_flip(array('AM', 'PM'));
+		if ($openClose == null) $openClose = array_flip(array('DE', 'A'));
 		$timeTable = new tx_icssitlorquery_TimeTable();
-		$timeEntry = array();
+		$timeEntryCache = array();
 		$reader->read();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
 			if($reader->nodeType == XMLReader::ELEMENT){
@@ -107,167 +113,34 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 						break;
 
-					case 'LUNDI_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[1]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'LUNDI_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[1]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'LUNDI_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[1]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'LUNDI_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[1]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
-					case 'MARDI_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[2]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'MARDI_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[2]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'MARDI_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[2]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'MARDI_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[2]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
-					case 'MERCREDI_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[3]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'MERCREDI_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[3]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'MERCREDI_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[3]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'MERCREDI_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[3]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
-					case 'JEUDI_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[4]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'JEUDI_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[4]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'JEUDI_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[4]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'JEUDI_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[4]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
-					case 'VENDREDI_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[5]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'VENDREDI_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[5]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'VENDREDI_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[5]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'VENDREDI_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[5]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
-					case 'SAMEDI_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[6]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'SAMEDI_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[6]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'SAMEDI_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[6]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'SAMEDI_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[6]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
-					case 'DIMANCHE_AM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[7]['am']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'DIMANCHE_AM_A':
-						if ($time = $reader->readString())
-							$timeEntry[7]['am']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'DIMANCHE_PM_DE':
-						if ($time = $reader->readString())
-							$timeEntry[7]['pm']['start'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-					case 'DIMANCHE_PM_A':
-						if ($time = $reader->readString())
-							$timeEntry[7]['pm']['end'] = strtotime($time);
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-						break;
-
 					default:
+						$parts = explode('_', $reader->name, 3);
+						if (isset($dayOfWeekByXMLName[$parts[0]]) &&
+							isset($amPm[$parts[1]]) &&
+							isset($openClose[$parts[2]])) {
+							$day = $dayOfWeekByXMLName[$parts[0]];
+							$isPM = $amPm[$parts[1]];
+							$which = $openClose[$parts[2]];
+							if ($value = $reader->readString()) {
+								$value = strtotime($value);
+								$id = implode('_', $day, $isPM, $which);
+								$otherId = implode('_', $day, $isPM, 1 - $which);
+								if (isset($timeEntryCache[$otherId])) {
+									$start = $which ? $timeEntryCache[$otherId] : $value;
+									$end = $which ? $value : $timeEntryCache[$otherId];
+									$timeTable->timeEntries[] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $start, $end, (bool)$isPM);
+									unset($timeEntryCache[$otherId]);
+								}
+								else {
+									$timeEntryCache[$id] = $value;
+								}
+							}
+						}
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
 			}
 			$reader->read();
 		}
-
-		foreach ($timeEntry as $day=>$entry) {
-			if (isset($entry['am']))
-				$timeTable->timeEntries[] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['am']['start'], $entry['am']['end'], false);
-			if (isset($entry['pm']))
-				$timeTable->timeEntries[] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $day, $entry['pm']['start'], $entry['pm']['end'], true);
-		}
-
 		return $timeTable;
 	}
 
@@ -287,20 +160,8 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function __toString() {
-		switch (func_num_args()) {
-			case 0:
-				return $this->toString();
-			case 1:
-				$a1 = func_get_arg(0);
-				if (is_array($a1)) {
-					return $this->toStringConf($a1);
-				}
-				else if ($a1 instanceof tslib_cObj) {
-					return $this->toStringObj($a1);
-				}
-			default:
-				return call_user_func_array(array($this, 'toStringObjConf'), func_get_args());
-		}
+		$args = func_get_args();
+		return (string)call_user_func_array(array($this, 'toString'), $args);
 	}
 
 	/**
@@ -310,7 +171,21 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		return $this->toStringConf(self::$lConf);
+		switch (func_num_args()) {
+			case 0:
+				return $this->toStringConf(self::$lConf);
+			case 1:
+				$a1 = func_get_arg(0);
+				if (is_array($a1)) {
+					return $this->toStringConf($a1);
+				}
+				else if ($a1 instanceof tslib_cObj) {
+					return $this->toStringObj($a1);
+				}
+			default:
+				$args = func_get_args();
+				return call_user_func_array(array($this, 'toStringObjConf'), $args);
+		}
 	}
 
 	/**
