@@ -106,6 +106,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Initialize query, connection
 		$this->setConnection();
+		// Set typoscript defaultConf
 		$this->setDefaultConf();
 
 		// Display mode
@@ -369,34 +370,38 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
 		switch($dataGroup) {
 			case 'ACCOMODATION':
-				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
-				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
-				foreach($subDataGroups as $subDataGroup) {
-					switch($subDataGroup) {
-						case 'HOTEL':
-							$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$hotel);
-							$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
-							$this->queryService->addFilter($filter);
-							break;
-						case 'CAMPING_AND_YOUTHHOSTEL':	// TODO: explode case CAMPING, case YOUTHHOSTEL
-							$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$campingAndYouthHostel);
-							$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
-							$this->queryService->addFilter($filter);
-							break;
-						case 'STRANGE':
-							$filter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION));
-							$this->queryService->addFilter($filter);
-							break;
-						case 'HOLLIDAY_COTTAGE_AND_GUESTHOUSE':	// TODO explode case HOLLIDAY_COTTAGE, case GUESTHOUSE
-							$categories = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(
-								tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
-								tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
-							));
-							$filter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $categories);
-							$this->queryService->addFilter($filter);
-							break;
-						default:
-							tx_icssitquery_Debug::warning('Sub-Datagroup ' . $subDataGroup . ' is not defined.');
+				if (!$this->conf['view.']['subDataGroups']) {
+					$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::ACCOMODATION));
+				} else {
+					$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+					$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+					foreach($subDataGroups as $subDataGroup) {
+						switch($subDataGroup) {
+							case 'HOTEL':
+								$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$hotel);
+								$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+								$this->queryService->addFilter($filter);
+								break;
+							case 'CAMPING_AND_YOUTHHOSTEL':	// TODO: explode case CAMPING, case YOUTHHOSTEL
+								$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$campingAndYouthHostel);
+								$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+								$this->queryService->addFilter($filter);
+								break;
+							case 'STRANGE':
+								$filter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION));
+								$this->queryService->addFilter($filter);
+								break;
+							case 'HOLLIDAY_COTTAGE_AND_GUESTHOUSE':	// TODO explode case HOLLIDAY_COTTAGE, case GUESTHOUSE
+								$categories = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(
+									tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
+									tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
+								));
+								$filter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $categories);
+								$this->queryService->addFilter($filter);
+								break;
+							default:
+								tx_icssitquery_Debug::warning('Sub-Datagroup ' . $subDataGroup . ' is not defined.');
+						}
 					}
 				}
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider');

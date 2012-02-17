@@ -6,11 +6,22 @@
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
-            <label index="list_mode_1">Mode 1</label>
-            <label index="list_mode_2">Mode 2</label>
-            <label index="list_mode_3">Mode 3</label>
-            <label index="back">Back</label>
-            <label index="submit_button_label">Click here to submit value</label>
+			<label index="openday_1">Monday</label>
+            <label index="openday_2">Tuesday</label>
+            <label index="openday_3">Wednesday</label>
+            <label index="openday_4">Thursday</label>
+            <label index="openday_5">Friday</label>
+            <label index="openday_6">Saturday</label>
+            <label index="openday_7">Sunday</label>
+        </languageKey>
+       <languageKey index="default" type="array">
+            <label index="openday_1">Lundi</label>
+            <label index="openday_2">Mardi</label>
+            <label index="openday_3">Mercredi</label>
+            <label index="openday_4">Jeudi</label>
+            <label index="openday_5">Vendredi</label>
+            <label index="openday_6">Samedi</label>
+            <label index="openday_7">Dimanche</label>
         </languageKey>
  	</data>
 </T3locallang>

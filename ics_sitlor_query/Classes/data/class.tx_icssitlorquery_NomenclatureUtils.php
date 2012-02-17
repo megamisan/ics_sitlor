@@ -36,6 +36,7 @@ class tx_icssitlorquery_NomenclatureUtils {
 	 * Accomodation
 	 *
 	 *******************************************************/
+	const ACCOMODATION = 4000001;		// Gender "Hébergement"
 	const HOTEL = 4000002;				// Type "Hôtel"
 	const HOTEL_RESTAURANT = 4000003;	// Type "Hôtel - hôtel restaurant"
 	const FURNISHED = 4000012;			// Type "Meublé"

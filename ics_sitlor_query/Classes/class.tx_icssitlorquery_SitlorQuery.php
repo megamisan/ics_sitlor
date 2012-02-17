@@ -70,7 +70,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		'WEBACCESS_EN',
 		'WEBACCESS_NL',
 	);
-	private $scheme = 'WEBACCESS';
+	private $scheme = 'LEI';
 	private $query = array();
 	private $entity = '737';
 	static private $startDate;
@@ -111,6 +111,22 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$params['rto'] = utf8_decode($this->end);
 		$params['latable'] = utf8_decode(self::$tableList[$this->table]);
 		$params['lxml'] = utf8_decode(self::$xmlBodyList[$this->table]);
+		switch ($GLOBALS['TSFE']->config['language']) {
+			case 'fr':
+				$this->scheme = 'LEI';
+				break;
+			case 'en':
+				$this->scheme = 'WEBACCESS_EN';
+				break;
+			case 'de':
+				$this->scheme = 'WEBACCESS_DE';
+				break;
+			case 'nl':
+				$this->scheme = 'WEBACCESS_NL';
+				break;
+			default:
+				$this->scheme = 'LEI';
+		}
 		$params['SCHEMA'] = utf8_decode($this->scheme);
 		//-- End of Format params
 
