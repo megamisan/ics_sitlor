@@ -116,11 +116,11 @@ class tx_icssitlorquery_SingleRenderer {
 		if (!($element instanceof tx_icssitquery_AbstractData))
 			return '';
 
+		$template = '';
 		$locMarkers = array();
 		$subparts = array();
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_ACCOMODATION###');
-			// $locMarkers = $this->renderAccomodation($element);
 			$this->renderAccomodation($element, $locMarkers, $subparts);
 			$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		}

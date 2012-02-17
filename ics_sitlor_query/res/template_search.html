@@ -23,113 +23,150 @@
 <!-- ###TEMPLATE_SEARCH_FORM### start-->
 	<form action="###ACTION_URL###"  method="get">
 		<fieldset class="###PREFIXID###_mainSearch">
-			###KEYWORD###
-			###HOTEL_TYPE###
-			###RESTAURANT_CATEGORY###
-			###CULINARY_SPECIALITY###
-			###DATE###
+			<h4>###MAIN_SEARCH_TITLE###</h4>
+			###GENERIC###
+			###SPECIFIC###
 		</fieldset>
-		<fieldset class="###PREFIXID###_searchMore">
-			###HOTEL_EQUIPMENT###
-			###OPENDAY###
-			###NOFEE###
-		</fieldset>
-		<fieldset class="###PREFIXID###_submitSearchForm">
-			<input type="submit" name="###PREFIXID###[submit]" value="###SUBMIT###" />
-		</fieldset>
+		###MORE###
 	</form>
 <!-- ###TEMPLATE_SEARCH_FORM### end-->
 
 
 
-<!-- ###SEARCH_KEYWORD### start-->
+<!-- ###TEMPLATE_FORM_GENERIC### start-->
+	<div class="sword">
+		<p><label for="sword">###KEYWORD_LABEL###</label></p>
+		<p><input type="text" name="###PREFIXID###[search][sword]" id="sword" value="###KEYWORD_VALUE###"/></p>
+	</div>
+	<div class="button">
+		<input type="button"  name="###PREFIXID###[btn_sword]" value="###SEARCH###" />
+	</div>
+<!-- ###TEMPLATE_FORM_GENERIC### end-->
+
+
+
+<!-- ###TEMPLATE_FORM_MORE### start-->
+		<fieldset class="###PREFIXID###_searchMore">
+			<h4>###SEARCH_MORE_TITLE###</h4>
+			###SPECIFIC###
+		</fieldset>
+<!-- ###TEMPLATE_FORM_MORE### end-->
+
+
+
+<!-- ###TEMPLATE_FORM_ACCOMODATION### start-->
+	<!-- ###SUBPART_HOTEL### start-->
+		<p><label>###HOTEL_TYPE_LABEL###</label></p>
+		<ul class="###PREFIXID###_checkList">
+			<!-- ###ITEM### -->
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_TYPE_ITEM### name="###PREFIXID###[search][hotelType]" id="hotelType_###TYPE_ITEM_VALUE###" value="###TYPE_ITEM_VALUE###" />
+				<label for="hotelType_###TYPE_ITEM_VALUE###">###TYPE_ITEM_LABEL###</label>
+			</li>
+			<!-- ###ITEM### -->
+		</ul>
+		<div class="button">
+			<input type="button"  name="###PREFIXID###[btn_hotelType]" value="###SEARCH###" />
+		</div>
+	<!-- ###SUBPART_HOTEL### end-->
+<!-- ###TEMPLATE_FORM_ACCOMODATION### end-->
+
+
+
+
+<!-- ###TEMPLATE_FORM_MORE_ACCOMODATION### start-->
+	<!-- ###SUBPART_HOTEL### start-->
+		<p><label for="hotelEquipment">###HOTEL_EQUIPMENT_LABEL###</label></p>
+		<ul class="###PREFIXID###_checkList">
+			<!-- ###ITEM### -->
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_EQUIPMENT_ITEM### name="hotelEquipment" id="hotelEquipment###EQUIPMENT_ITEM_VALUE###" value="###EQUIPMENT_ITEM_VALUE###"/>
+				<label for="hotelEquipment###EQUIPMENT_ITEM_VALUE###">###EQUIPMENT_ITEM_LABEL###</label>
+			</li>
+			<!-- ###ITEM### -->
+		</ul>
+		<div class="button">
+			<input type="button"  name="###PREFIXID###[btn_hotelEquipment]" value="###SEARCH###" />
+		</div>
+	<!-- ###SUBPART_HOTEL### end-->
+<!-- ###TEMPLATE_FORM_MORE_ACCOMODATION### end-->
+
+
+
+<!-- ###TEMPLATE_FORM_RESTAURANT### start-->
+	<!-- ###SUBPART_CATEGORY### start-->
+		<p><label>###RESTAURANT_CATEGORY_LABEL###</label></p>
+		<ul class="###PREFIXID###_checkList">
+			<!-- ###ITEM### -->
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_CATEGORY_ITEM### name="###PREFIXID###[search][restaurantCategory]" id="restaurantCategory###CATEGORY_ITEM_VALUE###" value="###CATEGORY_ITEM_VALUE###" />
+				<label for="restaurantCategory###CATEGORY_ITEM_VALUE###">###CATEGORY_ITEM_LABEL###</label>
+			</li>
+			<!-- ###ITEM### -->
+		</ul>
+		<div class="button">
+			<input type="button"  name="###PREFIXID###[btn_restaurantCategory]" value="###SEARCH###" />
+		</div>
+	<!-- ###SUBPART_CATEGORY### end-->
+	<!-- ###SUBPART_SPECIALITY### start-->
+		<p><label>###CULINARY_SPECIALITY_LABEL###</label></p>
+		<ul class="###PREFIXID###_checkList">
+			<!-- ###ITEM### -->
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_CULINARY_SPECIALITY### name="###PREFIXID###[search][culinarySpeciality]" id="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###" value="###CULINARY_SPECIALITY_ITEM_VALUE###" />
+				<label for="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###">###CULINARY_SPECIALITY_ITEM_LABEL###</label>
+			</li>
+			<!-- ###ITEM### -->
+		</ul>
+		<div class="button">
+			<input type="button"  name="###PREFIXID###[btn_restaurantSpeciality]" value="###SEARCH###" />
+		</div>
+	<!-- ###SUBPART_SPECIALITY### end-->
+<!-- ###TEMPLATE_FORM_RESTAURANT### end-->
+
+
+
+<!-- ###TEMPLATE_FORM_MORE_RESTAURANT### start-->
+	<!-- ###SUBPART_OPENDAY### -->
+		<p><label for="openDay">###OPENDAY_LABEL###</label></p>
+		<select class="###PREFIXID###_select" id="openDay">
+			<!-- ###ITEM### -->
+			<option class="###PREFIXID###_selectOption" value="###OPENDAY_ITEM_VALUE###" ###SELECTED_OPENDAY_ITEM###>###OPENDAY_ITEM_LABEL###</option>
+			<!-- ###ITEM### -->
+		</select>
+		<div class="button">
+			<input type="button"  name="###PREFIXID###[btn_restaurantOpenDay]" value="###SEARCH###" />
+		</div>
+	<!-- ###SUBPART_OPENDAY### -->
+<!-- ###TEMPLATE_FORM_MORE_RESTAURANT### end-->
+
+
+
+<!-- ###TEMPLATE_FORM_EVENT### start-->
+	<p><label>###DATE_LABEL###</label></p>
+	<div>
+		<p>
+			<label for="startDate">###STARTDATE###</label>
+			<input type="text" name="###PREFIXID###[search][startDate]" id="startDate" value="###STARTDATE_VALUE###"/>
+		</p>
+		<p>
+			<label for="endDate">###ENDDATE###</label>
+			<input type="text" name="###PREFIXID###[search][endDate]" id="endDate" value="###ENDDATE_VALUE###"/>
+		</p>
+	</div>
+	<div class="button">
+		<input type="button"  name="###PREFIXID###[btn_eventDate]" value="###SEARCH###" />
+	</div>
+<!-- ###TEMPLATE_FORM_EVENT### end-->
+
+
+
+<!-- ###TEMPLATE_FORM_MORE_EVENT### start-->
 	<p>
-		<label for="sword">###KEYWORD_LABEL###</label>
-		<input type="text" name="###PREFIXID###[search][sword]" id="sword" value="###KEYWORD_VALUE###"/>
-	</p>
-<!-- ###SEARCH_KEYWORD### end-->
-
-
-<!-- ###SEARCH_HOTEL_TYPE### start-->
-	<p><label>###HOTEL_TYPE_LABEL###</label></p>
-	<ul class="###PREFIXID###_checkList">
-		<!-- ###ITEM### -->
-		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED_TYPE_ITEM### name="###PREFIXID###[search][hotelType]" id="hotelType_###TYPE_ITEM_VALUE###" value="###TYPE_ITEM_VALUE###" />
-			<label for="hotelType_###TYPE_ITEM_VALUE###">###TYPE_ITEM_LABEL###</label>
-		</li>
-		<!-- ###ITEM### -->
-	</ul>
-<!-- ###SEARCH_HOTEL_TYPE### end-->
-
-
-<!-- ###SEARCH_RESTAURANT_CATEGORY### start-->
-	<p><label>###RESTAURANT_CATEGORY_LABEL###</label></p>
-	<ul class="###PREFIXID###_checkList">
-		<!-- ###ITEM### -->
-		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED_CATEGORY_ITEM### name="###PREFIXID###[search][restaurantCategory]" id="restaurantCategory###CATEGORY_ITEM_VALUE###" value="###CATEGORY_ITEM_VALUE###" />
-			<label for="restaurantCategory###CATEGORY_ITEM_VALUE###">###CATEGORY_ITEM_LABEL###</label>
-		</li>
-		<!-- ###ITEM### -->
-	</ul>
-<!-- ###SEARCH_RESTAURANT_CATEGORY### end-->
-
-
-<!-- ###SEARCH_CULINARY_SPECIALITY### start-->
-	<p><label>###CULINARY_SPECIALITY_LABEL###</label></p>
-	<ul class="###PREFIXID###_checkList">
-		<!-- ###ITEM### -->
-		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED_CULINARY_SPECIALITY### name="###PREFIXID###[search][culinarySpeciality]" id="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###" value="###CULINARY_SPECIALITY_ITEM_VALUE###" />
-			<label for="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###">###CULINARY_SPECIALITY_ITEM_LABEL###</label>
-		</li>
-		<!-- ###ITEM### -->
-	</ul>
-<!-- ###SEARCH_CULINARY_SPECIALITY### end-->
-
-
-<!-- ###SEARCH_DATE### start-->
-	<p>
-		<label for="startDate">###STARTDATE###</label>
-		<input type="text" name="###PREFIXID###[search][startDate]" id="startDate" value="###STARTDATE_VALUE###"/>
-	</p>
-	<p>
-		<label for="endDate">###ENDDATE###</label>
-		<input type="text" name="###PREFIXID###[search][endDate]" id="endDate" value="###ENDDATE_VALUE###"/>
-	</p>
-<!-- ###SEARCH_DATE### end-->
-
-
-<!-- ###SEARCH_HOTEL_EQUIPMENT### start-->
-	<p><label for="hotelEquipment">###HOTEL_EQUIPMENT_LABEL###</label></p>
-	<ul class="###PREFIXID###_checkList">
-		<!-- ###ITEM### -->
-		<li class="###PREFIXID###_checkListItem">
-			<input type="checkbox" ###SELECTED_EQUIPMENT_ITEM### name="hotelEquipment" id="hotelEquipment###EQUIPMENT_ITEM_VALUE###" value="###EQUIPMENT_ITEM_VALUE###"/>
-			<label for="hotelEquipment###EQUIPMENT_ITEM_VALUE###">###EQUIPMENT_ITEM_LABEL###</label>
-		</li>
-		<!-- ###ITEM### -->
-	</ul>
-<!-- ###SEARCH_HOTEL_EQUIPMENT### end-->
-
-
-<!-- ###SEARCH_OPENDAY### start-->
-	<p><label for="openDay">###OPENDAY_LABEL###</label></p>
-	<select class="###PREFIXID###_select" id="openDay">
-		<!-- ###ITEM### -->
-		<option class="###PREFIXID###_selectOption" value="###OPENDAY_ITEM_VALUE###" ###SELECTED_OPENDAY_ITEM###>###OPENDAY_ITEM_LABEL###</option>
-		<!-- ###ITEM### -->
-	</select>
-<!-- ###SEARCH_OPENDAY### end-->
-
-
-<!-- ###SEARCH_NOFEE### start-->
-	<p>
-		<label for="noFee">###NOFEE_LABEL###</label>
 		<input type="checkbox" ###SELECTED_NOFEE### name="noFee" id="noFee" value="###NOFEE_VALUE###"/>
+		<label for="noFee">###NOFEE_LABEL###</label>
 	</p>
-<!-- ###SEARCH_NOFEE### end-->
+<!-- ###TEMPLATE_FORM_MORE_EVENT### end-->
 
 </body>
 </html>

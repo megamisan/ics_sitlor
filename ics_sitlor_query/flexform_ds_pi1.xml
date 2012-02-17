@@ -81,12 +81,21 @@
 										<numIndex index="1">SINGLE</numIndex>
 									</numIndex>
 								</items>
-								<size>1</size>
+								<size>4</size>
 								<minitems>0</minitems>
-								<maxitems>1</maxitems>
+								<maxitems>3</maxitems>
 							</config>
 						</TCEforms>
 					</what_to_display>
+					<OTNancySubscriber>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:OTNancySubscriber</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</OTNancySubscriber>
 					<size>
 						<TCEforms>
 							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:size</label>
@@ -134,24 +143,6 @@
 						</TCEforms>
 					</dataGroup>
 					<!-- ###SUBDATAGROUP### -->
-					<OTNancySubscriber>
-						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:OTNancySubscriber</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</OTNancySubscriber>
-					<noDate>
-						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:noDate</label>
-							<config>
-								<type>input</type>
-								<size>2</size>
-							</config>
-						</TCEforms>
-					</noDate>
 				</el>
 			</ROOT>
 		</paramSelect>

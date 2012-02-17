@@ -1,3 +1,8 @@
+2012-02-17 Tsi Yang <tsi@in-cite.net>
+	* Feature: "OT Nancy" code for select params to main section
+	* Feature: Template search
+	* Refactor: Possibility to select many subdataGroup
+
 2012-02-16 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: TimeEntry array rendering. Needed for TimeTable string representation configuration.
 	* Refactor: TimeTable XML parsing algorithm.

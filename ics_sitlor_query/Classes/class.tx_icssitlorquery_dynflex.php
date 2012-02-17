@@ -101,12 +101,12 @@ class tx_icssitlorquery_dynflex {
 					'config' => array(
 						'type' => 'select',
 						'items' => $optionListArray,
-						'size' => '1',
+						'size' => '5',
 						'minitems' => '0',
-						'maxitems' => '1',
+						'maxitems' => '100',
 					),
 				);
-				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroup');
+				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroups');
 				break;
 			case 'RESTAURANT':
 				break;

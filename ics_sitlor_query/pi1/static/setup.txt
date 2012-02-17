@@ -17,8 +17,8 @@ plugin.tx_icssitlorquery_pi1 {
 		size = {$plugin.tx_icssitlorquery.size}
 		# Group of data: ACCOMODATION, RESTAURANT, EVENT
 		dataGroup = ACCOMODATION
-		# Category of accomodation: HOTEL, CAMPING_AND_YOUTHHOSTEL, STRANGE, HOLLIDAY_COTTAGE_AND_GUESTHOUSE
-		subDataGroup = 
+		# Category of accomodation (separated with coma): HOTEL, CAMPING, YOUTHHOSTEL, STRANGE, HOLLIDAY_COTTAGE, GUESTHOUSE
+		subDataGroups = 
 	}
 	
 	# Select

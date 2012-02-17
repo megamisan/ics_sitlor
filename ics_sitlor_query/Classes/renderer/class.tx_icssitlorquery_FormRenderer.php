@@ -53,7 +53,8 @@
 		array('CRITERION', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS),
 		array('CRITERION',  tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK),
 	);
-
+	private static $dayOfWeek = array(1,2,3,4,5,6,7);	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
+	
 	/**
 	 * Constructor
 	 *
@@ -79,188 +80,302 @@
 	 */
 	function render() {
 		$markers = array();
-		$locMarkers['KEYWORD'] = $this->render_Keyword($markers);
-		$locMarkers['HOTEL_TYPE'] = $this->render_HotelTypes($markers);
-		$locMarkers['RESTAURANT_CATEGORY'] = $this->render_RestaurantCategories($markers);
-		$locMarkers['CULINARY_SPECIALITY'] = $this->render_CulinarySpeciality($markers);
-		$locMarkers['DATE'] = $this->render_Date($markers);
+		$locMarkers['GENERIC'] = $this->renderGeneric($markers);
+		$locMarkers['SPECIFIC'] = $this->renderSpecific($markers);
 
-		$locMarkers['HOTEL_EQUIPMENT'] = $this->render_HotelEquipment($markers);
-		$locMarkers['OPENDAY'] = $this->render_Openday($markers);
-		$locMarkers['NOFEE'] = $this->render_NoFee($markers);
-
-		$markers['PREFIXID'] = $this->prefixId;
-		$markers['SUBMIT'] = $this->pi->pi_getLL('submit', 'Ok', true);
-
+		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+		$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+		$locMarkers['MORE'] = '';
+		if (($dataGroup == 'ACCOMODATION' && in_array('HOTEL', $subDataGroups)) ||
+			// ($dataGroup == 'RESTAURANT') ||
+			($dataGroup == 'EVENT')) {
+			$locMarkers['MORE'] = $this->renderMore($markers);
+		}
+		
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH_FORM###');
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
+		$template = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+
+		$markers = array(
+			'PREFIXID' => $this->prefixId,
+		);
+			// Get dataGroup main search title
+		switch($dataGroup ) {
+			case 'ACCOMODATION':
+				$markers['MAIN_SEARCH_TITLE'] = $this->pi->pi_getLL('search_accomodation', 'Search accomodation', true);
+				break;
+			case 'RESTAURANT':
+				$markers['MAIN_SEARCH_TITLE'] = $this->pi->pi_getLL('search_restaurant', 'Search restaurant', true);
+				break;
+			case 'EVENT':
+				$markers['MAIN_SEARCH_TITLE'] = $this->pi->pi_getLL('search_event', 'Search event', true);
+				break;
+			default:
+				$markers['MAIN_SEARCH_TITLE'] = '';
+		}
+		
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
-
+	
 	/**
-	 * [Describe function...]
+	 * Render search form generic
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_Keyword(&$markers) {
+	private function renderGeneric(&$markers) {
 		$markers['KEYWORD_LABEL'] = $this->pi->pi_getLL('keyword', 'Keyword', true);
 		$markers['KEYWORD_VALUE'] = $this->search['sword']? $this->search['sword']: $this->pi->pi_getLL('keyword', 'Search', true);
-		return $this->cObj->getSubpart($this->templateCode, '###SEARCH_KEYWORD###');
+		$markers['SEARCH'] = $this->pi->pi_getLL('search', 'Search', true);
+		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_GENERIC###');
 	}
-
+	
 	/**
-	 * [Describe function...]
+	 * Render search form  specific
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_HotelTypes(&$markers) {
-		$template = $this->cObj->getSubpart($this->templateCode, '###SEARCH_HOTEL_TYPE###');
-		$subparts = array();
-		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
-		foreach(self::$hotelTypes as $type) {
-			$itemContent = '';
-			if ($data = $this->getSelectData($type[0], $type[1])) {
-				$locMarkers = array();
-				$locMarkers['SELECTED_TYPE_ITEM'] = ($this->search['hotelType']==$data->ID)? 'selected="selected"': '';
-				$locMarkers['TYPE_ITEM_VALUE'] = $data->ID;
-				$locMarkers['TYPE_ITEM_LABEL'] = $data->Name;
-				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
-			}
-			$subparts['###ITEM###'] .= $itemContent;
+	private function renderSpecific(&$markers) {
+		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+		$template = '';
+		switch($dataGroup) {
+			case 'ACCOMODATION':
+				$template = $this->renderSpecific_Accomodation($markers);
+				break;
+			case 'RESTAURANT':
+				$template = $this->renderSpecific_Restaurant($markers);
+				break;
+			case 'EVENT':
+				$template = $this->renderSpecific_Event($markers);
+				break;
+			default:
+				$template = '';
 		}
-		$markers['HOTEL_TYPE_LABEL'] = $this->pi->pi_getLL('hotelType', 'Hotel type', true);
-		return $template = $this->cObj->substituteSubpartArray($template, $subparts);
+		return $template;
 	}
 
 	/**
-	 * [Describe function...]
+	 * Render accomodation search form specific
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_RestaurantCategories(&$markers) {
-		$template = $this->cObj->getSubpart($this->templateCode, '###SEARCH_RESTAURANT_CATEGORY###');
-		$subparts = array();
-		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
+	function renderSpecific_Accomodation(&$markers) {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_ACCOMODATION###');
+		$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+
+		// Hotel
+		$subparts['###SUBPART_HOTEL###'] = '';
+		if (in_array('HOTEL', $subDataGroups)) {
+			$markers['HOTEL_TYPE_LABEL'] = $this->pi->pi_getLL('hotelType', 'Hotel type', true);
+			$itemSubparts = array();
+			$hotelTemplate = $this->cObj->getSubpart($template, '###SUBPART_HOTEL###');
+			$itemTemplate = $this->cObj->getSubpart($hotelTemplate, '###ITEM###');
+			foreach(self::$hotelTypes as $type) {
+				$itemContent = '';
+				if ($data = $this->getSelectData($type[0], $type[1])) {
+					$itemMarkers = array();
+					$itemMarkers['SELECTED_TYPE_ITEM'] = ($this->search['hotelType']==$data->ID)? 'selected="selected"': '';
+					$itemMarkers['TYPE_ITEM_VALUE'] = $data->ID;
+					$itemMarkers['TYPE_ITEM_LABEL'] = $data->Name;
+					$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
+				}
+				$itemSubparts['###ITEM###'] .= $itemContent;
+			}
+			$subparts['###SUBPART_HOTEL###'] = $this->cObj->substituteSubpartArray($hotelTemplate, $itemSubparts);
+		}
+		
+		return $this->cObj->substituteSubpartArray($template, $subparts);
+	}
+	
+	/**
+	 * Render restaurant search form specific
+	 *
+	 * @param	array&		$markers: Markers array
+	 * @return	string		HTML detail content
+	 */
+	function renderSpecific_Restaurant(&$markers) {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_RESTAURANT###');
+		
+		// Category
+		$markers['RESTAURANT_CATEGORY_LABEL'] = $this->pi->pi_getLL('restaurantCategory', 'Restaurant category', true);
+		$categoryTemplate = $this->cObj->getSubpart($template, '###SUBPART_CATEGORY###');
+		$itemTemplate = $this->cObj->getSubpart($categoryTemplate, '###ITEM###');
 		foreach(self::$restaurantCategories as $cat) {
 			$itemContent = '';
 			if ($data = $this->getSelectData($cat[0], $cat[1])) {
-				$locMarkers = array();
-				$locMarkers['SELECTED_CATEGORY_ITEM'] = ($this->search['restaurantCategory']==$data->ID)? 'selected="selected"': '';
-				$locMarkers['CATEGORY_ITEM_VALUE'] = $data->ID;
-				$locMarkers['CATEGORY_ITEM_LABEL'] = $data->Name;
-				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
+				$itemMarkers = array();
+				$itemMarkers['SELECTED_CATEGORY_ITEM'] = ($this->search['restaurantCategory']==$data->ID)? 'selected="selected"': '';
+				$itemMarkers['CATEGORY_ITEM_VALUE'] = $data->ID;
+				$itemMarkers['CATEGORY_ITEM_LABEL'] = $data->Name;
+				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 			}
-			$subparts['###ITEM###'] .= $itemContent;
+			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
-		$markers['RESTAURANT_CATEGORY_LABEL'] = $this->pi->pi_getLL('restaurantCategory', 'Restaurant category', true);
-		return $template = $this->cObj->substituteSubpartArray($template, $subparts);
-	}
-
-	/**
-	 * [Describe function...]
-	 *
-	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
-	 */
-	private function render_CulinarySpeciality(&$markers) {
-		$template = $this->cObj->getSubpart($this->templateCode, '###SEARCH_CULINARY_SPECIALITY###');
-		$subparts = array();
-		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
+		$subparts['###SUBPART_CATEGORY###'] = $this->cObj->substituteSubpartArray($categoryTemplate, $itemSubparts);
+		
+		// Speciality
+		$markers['CULINARY_SPECIALITY_LABEL'] = $this->pi->pi_getLL('culinarySpeciality', 'Culinary speciality', true);
+		$specialityTemplate = $this->cObj->getSubpart($template, '###SUBPART_SPECIALITY###');
+		$itemTemplate = $this->cObj->getSubpart($specialityTemplate, '###ITEM###');
 		foreach(self::$foreignFood as $food) {
 			$itemContent = '';
 			if ($data = $this->getSelectData($food[0], $food[1])) {
-				$locMarkers = array();
-				$locMarkers['SELECTED_CULINARY_SPECIALITY'] = ($this->search['culinarySpeciality']==$data->ID)? 'selected="selected"': '';
-				$locMarkers['CULINARY_SPECIALITY_ITEM_VALUE'] = $data->ID;
-				$locMarkers['CULINARY_SPECIALITY_ITEM_LABEL'] = $data->Name;
-				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
+				$itemMarkers = array();
+				$itemMarkers['SELECTED_CULINARY_SPECIALITY'] = ($this->search['culinarySpeciality']==$data->ID)? 'selected="selected"': '';
+				$itemMarkers['CULINARY_SPECIALITY_ITEM_VALUE'] = $data->ID;
+				$itemMarkers['CULINARY_SPECIALITY_ITEM_LABEL'] = $data->Name;
+				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 			}
-			$subparts['###ITEM###'] .= $itemContent;
+			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
-		$markers['CULINARY_SPECIALITY_LABEL'] = $this->pi->pi_getLL('culinarySpeciality', 'Culinary speciality', true);
-		return $template = $this->cObj->substituteSubpartArray($template, $subparts);
+		$subparts['###SUBPART_SPECIALITY###'] = $this->cObj->substituteSubpartArray($specialityTemplate, $itemSubparts);
+		
+		return $this->cObj->substituteSubpartArray($template, $subparts);
 	}
 
+
 	/**
-	 * [Describe function...]
+	 * Render event search form specific
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_Date(&$markers) {
+	function renderSpecific_Event(&$markers) {
+		$markers['DATE_LABEL'] = $this->pi->pi_getLL('search_date', 'Search date', true);
 		$markers['STARTDATE'] = $this->pi->pi_getLL('startDate', 'Start date', true);
 		$markers['STARTDATE_VALUE'] = $this->search['startDate'];
 		$markers['ENDDATE'] = $this->pi->pi_getLL('endDate', 'End date', true);
 		$markers['ENDDATE_VALUE'] = $this->search['endDate'];
-		return $this->cObj->getSubpart($this->templateCode, '###SEARCH_DATE###');
-	}
-
+		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_EVENT###');
+	} 
+	
+	
 	/**
-	 * [Describe function...]
+	 * Render search form more
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_HotelEquipment(&$markers) {
-		$template = $this->cObj->getSubpart($this->templateCode, '###SEARCH_HOTEL_EQUIPMENT###');
-		$subparts = array();
-		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
-		foreach(self::$hotelEquipment as $equipment) {
-			$itemContent = '';
-			if ($data = $this->getSelectData($equipment[0], $equipment[1])) {
-				$locMarkers = array();
-				$locMarkers['SELECTED_EQUIPMENT_ITEM'] = ($this->search['hotelEquipment']==$data->ID)? 'selected="selected"': '';
-				$locMarkers['EQUIPMENT_ITEM_VALUE'] = $data->ID;
-				$locMarkers['EQUIPMENT_ITEM_LABEL'] = $data->Name;
-				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
-			}
-			$subparts['###ITEM###'] .= $itemContent;
+	private function renderMore(&$markers) {
+		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+		$template = '';
+		$locMarkers = array();
+		switch($dataGroup) {
+			case 'ACCOMODATION':
+				$locMarkers['SPECIFIC'] = $this->renderMore_Accomodation($markers);
+				break;
+			case 'RESTAURANT':
+				$locMarkers['SPECIFIC'] = $this->renderMore_Restaurant($markers);
+				break;
+			case 'EVENT':
+				$locMarkers['SPECIFIC'] = $this->renderMore_Event($markers);
+				break;
+			default:
+				$locMarkers['SPECIFIC'] = '';
 		}
-		$markers['HOTEL_EQUIPMENT_LABEL'] = $this->pi->pi_getLL('hotelEquipment', 'Hotel equipment', true);
-		return $template = $this->cObj->substituteSubpartArray($template, $subparts);
+		
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE###');
+		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
+		
+		$markers['SEARCH_MORE_TITLE'] = $this->pi->pi_getLL('search_more', 'Search more', true);
+		return $template;
 	}
-
+	
 	/**
-	 * [Describe function...]
+	 * Render  accomodation search form more
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_Openday(&$markers) {
-		$days = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(
+	function renderMore_Accomodation(&$markers) {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_ACCOMODATION###');
+		$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+
+		// Hotel
+		$subparts['###SUBPART_HOTEL###'] = '';
+		if (in_array('HOTEL', $subDataGroups)) {
+			$markers['HOTEL_EQUIPMENT_LABEL'] = $this->pi->pi_getLL('hotelEquipment', 'Hotel equipment', true);
+			$itemSubparts = array();
+			$hotelTemplate = $this->cObj->getSubpart($template, '###SUBPART_HOTEL###');
+			$itemTemplate = $this->cObj->getSubpart($hotelTemplate, '###ITEM###');
+			foreach(self::$hotelEquipment as $equipment) {
+				$itemContent = '';
+				if ($data = $this->getSelectData($equipment[0], $equipment[1])) {
+					$itemMarkers = array();
+					$itemMarkers['SELECTED_EQUIPMENT_ITEM'] = ($this->search['hotelEquipment']==$data->ID)? 'selected="selected"': '';
+					$itemMarkers['EQUIPMENT_ITEM_VALUE'] = $data->ID;
+					$itemMarkers['EQUIPMENT_ITEM_LABEL'] = $data->Name;
+					$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
+				}
+				$itemSubparts['###ITEM###'] .= $itemContent;
+			}
+			$subparts['###SUBPART_HOTEL###'] = $this->cObj->substituteSubpartArray($hotelTemplate, $itemSubparts);
+		}
+		
+		return $this->cObj->substituteSubpartArray($template, $subparts);
+	}
+	
+	/**
+	 * Render  restaurant search form more
+	 *
+	 * @param	array&		$markers: Markers array
+	 * @return	string		HTML detail content
+	 */
+	function renderMore_Restaurant(&$markers) {
+		/*
+			// NOTA : pb, il semblerait que ce soit sur la modalité "Jours de fermeture" du critère "Ouverture service"
+			//		donc sélectionner sur du texte libre => sait pas faire
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_RESTAURANT###');
+		$markers['OPENDAY_LABEL'] = $this->pi->pi_getLL('openday', 'Open days', true);
+		$opendayTemplate = $this->cObj->getSubpart($template, '###SUBPART_OPENDAY###');
+		$itemTemplate = $this->cObj->getSubpart($opendayTemplate, '###ITEM###');
+		$opendayTerms = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(
 			tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::OPENDAY)
 		);
-		$template = $this->cObj->getSubpart($this->templateCode, '###SEARCH_OPENDAY###');
-		$subparts = array();
-		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
-		for($i=0; $i<$days->Count(); $i++) {
-			$day = $days->Get($i);
-			$locMarkers = array();
-			$locMarkers['SELECTED_OPENDAY_ITEM'] = ($this->search['openday']==$day->ID)? 'selected="selected"': '';
-			$locMarkers['OPENDAY_ITEM_VALUE'] = $day->ID;
-			$locMarkers['OPENDAY_ITEM_LABEL'] = $day->Name;
-			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
-			$subparts['###ITEM###'] .= $itemContent;
+		// for($i=0; $i<$opendayTerms->Count(); $i++) {
+			// $day = $opendayTerms->Get($i);
+			// $itemContent = '';
+			// $itemMarkers = array();
+			// $itemMarkers['SELECTED_OPENDAY_ITEM'] = ($this->search['openday']==$day->ID)? 'selected="selected"': '';
+			// $itemMarkers['OPENDAY_ITEM_VALUE'] = $day->ID;
+			// $itemMarkers['OPENDAY_ITEM_LABEL'] = $day->Name;
+			// $itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
+			// $itemSubparts['###ITEM###'] .= $itemContent;
+		// }
+		foreach(self::$dayOfWeek as $numDay) {
+			$days = array($opendayTerms->Get($numDay*2 -2), $opendayTerms->Get($numDay*2 -1));
+			$itemContent = '';
+			$itemMarkers = array();
+			$itemMarkers['SELECTED_OPENDAY_ITEM'] = ($this->search['openday']== ($days[0]->ID.','.$days[1]->ID))? 'selected="selected"': '';
+			$itemMarkers['OPENDAY_ITEM_VALUE'] = $days[0]->ID.','.$days[1]->ID;
+			$itemMarkers['OPENDAY_ITEM_LABEL'] = $this->pi->pi_getLL('openday_'.$numDay, 'Open day '.$numDay, true);
+			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
+			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
-		$markers['OPENDAY_LABEL'] = $this->pi->pi_getLL('openday', 'Open days', true);
-		return $template = $this->cObj->substituteSubpartArray($template, $subparts);
+		$subparts['###SUBPART_OPENDAY###'] = $this->cObj->substituteSubpartArray($opendayTemplate, $itemSubparts);
+		
+		return $this->cObj->substituteSubpartArray($template, $subparts);
+		*/
+		return '';
 	}
-
+	 
 	/**
-	 * [Describe function...]
+	 * Render  event search form more
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML search form content
+	 * @return	string		HTML detail content
 	 */
-	private function render_NoFee(&$markers) {
+	function renderMore_Event(&$markers) {
 		$data = $this->getSelectData('TERM', array(tx_icssitlorquery_CriterionUtils::CURRENT_FREE, tx_icssitlorquery_CriterionUtils::CURRENT_FREE_YES));
 		$markers['NOFEE_LABEL'] = $this->pi->pi_getLL('noFee', 'No fee', true);
 		$markers['SELECTED_NOFEE'] = $this->search['noFee']? 'selected="selected"': '';
 		$markers['NOFEE_VALUE'] = $data->ID;
-		return $this->cObj->getSubpart($this->templateCode, '###SEARCH_NOFEE###');
+		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_EVENT###');
 	}
 
 	/**
