@@ -143,6 +143,14 @@
 						</TCEforms>
 					</dataGroup>
 					<!-- ###SUBDATAGROUP### -->
+					<OTNancy>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:OTNancyFilter</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</OTNancy>
 				</el>
 			</ROOT>
 		</paramSelect>

@@ -5,6 +5,7 @@ plugin.tx_icssitlorquery_pi1 {
 		url = {$plugin.tx_icssitlorquery.url}
 		nomenclatureUrl = {$plugin.tx_icssitlorquery.nomenclatureUrl}
 		criterionUrl = {$plugin.tx_icssitlorquery.criterionUrl}
+		OTNancy = {$plugin.tx_icssitlorquery.OTNancy}
 	}
 
 	# Template file

@@ -9,14 +9,16 @@ plugin.tx_icssitlorquery {
 	nomenclatureUrl = http://www.sitlor.fr/XML/exploitation/listenomenc.asp
 	# cat=plugin.tx_icssitlorquery/links/3; type=string; label= Criterion URL : SITLOR criterion url
 	criterionUrl = http://www.sitlor.fr/XML/exploitation/listecrit.asp
+	# cat=plugin.tx_icssitlorquery/other/3; type=string; label= OT Nancy subscriber code
+	OTNancy = 
 	
 	# cat=plugin.tx_icssitlorquery/file/1; type=string; label= Template : Template file
 	template =
 	
-	# cat=plugin.tx_icssitlorquery/other/3; type=string; label= Mode : Mode to display
+	# cat=plugin.tx_icssitlorquery/other/10; type=string; label= Mode : Mode to display
 	modes = LIST
 	
-	# cat=plugin.tx_icssitlorquery/other/4; type=string; label= Size : Page size
+	# cat=plugin.tx_icssitlorquery/other/11; type=string; label= Size : Page size
 	size = 20
 	
 }

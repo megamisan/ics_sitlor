@@ -5,6 +5,9 @@
 	* Refactor: Moved "OTNancySubscriber" field in plugin flexform to main section. Removed noDate.
 	* Feature: Augmented Search template.
 	* Refactor: Enable user to select several subdatagroup in plugin configuration.
+	* Fix: Declaration of CriterionFilter constructor must take Criterion instead of CriterionList.
+	* Fix: Missing loop foreach to add filter on accomodation subDataGroups
+	* Feature: Deleted systematic entity filter on query
 
 2012-02-16 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: TimeEntry array rendering. Needed for TimeTable string representation configuration.

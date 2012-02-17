@@ -185,7 +185,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Get OTNancySubscriber
 		$OTNancySubscriber = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancySubscriber', 'main');
-		$this->conf['filter.']['OTNancy'] = $OTNancySubscriber? $OTNancySubscriber: $this->conf['filter.']['OTNancy'];
+		$this->conf['sitlor.']['OTNancy'] = $OTNancySubscriber? $OTNancySubscriber: $this->conf['sitlor.']['OTNancy'];
 
 		// Get page size
 		$size = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'size', 'main');
@@ -210,6 +210,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$subDataGroups = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subDataGroups', 'paramSelect');
 		$this->conf['view.']['subDataGroups'] = $subDataGroups? $subDataGroups: $this->conf['view.']['subDataGroups'];
 
+		$filterOnOTNancy = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancy', 'paramSelect');
+		$this->conf['filter.']['OTNancy'] = $filterOnOTNancy? $filterOnOTNancy : $this->conf['filter.']['OTNancy'];
+		
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = self::$default_startDate;
 
@@ -354,44 +357,47 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$startDate = mktime(0,0,0,$month,$day,$year);
 		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
 		$this->queryService->addFilter($StartDateFilter);
+		// Always retrieves elements without date
 		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
 		$this->queryService->addFilter($noDateFilter);
 
 		// Set filter on OT Nancy
-		if ($this->conf['filter.']['OTNancy']) {
-			$criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(intval($this->conf['filter.']['OTNancy']));
-			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', array($criterion)));
+		if ($this->conf['sitlor.']['OTNancy'] && $this->conf['filter.']['OTNancy']) {
+			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', tx_icssitlorquery_CriterionFactory::GetCriterion(intval($this->conf['sitlor.']['OTNancy']))));
 		}
 
 		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
 		switch($dataGroup) {
 			case 'ACCOMODATION':
-				switch($this->conf['view.']['subDataGroups']) {
-					case 'HOTEL':
-						$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$hotel);
-						$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
-						$this->queryService->addFilter($filter);
-						break;
-					case 'CAMPING_AND_YOUTHHOSTEL':
-						$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$campingAndYouthHostel);
-						$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
-						$this->queryService->addFilter($filter);
-						break;
-					case 'STRANGE':
-						$criteria = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION));
-						$filter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criteria);
-						$this->queryService->addFilter($filter);
-						break;
-					case 'HOLLIDAY_COTTAGE_AND_GUESTHOUSE':
-						$categories = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(
-							tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
-							tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
-						));
-						$filter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $categories);
-						$this->queryService->addFilter($filter);
-						break;
-					default:
-						tx_icssitquery_Debug::warning('Sub-Datagroup ' . $this->conf['view.']['subDataGroups'] . ' is not defined.');
+				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+				foreach($subDataGroups as $subDataGroup) {
+					switch($subDataGroup) {
+						case 'HOTEL':
+							$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$hotel);
+							$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+							$this->queryService->addFilter($filter);
+							break;
+						case 'CAMPING_AND_YOUTHHOSTEL':	// TODO: explode case CAMPING, case YOUTHHOSTEL
+							$types = tx_icssitlorquery_NomenclatureFactory::GetTypes(tx_icssitlorquery_NomenclatureUtils::$campingAndYouthHostel);
+							$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', $types);
+							$this->queryService->addFilter($filter);
+							break;
+						case 'STRANGE':
+							$filter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION));
+							$this->queryService->addFilter($filter);
+							break;
+						case 'HOLLIDAY_COTTAGE_AND_GUESTHOUSE':	// TODO explode case HOLLIDAY_COTTAGE, case GUESTHOUSE
+							$categories = tx_icssitlorquery_NomenclatureFactory::GetTypes(array(
+								tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
+								tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
+							));
+							$filter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $categories);
+							$this->queryService->addFilter($filter);
+							break;
+						default:
+							tx_icssitquery_Debug::warning('Sub-Datagroup ' . $subDataGroup . ' is not defined.');
+					}
 				}
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider');
 				$elements = $this->queryService->getAccomodations($sorting);
@@ -410,10 +416,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			case 'EVENT':
 				$filter = t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::EVENT);
 				$this->queryService->addFilter($filter);
-				$criterion = tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT);
-				$criterionList = t3lib_div::makeInstance('tx_icssitlorquery_CriterionList');
-				$criterionList->Add($criterion);
-				$filter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criterionList);
+				$filter = t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT));
 				$this->queryService->addFilter($filter);
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider');
 				$elements = $this->queryService->getEvents($sorting);

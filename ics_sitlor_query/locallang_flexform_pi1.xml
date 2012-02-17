@@ -28,6 +28,7 @@
 			<label index="subDataGroup_strange">Strange</label>
 			<label index="subDataGroup_hollidayCottageAndGuesthouse">Holliday cottage and guesthouse</label>
 			<label index="OTNancySubscriber">OT Nancy subscriber code</label>
+			<label index="OTNancyFilter">Filter on OT Nancy</label>
 			<label index="paramSorting">Param sorting</label>
 			<label index="sortName">Sort name</label>
 			<label index="sortName_random">Random</label>
@@ -62,7 +63,8 @@
 			<label index="subDataGroup_campingAndYouthHostel">Camping et auberge de jeunesse</label>
 			<label index="subDataGroup_strange">Insolite</label>
 			<label index="subDataGroup_hollidayCottageAndGuesthouse">Gîtes et chambres d'hôtes</label>
-			<label index="OTNancySubscriber">Code d'adhésion OT Nancy (ex: 737000029)</label>
+			<label index="OTNancySubscriber">Code Adhérent OT Nancy (ex: 737000029)</label>
+			<label index="OTNancyFilter">Filtrer sur Adhérent OT Nancy</label>
 			<label index="paramSorting">Paramètre de tri</label>
 			<label index="sortName">Tri</label>
 			<label index="sortName_random">Aléatoire</label>

@@ -118,9 +118,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$filterArray = array_keys($this->filters);
 		$pnames = array();
 		$pvalues = array();
-		$params['lentit'] = utf8_decode($this->entity);
-		$pnames[] = 'lentidad';
-		$pvalues[] = $this->entity;
+		// $params['lentit'] = utf8_decode($this->entity);
+		// $pnames[] = 'lentidad';
+		// $pvalues[] = $this->entity;
 		if (in_array('idFilter', $filterArray)) {
 			$pnames[] = 'elproducto';
 			$pvalues[] = $this->filters['idFilter'];
