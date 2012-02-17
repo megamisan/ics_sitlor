@@ -123,8 +123,8 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 							$which = $openClose[$parts[2]];
 							if ($value = $reader->readString()) {
 								$value = strtotime($value);
-								$id = implode('_', $day, $isPM, $which);
-								$otherId = implode('_', $day, $isPM, 1 - $which);
+								$id = implode('_', array($day, $isPM, $which));
+								$otherId = implode('_', array($day, $isPM, 1 - $which));
 								if (isset($timeEntryCache[$otherId])) {
 									$start = $which ? $timeEntryCache[$otherId] : $value;
 									$end = $which ? $value : $timeEntryCache[$otherId];

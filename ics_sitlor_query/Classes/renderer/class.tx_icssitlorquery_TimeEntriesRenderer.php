@@ -37,7 +37,7 @@
  */
 class tx_icssitlorquery_TimeEntriesRenderer {
 	public function renderTimeEntries($content, $conf) {
-		$this->conf = conf;
+		$this->conf = $conf;
 		$content = $this->renderRows();
 		if (isset($this->conf['body.']))
 			$content = $this->cObj->stdWrap($content, $this->conf['body.']);
@@ -61,15 +61,13 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 			$allEntries = array();
 			foreach ($entries as $entry) {
 				$entryDay = $entry->DayOfWeek;
-				$entryPM = $entry->isPM ? 1 : 0;
-				while (($currentPM == $entryPM) ||
-					(($currentPM < $entryPM) && ($currentDay < $entryDay)) ||
-					(($currentPM > $entryPM) && ($currentDay + 1 < $entryDay))) {
+				$entryPM = $entry->IsPM ? 1 : 0;
+				while (($currentDay * 2 + $currentPM + 1) < ($entryDay * 2 + $entryPM)) {
 					$this->renderRows_addEntry($allEntries, $currentDay, $currentPM);
 				}
 				$this->renderRows_addEntry($allEntries, $currentDay, $currentPM, $entry);
 			}
-			while ($currentDay < 8) {
+			while (($currentDay * 2 + $currentPM) < 15) {
 				$this->renderRows_addEntry($allEntries, $currentDay, $currentPM);
 			}
 		}
@@ -88,7 +86,7 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 				}
 				$currentDay = $entry->DayOfWeek;
 			}
-			$entryContent = $entry->toStringObjConf($this->cObj, $this->conf[$entry->isPM ? 'rowPM.' : 'rowAM']);
+			$entryContent = $entry->toStringObjConf($this->cObj, $this->conf[$entry->IsPM ? 'rowPM.' : 'rowAM.']);
 			$asRows ? ($rowContent .= $entryContent) : ($content .= $entryContent);
 		}
 		if ($asRows && $rowContent) {
@@ -98,15 +96,6 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 	}
 	
 	private function renderRows_addEntry(array &$entries, & $currentDay, & $currentPM, tx_icssitlorquery_TimeEntry $entry = null) {
-		if ($entry == null) {
-			if ($currentPM) {
-				$entry = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $currentDay + 1, 0, 0, false);
-			}
-			else {
-				$entry = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $currentDay, 0, 0, true);
-			}
-		}
-		$entries[] = $entry;
 		if ($currentPM) {
 			$currentDay++;
 			$currentPM = 0;
@@ -114,6 +103,10 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 		else {
 			$currentPM++;
 		}
+		if ($entry == null) {
+			$entry = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', $currentDay, 0, 0, $currentPM);
+		}
+		$entries[] = $entry;
 	}
 	
 	private function getSortedEntries() {
@@ -126,8 +119,8 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 		if ($te0->DayOfWeek != $te1->DayOfWeek) {
 			return $te0->DayOfWeek - $te1->DayOfWeek;
 		}
-		if ($te0->isPM) {
-			if ($te1->isPM) {
+		if ($te0->IsPM) {
+			if ($te1->IsPM) {
 				return 0;
 			}
 			else {
@@ -135,7 +128,7 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 			}
 		}
 		else {
-			if ($te1->isPM) {
+			if ($te1->IsPM) {
 				return -1;
 			}
 			else {

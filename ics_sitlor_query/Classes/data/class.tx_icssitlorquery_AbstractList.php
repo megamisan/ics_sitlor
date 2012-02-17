@@ -136,10 +136,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 */
 	public function __toString() {
 		$args = func_get_args();
-		if (!empty($args) && is_string($args[0])) {
-			return $this->toString($args[0]);
-		}
-		return $this->toString();
+		return (string)call_user_func_array(array($this, 'toString'), $args);
 	}
 
 	/**

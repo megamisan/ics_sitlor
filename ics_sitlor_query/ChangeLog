@@ -1,7 +1,10 @@
+2012-02-17 Pierrick Caillon <pierrick@in-cite.net>
+	* Fix: Mistakes in TimeEntriesRenderer and TimeTable default setup.
+
 2012-02-17 Tsi Yang <tsi@in-cite.net>
-	* Feature: "OT Nancy" code for select params to main section
-	* Feature: Template search
-	* Refactor: Possibility to select many subdataGroup
+	* Refactor: Moved "OTNancySubscriber" field in plugin flexform to main section. Removed noDate.
+	* Feature: Augmented Search template.
+	* Refactor: Enable user to select several subdatagroup in plugin configuration.
 
 2012-02-16 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: TimeEntry array rendering. Needed for TimeTable string representation configuration.

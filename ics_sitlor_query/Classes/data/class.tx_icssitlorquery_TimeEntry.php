@@ -155,6 +155,7 @@ class tx_icssitlorquery_TimeEntry implements tx_icssitquery_IToStringObjConf {
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
 	 * Data fields:
+	 * * empty: Boolean. Indicates if this TimeEntry has no defined times. 0 if defined, 1 if not defined.
 	 * * open: Opening time as a timestamp. The date part use an arbitrary date with the entry's day of week.
 	 * * close: Closing time as a timestamp. The date part use an arbitrary date with the entry's day of week.
 	 * * isPM: Boolean, 0 for AM, 1 for PM.
@@ -171,6 +172,7 @@ class tx_icssitlorquery_TimeEntry implements tx_icssitquery_IToStringObjConf {
 		$end = getdate($this->end);
 		$dayDiff = ($this->dayOfWeek % 7) - $today['wday'];
 		$data = array(
+			'empty' => (!$this->start || !$this->end) ? 1 : 0,
 			'open' => mktime($start['hours'], $start['minutes'], $start['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']),
 			'close' => mktime($end['hours'], $end['minutes'], $end['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']),
 			'isPM' => $this->isPM ? 1 : 0,

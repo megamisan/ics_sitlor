@@ -156,21 +156,22 @@ plugin.tx_icssitlorquery_pi1 {
 		}
 		TimeTable.cObject = TEXT
 		TimeTable.cObject {
-			#preUserFunc = tx_icssitlorquery_TimeEntriesRenderer->renderTimeEntries
+			preUserFunc = tx_icssitlorquery_TimeEntriesRenderer->renderTimeEntries
 			preUserFunc {
 				addMissingEntries = 1
-				head.wrap = <thead><tr><td></td>|</tr></thead>
-				headAM.override = Matin
-				headAM.wrap = <td colspan="2" id="morning">|</td>
-				headPM.override = Après-midi
-				headPM.wrap = <td colspan="2" id="afternoon">|</td>
+				head.wrap = <thead><tr><td class="hiddenCell"></td>|</tr></thead>
+				headAM = Matin
+				headAM.wrap = <th class="timeSpanHead" colspan="2" id="morning">|</th>
+				headPM = Après-midi
+				headPM.wrap = <th class="timeSpanHead" colspan="2" id="afternoon">|</th>
 				body.wrap = <tbody>|</tbody>
 				row.wrap = <tr>|</tr>
 				rowAM.cObject = COA
 				rowAM.cObject {
 					10 = TEXT
-					10.value = Matin
-					10.innerWrap = <th>|</th>
+					10.field = open
+					10.strftime = %A
+					10.innerWrap = <th class="timeDayHead">|</th>
 					10.addParams {
 						id =
 						id.field = open
@@ -178,9 +179,12 @@ plugin.tx_icssitlorquery_pi1 {
 						id.wrap = day|
 					}
 					20 = TEXT
-					20.field = open
-					20.strftime = %H:%M
-					20.innerWrap = <td>|</td>
+					20.override {
+						if.isFalse.field = empty
+						field = open
+						strftime = %R
+					}
+					20.innerWrap = <td class="timeCell">|</td>
 					20.addParams {
 						headers =
 						headers.cObject = COA
@@ -195,11 +199,12 @@ plugin.tx_icssitlorquery_pi1 {
 						}
 					}
 					30 < .20
-					30.field = close
-					30.addParams.headers.10.value = afternoon
+					30.override.field = close
 				}
 				rowPM < .rowAM
-				rowPM.10 >
+				rowPM.cObject.10 >
+				rowPM.cObject.20.addParams.headers.10.value = afternoon
+				rowPM.cObject.30.addParams.headers.10.value = afternoon
 			}
 			preCObject = COA
 			preCObject {
