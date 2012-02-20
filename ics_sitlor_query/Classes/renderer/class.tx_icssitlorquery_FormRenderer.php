@@ -204,6 +204,7 @@
 		$markers['RESTAURANT_CATEGORY_LABEL'] = $this->pi->pi_getLL('restaurantCategory', 'Restaurant category', true);
 		$categoryTemplate = $this->cObj->getSubpart($template, '###SUBPART_CATEGORY###');
 		$itemTemplate = $this->cObj->getSubpart($categoryTemplate, '###ITEM###');
+		$itemSubparts['###ITEM###'] = '';
 		foreach(self::$restaurantCategories as $cat) {
 			$itemContent = '';
 			if ($data = $this->getSelectData($cat[0], $cat[1])) {
@@ -221,6 +222,7 @@
 		$markers['CULINARY_SPECIALITY_LABEL'] = $this->pi->pi_getLL('culinarySpeciality', 'Culinary speciality', true);
 		$specialityTemplate = $this->cObj->getSubpart($template, '###SUBPART_SPECIALITY###');
 		$itemTemplate = $this->cObj->getSubpart($specialityTemplate, '###ITEM###');
+		$itemSubparts['###ITEM###'] = '';
 		foreach(self::$foreignFood as $food) {
 			$itemContent = '';
 			if ($data = $this->getSelectData($food[0], $food[1])) {
