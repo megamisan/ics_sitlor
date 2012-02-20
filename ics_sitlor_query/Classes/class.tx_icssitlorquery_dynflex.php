@@ -81,45 +81,97 @@ class tx_icssitlorquery_dynflex {
 	 * @return	string		Xml flexform
 	 */
 	function preProcess_pi1(array $flexData) {
-		
-		$ffds = $this->ffds['pi1'];
 		$llang_ffds = $this->llang_ffds['pi1'];
 		
 		$xmlFlexPart = '';
 		$flexArray = array();
-		switch ($flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF']) {
+		$dataGroup = $flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF'];
+		switch ($dataGroup) {
 			case 'ACCOMODATION':
-				$optionListArray = array(
+				$subDataGroup_options = array(
 					array('', ''),
 					array($llang_ffds . ':subDataGroup_hotel', 'HOTEL'),
-					array($llang_ffds . ':subDataGroup_campingAndYouthHostel', 'CAMPING_AND_YOUTHHOSTEL'),
+					array($llang_ffds . ':subDataGroup_camping_youthHostel', 'CAMPING_YOUTHHOSTEL'),
 					array($llang_ffds . ':subDataGroup_strange', 'STRANGE'),
-					array($llang_ffds . ':subDataGroup_hollidayCottageAndGuesthouse', 'HOLLIDAY_COTTAGE_AND_GUESTHOUSE'),
+					array($llang_ffds . ':subDataGroup_hollidayCottage_guesthouse', 'HOLLIDAY_COTTAGE_GUESTHOUSE'),
 				);
 				$flexArray['TCEforms'] = array(
 					'label' => $llang_ffds . ':subDataGroup',
 					'config' => array(
 						'type' => 'select',
-						'items' => $optionListArray,
-						'size' => '5',
+						'items' => $subDataGroup_options,
+						'size' => '1',
 						'minitems' => '0',
-						'maxitems' => '100',
+						'maxitems' => '1',
 					),
 				);
-				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroups');
+				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroup');
+				
+				$hotelType_options = array(
+					array('', ''),
+					array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
+					array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
+				);
+				$flexArray['TCEforms'] = array(
+					'label' => $llang_ffds . ':hotelType',
+					'config' => array(
+						'type' => 'select',
+						'items' => $hotelType_options,
+						'size' => '3',
+						'minitems' => '0',
+						'maxitems' => '2',
+					),
+				);
+				$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelTypes');
+				
+				$hotelEquipment_options = array(
+					array('', ''),
+					array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
+					array($llang_ffds . ':hotelEquipment_allowedPets', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS.':'.tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES),
+					array($llang_ffds . ':hotelEquipment_wifi', tx_icssitlorquery_CriterionUtils::COMFORT_ROOM.':'.tx_icssitlorquery_CriterionUtils::WIFI),
+				);
+				$flexArray['TCEforms'] = array(
+					'label' => $llang_ffds . ':hotelEquipment',
+					'config' => array(
+						'type' => 'select',
+						'items' => $hotelEquipment_options,
+						'size' => '4',
+						'minitems' => '0',
+						'maxitems' => '3',
+					),
+				);
+				$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelEquipments');
 				break;
 			case 'RESTAURANT':
+				$category_options = array(
+					array('', ''),
+					array($llang_ffds . ':restaurantCategory_fastfood', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD),
+					array($llang_ffds . ':restaurantCategory_icecream_theahouse', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE),
+					array($llang_ffds . ':restaurantCategory_creperie', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE),
+				);
+				$flexArray['TCEforms'] = array(
+					'label' => $llang_ffds . ':restaurantCategory',
+					'config' => array(
+						'type' => 'select',
+						'items' => $category_options,
+						'size' => '4',
+						'minitems' => '0',
+						'maxitems' => '3',
+					),
+				);
+				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'restaurantCategories');
 				break;
 			case 'EVENT':
 				break;
 			default:
-				$flexArray = array();
+				$xmlFlexPart = '';
 		}
-		$content =  str_replace(
+		
+		return  str_replace(
 			'<!-- ###SUBDATAGROUP### -->',
 			$xmlFlexPart,
-			file_get_contents(t3lib_div::getFileAbsFileName($ffds))
+			file_get_contents(t3lib_div::getFileAbsFileName($this->ffds['pi1']))
 		);
-		return $content;
 	}
+		
 }

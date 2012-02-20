@@ -19,6 +19,8 @@ plugin.tx_icssitlorquery_pi1 {
 		# Group of data: ACCOMODATION, RESTAURANT, EVENT
 		dataGroup = ACCOMODATION
 		# Category of accomodation (separated with coma): HOTEL, CAMPING, YOUTHHOSTEL, STRANGE, HOLLIDAY_COTTAGE, GUESTHOUSE
+		# HOLLIDAY_COTTAGE and GUESTHOUSE can match together
+		# HOTEL, CAMPING, YOUTHHOSTEL can match together
 		subDataGroups = 
 	}
 	

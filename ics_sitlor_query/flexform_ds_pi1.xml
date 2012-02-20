@@ -151,10 +151,18 @@
 							</config>
 						</TCEforms>
 					</OTNancy>
+					<entity_737>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:entity_737</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</entity_737>
 				</el>
 			</ROOT>
 		</paramSelect>
-		<!--<paramSorting>
+		<paramSorting>
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
@@ -180,8 +188,8 @@
 										<numIndex index="1">PRICE</numIndex>
 									</numIndex>
 									<numIndex index="4" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_rating</numIndex>
-										<numIndex index="1">RATING</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_hotelRating</numIndex>
+										<numIndex index="1">HOTELRATING</numIndex>
 									</numIndex>
 									<numIndex index="5" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_date</numIndex>
@@ -218,6 +226,6 @@
 					</sortOrder>
 				</el>
 			</ROOT>
-		</paramSorting>-->
+		</paramSorting>
 	</sheets>
 </T3DataStructure>

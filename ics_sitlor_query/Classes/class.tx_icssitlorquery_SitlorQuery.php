@@ -134,9 +134,11 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$filterArray = array_keys($this->filters);
 		$pnames = array();
 		$pvalues = array();
-		// $params['lentit'] = utf8_decode($this->entity);
-		// $pnames[] = 'lentidad';
-		// $pvalues[] = $this->entity;
+		if (in_array('entity', $filterArray)) {
+			$params['lentit'] = $this->filters['entity'];
+			$pnames[] = 'lentidad';
+			$pvalues[] = $this->filters['entity'];
+		}
 		if (in_array('idFilter', $filterArray)) {
 			$pnames[] = 'elproducto';
 			$pvalues[] = $this->filters['idFilter'];
@@ -242,18 +244,19 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			case 'endValid':
 			case 'reference':
 			case 'zip':
+			case 'entity':
 				$this->filters[$name] = $value;
 				break;
-			
+				
 			// Sorting parameters
 			case 'randomSorting':
 			case 'alphaSorting':
 			case 'titleSorting':
 			case 'ratingStarSorting':
-			case 'ratingEarsOfCornSorting':
+			// case 'ratingEarsOfCornSorting':
 			case 'minDualRoomSorting':
 			case 'currentWeeklyPriceSorting':
-			case 'labelChainSorting':
+			// case 'labelChainSorting':
 			case 'adultMenuSorting':
 			case 'dateSorting':
 				$this->sortings[$name] = $value;

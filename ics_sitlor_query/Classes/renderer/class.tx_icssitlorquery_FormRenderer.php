@@ -40,6 +40,7 @@
 		array('TYPE', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
 	);
 	private static $restaurantCategories = array(
+		array('TERM', array(tx_icssitlorquery_CriterionUtils::RCATEGORIE, tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD)),
 		array('TERM', array(tx_icssitlorquery_CriterionUtils::RCATEGORIE, tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE)),
 		array('TERM', array(tx_icssitlorquery_CriterionUtils::RCATEGORIE, tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE)),
 	);

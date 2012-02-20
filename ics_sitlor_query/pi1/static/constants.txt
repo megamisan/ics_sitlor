@@ -9,7 +9,7 @@ plugin.tx_icssitlorquery {
 	nomenclatureUrl = http://www.sitlor.fr/XML/exploitation/listenomenc.asp
 	# cat=plugin.tx_icssitlorquery/links/3; type=string; label= Criterion URL : SITLOR criterion url
 	criterionUrl = http://www.sitlor.fr/XML/exploitation/listecrit.asp
-	# cat=plugin.tx_icssitlorquery/other/3; type=string; label= OT Nancy subscriber code
+	# cat=plugin.tx_icssitlorquery/other/3; type=string; label= OT Nancy subscriber code/value
 	OTNancy = 
 	
 	# cat=plugin.tx_icssitlorquery/file/1; type=string; label= Template : Template file
