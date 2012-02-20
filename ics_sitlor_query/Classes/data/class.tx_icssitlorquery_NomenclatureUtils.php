@@ -49,11 +49,10 @@ class tx_icssitlorquery_NomenclatureUtils {
 	const CATEGORIZED_CAMPSITE = 4000004;	// Type "Terrain de Camping classé"
 	const FARM_CAMPING = 4000006;	// Type "Camping à la ferme"
 	const YOUTH_HOSTEL = 4000071;	// Type "Auberge de Jeunesse"
-	static $campingAndYouthHostel = array(
+	static $camping = array(
 		self::HOLLIDAY_CAMPSITE,
 		self::CATEGORIZED_CAMPSITE,
 		self::FARM_CAMPING,
-		self::YOUTH_HOSTEL,
 	);
 	const GUESTHOUSE = 4000001;	// Category "Chambres d'hôtes"
 	const HOLLIDAY_COTTAGE = 4000005; // Category "Meublé "

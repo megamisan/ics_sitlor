@@ -1,5 +1,9 @@
 2012-02-17 Tsi Yang <tsi@in-cite.net>
 	* Fix : Forgotten var init in Restaurant search form.
+	* Feature: Added term "yes" for strange accomodation criterion in CriterionUtils
+	* Feature: Deleted array "campingAndYouthHostel" and added array "camping" in NomenclatureUtils.
+	* Bug Fix: Forgotten implode terms array to makeCriterionFilter in SitlorQuery.
+
 
 2012-02-17 Pierrick Caillon <pierrick@in-cite.net>
 	* Fix: Mistakes in TimeEntriesRenderer and TimeTable default setup.

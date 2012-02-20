@@ -149,6 +149,7 @@ class tx_icssitlorquery_CriterionUtils {
 	const HOTEL_EQUIPMENT = 736000019;
 	const HOTEL_SERVICE = 736000020;
 	const STRANGE_ACCOMODATION = 4000099;
+	const STRANGE_ACCOMODATION_YES = 4000396;
 
 	/*******************************************************
 	 *

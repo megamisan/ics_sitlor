@@ -111,7 +111,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$params['rto'] = utf8_decode($this->end);
 		$params['latable'] = utf8_decode(self::$tableList[$this->table]);
 		$params['lxml'] = utf8_decode(self::$xmlBodyList[$this->table]);
-		switch ($GLOBALS['TSFE']->config['language']) {
+		switch ($GLOBALS['TSFE']->config['config']['language']) {
 			case 'fr':
 				$this->scheme = 'LEI';
 				break;
@@ -146,11 +146,11 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$pnames[] = 'libtext=' . $this->filters['keyword'];
 			}
 		
-			if (in_array('gender', $filterArray) && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
+			if (in_array('gender', $filterArray)) { // && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
 				$pnames[] = 'elgendro';
 				$pvalues[] = $this->filters['gender'];
 			}
-			if (in_array('category', $filterArray) && (!in_array('type', $filterArray))) {
+			if (in_array('category', $filterArray)) { // && (!in_array('type', $filterArray))) {
 				$this->makeCategoryFilter($pnames, $pvalues);
 			}
 			if (in_array('type', $filterArray)) {
@@ -389,7 +389,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$pvalues[] = $criterionTerms[0];
 			if (is_array($criterionTerms[1]) && !empty($criterionTerms[1])) {
 				$pnames[] = 'modalidad' . $key;
-				$pvalues[] = $criterionTerms[1];
+				$pvalues[] = implode('|', $criterionTerms[1]);
 			}
 		}
 		
