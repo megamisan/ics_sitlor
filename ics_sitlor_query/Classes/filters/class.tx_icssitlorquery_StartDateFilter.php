@@ -40,10 +40,9 @@ class tx_icssitlorquery_StartDateFilter implements tx_icssitquery_IFilter {
 	 * @param	int timestamp $value : The start date
 	 */
 	public function __construct($value) {
-		if (is_int($value))
-			$this->value = $value;
-		else
-			tx_icssitquery_Debug::warning('Start date ' . $value . ' is not a timestamp.');
+		if (!is_int($value))
+			throw new Exception('Start date ' . $value . ' is not a timestamp.');
+		$this->value = $value;
 	}
 
 	/**

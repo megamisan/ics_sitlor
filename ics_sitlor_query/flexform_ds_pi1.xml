@@ -143,6 +143,22 @@
 						</TCEforms>
 					</dataGroup>
 					<!-- ###PARAMSELECT_SPECIFIC### -->
+					<OTNancy>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:OTNancyFilter</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</OTNancy>
+					<!--<entity_737>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:entity_737</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</entity_737>-->
 				</el>
 			</ROOT>
 		</paramSelect>

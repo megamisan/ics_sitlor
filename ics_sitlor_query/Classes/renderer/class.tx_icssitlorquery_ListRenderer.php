@@ -112,7 +112,7 @@
 			return '';
 
 		$locMarkers = array(
-			'ILLUSTRATION' => $element->Illustration,
+			'ILLUSTRATION' => $element->Illustration, //->Get(0),
 		);
 		$markers = array_merge($markers, $locMarkers);
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_GENERIC###');
@@ -132,31 +132,43 @@
 		$locMarkers = array();
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_ACCOMODATION###');
+			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
+			$valudeTerm = $element->CurrentSingleClientsRate->Get(0);
+			if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE_DOUBLEROOM_MIN)
+				$price = $this->pi->renderPrice($valudeTerm);
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $element->Name,
 				'DESCRIPTION' => $element->Description,
-				'PRICE' => $element->CurrentSingleClientsRate,
+				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
+				'PRICE' => $price,
 				'RATINGSTAR' => $element->RatingStar,
 			);
 		}
 		if ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_RESTAURANT###');
+			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
+			for ($i=0; $i<$element->CurrentMenuPrice->Count(); $i++) {
+				$valudeTerm = $element->CurrentMenuPrice->Get($i);
+				if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE_ADULT)
+					$price = $this->pi->renderPrice($valudeTerm);
+			}
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $element->Name,
 				'DESCRIPTION' => $element->Description,
-				'PRICE' => $element->CurrentMenuPrice,
+				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
+				'PRICE' => $price,
 				'LABELCHAIN' => $element->LabelChain,
 			);
 		}
 		if ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
-				'TYPE' => $element->Type,
+				'TYPE' => $element->TypeEvent,
 				'TITLE' => $element->Name,
 				'DESCRIPTION' => $element->Description,
-				'DATE' => $element->TimeTable,
+				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderDate($element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
 			);
 		}
 		$markers = array_merge($markers, $locMarkers);

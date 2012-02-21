@@ -416,21 +416,21 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if (isset($params['leshoraires'])) {
 			$pnames[] = 'horariodu';
 			if ($this->filters['startDate']) {
-				$startDate = date('d/m/Y h:i:s', $this->filters['startDate']);
+				$startDate = date('d/m/Y H:i:s', $this->filters['startDate']);
 			} else {
-				$startDate = date('d/m/Y h:i:s');
+				$startDate = date('d/m/Y H:i:s');
 			}
-			$pvalues[] = $startDate;
+			$pvalues[] = utf8_decode($startDate);
 			$pnames[] = 'horarioau';
 			if ($this->filters['endDate']) {
-				$endDate = date('d/m/Y h:i:s', $this->filters['endDate']);
+				$endDate = date('d/m/Y H:i:s', $this->filters['endDate']);
 			} else {
 				$endDate = self::$endDate;
 			}
-			$pvalues[] = $endDate;
+			$pvalues[] = utf8_decode($endDate);
 		}
 		if (in_array('noDate', $filterArray) && $this->filters['noDate']) {
-			$params['tshor'] = utf8_decode('Y');
+			$params['tshor'] = 'Y';
 		}
 	}
 

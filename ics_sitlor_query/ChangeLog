@@ -3,6 +3,10 @@
 	* Feature: Added restaurant speciality in flexform
 	* Feature: Deleted entity "737 - OT Nancy" and criterion "Adhérent Nancy" in flexform
 	* Feature: Added dates, period and noFee in flexform
+	* Feature: Added CriterionUtils terms codes for price
+	* Feature: Added price label in template
+	* Bug Fix: EndDateFilter crash error.
+	* Feature: Added kind event and complete event render
 
 2012-02-17 Tsi Yang <tsi@in-cite.net>
 	* Fix : Forgotten var init in Restaurant search form.

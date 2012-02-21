@@ -228,18 +228,17 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		$this->conf['view.']['subDataGroups'] = $subDataGroups? $subDataGroups: $this->conf['view.']['subDataGroups'];
 
-		// if (isset($this->piVars['select']['OTNancy']))
-			// $filterOTNancy = $this->piVars['select']['OTNancy'];
-		// $filterOTNancy = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancy', 'paramSelect');
+		if (isset($this->piVars['select']['OTNancy']))
+			$filterOTNancy = $this->piVars['select']['OTNancy'];
+		$filterOTNancy = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancy', 'paramSelect');
 		$this->conf['filter.']['OTNancy'] = $filterOTNancy? $filterOTNancy : $this->conf['filter.']['OTNancy'];
 		
+		// Never filter on entity (not sure)
 		// if (isset($this->piVars['select']['entity_737']))
 			// $filterEntity737 = $this->piVars['select']['entity_737'];
 		// $filterEntity737 = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'entity_737', 'paramSelect');
 		// $this->conf['filter.']['entity_737'] = $filterEntity737? $filterEntity737 : $this->conf['filter.']['entity_737'];
 		
-		if (!$this->conf['filter.']['startDate'])
-			$this->conf['filter.']['startDate'] = self::$default_startDate;
 		
 			// Select params Hotel
 		$hotelTypes =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hotelTypes', 'paramSelect');
@@ -250,7 +249,30 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			// Select params Restaurant
 		$restaurantCategories =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restaurantCategories', 'paramSelect');
 		$this->conf['filter.']['restaurantCategories'] = $restaurantCategories? $restaurantCategories : $this->conf['filter.']['restaurantCategories'];
+		$foreignFood =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'foreignFoods', 'paramSelect');
+		$this->conf['filter.']['foreignFoods'] = $foreignFood? $foreignFood : $this->conf['filter.']['foreignFoods'];
 
+			// Select params Event
+		$period =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'period', 'paramSelect');
+		if ($period) {
+			$this->conf['filter.']['startDate'] = date('d/m/Y');
+			$this->conf['filter.']['endDate'] = date('d/m/Y', strtotime('+8 days'));
+		} else {
+			$startDate =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'startDate', 'paramSelect');
+			$this->conf['filter.']['startDate'] = $startDate? date('d/m/Y', $startDate) : $this->conf['filter.']['startDate'];
+			$endDate =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'endDate', 'paramSelect');
+			$this->conf['filter.']['endDate'] = $endDate? date('d/m/Y', $endDate) : $this->conf['filter.']['endDate'];
+		}
+		
+		$noFeeEvent =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'noFeeEvent', 'paramSelect');
+		if ($noFeeEvent) {
+			$this->conf['filter.']['noFeeEvent'] = tx_icssitlorquery_CriterionUtils::CURRENT_FREE.':'.tx_icssitlorquery_CriterionUtils::CURRENT_FREE_YES;
+		}
+		
+			
+		if (!$this->conf['filter.']['startDate'])
+			$this->conf['filter.']['startDate'] = self::$default_startDate;
+			
 		// Get param sorting
 		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'paramSorting');
 		$this->conf['sortName'] = $sortName? $sortName: $this->conf['sortName'];
@@ -313,8 +335,34 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		return $this->cObj->stdWrap(implode($this->conf['renderConf.']['phones.']['separator'], $phones), $this->conf['renderConf.']['phones.']);
 	}
 	
+	/**
+	 * Render fax
+	 *
+	 * @param	string		$fax : Fax
+	 * @return	string		The phones content
+	 */
 	function renderFax($fax) {
 		return $this->cObj->stdWrap($fax, $this->conf['renderConf.']['fax.']);
+	}
+	
+	/**
+	 * Render price
+	 *
+	 * @param	string		$price :Price
+	 * @return	string		The price content
+	 */
+	function renderPrice($price) {
+		return $this->cObj->stdWrap($price, $this->conf['renderConf.']['price.']);
+	}
+	
+	/**
+	 * Render date
+	 *
+	 * @param	tx_icssitlorquery_TimeTable		$timeTable : TimeTable
+	 * @return	string		The timeTable content
+	 */
+	function renderDate(tx_icssitlorquery_TimeTable $timeTable) {
+		return $timeTable->toStringConf($this->conf['renderConf.']['date.']);
 	}
 	
 	/**
@@ -392,6 +440,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$startDate = mktime(0,0,0,$month,$day,$year);
 		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
 		$this->queryService->addFilter($StartDateFilter);
+		if ($this->conf['filter.']['endDate']) {
+			list($day, $month, $year) = explode('/', $this->conf['filter.']['endDate']);
+			$endDate = mktime(23,59,59,$month,$day,$year);
+			$EndDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_EndDateFilter', $endDate);
+			$this->queryService->addFilter($EndDateFilter);
+		}
 		// Always retrieves elements without date
 		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
 		$this->queryService->addFilter($noDateFilter);
@@ -483,6 +537,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 						$this->addCriterionFilter($criterionID, $termIDs);
 					}
 				}
+				if ($this->conf['filter.']['foreignFoods']) {
+					$criterionTerms = $this->process_criterionTermArray(t3lib_div::trimExplode(',', $this->conf['filter.']['foreignFoods'], true));
+					foreach ($criterionTerms as $criterionID=>$termIDs) {
+						$this->addCriterionFilter($criterionID, $termIDs);
+					}
+				}
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_RestaurantSortingProvider');
 				$elements = $this->queryService->getRestaurants($sorting);
 				break;
@@ -491,6 +551,10 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				$filter = t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::EVENT);
 				$this->queryService->addFilter($filter);
 				$this->addCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT);
+				if ($this->conf['filter.']['noFeeEvent']) {
+					list($crit, $term) = t3lib_div::trimExplode(':', $this->conf['filter.']['noFeeEvent']);
+					$this->addCriterionFilter($crit, $term);
+				}
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider');
 				$elements = $this->queryService->getEvents($sorting);
 				break;

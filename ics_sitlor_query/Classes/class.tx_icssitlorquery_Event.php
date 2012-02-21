@@ -40,6 +40,8 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		'city' => '',
 	);
 
+	private $typeEvent = null;
+	
 	/** 
 	 * Constructor
 	 */
@@ -57,6 +59,8 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'TypeEvent':
+				return $this->typeEvent;
 			default : 
 				return parent::__get($name);
 		}
@@ -73,6 +77,8 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
+			case 'TypeEvent':
+				$this->typeEvent = $value;
 			default : 
 				parent::__set($name, $value);
 		}		
@@ -215,6 +221,9 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				'illustration'
 			);
 		}
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::TYPE_EVENT) {
+			$this->TypeEvent = $valuedTerm;
+		}
 	}
 	
 	/**
@@ -264,6 +273,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
+			tx_icssitlorquery_CriterionUtils::TYPE_EVENT,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

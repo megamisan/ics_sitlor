@@ -26,7 +26,7 @@ plugin.tx_icssitlorquery_pi1 {
 	
 	# Select
 	filter {
-		OTNancy = 1
+		OTNancy = 
 		startDate = 01/01/2000
 	}
 	
@@ -122,7 +122,6 @@ plugin.tx_icssitlorquery_pi1 {
 			}
 		}
 		Picture {
-			field = url
 			cObject = TEXT
 			cObject.value = <img />
 			addParams {
@@ -242,6 +241,22 @@ plugin.tx_icssitlorquery_pi1 {
 			separator = <span class="phone_separator"> - </span>
 		}
 		fax.noTrimWrap = |Fax&nbsp;: ||
+		price.wrap = | eur
+		date.cObject = COA
+		date.cObject {
+			10 = TEXT
+			10 {
+				field = start
+				stdWrap.strftime = %d/%m/%Y
+				noTrimWrap = |Du ||
+			}
+			20 = TEXT
+			20 {
+				field = end
+				stdWrap.strftime = %d/%m/%Y
+				noTrimWrap = | au ||
+			}
+		}
 	}
 	
 }

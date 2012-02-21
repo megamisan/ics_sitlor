@@ -137,9 +137,13 @@ class tx_icssitlorquery_CriterionUtils {
 	 *
 	 *******************************************************/
 	const CURRENT_SINGLE_CLIENTS_RATE = 4000010;
+	const CURRENT_SINGLE_CLIENTS_RATE_DOUBLEROOM_MIN = 4000048;
 	const CURRENT_SALE_FORMULA = 4000016;
 	const CURRENT_CARTE_PRICE = 4000017;
 	const CURRENT_MENU_PRICE = 4000018;
+	const CURRENT_MENU_PRICE_CHILD = 4000089;
+	const CURRENT_MENU_PRICE_ADULT = 4000090;
+	const CURRENT_MENU_PRICE_GROUP = 4000091;
 
 	/*******************************************************
 	 *

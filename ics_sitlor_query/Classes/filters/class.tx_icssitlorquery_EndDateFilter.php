@@ -29,21 +29,20 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_EndDateFilter implements tx_icssitquery_IFilter {
 	private $value=0;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	int timestamp $value : The end date
+	 * @param	int timestamp $value : The start date
 	 */
 	public function __construct($value) {
-		if (is_int($value))
-			$this->value = $value;
-		else
-			tx_icssitquery_Debug::warning('End date ' . $value . ' is not a timestamp.');
+		if (!is_int($value))
+			throw new Exception('End date ' . $value . ' is not a timestamp.');
+		$this->value = $value;
 	}
+
 	/**
 	 * Apply filter
 	 *
@@ -51,7 +50,8 @@ class tx_icssitlorquery_EndDateFilter implements tx_icssitquery_IFilter {
 	 *
 	 * @return void
 	 */
-	function apply($query) {
+	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('endDate', $this->value);
 	}
 }
+
