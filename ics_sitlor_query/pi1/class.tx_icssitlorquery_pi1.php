@@ -228,15 +228,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		$this->conf['view.']['subDataGroups'] = $subDataGroups? $subDataGroups: $this->conf['view.']['subDataGroups'];
 
-		if (isset($this->piVars['select']['OTNancy']))
-			$filterOTNancy = $this->piVars['select']['OTNancy'];
-		$filterOTNancy = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancy', 'paramSelect');
+		// if (isset($this->piVars['select']['OTNancy']))
+			// $filterOTNancy = $this->piVars['select']['OTNancy'];
+		// $filterOTNancy = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancy', 'paramSelect');
 		$this->conf['filter.']['OTNancy'] = $filterOTNancy? $filterOTNancy : $this->conf['filter.']['OTNancy'];
 		
-		if (isset($this->piVars['select']['entity_737']))
-			$filterEntity737 = $this->piVars['select']['entity_737'];
-		$filterEntity737 = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'entity_737', 'paramSelect');
-		$this->conf['filter.']['entity_737'] = $filterEntity737? $filterEntity737 : $this->conf['filter.']['entity_737'];
+		// if (isset($this->piVars['select']['entity_737']))
+			// $filterEntity737 = $this->piVars['select']['entity_737'];
+		// $filterEntity737 = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'entity_737', 'paramSelect');
+		// $this->conf['filter.']['entity_737'] = $filterEntity737? $filterEntity737 : $this->conf['filter.']['entity_737'];
 		
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = self::$default_startDate;

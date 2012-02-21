@@ -81,97 +81,198 @@ class tx_icssitlorquery_dynflex {
 	 * @return	string		Xml flexform
 	 */
 	function preProcess_pi1(array $flexData) {
-		$llang_ffds = $this->llang_ffds['pi1'];
-		
 		$xmlFlexPart = '';
-		$flexArray = array();
 		$dataGroup = $flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF'];
 		switch ($dataGroup) {
 			case 'ACCOMODATION':
-				$subDataGroup_options = array(
-					array('', ''),
-					array($llang_ffds . ':subDataGroup_hotel', 'HOTEL'),
-					array($llang_ffds . ':subDataGroup_camping_youthHostel', 'CAMPING_YOUTHHOSTEL'),
-					array($llang_ffds . ':subDataGroup_strange', 'STRANGE'),
-					array($llang_ffds . ':subDataGroup_hollidayCottage_guesthouse', 'HOLLIDAY_COTTAGE_GUESTHOUSE'),
-				);
-				$flexArray['TCEforms'] = array(
-					'label' => $llang_ffds . ':subDataGroup',
-					'config' => array(
-						'type' => 'select',
-						'items' => $subDataGroup_options,
-						'size' => '1',
-						'minitems' => '0',
-						'maxitems' => '1',
-					),
-				);
-				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroup');
-				
-				$hotelType_options = array(
-					array('', ''),
-					array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
-					array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
-				);
-				$flexArray['TCEforms'] = array(
-					'label' => $llang_ffds . ':hotelType',
-					'config' => array(
-						'type' => 'select',
-						'items' => $hotelType_options,
-						'size' => '3',
-						'minitems' => '0',
-						'maxitems' => '2',
-					),
-				);
-				$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelTypes');
-				
-				$hotelEquipment_options = array(
-					array('', ''),
-					array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
-					array($llang_ffds . ':hotelEquipment_allowedPets', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS.':'.tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES),
-					array($llang_ffds . ':hotelEquipment_wifi', tx_icssitlorquery_CriterionUtils::COMFORT_ROOM.':'.tx_icssitlorquery_CriterionUtils::WIFI),
-				);
-				$flexArray['TCEforms'] = array(
-					'label' => $llang_ffds . ':hotelEquipment',
-					'config' => array(
-						'type' => 'select',
-						'items' => $hotelEquipment_options,
-						'size' => '4',
-						'minitems' => '0',
-						'maxitems' => '3',
-					),
-				);
-				$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelEquipments');
+				$xmlFlexPart = $this->flexPart_Accomodation();
 				break;
 			case 'RESTAURANT':
-				$category_options = array(
-					array('', ''),
-					array($llang_ffds . ':restaurantCategory_fastfood', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD),
-					array($llang_ffds . ':restaurantCategory_icecream_theahouse', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE),
-					array($llang_ffds . ':restaurantCategory_creperie', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE),
-				);
-				$flexArray['TCEforms'] = array(
-					'label' => $llang_ffds . ':restaurantCategory',
-					'config' => array(
-						'type' => 'select',
-						'items' => $category_options,
-						'size' => '4',
-						'minitems' => '0',
-						'maxitems' => '3',
-					),
-				);
-				$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'restaurantCategories');
+				$xmlFlexPart = $this->flexPart_Restaurant();
 				break;
 			case 'EVENT':
+				$xmlFlexPart = $this->flexPart_Event();
 				break;
 			default:
 				$xmlFlexPart = '';
 		}
 		
 		return  str_replace(
-			'<!-- ###SUBDATAGROUP### -->',
+			'<!-- ###PARAMSELECT_SPECIFIC### -->',
 			$xmlFlexPart,
 			file_get_contents(t3lib_div::getFileAbsFileName($this->ffds['pi1']))
 		);
 	}
+	
+	/**
+	 * Retrieves Accomodation flex part
+	 *
+	 * @return	string		XML flex part content
+	 */
+	private function flexPart_Accomodation() {
+		$llang_ffds = $this->llang_ffds['pi1'];
+		$xmlFlexPart = '';
+		$flexArray = array();
 		
+		// Subdata group
+		$subDataGroup_options = array(
+			array('', ''),
+			array($llang_ffds . ':subDataGroup_hotel', 'HOTEL'),
+			array($llang_ffds . ':subDataGroup_camping_youthHostel', 'CAMPING_YOUTHHOSTEL'),
+			array($llang_ffds . ':subDataGroup_strange', 'STRANGE'),
+			array($llang_ffds . ':subDataGroup_hollidayCottage_guesthouse', 'HOLLIDAY_COTTAGE_GUESTHOUSE'),
+		);
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':subDataGroup',
+			'config' => array(
+				'type' => 'select',
+				'items' => $subDataGroup_options,
+				'size' => '1',
+				'minitems' => '0',
+				'maxitems' => '1',
+			),
+		);
+		$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroup');
+		
+		// Hotel types
+		$hotelType_options = array(
+			array('', ''),
+			array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
+			array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
+		);
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':hotelType',
+			'config' => array(
+				'type' => 'select',
+				'items' => $hotelType_options,
+				'size' => '3',
+				'minitems' => '0',
+				'maxitems' => '2',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelTypes');
+		
+		// Hotel equipments
+		$hotelEquipment_options = array(
+			array('', ''),
+			array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
+			array($llang_ffds . ':hotelEquipment_allowedPets', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS.':'.tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES),
+			array($llang_ffds . ':hotelEquipment_wifi', tx_icssitlorquery_CriterionUtils::COMFORT_ROOM.':'.tx_icssitlorquery_CriterionUtils::WIFI),
+		);
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':hotelEquipment',
+			'config' => array(
+				'type' => 'select',
+				'items' => $hotelEquipment_options,
+				'size' => '4',
+				'minitems' => '0',
+				'maxitems' => '3',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelEquipments');
+		
+		return $xmlFlexPart;
+	}
+	
+	/**
+	 * Retrieves Restaurant flex part
+	 *
+	 * @return	string		XML flex part content
+	 */
+	private function flexPart_Restaurant() {
+		$llang_ffds = $this->llang_ffds['pi1'];
+		$xmlFlexPart = '';
+		$flexArray = array();
+		
+		// Restaurant categories
+		$category_options = array(
+			array('', ''),
+			array($llang_ffds . ':restaurantCategory_fastfood', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD),
+			array($llang_ffds . ':restaurantCategory_icecream_theahouse', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE),
+			array($llang_ffds . ':restaurantCategory_creperie', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE),
+		);
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':restaurantCategory',
+			'config' => array(
+				'type' => 'select',
+				'items' => $category_options,
+				'size' => '4',
+				'minitems' => '0',
+				'maxitems' => '3',
+			),
+		);
+		$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'restaurantCategories');
+		
+		// Restaurant spéciality
+		$foreignFood_options = array(
+			array('', ''),
+			array($llang_ffds . ':foreignFood_asian', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN),
+			array($llang_ffds . ':foreignFood_sa', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_SA),
+			array($llang_ffds . ':foreignFood_oriental', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ORIENTAL),
+		);
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':foreignFood',
+			'config' => array(
+				'type' => 'select',
+				'items' => $foreignFood_options,
+				'size' => '4',
+				'minitems' => '0',
+				'maxitems' => '3',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'foreignFoods');
+		
+		return $xmlFlexPart;
+	}
+	
+	/**
+	 * Retrieves Event flex part
+	 *
+	 * @return	string		XML flex part content
+	 */
+	private function flexPart_Event() {
+		$llang_ffds = $this->llang_ffds['pi1'];
+		$xmlFlexPart = '';
+		$flexArray = array();
+	
+		// Dates
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':startDate',
+			'config' => array(
+				'type' => 'input',
+				'size' => '10',
+				'eval' => 'date',
+			),
+		);
+		$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'startDate');
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':endDate',
+			'config' => array(
+				'type' => 'input',
+				'size' => '10',
+				'eval' => 'date',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'endDate');
+		
+		// Period
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':period',
+			'config' => array(
+				'type' => 'check',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'period');
+		
+		// No fee
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':noFeeEvent',
+			'config' => array(
+				'type' => 'check',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'noFeeEvent');
+		
+		return $xmlFlexPart;
+	}
 }

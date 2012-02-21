@@ -1,3 +1,9 @@
+2012-02-18 Tsi Yang <tsi@in-cite.net>
+	* Feature: Renamed flexform marker to appropriate name
+	* Feature: Added restaurant speciality in flexform
+	* Feature: Deleted entity "737 - OT Nancy" and criterion "Adhérent Nancy" in flexform
+	* Feature: Added dates, period and noFee in flexform
+
 2012-02-17 Tsi Yang <tsi@in-cite.net>
 	* Fix : Forgotten var init in Restaurant search form.
 	* Feature: Added term "yes" for strange accomodation criterion in CriterionUtils
