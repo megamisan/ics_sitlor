@@ -37,6 +37,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	private $page;		// The page
 	private $pageSize;	// The page size
 	private $filters = array();	// Array of IFilters
+	private $totalSize;		// Elements size
 
 	/**
 	 * Initializes service access.
@@ -89,6 +90,16 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		$this->filters[] = $filter;
 	}
 
+	
+	/**
+	 * Retrieves size
+	 *
+	 * @return	size
+	 */
+	public function getSize() {
+		return $this->totalSize;
+	}
+	
 	/**
 	 * Retrieves the last query.
 	 *
@@ -131,6 +142,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
 			return false;
 		}
+		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
 		$reader->read();
 		$accomodations = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
@@ -187,6 +199,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
 			return false;
 		}
+		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
 		$reader->read();
 		$restaurants = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
@@ -246,6 +259,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
 			return false;
 		}
+		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
 		$reader->read();
 		$events = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
