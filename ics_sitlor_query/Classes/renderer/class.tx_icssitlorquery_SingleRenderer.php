@@ -126,7 +126,8 @@ class tx_icssitlorquery_SingleRenderer {
 		}
 		if ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_RESTAURANT###');
-			$locMarkers = $this->getMarkers_Restaurant($element);
+			$this->renderRestaurant($element, $locMarkers, $subparts);
+			$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		}
 		if ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_EVENT###');
@@ -137,10 +138,11 @@ class tx_icssitlorquery_SingleRenderer {
 	}
 
 	/**
-	 * Retrieves Accomodation markers
+	 * Render Accomodation
 	 *
 	 * @param	tx_icssitlorquery_Accomodation	$element: Accomodation
-	 * @return	mixed	Markers array
+	 * @param	&array		$markers: The marker array
+	 * @param	&array		$subparts: The subpart array
 	 */
 	private function renderAccomodation($element, array &$markers, array &$subparts) {
 		$locMarkers = array(
@@ -194,9 +196,9 @@ class tx_icssitlorquery_SingleRenderer {
 		
 		$markers = array_merge($markers, $locMarkers);
 		
-		if ($element->ReceptionLanguage->Count()<0)
+		if ($element->ReceptionLanguage->Count()<=0)
 			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
-		if ($element->ReservationLanguage->Count()<0)
+		if ($element->ReservationLanguage->Count()<=0)
 			$subparts['###SUBPART_RESERVATION_LANGUAGE###'] = '';
 		if (!$element->MobilityImpaired)
 			$subparts['###SUBPART_MOBILITY_IMPAIRED###'] = '';
@@ -206,29 +208,29 @@ class tx_icssitlorquery_SingleRenderer {
 			$subparts['###SUBPART_ALLOWED_PETS###'] = '';
 		if (!$element->AllowedGroup)
 			$subparts['###SUBPART_ALLOWED_GROUP###'] = '';
-		if ($element->ReceptionGroup->Count()<0)
+		if ($element->ReceptionGroup->Count()<=0)
 			$subparts['###SUBPART_RECEPTION_GROUP###'] = '';
 		if (!$element->MotorCoachPark)
 			$subparts['###SUBPART_MOTORCOACH_PARK###'] = '';
 		if (!$element->Opening24_24)
 			$subparts['###SUBPART_OPENING24_24###'] = '';
-				
 	}
 
 	/**
-	 * Retrieves Restaurant markers
+	 * Render Restaurant
 	 *
 	 * @param	tx_icssitlorquery_Restaurantn	$element: Restaurant
-	 * @return	mixed	Markers array
+	 * @param	&array		$markers: The marker array
+	 * @param	&array		$subparts: The subpart array
 	 */	
-	private function getMarkers_Restaurant($element) {
-		return array(
+	private function renderRestaurant($element, array &$markers, array &$subparts) {
+		$locMarkers = array(
 				// Provider
 			'PROVIDER_LABEL' => $this->pi->pi_getLL('provider', 'Provider', true),
 			'PROVIDER_NAME' => $element->ProviderName,
 			'PROVIDER_ADDRESS' => $element->ProviderAddress,
-			'PROVIDER_PHONE' => $element->ProviderPhones,
-			'PROVIDER_FAX' => $element->ProviderFax,
+			'PROVIDER_PHONE' => $this->pi->renderPhones($element->ProviderPhones),
+			'PROVIDER_FAX' => $this->pi->renderFax($element->ProviderFax),
 			'PROVIDER_MAIL' => $element->ProviderEmail,
 			'PROVIDER_WEBSITE' => $element->ProviderWebSite,
 				// Class
@@ -236,23 +238,60 @@ class tx_icssitlorquery_SingleRenderer {
 			'RESTAURANT_CLASS' => $element->Class,
 				// Reception
 			'RECEPTION_LABEL' => $this->pi->pi_getLL('reception', 'Reception', true),
+			'RECEPTION_LANGUAGE_LABEL' => $this->pi->pi_getLL('reception_language', 'Reception language', true),
 			'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
+			'MENU_LANGUAGE_LABEL' => $this->pi->pi_getLL('menu_language', 'Menu language', true),
 			'MENU_LANGUAGE' => $element->MenuLanguage,
+			'PETS_LABEL' => $this->pi->pi_getLL('pets', 'Pets', true),
 			'PETS' => $element->Pets,
+			'ALLOWED_PETS_LABEL' => $this->pi->pi_getLL('allowed_pets', 'Allowed pets', true),
 			'ALLOWED_PETS' => $element->AllowedPets,
+			'ALLOWED_GROUP_LABEL' => $this->pi->pi_getLL('allowed_group', 'Allowed group', true),
 			'ALLOWED_GROUP' => $element->AllowedGroup,
+			'ALLOWED_GROUP_NUMBER_LABEL' => $this->pi->pi_getLL('allowed_group_number', 'Allowed group number', true),
 			'ALLOWED_GROUP_NUMBER' => $element->AllowedGroupNumber,
+			'MOTORCOACH_PARK_LABEL' => $this->pi->pi_getLL('motorcoach_park', 'Motorcoach park', true),
 			'MOTORCOACH_PARK' => $element->MotorCoachPark,
+			'SERVICE_OPEN_LABEL' => $this->pi->pi_getLL('service_open', 'Service open', true),
 			'SERVICE_OPEN' => $element->ServiceOpen,
 				// Capacity
 			'CAPACITY_LABEL' => $this->pi->pi_getLL('capacity', 'Capacity', true),
 			'CAPACITY' => $element->Capacity,
 				// Price
 			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
+			'SALE_FORMULA_LABEL' => $this->pi->pi_getLL('sale_formula', 'Sale formula', true),
 			'SALE_FORMULA' => $element->CurrentSaleFormula,
+			'CARTE_PRICE_LABEL' => $this->pi->pi_getLL('carte_price', 'Carte price', true),
 			'CARTE_PRICE' => $element->CurrentCartePrice,
+			'MENU_PRICE_LABEL' => $this->pi->pi_getLL('menu_price', 'Menu price', true),
 			'MENU_PRICE' => $element->CurrentMenuPrice,
 		);
+		
+		$markers = array_merge($markers, $locMarkers);
+		
+		if ($element->ReceptionLanguage->Count()<=0)
+			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
+		if ($element->MenuLanguage->Count()<=0)
+			$subparts['###SUBPART_MENU_LANGUAGE###'] = '';
+		if (!$element->Pets)
+			$subparts['###SUBPART_PETS###'] = '';
+		if (!$element->AllowedPets)
+			$subparts['###SUBPART_ALLOWED_PETS###'] = '';
+		if (!$element->AllowedGroup)
+			$subparts['###SUBPART_ALLOWED_GROUP###'] = '';
+		if ($element->AllowedGroupNumber->Count()<=0)
+			$subparts['###SUBPART_ALLOWED_GROUP_NUMBER###'] = '';
+		if (!$element->MotorCoachPark)
+			$subparts['###SUBPART_MOTORCOACH_PARK###'] = '';
+		if ($element->ServiceOpen->Count()<=0)
+			$subparts['###SUBPART_SERVICE_OPEN###'] = '';
+
+		if ($element->CurrentSaleFormula->Count()<=0)
+			$subparts['###SUBPART_SALE_FORMULA###'] = '';
+		if ($element->CurrentCartePrice->Count()<=0)
+			$subparts['###SUBPART_CARTE_PRICE###'] = '';
+		if ($element->CurrentMenuPrice->Count()<=0)
+			$subparts['###SUBPART_MENU_PRICE###'] = '';
 	}
 	
 	/**

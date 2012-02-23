@@ -74,7 +74,6 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 	private $currentSaleFormula;			// tx_icssitlorquery_ValuedTermList
 	private $currentCartePrice;				// tx_icssitlorquery_ValuedTermList
-	// private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
 
 
 	/**
@@ -94,7 +93,6 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		$this->capacity = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentSaleFormula = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentCartePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
-		// $this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
