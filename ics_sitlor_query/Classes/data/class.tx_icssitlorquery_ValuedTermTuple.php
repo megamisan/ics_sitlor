@@ -223,12 +223,14 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 			$data[$item] = $this->items[$i];
 		}
 		$local_cObj->start($data, 'ValuedTermTuples');
+		tx_icssitlorquery_getDataHook::pushContext($data);
 		for ($i = 0; $i < $this->count; $i++) {
 			$item = 'item' . ($i + 1);
 			if (($this->items[$i] != null) && isset($conf[$item . '_conf.'])) {
 				$data[$item] = $this->items[$i]->toStringConf($conf[$item . '_conf.']);
 			}
 		}
+		tx_icssitlorquery_getDataHook::popContext();
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
 		$local_cObj->start($data, 'ValuedTermTuples');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);

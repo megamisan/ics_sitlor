@@ -231,7 +231,10 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 		);
 		$local_cObj->start($data, 'TimeTable');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
-		return $local_cObj->stdWrap('', $conf);
+		tx_icssitlorquery_getDataHook::pushContext($data);
+		$result = $local_cObj->stdWrap('', $conf);
+		tx_icssitlorquery_getDataHook::popContext();
+		return $result;
 	}
 
 }

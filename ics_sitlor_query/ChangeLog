@@ -1,5 +1,6 @@
 2012-02-23 Pierrick Caillon <pierrick@in-cite.net>
 	* Bug fix: ValueTermTuple were not renderer. Miss usage of the tag value and setting it.
+	* Feature: Saving calling context for stdWrap.data access using type context.
 
 2012-02-23 Tsi Yang <tsi@in-cite.net>
 	* Feature: Added restaurant template subparts and render subparts

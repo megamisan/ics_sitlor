@@ -178,6 +178,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf {
 			'valueType' => is_object($this->value) ? get_class($this->value) : gettype($this->value),
 		);
 		$local_cObj->start($data, 'ValuedTerm');
+		tx_icssitlorquery_getDataHook::pushContext($data);
 		if (($this->value != null) && is_object($this->value) && isset($conf['value_conf.'])) {
 			if ($this->value instanceof tx_icssitquery_IToStringObjConf) {
 				$data['value'] = $this->value->toStringObjConf($local_cObj, $conf['value_conf.']);
@@ -186,6 +187,7 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf {
 				$data['value'] = $this->value->toStringConf($conf['value_conf.']);
 			}
 		}
+		tx_icssitlorquery_getDataHook::popContext();
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
 		$local_cObj->start($data, 'ValuedTerm');
 		return $local_cObj->stdWrap('', $conf);

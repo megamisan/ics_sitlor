@@ -103,7 +103,7 @@ plugin.tx_icssitlorquery_pi1 {
 						title = illustration
 						title.append = CASE
 						title.append {
-							key.data = parentField:criterionId
+							key.data = context:criterionId
 							736000294 = TEXT
 							736000294.value = 1
 							736001142 = TEXT
@@ -150,7 +150,7 @@ plugin.tx_icssitlorquery_pi1 {
 			value_conf {
 				cObject = CASE
 				cObject {
-					key.data = parentfield:valueType
+					key.data = context:valueType
 					tx_icssitlorquery_Picture = TEXT
 					tx_icssitlorquery_Picture.value = C'est une image
 				}
