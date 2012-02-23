@@ -100,6 +100,7 @@
 
 		$markers = array(
 			'PREFIXID' => $this->prefixId,
+			'ACTION_URL' =>  t3lib_div::getIndpEnv('TYPO3_REQUEST_URL') ,
 		);
 			// Get dataGroup main search title
 		switch($dataGroup ) {
@@ -311,7 +312,7 @@
 				if ($data = $this->getSelectData($equipment[0], $equipment[1])) {
 					$itemMarkers = array();
 					$itemMarkers['SELECTED_EQUIPMENT_ITEM'] = ($this->search['hotelEquipment']==$data->ID)? 'selected="selected"': '';
-					$itemMarkers['EQUIPMENT_ITEM_VALUE'] = $data->ID;
+					$itemMarkers['EQUIPMENT_ITEM_VALUE'] = ($equipment[0]=='TERM')? $equipment[1][0].':'.$data->ID: $data->ID;
 					$itemMarkers['EQUIPMENT_ITEM_LABEL'] = $data->Name;
 					$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 				}

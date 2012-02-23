@@ -108,6 +108,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->setConnection();
 		// Set typoscript defaultConf
 		$this->setDefaultConf();
+		// Set search params
+		if (isset($this->piVars['search']))
+			$this->setPIVars_searchParams();
 
 		// Display mode
 		foreach ($this->codes as $theCode) {
@@ -325,6 +328,40 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 	}
 
+	/**
+	 * Sets search params from piVars
+	 *
+	 * @return	void
+	 */
+	function setPIVars_searchParams() {
+		$params = $this->piVars['search'];
+		
+		if (isset($this->piVars['btn_sword']) && $params['sword'])
+			$this->sword = $params['sword'];
+			
+		if (isset($this->piVars['btn_hotelType']) && count($params['hotelType'])>0)
+				$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
+				
+		if (isset($this->piVars['btn_hotelEquipment']) && count($params['hotelEquipment'])>0)
+				$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
+				
+		if (isset($this->piVars['btn_restaurantCategory']) && count($params['restaurantCategory'])>0)
+			$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
+			
+		if (isset($this->piVars['btn_restaurantSpeciality']) && count($params['culinarySpeciality'])>0)
+			$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
+			
+		if (isset($this->piVars['btn_eventDate'])) {
+			if ($params['startDate'])
+				$this->conf['filter.']['startDate']= $params['startDate'];
+			if ($params['endDate'])
+				$this->conf['filter.']['endDate']= $params['endDate'];
+		}
+		
+		if (isset($this->piVars['btn_noFee']) && $params['noFee'])
+			$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
+	}
+	
 	/**
 	 * Render phones
 	 *

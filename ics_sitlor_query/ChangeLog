@@ -6,6 +6,9 @@
 	* Feature: Added restaurant template subparts and render subparts
 	* Feature: Added event template subparts and render subparts
 	* Feature: Added total size property for query service
+	* Feature: Added process on valid form.
+	* Feature: Completed search template
+	* Fix: Missing form action url
 	
 2012-02-21 Tsi Yang <tsi@in-cite.net>
 	* Feature: Renamed flexform marker to appropriate name

@@ -21,7 +21,7 @@
 
 
 <!-- ###TEMPLATE_SEARCH_FORM### start-->
-	<form action="###ACTION_URL###"  method="get">
+	<form action="###ACTION_URL###"  method="POST" enctype="multipart/form-data">
 		<fieldset class="###PREFIXID###_mainSearch">
 			<h4>###MAIN_SEARCH_TITLE###</h4>
 			###GENERIC###
@@ -39,7 +39,7 @@
 		<p><input type="text" name="###PREFIXID###[search][sword]" id="sword" value="###KEYWORD_VALUE###"/></p>
 	</div>
 	<div class="button">
-		<input type="button"  name="###PREFIXID###[btn_sword]" value="###SEARCH###" />
+		<input type="submit"  name="###PREFIXID###[btn_sword]" id="###PREFIXID###_btn_sword" value="###SEARCH###"/>
 	</div>
 <!-- ###TEMPLATE_FORM_GENERIC### end-->
 
@@ -60,13 +60,13 @@
 		<ul class="###PREFIXID###_checkList">
 			<!-- ###ITEM### -->
 			<li class="###PREFIXID###_checkListItem">
-				<input type="checkbox" ###SELECTED_TYPE_ITEM### name="###PREFIXID###[search][hotelType]" id="hotelType_###TYPE_ITEM_VALUE###" value="###TYPE_ITEM_VALUE###" />
+				<input type="checkbox" ###SELECTED_TYPE_ITEM### name="###PREFIXID###[search][hotelType][]" id="hotelType_###TYPE_ITEM_VALUE###" value="###TYPE_ITEM_VALUE###" />
 				<label for="hotelType_###TYPE_ITEM_VALUE###">###TYPE_ITEM_LABEL###</label>
 			</li>
 			<!-- ###ITEM### -->
 		</ul>
 		<div class="button">
-			<input type="button"  name="###PREFIXID###[btn_hotelType]" value="###SEARCH###" />
+			<input type="submit"  name="###PREFIXID###[btn_hotelType]"  id="###PREFIXID###_btn_hotelType" value="###SEARCH###"/>
 		</div>
 	<!-- ###SUBPART_HOTEL### end-->
 <!-- ###TEMPLATE_FORM_ACCOMODATION### end-->
@@ -80,13 +80,13 @@
 		<ul class="###PREFIXID###_checkList">
 			<!-- ###ITEM### -->
 			<li class="###PREFIXID###_checkListItem">
-				<input type="checkbox" ###SELECTED_EQUIPMENT_ITEM### name="hotelEquipment" id="hotelEquipment###EQUIPMENT_ITEM_VALUE###" value="###EQUIPMENT_ITEM_VALUE###"/>
+				<input type="checkbox" ###SELECTED_EQUIPMENT_ITEM### name="###PREFIXID###[search]hotelEquipment[]" id="hotelEquipment###EQUIPMENT_ITEM_VALUE###" value="###EQUIPMENT_ITEM_VALUE###"/>
 				<label for="hotelEquipment###EQUIPMENT_ITEM_VALUE###">###EQUIPMENT_ITEM_LABEL###</label>
 			</li>
 			<!-- ###ITEM### -->
 		</ul>
 		<div class="button">
-			<input type="button"  name="###PREFIXID###[btn_hotelEquipment]" value="###SEARCH###" />
+			<input type="submit"  name="###PREFIXID###[btn_hotelEquipment]" value="###SEARCH###" />
 		</div>
 	<!-- ###SUBPART_HOTEL### end-->
 <!-- ###TEMPLATE_FORM_MORE_ACCOMODATION### end-->
@@ -99,13 +99,13 @@
 		<ul class="###PREFIXID###_checkList">
 			<!-- ###ITEM### -->
 			<li class="###PREFIXID###_checkListItem">
-				<input type="checkbox" ###SELECTED_CATEGORY_ITEM### name="###PREFIXID###[search][restaurantCategory]" id="restaurantCategory###CATEGORY_ITEM_VALUE###" value="###CATEGORY_ITEM_VALUE###" />
+				<input type="checkbox" ###SELECTED_CATEGORY_ITEM### name="###PREFIXID###[search][restaurantCategory][]" id="restaurantCategory###CATEGORY_ITEM_VALUE###" value="###CATEGORY_ITEM_VALUE###" />
 				<label for="restaurantCategory###CATEGORY_ITEM_VALUE###">###CATEGORY_ITEM_LABEL###</label>
 			</li>
 			<!-- ###ITEM### -->
 		</ul>
 		<div class="button">
-			<input type="button"  name="###PREFIXID###[btn_restaurantCategory]" value="###SEARCH###" />
+			<input type="submit"  name="###PREFIXID###[btn_restaurantCategory]" value="###SEARCH###" />
 		</div>
 	<!-- ###SUBPART_CATEGORY### end-->
 	<!-- ###SUBPART_SPECIALITY### start-->
@@ -113,13 +113,13 @@
 		<ul class="###PREFIXID###_checkList">
 			<!-- ###ITEM### -->
 			<li class="###PREFIXID###_checkListItem">
-				<input type="checkbox" ###SELECTED_CULINARY_SPECIALITY### name="###PREFIXID###[search][culinarySpeciality]" id="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###" value="###CULINARY_SPECIALITY_ITEM_VALUE###" />
+				<input type="checkbox" ###SELECTED_CULINARY_SPECIALITY### name="###PREFIXID###[search][culinarySpeciality][]" id="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###" value="###CULINARY_SPECIALITY_ITEM_VALUE###" />
 				<label for="culinarySpeciality###CULINARY_SPECIALITY_ITEM_VALUE###">###CULINARY_SPECIALITY_ITEM_LABEL###</label>
 			</li>
 			<!-- ###ITEM### -->
 		</ul>
 		<div class="button">
-			<input type="button"  name="###PREFIXID###[btn_restaurantSpeciality]" value="###SEARCH###" />
+			<input type="submit"  name="###PREFIXID###[btn_restaurantSpeciality]" value="###SEARCH###" />
 		</div>
 	<!-- ###SUBPART_SPECIALITY### end-->
 <!-- ###TEMPLATE_FORM_RESTAURANT### end-->
@@ -135,7 +135,7 @@
 			<!-- ###ITEM### -->
 		</select>
 		<div class="button">
-			<input type="button"  name="###PREFIXID###[btn_restaurantOpenDay]" value="###SEARCH###" />
+			<input type="submit"  name="###PREFIXID###[btn_restaurantOpenDay]" value="###SEARCH###" />
 		</div>
 	<!-- ###SUBPART_OPENDAY### -->
 <!-- ###TEMPLATE_FORM_MORE_RESTAURANT### end-->
@@ -155,7 +155,7 @@
 		</p>
 	</div>
 	<div class="button">
-		<input type="button"  name="###PREFIXID###[btn_eventDate]" value="###SEARCH###" />
+		<input type="submit"  name="###PREFIXID###[btn_eventDate]" value="###SEARCH###" />
 	</div>
 <!-- ###TEMPLATE_FORM_EVENT### end-->
 
@@ -163,9 +163,12 @@
 
 <!-- ###TEMPLATE_FORM_MORE_EVENT### start-->
 	<p>
-		<input type="checkbox" ###SELECTED_NOFEE### name="noFee" id="noFee" value="###NOFEE_VALUE###"/>
+		<input type="checkbox" ###SELECTED_NOFEE### name="###PREFIXID###[search][noFee]" id="noFee" value="###NOFEE_VALUE###"/>
 		<label for="noFee">###NOFEE_LABEL###</label>
 	</p>
+	<div class="button">
+		<input type="submit"  name="###PREFIXID###[btn_noFee]" value="###SEARCH###" />
+	</div>
 <!-- ###TEMPLATE_FORM_MORE_EVENT### end-->
 
 </body>
