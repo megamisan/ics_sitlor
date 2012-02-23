@@ -122,17 +122,16 @@ class tx_icssitlorquery_SingleRenderer {
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_ACCOMODATION###');
 			$this->renderAccomodation($element, $locMarkers, $subparts);
-			$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		}
 		if ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_RESTAURANT###');
 			$this->renderRestaurant($element, $locMarkers, $subparts);
-			$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		}
 		if ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_EVENT###');
-			$locMarkers = $this->getMarkers_Event($element);
+			$this->renderEvent($element, $locMarkers, $subparts);
 		}
+		$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		$markers = array_merge($markers, $locMarkers);
 		return $template;
 	}
@@ -144,7 +143,7 @@ class tx_icssitlorquery_SingleRenderer {
 	 * @param	&array		$markers: The marker array
 	 * @param	&array		$subparts: The subpart array
 	 */
-	private function renderAccomodation($element, array &$markers, array &$subparts) {
+	private function renderAccomodation(tx_icssitlorquery_Accomodation $element, array &$markers, array &$subparts) {
 		$locMarkers = array(
 				// Provider
 			'PROVIDER_LABEL' => $this->pi->pi_getLL('provider', 'Provider', true),
@@ -219,11 +218,11 @@ class tx_icssitlorquery_SingleRenderer {
 	/**
 	 * Render Restaurant
 	 *
-	 * @param	tx_icssitlorquery_Restaurantn	$element: Restaurant
+	 * @param	tx_icssitlorquery_Restaurant	$element: Restaurant
 	 * @param	&array		$markers: The marker array
 	 * @param	&array		$subparts: The subpart array
 	 */	
-	private function renderRestaurant($element, array &$markers, array &$subparts) {
+	private function renderRestaurant(tx_icssitlorquery_Restaurant $element, array &$markers, array &$subparts) {
 		$locMarkers = array(
 				// Provider
 			'PROVIDER_LABEL' => $this->pi->pi_getLL('provider', 'Provider', true),
@@ -295,22 +294,46 @@ class tx_icssitlorquery_SingleRenderer {
 	}
 	
 	/**
-	 * Retrieves Event markers
+	 * Render Event
 	 *
-	 * @param	tx_icssitlorquery_Event	$element: Event
-	 * @return	mixed	Markers array
-	 */
-	private function getMarkers_Event($element) {
-		return array(
+	 * @param	tx_icssitlorquery_Event		$element: Event
+	 * @param	&array		$markers: The marker array
+	 * @param	&array		$subparts: The subpart array
+	 */	
+	private function renderEvent(tx_icssitlorquery_Event $element, array &$markers, array &$subparts) {
+		$locMarkers = array(
 			'EVENT_INFORMATION' => $this->pi->pi_getLL('event_infos', 'Event informations', true),
+			'KIND_EVENT_LABEL' => $this->pi->pi_getLL('kind_event', 'Kind of event', true),
 			'KIND_EVENT' => $element->KindOfEvent,
+			'TYPE_EVENT_LABEL' => $this->pi->pi_getLL('type', 'Type', true),
 			'TYPE_EVENT' => $element->TypeEvent,
+			'INFORMATION_LABEL' => $this->pi->pi_getLL('infos', 'Informations', true),
 			'INFORMATION' => $element->Information,
+			'FESTIVAL_LABEL' => $this->pi->pi_getLL('festival', 'Festival', true),
 			'FESTIVAL' => $element->Festival,
 				// Price
 			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
-			'FREE' => $element->CurrentFree,
-			'PRICE' => $element->CurrentBasePrice,
 		);
+		if ($element->CurrentFree && ($element->CurrentFree->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_FREE_YES)) {
+			$locMarkers['FREE'] = $this->pi->pi_getLL('noFee', 'No fee', true);
+		} else {
+			$subparts['###SUBPART_FREE###'] = '';
+		}
+		if ($element->CurrentBasePrice->Count()>0) {
+			$locMarkers['PRICE'] = $element->CurrentBasePrice;
+		} else {
+			$subparts['###SUBPART_PRICE###'] = '';
+		}
+		
+		if (!$element->KindOfEvent)
+			$subparts['###SUBPART_KIND_EVENT###'] = '';
+		if (!$element->TypeEvent)
+			$subparts['###SUBPART_TYPE_EVENT###'] = '';
+		if ($element->Information->Count()<=0)
+			$subparts['###SUBPART_INFORMATION###'] = '';			
+		if (!$element->Festival)
+			$subparts['###SUBPART_FESTIVAL###'] = '';			
+		
+		$markers = array_merge($markers, $locMarkers);
 	}
 }

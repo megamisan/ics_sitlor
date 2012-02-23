@@ -1,5 +1,6 @@
 2012-02-23 Tsi Yang <tsi@in-cite.net>
 	* Feature: Added restaurant template subparts and render subparts
+	* Feature: Added event template subparts and render subparts
 	
 2012-02-21 Tsi Yang <tsi@in-cite.net>
 	* Feature: Renamed flexform marker to appropriate name
