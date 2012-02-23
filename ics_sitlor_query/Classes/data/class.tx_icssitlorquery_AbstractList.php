@@ -38,8 +38,9 @@
  */
 abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToString {
 	private $elements = array();	/**< List elements */
-	private static $separator = ',';	/**< Default list separator for string representation. */
-
+	private static $separator = array('tx_icssitlorquery_abstractlist' => ',');	/**< Default list separator for string representation. */
+	private static $defaultType = 'tx_icssitlorquery_abstractlist';	// Default type
+		
 	/**
 	 * Initializes the list.
 	 * Optionaly copy the elements from another list.
@@ -146,8 +147,14 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 * @return	string		Representation of the object.
 	 */
 	public function toString() {
-		$separator = self::$separator;// si def valeur pour le type de liste courant sinon pour abstractlist
-
+		$type = strtolower(get_class($this));
+		$types = array_keys(self::$separator);
+		if (in_array($type, $types)) {
+			$separator = self::$separator[$type];
+		} else {
+			$separator = self::$separator[self::$defaultType];
+		}
+		
 		$args = func_get_args();
 		if (!empty($args) && is_string($args[0])) {
 			$separator = $args[0];
@@ -162,10 +169,11 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 * @param	string		$type: Type of list
 	 * @return	void
 	 */
-	public static function setSeparator($separator, $type=null) {// TODO: Rename setDefaultSeparator
-		// TODO : $type référence descendant d'AbstractList. null => AbstractList
+	public static function setDefaultSeparator($separator, $type=null) {
+		if (!$type)
+			$type = self::$defaultType;
 		if (is_string($separator)) {
-			self::$separator = $separator;
+			self::$separator[$type] = $separator;
 		}
 	}
 }

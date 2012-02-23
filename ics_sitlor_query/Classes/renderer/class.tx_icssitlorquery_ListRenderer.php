@@ -112,7 +112,7 @@
 			return '';
 
 		$locMarkers = array(
-			'ILLUSTRATION' => $element->Illustration, //->Get(0),
+			'ILLUSTRATION' => $element->Illustration->Get(0),
 		);
 		$markers = array_merge($markers, $locMarkers);
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_GENERIC###');

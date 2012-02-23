@@ -108,6 +108,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->setConnection();
 		// Set typoscript defaultConf
 		$this->setDefaultConf();
+		$this->setDefaultSeparator();
 		// Set search params
 		if (isset($this->piVars['search']))
 			$this->setPIVars_searchParams();
@@ -325,6 +326,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 					t3lib_div::devLog($class . ' default conf', 'ics_sitlor_query', 0, $conf);
 				}
 			}
+		}
+	}
+	
+	function setDefaultSeparator() {
+		foreach ($this->conf['defaultSeparator.'] as $type => $conf) {
+			$class = 'tx_icssitlorquery_' . $type . 'List';
+			tx_icssitlorquery_AbstractList::setDefaultSeparator($conf, strtolower($class));
 		}
 	}
 

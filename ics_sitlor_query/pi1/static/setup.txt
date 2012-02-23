@@ -144,15 +144,46 @@ plugin.tx_icssitlorquery_pi1 {
 			}
 		}
 		ValuedTerm {
-			field = criterion
-			override.field = term
-			override.override.field = value
-			value_conf {
-				cObject = CASE
-				cObject {
-					key.data = context:valueType
-					tx_icssitlorquery_Picture = TEXT
-					tx_icssitlorquery_Picture.value = C'est une image
+			cObject = CASE
+			cObject {
+				labelValue = TEXT
+				labelValue {
+					field = term
+					append = TEXT
+					append {
+						field = value
+						noTrimWrap = |: ||
+					}
+				}
+				key.data = field:criterionId
+				# Rating star
+				736000015 = TEXT
+				736000015.field = term
+				# Reception group
+				736000142 < .labelValue
+				# Hotel price
+				4000010 < .labelValue
+				# Allowed group number
+				736000409 < .labelValue
+				# Restaurant capacity
+				736000151 < .labelValue
+				# Restaurant carte price
+				4000017 < .labelValue
+				# Restaurant menu price
+				4000018 < .labelValue
+				default = TEXT
+				default {
+					field = criterion
+					override.field = term
+					override.override.field = value
+					value_conf {
+						cObject = CASE
+						cObject {
+							key.data = context:valueType
+							tx_icssitlorquery_Picture = TEXT
+							tx_icssitlorquery_Picture.value = C'est une image
+						}
+					}
 				}
 			}
 		}
@@ -232,6 +263,11 @@ plugin.tx_icssitlorquery_pi1 {
 				wrap = <p>|</p>
 			}
 		}
+	}
+	
+	defaultSeparator {
+		ValuedTerm = </li><li>
+		ValuedTermTuple =
 	}
 	
 	# Render data
