@@ -311,7 +311,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 					if ($tag{strlen($tag) - 1} != '.')
 						continue;
 					$tag = substr($tag, 0, -1);
-					call_user_func(array($class, 'SetDefaultConf'), $tag, $conf);
+					call_user_func(array($class, 'SetDefaultConf'), $tag, $subconf);
 				}
 			}
 			else {

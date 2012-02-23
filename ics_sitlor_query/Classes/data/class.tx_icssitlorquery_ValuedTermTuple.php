@@ -157,7 +157,7 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	public function toString() {
 		switch (func_num_args()) {
 			case 0:
-				return $this->toStringConf(self::$lConf);
+				return $this->toStringConf(self::$lConf[$this->tag]);
 			case 1:
 				$a1 = func_get_arg(0);
 				if (is_array($a1)) {
@@ -225,13 +225,13 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 		$local_cObj->start($data, 'ValuedTermTuples');
 		for ($i = 0; $i < $this->count; $i++) {
 			$item = 'item' . ($i + 1);
-			if (($this->items[$i] != null) && isset($conf[$this->tag.'.'][$item . '_conf.'])) {
-				$data[$item] = $this->items[$i]->toStringConf($conf[$this->tag.'.'][$item . '_conf.']);
+			if (($this->items[$i] != null) && isset($conf[$item . '_conf.'])) {
+				$data[$item] = $this->items[$i]->toStringConf($conf[$item . '_conf.']);
 			}
 		}
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
 		$local_cObj->start($data, 'ValuedTermTuples');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
-		return $local_cObj->stdWrap('', $conf[$this->tag . '.']);
+		return $local_cObj->stdWrap('', $conf);
 	}
 }
