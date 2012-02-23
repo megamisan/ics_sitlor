@@ -92,11 +92,11 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 
 	
 	/**
-	 * Retrieves size
+	 * Retrieves last total count
 	 *
 	 * @return	size
 	 */
-	public function getSize() {
+	public function getLastTotalCount() {
 		return $this->totalSize;
 	}
 	

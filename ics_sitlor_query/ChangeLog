@@ -9,6 +9,7 @@
 	* Feature: Added process on valid form.
 	* Feature: Completed search template
 	* Fix: Missing form action url
+	* Feature: Renamed retrieved total size queryService function to appropriate name
 	
 2012-02-21 Tsi Yang <tsi@in-cite.net>
 	* Feature: Renamed flexform marker to appropriate name
