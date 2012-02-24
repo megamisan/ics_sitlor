@@ -145,7 +145,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		}
 		if ($this->table=='small' || $this->table=='complete') {
 			if (in_array('keyword', $filterArray)) {
-				$pnames[] = 'libtext=' . $this->filters['keyword'];
+				$params['libtext'] = $this->filters['keyword'];
 			}
 		
 			if (in_array('gender', $filterArray)) { // && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {

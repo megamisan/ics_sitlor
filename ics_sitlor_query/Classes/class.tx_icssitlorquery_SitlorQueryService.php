@@ -164,6 +164,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$reader->read();
 		}
 		t3lib_div::devLog('Accomodations count', 'ics_sitlor_query', 0, array(count($accomodations)));
+		t3lib_div::devLog('Total Accomodations count', 'ics_sitlor_query', 0, array($this->totalSize));
 		return $accomodations;
 	}
 
@@ -221,6 +222,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$reader->read();
 		}
 		t3lib_div::devLog('Restaurants count', 'ics_sitlor_query', 0, array(count($restaurants)));
+		t3lib_div::devLog('Total Restaurants count', 'ics_sitlor_query', 0, array($this->totalSize));
 		return $restaurants;
 	}
 
@@ -282,6 +284,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$reader->read();
 		}
 		t3lib_div::devLog('Events count', 'ics_sitlor_query', 0, array(count($events)));
+		t3lib_div::devLog('Total Events count', 'ics_sitlor_query', 0, array($this->totalSize));
 		return $events;
 	}
 }

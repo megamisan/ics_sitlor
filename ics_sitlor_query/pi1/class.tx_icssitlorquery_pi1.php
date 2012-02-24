@@ -237,12 +237,11 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$filterOTNancy = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancy', 'paramSelect');
 		$this->conf['filter.']['OTNancy'] = $filterOTNancy? $filterOTNancy : $this->conf['filter.']['OTNancy'];
 		
-		// Never filter on entity (not sure)
-		// if (isset($this->piVars['select']['entity_737']))
-			// $filterEntity737 = $this->piVars['select']['entity_737'];
-		// $filterEntity737 = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'entity_737', 'paramSelect');
-		// $this->conf['filter.']['entity_737'] = $filterEntity737? $filterEntity737 : $this->conf['filter.']['entity_737'];
-		
+		// Filter on entity (not sure)
+		if (isset($this->piVars['select']['entity_737']))
+			$filterEntity737 = $this->piVars['select']['entity_737'];
+		$filterEntity737 = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'entity_737', 'paramSelect');
+		$this->conf['filter.']['entity_737'] = $filterEntity737? $filterEntity737 : $this->conf['filter.']['entity_737'];
 		
 			// Select params Hotel
 		$hotelTypes =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hotelTypes', 'paramSelect');
@@ -273,7 +272,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->conf['filter.']['noFeeEvent'] = tx_icssitlorquery_CriterionUtils::CURRENT_FREE.':'.tx_icssitlorquery_CriterionUtils::CURRENT_FREE_YES;
 		}
 		
-			
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = self::$default_startDate;
 			
@@ -283,7 +281,41 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$sortOrder = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortOrder', 'paramSorting');
 		$this->conf['sortOrder'] = $sortOrder? $sortOrder: $this->conf['sortOrder'];
 	}
-
+	
+	/**
+	 * Sets search params from piVars
+	 *
+	 * @return	void
+	 */
+	function setPIVars_searchParams() {
+		$params = $this->piVars['search'];
+		
+		if (isset($this->piVars['btn_sword']) && $params['sword'])
+			$this->sword = $params['sword'];
+			
+		if (isset($this->piVars['btn_hotelType']) && count($params['hotelType'])>0)
+				$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
+				
+		if (isset($this->piVars['btn_hotelEquipment']) && count($params['hotelEquipment'])>0)
+				$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
+				
+		if (isset($this->piVars['btn_restaurantCategory']) && count($params['restaurantCategory'])>0)
+			$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
+			
+		if (isset($this->piVars['btn_restaurantSpeciality']) && count($params['culinarySpeciality'])>0)
+			$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
+			
+		if (isset($this->piVars['btn_eventDate'])) {
+			if ($params['startDate'])
+				$this->conf['filter.']['startDate']= $params['startDate'];
+			if ($params['endDate'])
+				$this->conf['filter.']['endDate']= $params['endDate'];
+		}
+		
+		if (isset($this->piVars['btn_noFee']) && $params['noFee'])
+			$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
+	}
+	
 	/**
 	 * Set the queryService
 	 *
@@ -329,6 +361,11 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 	}
 	
+	/**
+	 * Sets default separator
+	 *
+	 * @return	void
+	 */
 	function setDefaultSeparator() {
 		foreach ($this->conf['defaultSeparator.'] as $type => $conf) {
 			$class = 'tx_icssitlorquery_' . $type . 'List';
@@ -336,39 +373,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 	}
 
-	/**
-	 * Sets search params from piVars
-	 *
-	 * @return	void
-	 */
-	function setPIVars_searchParams() {
-		$params = $this->piVars['search'];
-		
-		if (isset($this->piVars['btn_sword']) && $params['sword'])
-			$this->sword = $params['sword'];
-			
-		if (isset($this->piVars['btn_hotelType']) && count($params['hotelType'])>0)
-				$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
-				
-		if (isset($this->piVars['btn_hotelEquipment']) && count($params['hotelEquipment'])>0)
-				$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
-				
-		if (isset($this->piVars['btn_restaurantCategory']) && count($params['restaurantCategory'])>0)
-			$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
-			
-		if (isset($this->piVars['btn_restaurantSpeciality']) && count($params['culinarySpeciality'])>0)
-			$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
-			
-		if (isset($this->piVars['btn_eventDate'])) {
-			if ($params['startDate'])
-				$this->conf['filter.']['startDate']= $params['startDate'];
-			if ($params['endDate'])
-				$this->conf['filter.']['endDate']= $params['endDate'];
-		}
-		
-		if (isset($this->piVars['btn_noFee']) && $params['noFee'])
-			$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
-	}
 	
 	/**
 	 * Render phones
@@ -480,7 +484,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	array		The array of elements
 	 */
 	private function getElements() {
-		// Set filter on date to get date data
+		// Set filter on OT Nancy
+		if ($this->conf['sitlor.']['OTNancy'] && $this->conf['filter.']['OTNancy']) {
+			list($code, $value) = t3lib_div::trimExplode(':', $this->conf['sitlor.']['OTNancy']);
+			$this->addCriterionFilter(intval($code), ($value? array($value): null));
+		}
+		// Set filter on entity 737
+		if ($this->conf['filter.']['entity_737'])
+			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_EntityFilter', 737));
+
+			// Set filter on date to get date data
 		list($day, $month, $year) = explode('/', $this->conf['filter.']['startDate']);
 		$startDate = mktime(0,0,0,$month,$day,$year);
 		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
@@ -495,16 +508,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
 		$this->queryService->addFilter($noDateFilter);
 
-		// Set filter on OT Nancy
-		if ($this->conf['sitlor.']['OTNancy'] && $this->conf['filter.']['OTNancy']) {
-			list($code, $value) = t3lib_div::trimExplode(':', $this->conf['sitlor.']['OTNancy']);
-			$this->addCriterionFilter(intval($code), ($value? array($value): null));
-		}
-		
-		// Set filter on entity 737
-		if ($this->conf['filter.']['entity_737']) {
-			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_EntityFilter', 737));
-		}
+		// Set filter on keyword
+		if ($this->sword)
+			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_KeywordFilter', $this->sword));
 
 		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
 		switch($dataGroup) {
