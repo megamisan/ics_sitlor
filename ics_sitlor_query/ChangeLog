@@ -1,6 +1,7 @@
 2012-02-24 Tsi Yang <tsi@in-cite.net>
 	* Fix: Bad parameter for query keyword search param.
 	* Feature: Search form validation for keyword.
+	* Feature: Search form validation for accomodatio, restaurant, event.
 	
 2012-02-23 Pierrick Caillon <pierrick@in-cite.net>
 	* Bug fix: ValueTermTuple were not renderer. Miss usage of the tag value and setting it.

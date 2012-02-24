@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-    <meta type="array">
-        <type>module</type>
-        <description>Language labels for plugin &quot;tx_icssitlorquery_pi1&quot;</description>
-    </meta>
-    <data type="array">
-        <languageKey index="default" type="array">
+	<meta agda_type="array">
+		<agda_type>module</agda_type>
+		<description>Language labels for plugin &quot;tx_icswebservice_pi1&quot;</description>
+	</meta>
+	<data agda_type="array">
+      <languageKey index="default" type="array">
 			<label index="openday_1">Monday</label>
             <label index="openday_2">Tuesday</label>
             <label index="openday_3">Wednesday</label>
@@ -13,8 +13,21 @@
             <label index="openday_5">Friday</label>
             <label index="openday_6">Saturday</label>
             <label index="openday_7">Sunday</label>
-        </languageKey>
-       <languageKey index="default" type="array">
+            <label index="keyword">Keyword</label>
+            <label index="search">search</label>
+            <label index="hotel_restaurant">Hotel-restaurant</label>
+            <label index="furnished">Furnished</label>
+			<label index="wifi">Wifi</label>
+            <label index="allowed_pets">Allowed pets</label>
+			<label index="park">Park</label>
+			<label index="fastfood">Fast food</label>
+            <label index="icecream_theahouse">Ice cream and thea house</label>
+            <label index="creperie">Creperie</label>
+            <label index="asian_food">Asian</label>
+            <label index="sa_food">South american</label>
+            <label index="oriental_food">Oriental</label>
+ 		</languageKey>
+		<languageKey index="default" type="array">
             <label index="openday_1">Lundi</label>
             <label index="openday_2">Mardi</label>
             <label index="openday_3">Mercredi</label>
@@ -22,6 +35,19 @@
             <label index="openday_5">Vendredi</label>
             <label index="openday_6">Samedi</label>
             <label index="openday_7">Dimanche</label>
+            <label index="keyword">Rechercher par mot-clé</label>
+            <label index="search">Rechercher</label>
+            <label index="hotel_restaurant">Hôtel-Hôtel restaurant</label>
+            <label index="furnished">Meublé</label>
+            <label index="wifi">Wifi</label>
+            <label index="allowed_pets">Animaux acceptés</label>
+            <label index="park">Parking</label>
+            <label index="fastfood">La restauration rapide</label>
+            <label index="icecream_theahouse">Les glaciers et salon de thé</label>
+            <label index="creperie">Les crêperies</label>
+            <label index="asian_food">Asiatique</label>
+            <label index="sa_food">Sud américaine</label>
+            <label index="oriental_food">Orientale</label>
         </languageKey>
- 	</data>
+	</data>
 </T3locallang>

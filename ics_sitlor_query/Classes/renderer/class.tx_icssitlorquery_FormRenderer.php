@@ -35,25 +35,10 @@
  * @subpackage	tx_icssitlorquery
  */
  class tx_icssitlorquery_FormRenderer {
-	private static $hotelTypes = array(
-		array('TYPE', tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
-		array('TYPE', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
-	);
-	private static $restaurantCategories = array(
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::RCATEGORIE, tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD)),
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::RCATEGORIE, tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE)),
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::RCATEGORIE, tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE)),
-	);
-	private static $foreignFood = array(
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD, tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN)),
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD, tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_SA)),
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD, tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ORIENTAL)),
-	);
-	private static $hotelEquipment = array(
-		array('TERM', array(tx_icssitlorquery_CriterionUtils::COMFORT_ROOM, tx_icssitlorquery_CriterionUtils::WIFI)),
-		array('CRITERION', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS),
-		array('CRITERION',  tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK),
-	);
+	private static $hotelTypes = array();
+	private static $restaurantCategories = array();
+	private static $foreignFood = array();
+	private static $hotelEquipment = array();
 	private static $dayOfWeek = array(1,2,3,4,5,6,7);	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
 	
 	/**
@@ -70,8 +55,70 @@
 		$this->conf = $lConf;
 		$this->prefixId = $pi->prefixId;
 		$this->templateCode = $pi->templateCode;
-		if (isset($pi->piVars['search']))
-			$this->search = $pi->piVars['search'];
+		$this->search = $pi->piVars['search'];
+		
+		$this->setDataForm();
+	}
+	
+	/**
+	 * Sets data form
+	 *
+	 * @return	void
+	 */
+	private function setDataForm() {
+		self::$hotelTypes = array(
+			'hotel_restaurant' => array(
+				'label' => $this->pi->pi_getLL('hotel_restaurant', 'Hotel-restaurant', true),
+				'value' => tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT
+			),
+			'furnished' => array(
+				'label' =>  $this->pi->pi_getLL('furnished', 'Furnished', true),
+				'value' => tx_icssitlorquery_NomenclatureUtils::FURNISHED
+			),
+		);
+		self::$hotelEquipment = array(
+			'wifi' => array(
+				'label' => $this->pi->pi_getLL('wifi', 'Wifi', true),
+				'value' => tx_icssitlorquery_CriterionUtils::COMFORT_ROOM . ':' . tx_icssitlorquery_CriterionUtils::WIFI
+			),
+			'pets' => array(
+				'label' => $this->pi->pi_getLL('allowed_pets', 'Allowed pets', true),
+				'value' => tx_icssitlorquery_CriterionUtils::ALLOWED_PETS . ':' . tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES
+			),
+			'park' => array(
+				'label' => $this->pi->pi_getLL('park', 'Park', true),
+				'value' => tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK . ':' . tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES
+			),
+		);
+		self::$restaurantCategories = array(
+			'fastfood' => array(
+				'label' => $this->pi->pi_getLL('fastfood', 'Fast food', true), 
+				'value' => tx_icssitlorquery_CriterionUtils::RCATEGORIE . ':' . tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD
+			),
+			'icecream_theahouse' => array(
+				'label' => $this->pi->pi_getLL('icecream_theahouse', 'Ice cream and thea house', true), 
+				'value' => tx_icssitlorquery_CriterionUtils::RCATEGORIE . ':' . tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE
+			),
+			'creperie' => array(
+				'label' => $this->pi->pi_getLL('creperie', 'Creperie', true), 
+				'value' => tx_icssitlorquery_CriterionUtils::RCATEGORIE . ':' . tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE
+			),
+		);
+		self::$foreignFood = array(
+			'asian' => array(
+				'label' => $this->pi->pi_getLL('asian_food', 'Asian food', true), 
+				'value' => tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD . ':' . tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN
+			),
+			'sa' => array(
+				'label' => $this->pi->pi_getLL('sa_food', 'South american food', true), 
+				'value' => tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD . ':' . tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_SA
+			),
+			'oriental' => array(
+				'label' => $this->pi->pi_getLL('oriental_food', 'Oriental food', true), 
+				'value' => tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD . ':' . tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ORIENTAL
+			),
+		);
+		
 	}
 
 	/**
@@ -176,15 +223,13 @@
 			$itemSubparts = array();
 			$hotelTemplate = $this->cObj->getSubpart($template, '###SUBPART_HOTEL###');
 			$itemTemplate = $this->cObj->getSubpart($hotelTemplate, '###ITEM###');
-			foreach(self::$hotelTypes as $type) {
+			foreach(self::$hotelTypes as $title=>$data) {
 				$itemContent = '';
-				if ($data = $this->getSelectData($type[0], $type[1])) {
-					$itemMarkers = array();
-					$itemMarkers['SELECTED_TYPE_ITEM'] = ($this->search['hotelType']==$data->ID)? 'selected="selected"': '';
-					$itemMarkers['TYPE_ITEM_VALUE'] = $data->ID;
-					$itemMarkers['TYPE_ITEM_LABEL'] = $data->Name;
-					$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
-				}
+				$itemMarkers = array();
+				$itemMarkers['SELECTED_TYPE_ITEM'] = in_array($data['value'], $this->search['hotelType'])? 'checked="checked"': '';
+				$itemMarkers['TYPE_ITEM_VALUE'] = $data['value'];
+				$itemMarkers['TYPE_ITEM_LABEL'] = $data['label'];
+				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 				$itemSubparts['###ITEM###'] .= $itemContent;
 			}
 			$subparts['###SUBPART_HOTEL###'] = $this->cObj->substituteSubpartArray($hotelTemplate, $itemSubparts);
@@ -207,15 +252,13 @@
 		$categoryTemplate = $this->cObj->getSubpart($template, '###SUBPART_CATEGORY###');
 		$itemTemplate = $this->cObj->getSubpart($categoryTemplate, '###ITEM###');
 		$itemSubparts['###ITEM###'] = '';
-		foreach(self::$restaurantCategories as $cat) {
+		foreach(self::$restaurantCategories as $title=>$data) {
 			$itemContent = '';
-			if ($data = $this->getSelectData($cat[0], $cat[1])) {
-				$itemMarkers = array();
-				$itemMarkers['SELECTED_CATEGORY_ITEM'] = ($this->search['restaurantCategory']==$data->ID)? 'selected="selected"': '';
-				$itemMarkers['CATEGORY_ITEM_VALUE'] = $data->ID;
-				$itemMarkers['CATEGORY_ITEM_LABEL'] = $data->Name;
-				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
-			}
+			$itemMarkers = array();
+			$itemMarkers['SELECTED_CATEGORY_ITEM'] = in_array($data['value'], $this->search['restaurantCategory'])? 'checked="checked"': '';
+			$itemMarkers['CATEGORY_ITEM_VALUE'] = $data['value'];
+			$itemMarkers['CATEGORY_ITEM_LABEL'] = $data['label'];
+			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
 		$subparts['###SUBPART_CATEGORY###'] = $this->cObj->substituteSubpartArray($categoryTemplate, $itemSubparts);
@@ -225,15 +268,13 @@
 		$specialityTemplate = $this->cObj->getSubpart($template, '###SUBPART_SPECIALITY###');
 		$itemTemplate = $this->cObj->getSubpart($specialityTemplate, '###ITEM###');
 		$itemSubparts['###ITEM###'] = '';
-		foreach(self::$foreignFood as $food) {
+		foreach(self::$foreignFood as $title=>$data) {
 			$itemContent = '';
-			if ($data = $this->getSelectData($food[0], $food[1])) {
-				$itemMarkers = array();
-				$itemMarkers['SELECTED_CULINARY_SPECIALITY'] = ($this->search['culinarySpeciality']==$data->ID)? 'selected="selected"': '';
-				$itemMarkers['CULINARY_SPECIALITY_ITEM_VALUE'] = $data->ID;
-				$itemMarkers['CULINARY_SPECIALITY_ITEM_LABEL'] = $data->Name;
-				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
-			}
+			$itemMarkers = array();
+			$itemMarkers['SELECTED_CULINARY_SPECIALITY'] = in_array($data['value'], $this->search['culinarySpeciality'])? 'checked="checked"': '';
+			$itemMarkers['CULINARY_SPECIALITY_ITEM_VALUE'] = $data['value'];
+			$itemMarkers['CULINARY_SPECIALITY_ITEM_LABEL'] = $data['label'];
+			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
 		$subparts['###SUBPART_SPECIALITY###'] = $this->cObj->substituteSubpartArray($specialityTemplate, $itemSubparts);
@@ -307,15 +348,13 @@
 			$itemSubparts = array();
 			$hotelTemplate = $this->cObj->getSubpart($template, '###SUBPART_HOTEL###');
 			$itemTemplate = $this->cObj->getSubpart($hotelTemplate, '###ITEM###');
-			foreach(self::$hotelEquipment as $equipment) {
+			foreach(self::$hotelEquipment as $title=>$data) {
 				$itemContent = '';
-				if ($data = $this->getSelectData($equipment[0], $equipment[1])) {
-					$itemMarkers = array();
-					$itemMarkers['SELECTED_EQUIPMENT_ITEM'] = ($this->search['hotelEquipment']==$data->ID)? 'selected="selected"': '';
-					$itemMarkers['EQUIPMENT_ITEM_VALUE'] = ($equipment[0]=='TERM')? $equipment[1][0].':'.$data->ID: $data->ID;
-					$itemMarkers['EQUIPMENT_ITEM_LABEL'] = $data->Name;
-					$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
-				}
+				$itemMarkers = array();
+				$itemMarkers['SELECTED_EQUIPMENT_ITEM'] = in_array($data['value'], $this->search['hotelEquipment'])? 'checked="checked"': '';
+				$itemMarkers['EQUIPMENT_ITEM_VALUE'] = $data['value'];
+				$itemMarkers['EQUIPMENT_ITEM_LABEL'] = $data['label'];
+				$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
 				$itemSubparts['###ITEM###'] .= $itemContent;
 			}
 			$subparts['###SUBPART_HOTEL###'] = $this->cObj->substituteSubpartArray($hotelTemplate, $itemSubparts);
@@ -332,8 +371,8 @@
 	 */
 	function renderMore_Restaurant(&$markers) {
 		/*
-			// NOTA : pb, il semblerait que ce soit sur la modalité "Jours de fermeture" du critère "Ouverture service"
-			//		donc sélectionner sur du texte libre => sait pas faire
+			// NOTA : pb, il semblerait que ce soit sur la modalitÃ© "Jours de fermeture" du critÃ¨re "Ouverture service"
+			//		donc sÃ©lectionner sur du texte libre => sait pas faire
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_RESTAURANT###');
 		$markers['OPENDAY_LABEL'] = $this->pi->pi_getLL('openday', 'Open days', true);
 		$opendayTemplate = $this->cObj->getSubpart($template, '###SUBPART_OPENDAY###');
@@ -375,35 +414,12 @@
 	 * @return	string		HTML detail content
 	 */
 	function renderMore_Event(&$markers) {
-		$data = $this->getSelectData('TERM', array(tx_icssitlorquery_CriterionUtils::CURRENT_FREE, tx_icssitlorquery_CriterionUtils::CURRENT_FREE_YES));
+		$value = tx_icssitlorquery_CriterionUtils::CURRENT_FREE . ':' . tx_icssitlorquery_CriterionUtils::CURRENT_FREE_YES;
 		$markers['NOFEE_LABEL'] = $this->pi->pi_getLL('noFee', 'No fee', true);
-		$markers['SELECTED_NOFEE'] = $this->search['noFee']? 'selected="selected"': '';
-		$markers['NOFEE_VALUE'] = $data->ID;
+		$markers['SELECTED_NOFEE'] = $this->search['noFee']? 'checked="checked"': '';
+		$markers['NOFEE_VALUE'] = $value;
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_EVENT###');
 	}
 
-	/**
-	 * [Describe function...]
-	 *
-	 * @param	string		$type: Data type
-	 * @param	mixed		$value: Data value
-	 * @return	mixed		Category, Type, Criterion or Term
-	 */
-	private function getSelectData($type, $value) {
-		switch ($type) {
-			case 'CATEGORY':
-				return tx_icssitlorquery_NomenclatureFactory::GetCategory($value);
-			case 'TYPE':
-				return tx_icssitlorquery_NomenclatureFactory::GetType($value);
-			case 'CRITERION':
-				return tx_icssitlorquery_CriterionFactory::GetCriterion($value);
-			case 'TERM':
-				return tx_icssitlorquery_CriterionFactory::GetCriterionTerm(
-					tx_icssitlorquery_CriterionFactory::GetCriterion($value[0]),
-					$value[1]
-				);
-			default:
-				return false;
-		}
-	}
+
  }

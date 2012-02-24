@@ -289,15 +289,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 */
 	function setPIVars_searchParams() {
 		$params = $this->piVars['search'];
-		
+
 		if (isset($this->piVars['btn_sword']) && $params['sword'])
 			$this->sword = $params['sword'];
 			
 		if (isset($this->piVars['btn_hotelType']) && count($params['hotelType'])>0)
-				$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
+			$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
 				
 		if (isset($this->piVars['btn_hotelEquipment']) && count($params['hotelEquipment'])>0)
-				$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
+			$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
 				
 		if (isset($this->piVars['btn_restaurantCategory']) && count($params['restaurantCategory'])>0)
 			$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
@@ -604,7 +604,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				$this->addCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT);
 				if ($this->conf['filter.']['noFeeEvent']) {
 					list($crit, $term) = t3lib_div::trimExplode(':', $this->conf['filter.']['noFeeEvent']);
-					$this->addCriterionFilter($crit, $term);
+					$this->addCriterionFilter($crit, array($term));
 				}
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider');
 				$elements = $this->queryService->getEvents($sorting);
