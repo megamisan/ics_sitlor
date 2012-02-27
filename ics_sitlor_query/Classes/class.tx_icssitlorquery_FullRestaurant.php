@@ -68,7 +68,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $allowedGroup;
 	private $allowedGroupNumber;	// tx_icssitlorquery_ValuedTermList
 	private $motorCoachPark;
-	private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
+	// private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
 
 	private $capacity;				// tx_icssitlorquery_ValuedTermList
 
@@ -89,7 +89,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->menuLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->allowedGroupNumber = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
-		$this->serviceOpen = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		// $this->serviceOpen = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->capacity = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentSaleFormula = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentCartePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
@@ -151,8 +151,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->allowedGroupNumber;
 			case 'MotorCoachPark':
 				return $this->motorCoachPark;
-			case 'ServiceOpen':
-				return $this->serviceOpen;
+			// case 'ServiceOpen':
+				// return $this->serviceOpen;
 
 			//-- CAPACITY
 			case 'Capacity':
@@ -333,8 +333,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			$this->allowedGroupNumber->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK)
 			$this->motorCoachPark = $valuedTerm;
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::SERVICEOPEN)
-			$this->serviceOpen->Add($valuedTerm);
+		// if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::SERVICEOPEN)
+			// $this->serviceOpen->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY)
 			$this->capacity->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA)
@@ -383,7 +383,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP,
 			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP_NUMBER,
 			tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK,
-			tx_icssitlorquery_CriterionUtils::SERVICEOPEN,
+			// tx_icssitlorquery_CriterionUtils::SERVICEOPEN,
 			tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA,
 			tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE,

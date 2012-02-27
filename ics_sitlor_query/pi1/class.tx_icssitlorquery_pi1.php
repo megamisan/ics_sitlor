@@ -180,13 +180,19 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		if (isset($this->piVars['mode']))
 			$modes = array($this->piVars['mode']);
-		if (empty($mode))
+		if (empty($modes))
 			$modes = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'main'), true);
 		if (empty($modes))
 			$modes = t3lib_div::trimExplode(',', $this->conf['view.']['modes'], true);
 		if (!empty($modes))
 			$codes = array_merge($codes, $modes);
 		$this->codes = array_unique($codes);
+
+		$PIDitemDisplay = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'PIDitemDisplay', 'main');
+		if ($PIDitemDisplay)
+			$this->conf['PIDitemDisplay'] = $PIDitemDisplay;
+		if (!$this->conf['PIDitemDisplay']) 
+			$this->conf['PIDitemDisplay'] = $GLOBALS['TSFE']->id;
 
 		// Get OTNancySubscriber
 		$OTNancySubscriber = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'OTNancySubscriber', 'main');
@@ -198,7 +204,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->conf['view.']['size'] = $this->conf['view.']['size']? $this->conf['view.']['size']: $this->defaultSize;
 
 		if (isset($this->piVars['page']))
-			$this->conf['page'] = $this->piVars['page'];
+			$this->conf['page'] = $this->piVars['page'] +1;
 		if (!$this->conf['page'])
 			$this->conf['page'] = 1;
 
@@ -290,30 +296,32 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	function setPIVars_searchParams() {
 		$params = $this->piVars['search'];
 
-		if (isset($this->piVars['btn_sword']) && $params['sword'])
+		// if (isset($this->piVars['btn_sword']) && $params['sword'])
 			$this->sword = $params['sword'];
 			
-		if (isset($this->piVars['btn_hotelType']) && count($params['hotelType'])>0)
+		// if (isset($this->piVars['btn_hotelType']) && count($params['hotelType'])>0)
 			$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
 				
-		if (isset($this->piVars['btn_hotelEquipment']) && count($params['hotelEquipment'])>0)
+		// if (isset($this->piVars['btn_hotelEquipment']) && count($params['hotelEquipment'])>0)
 			$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
 				
-		if (isset($this->piVars['btn_restaurantCategory']) && count($params['restaurantCategory'])>0)
+		// if (isset($this->piVars['btn_restaurantCategory']) && count($params['restaurantCategory'])>0)
 			$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
 			
-		if (isset($this->piVars['btn_restaurantSpeciality']) && count($params['culinarySpeciality'])>0)
+		// if (isset($this->piVars['btn_restaurantSpeciality']) && count($params['culinarySpeciality'])>0)
 			$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
 			
-		if (isset($this->piVars['btn_eventDate'])) {
+		// if (isset($this->piVars['btn_eventDate'])) {
 			if ($params['startDate'])
 				$this->conf['filter.']['startDate']= $params['startDate'];
 			if ($params['endDate'])
 				$this->conf['filter.']['endDate']= $params['endDate'];
-		}
+		// }
 		
-		if (isset($this->piVars['btn_noFee']) && $params['noFee'])
+		// if (isset($this->piVars['btn_noFee']) && $params['noFee'])
 			$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
+
+		$this->navParams = array('search' => $params);
 	}
 	
 	/**
@@ -397,11 +405,21 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Render price
 	 *
-	 * @param	string		$price :Price
+	 * @param	tx_icssitlorquery_ValuedTerm		$price :Price
 	 * @return	string		The price content
 	 */
-	function renderPrice($price) {
+	function renderPrice(tx_icssitlorquery_ValuedTerm $price) {
 		return $this->cObj->stdWrap($price, $this->conf['renderConf.']['price.']);
+	}
+	
+	/**
+	 * Render open close day
+	 *
+	 * @param	tx_icssitlorquery_ValuedTerm		$price :Price
+	 * @return	string		The price content
+	 */
+	function renderOpenCloseDay(tx_icssitlorquery_ValuedTerm $day) {
+		return $day->toStringConf($this->conf['renderConf.']['openCloseDay.']);
 	}
 	
 	/**
@@ -657,6 +675,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		return $criterionTerms;
 	}
+	
 
 }
 

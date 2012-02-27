@@ -21,7 +21,7 @@
 
 
 <!-- ###TEMPLATE_SEARCH_FORM### start-->
-	<form action="###ACTION_URL###"  method="POST" enctype="multipart/form-data">
+	<form action="###ACTION_URL###"  method="get" enctype="multipart/form-data">
 		<fieldset class="###PREFIXID###_mainSearch">
 			<h4>###MAIN_SEARCH_TITLE###</h4>
 			###GENERIC###
@@ -36,7 +36,7 @@
 <!-- ###TEMPLATE_FORM_GENERIC### start-->
 	<div class="sword">
 		<p><label for="sword">###KEYWORD_LABEL###</label></p>
-		<p><input type="text" name="###PREFIXID###[search][sword]" id="sword" value="###KEYWORD_VALUE###"/></p>
+		<p><input type="text" name="###PREFIXID###[search][sword]" id="sword" value=""/></p>
 	</div>
 	<div class="button">
 		<input type="submit"  name="###PREFIXID###[btn_sword]" id="###PREFIXID###_btn_sword" value="###SEARCH###"/>

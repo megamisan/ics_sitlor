@@ -293,6 +293,15 @@ plugin.tx_icssitlorquery_pi1 {
 				noTrimWrap = | au ||
 			}
 		}
+		openCloseDay.cObject = TEXT
+		openCloseDay.cObject {
+			field = term
+			append = TEXT
+			append {
+				field = value
+				noTrimWrap = |&nbsp;: ||
+			}
+		}
 	}
 	
 }

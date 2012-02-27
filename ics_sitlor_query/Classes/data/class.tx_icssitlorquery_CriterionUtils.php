@@ -129,6 +129,7 @@ class tx_icssitlorquery_CriterionUtils {
 	const MOTORCOACH_PARK_YES = 107;
 	const OPENING_24_24 = 736000325;
 	const SERVICEOPEN = 736000146;
+	const SERVICEOPEN_CLOSEDAY = 7;
 	const OPENDAY = 736001020;
 
 	/*******************************************************

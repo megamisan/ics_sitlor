@@ -147,7 +147,7 @@
 
 		$markers = array(
 			'PREFIXID' => $this->prefixId,
-			'ACTION_URL' =>  t3lib_div::getIndpEnv('TYPO3_REQUEST_URL') ,
+			'ACTION_URL' =>  $this->pi->pi_getPageLink ($GLOBALS['TSFE']->id, $target='', array()),//t3lib_div::getIndpEnv('TYPO3_REQUEST_URL') ,
 		);
 			// Get dataGroup main search title
 		switch($dataGroup ) {
@@ -421,5 +421,4 @@
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_EVENT###');
 	}
 
-
- }
+}

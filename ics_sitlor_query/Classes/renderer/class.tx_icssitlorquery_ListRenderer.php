@@ -71,7 +71,9 @@
 	 */
 	private function renderListEmpty() {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_LIST_EMPTY###');
-		$markers = array();
+		$markers = array(
+			'MESSAGE' => $this->pi->pi_getLL('empty_list', 'Empty list', true),
+		);
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###', false, true);
 	}
 
@@ -95,6 +97,7 @@
 		}
 		$markers = array(
 			'PREFIXID' => $this->prefixId,
+			'PAGE_BROWSER' => $this->getListGetPageBrowser(intval(ceil($this->pi->queryService->getLastTotalCount()/$this->conf['view.']['size']))),
 		);
 		$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
@@ -138,7 +141,11 @@
 				$price = $this->pi->renderPrice($valudeTerm);
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $element->Name,
+				'TITLE' => $this->pi->pi_linkTP	($element->Name,
+					array($this->prefixId . '[showUid]' => $element->ID, 'mode' => 'SINGLE'),
+					0,
+					$this->conf['PIDitemDisplay']
+				),
 				'DESCRIPTION' => $element->Description,
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
@@ -153,20 +160,34 @@
 				if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE_ADULT)
 					$price = $this->pi->renderPrice($valudeTerm);
 			}
+			for ($i=0; $i<$element->ServiceOpen->Count(); $i++) {
+				$valudeTerm = $element->ServiceOpen->Get($i);
+				if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::SERVICEOPEN_CLOSEDAY)
+					$day = $valudeTerm;
+			}
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $element->Name,
+				'TITLE' => $this->pi->pi_linkTP	($element->Name,
+					array($this->prefixId . '[showUid]' => $element->ID, 'mode' => 'SINGLE'),
+					0,
+					$this->conf['PIDitemDisplay']
+				),
 				'DESCRIPTION' => $element->Description,
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'LABELCHAIN' => $element->LabelChain,
+				'SERVICE_OPEN' => isset($day)? $this->pi->renderOpenCloseDay($day): '',
 			);
 		}
 		if ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
 				'TYPE' => $element->TypeEvent,
-				'TITLE' => $element->Name,
+				'TITLE' => $this->pi->pi_linkTP	($element->Name,
+					array($this->prefixId . '[showUid]' => $element->ID, 'mode' => 'SINGLE'),
+					0,
+					$this->conf['PIDitemDisplay']
+				),
 				'DESCRIPTION' => $element->Description,
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderDate($element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
 			);
@@ -174,4 +195,22 @@
 		$markers = array_merge($markers, $locMarkers);
 		return $template;
 	}
+	
+	protected function getListGetPageBrowser($numberOfPages) {
+		// Get default configuration
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
+		// Modify this configuration
+		$conf += array(
+			'pageParameterName' => $this->prefixId . '|page',
+			'numberOfPages' => $numberOfPages,
+			// 'extraQueryString' => isset($this->pi->navParams)? t3lib_div::implodeArrayForUrl($this->prefixId, $this->pi->navParams): '',
+		);
+		
+		// Get page browser
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		/* @var $cObj tslib_cObj */
+		$cObj->start(array(), '');
+		return $cObj->cObjGetSingle('USER', $conf);
+	}	
+	
  }
