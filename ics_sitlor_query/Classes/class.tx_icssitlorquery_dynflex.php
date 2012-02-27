@@ -116,7 +116,6 @@ class tx_icssitlorquery_dynflex {
 		
 		// Subdata group
 		$subDataGroup_options = array(
-			array('', ''),
 			array($llang_ffds . ':subDataGroup_hotel', 'HOTEL'),
 			array($llang_ffds . ':subDataGroup_camping_youthHostel', 'CAMPING_YOUTHHOSTEL'),
 			array($llang_ffds . ':subDataGroup_strange', 'STRANGE'),
@@ -136,7 +135,6 @@ class tx_icssitlorquery_dynflex {
 		
 		// Hotel types
 		$hotelType_options = array(
-			array('', ''),
 			array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
 			array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
 		);
@@ -154,7 +152,6 @@ class tx_icssitlorquery_dynflex {
 		
 		// Hotel equipments
 		$hotelEquipment_options = array(
-			array('', ''),
 			array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
 			array($llang_ffds . ':hotelEquipment_allowedPets', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS.':'.tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES),
 			array($llang_ffds . ':hotelEquipment_wifi', tx_icssitlorquery_CriterionUtils::COMFORT_ROOM.':'.tx_icssitlorquery_CriterionUtils::WIFI),
@@ -186,7 +183,6 @@ class tx_icssitlorquery_dynflex {
 		
 		// Restaurant categories
 		$category_options = array(
-			array('', ''),
 			array($llang_ffds . ':restaurantCategory_fastfood', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD),
 			array($llang_ffds . ':restaurantCategory_icecream_theahouse', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE),
 			array($llang_ffds . ':restaurantCategory_creperie', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE),
@@ -205,7 +201,6 @@ class tx_icssitlorquery_dynflex {
 		
 		// Restaurant spéciality
 		$foreignFood_options = array(
-			array('', ''),
 			array($llang_ffds . ':foreignFood_asian', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN),
 			array($llang_ffds . ':foreignFood_sa', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_SA),
 			array($llang_ffds . ':foreignFood_oriental', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ORIENTAL),

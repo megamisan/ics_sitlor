@@ -67,16 +67,15 @@
 							<config>
 								<type>select</type>
 								<items type="array">
-									<numIndex index="0" type="array"></numIndex>
-									<numIndex index="1" type="array">
+									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:search</numIndex>
 										<numIndex index="1">SEARCH</numIndex>
 									</numIndex>
-									<numIndex index="2" type="array">
+									<numIndex index="1" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:list</numIndex>
 										<numIndex index="1">LIST</numIndex>
 									</numIndex>
-									<numIndex index="3" type="array">
+									<numIndex index="2" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:single</numIndex>
 										<numIndex index="1">SINGLE</numIndex>
 									</numIndex>
@@ -137,16 +136,15 @@
 							<config type="array">
 								<type>select</type>
 								<items type="array">
-									<numIndex index="0" type="array"></numIndex>
-									<numIndex index="1" type="array">
+									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_accomodation</numIndex>
 										<numIndex index="1">ACCOMODATION</numIndex>
 									</numIndex>
-									<numIndex index="2" type="array">
+									<numIndex index="1" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_restaurant</numIndex>
 										<numIndex index="1">RESTAURANT</numIndex>
 									</numIndex>
-									<numIndex index="3" type="array">
+									<numIndex index="2" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_event</numIndex>
 										<numIndex index="1">EVENT</numIndex>
 									</numIndex>
@@ -189,24 +187,23 @@
 							<config type="array">
 								<type>select</type>
 								<items type="array">
-									<numIndex index="0" type="array"></numIndex>
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_alpha</numIndex>
+										<numIndex index="1">ALPHA</numIndex>
+									</numIndex>
 									<numIndex index="1" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_random</numIndex>
 										<numIndex index="1">RANDOM</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_alpha</numIndex>
-										<numIndex index="1">ALPHA</numIndex>
-									</numIndex>
-									<numIndex index="3" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_price</numIndex>
 										<numIndex index="1">PRICE</numIndex>
 									</numIndex>
-									<numIndex index="4" type="array">
+									<numIndex index="3" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_hotelRating</numIndex>
 										<numIndex index="1">HOTELRATING</numIndex>
 									</numIndex>
-									<numIndex index="5" type="array">
+									<numIndex index="4" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_date</numIndex>
 										<numIndex index="1">DATE</numIndex>
 									</numIndex>
@@ -223,14 +220,13 @@
 							<config type="array">
 								<type>select</type>
 								<items type="array">
-									<numIndex index="0" type="array"></numIndex>
-									<numIndex index="1" type="array">
+									<numIndex index="0" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortOrder_asc</numIndex>
-										<numIndex index="1">asc</numIndex>
+										<numIndex index="1">ASC</numIndex>
 									</numIndex>
-									<numIndex index="2" type="array">
+									<numIndex index="1" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortOrder_desc</numIndex>
-										<numIndex index="1">desc</numIndex>
+										<numIndex index="1">DESC</numIndex>
 									</numIndex>
 								</items>
 								<size>1</size>

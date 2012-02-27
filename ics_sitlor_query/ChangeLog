@@ -7,6 +7,7 @@
 	* Feature: Removed Restaurant form search more
 	* Feature: Transfered locallang
 	* Feature: Setted typoscript conf price for view list 
+	* Feature: Removed flexform blank line select
 
 2012-02-24 Tsi Yang <tsi@in-cite.net>
 	* Fix: Bad parameter for query keyword search param.
