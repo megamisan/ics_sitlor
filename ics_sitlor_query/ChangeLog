@@ -3,7 +3,8 @@
 	* Feature: Added data in CriterionUtils
 	* Feature: Added page browser
 	* Feature: Added conf single page id
-	* Feature: Added link on results list title to setail
+	* Feature: Added link on results list title to detail
+	* Feature: Removed Restaurant form search more
 
 2012-02-24 Tsi Yang <tsi@in-cite.net>
 	* Fix: Bad parameter for query keyword search param.

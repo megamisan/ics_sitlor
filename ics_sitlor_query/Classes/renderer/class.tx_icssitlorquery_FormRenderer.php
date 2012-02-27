@@ -136,7 +136,6 @@
 		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
 		$locMarkers['MORE'] = '';
 		if (($dataGroup == 'ACCOMODATION' && in_array('HOTEL', $subDataGroups)) ||
-			// ($dataGroup == 'RESTAURANT') ||
 			($dataGroup == 'EVENT')) {
 			$locMarkers['MORE'] = $this->renderMore($markers);
 		}
@@ -363,49 +362,6 @@
 		return $this->cObj->substituteSubpartArray($template, $subparts);
 	}
 	
-	/**
-	 * Render  restaurant search form more
-	 *
-	 * @param	array&		$markers: Markers array
-	 * @return	string		HTML detail content
-	 */
-	function renderMore_Restaurant(&$markers) {
-		/*
-			// NOTA : pb, il semblerait que ce soit sur la modalité "Jours de fermeture" du critère "Ouverture service"
-			//		donc sélectionner sur du texte libre => sait pas faire
-		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE_RESTAURANT###');
-		$markers['OPENDAY_LABEL'] = $this->pi->pi_getLL('openday', 'Open days', true);
-		$opendayTemplate = $this->cObj->getSubpart($template, '###SUBPART_OPENDAY###');
-		$itemTemplate = $this->cObj->getSubpart($opendayTemplate, '###ITEM###');
-		$opendayTerms = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(
-			tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::OPENDAY)
-		);
-		// for($i=0; $i<$opendayTerms->Count(); $i++) {
-			// $day = $opendayTerms->Get($i);
-			// $itemContent = '';
-			// $itemMarkers = array();
-			// $itemMarkers['SELECTED_OPENDAY_ITEM'] = ($this->search['openday']==$day->ID)? 'selected="selected"': '';
-			// $itemMarkers['OPENDAY_ITEM_VALUE'] = $day->ID;
-			// $itemMarkers['OPENDAY_ITEM_LABEL'] = $day->Name;
-			// $itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
-			// $itemSubparts['###ITEM###'] .= $itemContent;
-		// }
-		foreach(self::$dayOfWeek as $numDay) {
-			$days = array($opendayTerms->Get($numDay*2 -2), $opendayTerms->Get($numDay*2 -1));
-			$itemContent = '';
-			$itemMarkers = array();
-			$itemMarkers['SELECTED_OPENDAY_ITEM'] = ($this->search['openday']== ($days[0]->ID.','.$days[1]->ID))? 'selected="selected"': '';
-			$itemMarkers['OPENDAY_ITEM_VALUE'] = $days[0]->ID.','.$days[1]->ID;
-			$itemMarkers['OPENDAY_ITEM_LABEL'] = $this->pi->pi_getLL('openday_'.$numDay, 'Open day '.$numDay, true);
-			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $itemMarkers, '###|###');
-			$itemSubparts['###ITEM###'] .= $itemContent;
-		}
-		$subparts['###SUBPART_OPENDAY###'] = $this->cObj->substituteSubpartArray($opendayTemplate, $itemSubparts);
-		
-		return $this->cObj->substituteSubpartArray($template, $subparts);
-		*/
-		return '';
-	}
 	 
 	/**
 	 * Render  event search form more
