@@ -203,9 +203,8 @@
 		$conf += array(
 			'pageParameterName' => $this->prefixId . '|page',
 			'numberOfPages' => $numberOfPages,
-			// 'extraQueryString' => isset($this->pi->navParams)? t3lib_div::implodeArrayForUrl($this->prefixId, $this->pi->navParams): '',
+			'extraQueryString' => $this->pi->queryService->getLastRandomSession()? '&' . $this->prefixId . '[sortExtra]=' . $this->pi->queryService->getLastRandomSession(): ''
 		);
-		
 		// Get page browser
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		/* @var $cObj tslib_cObj */

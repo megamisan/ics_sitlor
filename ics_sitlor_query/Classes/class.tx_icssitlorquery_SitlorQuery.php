@@ -40,7 +40,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	private $end = 20;	// End of page
 	
 	private $filters = array();	// Associative array
-	private $sortings = array();
+	private $sorting = null;
 	
 	static private $outputList = array(	// SITLOR Output value
 		'xml' => '1',
@@ -177,8 +177,12 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$this->makeValidFilter($params, $pnames, $pvalues, $filterArray);
 			$this->makeAvailableFilter($params, $pnames, $pvalues, $filterArray);
 		}
-
 		//-- End of Filter on params
+		
+		//-- Sorting
+		if (isset($this->sorting))
+			$this->putSorting($params, $pnames, $pvalues);
+			
 
 		$params['PNAMES'] = utf8_decode(implode(',', $pnames));
 		$params['PVALUES'] = utf8_decode(implode(',', $pvalues));
@@ -249,17 +253,14 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				break;
 				
 			// Sorting parameters
-			case 'randomSorting':
-			case 'alphaSorting':
-			case 'titleSorting':
-			case 'ratingStarSorting':
-			// case 'ratingEarsOfCornSorting':
-			case 'minDualRoomSorting':
-			case 'currentWeeklyPriceSorting':
-			// case 'labelChainSorting':
-			case 'adultMenuSorting':
-			case 'dateSorting':
-				$this->sortings[$name] = $value;
+			case 'accomodationSorting':
+			case 'restaurantSorting':
+			case 'eventSorting':
+				$this->sorting = array(
+					$name,
+					$value[0],
+					$value[1]
+				);
 				break;
 			
 			default:
@@ -395,7 +396,6 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$pvalues[] = implode('|', $criterionTerms[1]);
 			}
 		}
-		
 	}
 	
 	/**
@@ -500,6 +500,29 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		}
 		if (in_array('notAvailable', $filterArray) && $this->filters['notAvailable']) {
 			$params['tsdispo'] = utf8_decode('Y');
+		}
+	}
+	
+	/**
+	 * @param	array&		$pnames Parameters names.
+	 * @param	array&		$pvalues Parameters values.
+	 * @param	array		$filterArray Filters to use.
+	 * @return	void
+	 */
+	private function putSorting(array &$params, array &$pnames, array &$pvalues) {
+		switch ($this->sorting[1]) {
+			case 'alpha':
+				$params['lestris'] = '"Nom"';
+				break;
+			case 'random':
+				$params['sessionalea'] = $this->sorting[2]? $this->sorting[2]: 'start';
+				break;
+			case 'rating':
+				$params['minscore'] = '-1';
+				$params['score']= 2000292000002;
+				break;
+			case 'price':
+				break;
 		}
 	}
 

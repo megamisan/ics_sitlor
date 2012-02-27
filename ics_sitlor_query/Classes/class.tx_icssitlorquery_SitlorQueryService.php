@@ -38,6 +38,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	private $pageSize;	// The page size
 	private $filters = array();	// Array of IFilters
 	private $totalSize;		// Elements size
+	private $randomSession;
 
 	/**
 	 * Initializes service access.
@@ -101,6 +102,15 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	}
 	
 	/**
+	 * Retrieves random session
+	 *
+	 * @return random session
+	 */
+	public function getLastRandomSession() {
+		return $this->randomSession;
+	}
+	
+	/**
 	 * Retrieves the last query.
 	 *
 	 * @return tx_icssitquery_IQuery		The last executed query.
@@ -117,16 +127,20 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 */
 	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
+
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
 				$full = true;
 			$filter->apply($this->query);
 		}
-		if ($full)
+		if ($full) {
 			$this->query->setCriteria(tx_icssitlorquery_FullAccomodation::getRequiredCriteria());
-		else
+		} else {
 			$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
+			if (isset($sorting))
+				$sorting->apply($this->query);
+		}
 		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
 
@@ -143,6 +157,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			return false;
 		}
 		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
+		$this->randomSession = $reader->getAttribute('SESSIONALEA');
 		$reader->read();
 		$accomodations = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
@@ -176,18 +191,23 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 */
 	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting=null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
+
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
 				$full = true;
 			$filter->apply($this->query);
 		}
-		if ($full)
+		if ($full) {
 			$this->query->setCriteria(tx_icssitlorquery_FullRestaurant::getRequiredCriteria());
-		else
+		} else {
 			$this->query->setCriteria(tx_icssitlorquery_Restaurant::getRequiredCriteria());
+			if (isset($sorting))
+				$sorting->apply($this->query);
+		}
 		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
+		
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
 
@@ -201,6 +221,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			return false;
 		}
 		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
+		$this->randomSession = $reader->getAttribute('SESSIONALEA');
 		$reader->read();
 		$restaurants = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
@@ -242,10 +263,13 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 				$full = true;
 			$filter->apply($this->query);
 		}
-		if ($full)
+		if ($full) {
 			$this->query->setCriteria(tx_icssitlorquery_FullEvent::getRequiredCriteria());
-		else
+		} else {
 			$this->query->setCriteria(tx_icssitlorquery_Event::getRequiredCriteria());
+			if (isset($sorting))
+				$sorting->apply($this->query);
+		}
 		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
 		
@@ -262,6 +286,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			return false;
 		}
 		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
+		$this->randomSession = $reader->getAttribute('SESSIONALEA');
 		$reader->read();
 		$events = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {

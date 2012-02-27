@@ -282,10 +282,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->conf['filter.']['startDate'] = self::$default_startDate;
 			
 		// Get param sorting
-		$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'paramSorting');
-		$this->conf['sortName'] = $sortName? $sortName: $this->conf['sortName'];
-		$sortOrder = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortOrder', 'paramSorting');
-		$this->conf['sortOrder'] = $sortOrder? $sortOrder: $this->conf['sortOrder'];
+		$sortName = $this->piVars['sortName']? $this->piVars['sortName']: '';
+		$sortName = $sortName? $sortName: $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'paramSorting');
+		$this->conf['sort.']['name'] = $sortName? $sortName: $this->conf['sort.']['name'];
+		
+		$sortExtra = $this->piVars['sortExtra']? $this->piVars['sortExtra']: '';
+		$sortExtra = $sortExtra? $sortExtra: $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortExtra', 'paramSorting');
+		$this->conf['sort.']['extra'] = $sortExtra? $sortExtra: $this->conf['sort.']['extra'];
 	}
 	
 	/**
@@ -590,7 +593,23 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 						$this->queryService->addFilter($filter);
 					}
 				}
-				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider');
+				switch ($this->conf['sort.']['name']) {
+					case 'ALPHA':
+						$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
+						break;
+					case 'RANDOM':
+						if ($this->conf['sort.']['extra'])
+							$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider', 'random', $this->conf['sort.']['extra']);
+						else
+							$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider', 'random', 'start');
+						break;
+					case 'HOTELRATING':
+						$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider', 'rating', strtoupper($this->conf['sort.']['extra']));
+						break;
+					case 'PRICE':
+						$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider', 'price', strtoupper($this->conf['sort.']['extra']));
+						break;
+				}
 				$elements = $this->queryService->getAccomodations($sorting);
 				break;
 

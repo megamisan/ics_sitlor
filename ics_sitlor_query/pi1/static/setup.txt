@@ -30,6 +30,13 @@ plugin.tx_icssitlorquery_pi1 {
 		startDate = 01/01/2000
 	}
 	
+	# Sorting
+	sort {
+		name = 
+		# order "ASC" or "DESC"
+		extra = 
+	}
+	
 	# Default primitive rendering
 	defaultConf {
 		Phone.field = phone

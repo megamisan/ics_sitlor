@@ -8,6 +8,7 @@
 	* Feature: Transfered locallang
 	* Feature: Setted typoscript conf price for view list 
 	* Feature: Removed flexform blank line select
+	* Feature: Added partial Accomodation sorting
 
 2012-02-24 Tsi Yang <tsi@in-cite.net>
 	* Fix: Bad parameter for query keyword search param.
