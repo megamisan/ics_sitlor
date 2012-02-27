@@ -409,7 +409,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	string		The price content
 	 */
 	function renderPrice(tx_icssitlorquery_ValuedTerm $price) {
-		return $this->cObj->stdWrap($price, $this->conf['renderConf.']['price.']);
+		return $price->toStringConf($this->conf['renderConf.']['price.']);
 	}
 	
 	/**

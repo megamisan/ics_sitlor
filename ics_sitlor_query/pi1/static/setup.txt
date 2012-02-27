@@ -277,7 +277,11 @@ plugin.tx_icssitlorquery_pi1 {
 			separator = <span class="phone_separator"> - </span>
 		}
 		fax.noTrimWrap = |Fax&nbsp;: ||
-		price.wrap = | eur
+		price.cObject = TEXT
+		price.cObject {
+			field = value
+			noTrimWrap = || eur|
+		}
 		date.cObject = COA
 		date.cObject {
 			10 = TEXT
