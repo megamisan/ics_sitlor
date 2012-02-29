@@ -39,7 +39,6 @@
 abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToString {
 	private $elements = array();	/**< List elements */
 	private static $separator = array('tx_icssitlorquery_abstractlist' => ',');	/**< Default list separator for string representation. */
-	private static $defaultType = 'tx_icssitlorquery_abstractlist';	// Default type
 		
 	/**
 	 * Initializes the list.
@@ -148,11 +147,10 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 */
 	public function toString() {
 		$type = strtolower(get_class($this));
-		$types = array_keys(self::$separator);
-		if (in_array($type, $types)) {
+		if (isset(self::$separator[$type])) {
 			$separator = self::$separator[$type];
 		} else {
-			$separator = self::$separator[self::$defaultType];
+			$separator = self::$separator[strtolower(__CLASS__)];
 		}
 		
 		$args = func_get_args();
@@ -171,9 +169,9 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 */
 	public static function setDefaultSeparator($separator, $type=null) {
 		if (!$type)
-			$type = self::$defaultType;
+			$type = __CLASS__;
 		if (is_string($separator)) {
-			self::$separator[$type] = $separator;
+			self::$separator[strtolower($type)] = $separator;
 		}
 	}
 }

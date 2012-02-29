@@ -380,7 +380,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	function setDefaultSeparator() {
 		foreach ($this->conf['defaultSeparator.'] as $type => $conf) {
 			$class = 'tx_icssitlorquery_' . $type . 'List';
-			tx_icssitlorquery_AbstractList::setDefaultSeparator($conf, strtolower($class));
+			tx_icssitlorquery_AbstractList::setDefaultSeparator($conf, $class);
 		}
 	}
 
