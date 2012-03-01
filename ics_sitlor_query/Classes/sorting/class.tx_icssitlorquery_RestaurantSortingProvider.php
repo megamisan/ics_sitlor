@@ -32,24 +32,38 @@
  */
 
 class tx_icssitlorquery_RestaurantSortingProvider implements tx_icssitquery_ISortingProvider {
+	private $value;
+	private $sortings = array(
+		'random',
+		// 'rating',	// TODO : stand by till Nancy get the classment to use
+		'price',
+	);
 
 	/**
 	 * Constructor
 	 *
-	 * @return	void
+	 * @param	string $value : Sorting's value
+	 * @param	string $extra : order "ASC"/"DESC" or random extra data
 	 */
-	function __construct() {
+	function __construct($value, $extra='') {
+		if (!is_string($value))
+			throw new Exception('Type must be a string.');
+		if (!in_array($value, $this->sortings))
+			throw new Exception('Unkown type sorting ' . $value . '.');
+		if ($value != 'random' && $extra && !in_array(strtoupper($extra), array('ASC', 'DESC'))) 
+			$extra = 'ASC';
+		
+		$this->value = array($value, $extra);
 	}
 
-
-
 	/**
-	 * Applies sorting.
+	 * Apply sorting
 	 *
-	 * @param	tx_icssitquery_IQuery		$query The query the apply the provider to.
+	 * @param	IQuery $query : The IQuery
+	 *
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
+		$query->setParameter('restaurantSorting', $this->value);
 	}
-
 }

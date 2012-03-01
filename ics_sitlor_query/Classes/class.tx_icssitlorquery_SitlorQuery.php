@@ -183,10 +183,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if (isset($this->sorting))
 			$this->putSorting($params, $pnames, $pvalues);
 			
-
 		$params['PNAMES'] = utf8_decode(implode(',', $pnames));
 		$params['PVALUES'] = utf8_decode(implode(',', $pvalues));
-
+		
 		$urlQuery = $this->url . '?' . http_build_query($params);
 		t3lib_div::devLog('Url', 'ics_sitlor_query', 0, array(urldecode($urlQuery)));
 		return tx_icssitlorquery_XMLTools::getXMLDocument($urlQuery);
@@ -510,19 +509,61 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @return	void
 	 */
 	private function putSorting(array &$params, array &$pnames, array &$pvalues) {
+		if (!in_array($this->sorting[0], array('accomodationSorting', 'restaurantSorting', 'eventSorting')))
+			return;
+	
 		switch ($this->sorting[1]) {
 			case 'alpha':
 				$params['lestris'] = '"Nom"';
 				break;
+
 			case 'random':
 				$params['sessionalea'] = $this->sorting[2]? $this->sorting[2]: 'start';
 				break;
+
 			case 'rating':
-				$params['minscore'] = '-1';
-				$params['score']= 2000292000002;
+				switch($this->sorting[0]) {
+					case 'accomodationSorting':
+						$params['minscore'] = '-1';
+						$params['score']= 2000292000002;
+						break;
+					default:
+						tx_icssitquery_Debug::warning('Sorting ' . $this->sorting[1] . ' is not implemented for ' . $this->sorting[0]);
+				}
 				break;
+
 			case 'price':
+				switch($this->sorting[0]) {
+					case 'accomodationSorting':
+						$this->filters['criterion'][] = array(tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE, array(tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE_DOUBLEROOM_MIN));
+						break;
+					case 'restaurantSorting':
+						$this->filters['criterion'][] = array(tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE, array(tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE_ADULT));
+					default:
+						tx_icssitquery_Debug::warning('Sorting ' . $this->sorting[1] . ' is not implemented for ' . $this->sorting[0]);
+				}
+				if (in_array($this->sorting[0], array('accomodationSorting', 'restaurantSorting'))) {
+					$position = count($this->filters['criterion']) -1;
+					$pnames[] = 'elcriterio' . $position;
+					$pvalues[] = $this->filters['criterion'][$position][0];
+					$pnames[] = 'modalidad' . $position;
+					$pvalues[] = implode('|', $this->filters['criterion'][$position][1]);
+					$params['champstri'] = 'TO_NUMBER(CRIT' . $position . '."Valeur",\'9999.99\') AS valeur';
+					$params['lestris'] = 'valeur';
+				}
 				break;
+
+			case 'endDate':
+				if ($this->sorting[0] == 'eventSorting') {
+					$params['champstri'] = 'HORAIR."Au" as endDate';
+					$params['lestris'] = 'endDate';
+				} else {
+					tx_icssitquery_Debug::warning('Sorting ' . $this->sorting[1] . ' is not implemented for ' . $this->sorting[0]);
+				}
+				break;
+				
+			default:
+				tx_icssitquery_Debug::warning('Sorting ' . $this->sorting[1] . ' is not implemented.');
 		}
 	}
 

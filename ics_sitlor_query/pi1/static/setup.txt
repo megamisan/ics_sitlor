@@ -178,6 +178,8 @@ plugin.tx_icssitlorquery_pi1 {
 				4000017 < .labelValue
 				# Restaurant menu price
 				4000018 < .labelValue
+				# Restaurant service open
+				736000146 < .labelValue
 				default = TEXT
 				default {
 					field = criterion

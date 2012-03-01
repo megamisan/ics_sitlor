@@ -133,6 +133,8 @@
 			return '';
 
 		$locMarkers = array();
+		
+		// Render Accomodations
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_ACCOMODATION###');
 			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
@@ -141,17 +143,14 @@
 				$price = $this->pi->renderPrice($valudeTerm);
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $this->pi->pi_linkTP	($element->Name,
-					array($this->prefixId . '[showUid]' => $element->ID, 'mode' => 'SINGLE'),
-					0,
-					$this->conf['PIDitemDisplay']
-				),
+				'TITLE' => $this->renderTitleLink($element),
 				'DESCRIPTION' => $element->Description,
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'RATINGSTAR' => $element->RatingStar,
 			);
 		}
+		// Render Restaurants
 		if ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_RESTAURANT###');
 			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
@@ -167,11 +166,7 @@
 			}
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $this->pi->pi_linkTP	($element->Name,
-					array($this->prefixId . '[showUid]' => $element->ID, 'mode' => 'SINGLE'),
-					0,
-					$this->conf['PIDitemDisplay']
-				),
+				'TITLE' => $this->renderTitleLink($element),
 				'DESCRIPTION' => $element->Description,
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
@@ -179,23 +174,38 @@
 				'SERVICE_OPEN' => isset($day)? $this->pi->renderOpenCloseDay($day): '',
 			);
 		}
+		// Render Events
 		if ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
 				'TYPE' => $element->TypeEvent,
-				'TITLE' => $this->pi->pi_linkTP	($element->Name,
-					array($this->prefixId . '[showUid]' => $element->ID, 'mode' => 'SINGLE'),
-					0,
-					$this->conf['PIDitemDisplay']
-				),
+				'TITLE' => $this->renderTitleLink($element),
 				'DESCRIPTION' => $element->Description,
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderDate($element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
 			);
 		}
+		
 		$markers = array_merge($markers, $locMarkers);
 		return $template;
 	}
 	
+	/**
+	 * Render title link
+	 *
+	 * @return	string		Title link content	
+	 */
+	private function renderTitleLink($element) {
+		return $this->pi->pi_linkTP	($element->Name,
+			array($this->prefixId . '[showUid]' => $element->ID, $this->prefixId . '[mode]' => 'SINGLE'),
+			0,
+			$this->conf['PIDitemDisplay']
+		);
+	}
+	/**
+	 * Page browser
+	 *
+	 * @return 		page browser content
+	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		// Get default configuration
 		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];

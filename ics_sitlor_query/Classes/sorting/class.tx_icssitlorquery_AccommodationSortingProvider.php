@@ -43,8 +43,8 @@ class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_IS
 	/**
 	 * Constructor
 	 *
-	 * @param	string $value
-	 * @param	boolean $extra
+	 * @param	string $value : Sorting's value
+	 * @param	string $extra : order "ASC"/"DESC" or random extra data
 	 */
 	function __construct($value, $extra='') {
 		if (!is_string($value))
@@ -57,8 +57,6 @@ class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_IS
 		$this->value = array($value, $extra);
 	}
 
-
-
 	/**
 	 * Apply sorting
 	 *
@@ -69,5 +67,4 @@ class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_IS
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('accomodationSorting', $this->value);
 	}
-
 }

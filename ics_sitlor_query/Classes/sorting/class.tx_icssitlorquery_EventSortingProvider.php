@@ -32,14 +32,25 @@
  */
 
 class tx_icssitlorquery_EventSortingProvider implements tx_icssitquery_ISortingProvider {
+	private $value;
+	private $sortings = array(
+		'endDate',
+	);
+
 	/**
 	 * Constructor
 	 *
+	 * @param	string $value : Sorting's value
+	 * @param	string $extra : order "ASC"/"DESC" or random extra data
 	 */
-	function __construct() {
+	function __construct($value, $extra='') {
+		if (!is_string($value))
+			throw new Exception('Type must be a string.');
+		if (!in_array($value, $this->sortings))
+			throw new Exception('Unkown type sorting ' . $value . '.');
+		
+		$this->value = array($value, $extra);
 	}
-
-
 
 	/**
 	 * Apply sorting
@@ -49,6 +60,6 @@ class tx_icssitlorquery_EventSortingProvider implements tx_icssitquery_ISortingP
 	 * @return void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
+		$query->setParameter('eventSorting', $this->value);
 	}
-
 }
