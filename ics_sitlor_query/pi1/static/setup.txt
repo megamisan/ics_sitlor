@@ -141,13 +141,19 @@ plugin.tx_icssitlorquery_pi1 {
 		Coordinates.cObject {
 			10 = TEXT
 			10 {
+				prepend = TEXT
+				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:latitude
 				field = latitude
-				noTrimWrap = |Latitude&nbsp;: ||
+				noTrimWrap = | : ||
 			}
+			15 = TEXT
+			15.value = &nbsp;&nbsp;
 			20 = TEXT
 			20 {
+				prepend = TEXT
+				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:longitude
 				field = longitude
-				noTrimWrap = |&nbsp;&nbsp;Longitude&nbsp;: ||
+				noTrimWrap = | : ||
 			}
 		}
 		ValuedTerm {
@@ -202,9 +208,9 @@ plugin.tx_icssitlorquery_pi1 {
 			preUserFunc {
 				addMissingEntries = 1
 				head.wrap = <thead><tr><td class="hiddenCell"></td>|</tr></thead>
-				headAM = Matin
+				headAM.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:morning
 				headAM.wrap = <th class="timeSpanHead" colspan="2" id="morning">|</th>
-				headPM = Après-midi
+				headPM.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:afternoon
 				headPM.wrap = <th class="timeSpanHead" colspan="2" id="afternoon">|</th>
 				body.wrap = <tbody>|</tbody>
 				row.wrap = <tr>|</tr>
@@ -252,15 +258,21 @@ plugin.tx_icssitlorquery_pi1 {
 			preCObject {
 				10 = TEXT
 				10 {
+					prepend = TEXT
+					prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:from_date
 					field = start
 					stdWrap.strftime = %d/%m/%Y
-					noTrimWrap = |Du ||
+					noTrimWrap = | ||
 				}
+				15 = TEXT
+				15.value = &nbsp;
 				20 = TEXT
 				20 {
+					prepend = TEXT
+					prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:to_date
 					field = end
 					stdWrap.strftime = %d/%m/%Y
-					noTrimWrap = | au ||
+					noTrimWrap = | ||
 				}
 				wrap = <caption>|</caption>
 			}
@@ -282,28 +294,54 @@ plugin.tx_icssitlorquery_pi1 {
 	# Render data
 	renderConf {
 		phones {
-			noTrimWrap = |Tél&nbsp;: ||
+			prepend = TEXT
+			prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:phone
+			noTrimWrap = |&nbsp;: ||
 			separator = <span class="phone_separator"> - </span>
 		}
-		fax.noTrimWrap = |Fax&nbsp;: ||
-		price.cObject = TEXT
+		fax {
+			prepend = TEXT
+			prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:fax
+			noTrimWrap = |&nbsp;: ||
+		}
+		price.cObject = COA
 		price.cObject {
-			field = value
-			noTrimWrap = || eur|
+			10 = TEXT
+			10 {
+				data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:price
+			}
+			15 = TEXT
+			15 {
+				value = &nbsp:
+				noTrimWrap = || |
+			}
+			20 = TEXT
+			20 {
+				append = TEXT
+				append.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:currency
+				field = value
+				noTrimWrap = || |
+			}
 		}
 		date.cObject = COA
 		date.cObject {
 			10 = TEXT
 			10 {
+				prepend = TEXT
+				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:from_date
 				field = start
 				stdWrap.strftime = %d/%m/%Y
-				noTrimWrap = |Du ||
+				noTrimWrap = | ||
 			}
+			15 = TEXT
+			15.value = &nbsp;
 			20 = TEXT
 			20 {
+				prepend = TEXT
+				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:to_date
 				field = end
 				stdWrap.strftime = %d/%m/%Y
-				noTrimWrap = | au ||
+				noTrimWrap = | ||
 			}
 		}
 		openCloseDay.cObject = TEXT

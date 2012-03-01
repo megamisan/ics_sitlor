@@ -68,6 +68,15 @@
             <label index="type_event">Type events</label>
             <label index="other_infos">Other informations</label>
             <label index="festival">Festival</label>
+            <label index="phone">Phone</label>
+            <label index="fax">Fax</label>
+            <label index="latitude">Latitude</label>
+            <label index="longitude">Longitude</label>
+            <label index="from_date">Du</label>
+            <label index="to_date">Au</label>
+            <label index="morning">Morning</label>
+            <label index="afternoon">Afternoon</label>
+            <label index="currency">Eur</label>
 		</languageKey>
 		<languageKey index="default" type="array">
 			<label index="data_not_available">Aucune données accessibles.</label>
@@ -132,6 +141,15 @@
             <label index="type_event">Type d'animation / manifestation</label>
             <label index="other_infos">Autres informations</label>
             <label index="festival">Festival</label>
+            <label index="phone">Téléphone</label>
+            <label index="fax">Fax</label>
+            <label index="latitude">Latitude</label>
+            <label index="longitude">Longitude</label>
+            <label index="from_date">Du</label>
+            <label index="to_date">Au</label>
+            <label index="morning">Matin</label>
+            <label index="afternoon">Après-midi</label>
+            <label index="currency">Eur</label>
        </languageKey>
 	</data>
 </T3locallang>

@@ -4,6 +4,7 @@
 	* Fix: Bad parameter on title link in ListRenderer
 	* Refactor: Exploded plugin function init in severals functions
 	* Refactor: Refactoring plugin render functions
+	* Feature: Typoscript conf to render label
 
 2012-02-29 Pierrick Caillon <pierrick@in-cite.net>
 	* Refactor: Little changes in AbstractList rendering.
