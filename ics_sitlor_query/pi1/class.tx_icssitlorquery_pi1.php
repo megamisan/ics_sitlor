@@ -422,57 +422,24 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 	}
 
-
 	/**
-	 * Render phones
+	 * Render data
 	 *
-	 * @param	array		$phones : Array of Phone
-	 * @return	string		The phones content
+	 * @param	string 		$name : Name of element to render
+	 * @param	mixed 		$element : Element to render
 	 */
-	function renderPhones($phones) {
-		return $this->cObj->stdWrap(implode($this->conf['renderConf.']['phones.']['separator'], $phones), $this->conf['renderConf.']['phones.']);
+	function renderData($name, $element) {
+		$content = '';
+		if ($element instanceof tx_icssitlorquery_TimeTable || $element instanceof tx_icssitlorquery_ValuedTerm) {
+			$content = $element->toStringConf($this->conf['renderConf.'][$name . '.']);
+		} elseif(is_array($element)) {
+			$content = $this->cObj->stdWrap(implode($this->conf['renderConf.'][$name . '.']['separator'], $element), $this->conf['renderConf.'][$name . '.']);
+		} else {
+			$content = $this->cObj->stdWrap($element, $this->conf['renderConf.'][$name . '.']);
+		}
+		return $content;
 	}
-
-	/**
-	 * Render fax
-	 *
-	 * @param	string		$fax : Fax
-	 * @return	string		The phones content
-	 */
-	function renderFax($fax) {
-		return $this->cObj->stdWrap($fax, $this->conf['renderConf.']['fax.']);
-	}
-
-	/**
-	 * Render price
-	 *
-	 * @param	tx_icssitlorquery_ValuedTerm		$price :Price
-	 * @return	string		The price content
-	 */
-	function renderPrice(tx_icssitlorquery_ValuedTerm $price) {
-		return $price->toStringConf($this->conf['renderConf.']['price.']);
-	}
-
-	/**
-	 * Render open close day
-	 *
-	 * @param	tx_icssitlorquery_ValuedTerm		$price :Price
-	 * @return	string		The price content
-	 */
-	function renderOpenCloseDay(tx_icssitlorquery_ValuedTerm $day) {
-		return $day->toStringConf($this->conf['renderConf.']['openCloseDay.']);
-	}
-
-	/**
-	 * Render date
-	 *
-	 * @param	tx_icssitlorquery_TimeTable		$timeTable : TimeTable
-	 * @return	string		The timeTable content
-	 */
-	function renderDate(tx_icssitlorquery_TimeTable $timeTable) {
-		return $timeTable->toStringConf($this->conf['renderConf.']['date.']);
-	}
-
+	
 	/**
 	 * Display the list view of elements
 	 *

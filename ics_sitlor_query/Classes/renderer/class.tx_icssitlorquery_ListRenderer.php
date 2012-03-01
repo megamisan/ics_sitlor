@@ -140,7 +140,7 @@
 			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
 			$valudeTerm = $element->CurrentSingleClientsRate->Get(0);
 			if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE_DOUBLEROOM_MIN)
-				$price = $this->pi->renderPrice($valudeTerm);
+				$price = $this->pi->renderData('price', $valudeTerm);
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $this->renderTitleLink($element),
@@ -157,7 +157,7 @@
 			for ($i=0; $i<$element->CurrentMenuPrice->Count(); $i++) {
 				$valudeTerm = $element->CurrentMenuPrice->Get($i);
 				if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE_ADULT)
-					$price = $this->pi->renderPrice($valudeTerm);
+					$price = $this->pi->renderData('price', $valudeTerm);
 			}
 			for ($i=0; $i<$element->ServiceOpen->Count(); $i++) {
 				$valudeTerm = $element->ServiceOpen->Get($i);
@@ -171,7 +171,7 @@
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'LABELCHAIN' => $element->LabelChain,
-				'SERVICE_OPEN' => isset($day)? $this->pi->renderOpenCloseDay($day): '',
+				'SERVICE_OPEN' => isset($day)? $this->pi->renderData('openCloseDay', $day): '',
 			);
 		}
 		// Render Events
@@ -181,7 +181,7 @@
 				'TYPE' => $element->TypeEvent,
 				'TITLE' => $this->renderTitleLink($element),
 				'DESCRIPTION' => $element->Description,
-				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderDate($element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
+				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
 			);
 		}
 		
