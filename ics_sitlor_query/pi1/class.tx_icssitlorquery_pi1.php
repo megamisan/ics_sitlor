@@ -336,11 +336,27 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 */
 	private function initSortingParams() {
 		$sortName = $this->piVars['sortName']? $this->piVars['sortName']: '';
-		$sortName = $sortName? $sortName: $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortName', 'paramSorting');
+		if (!$sortName) {
+			$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+			$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+			$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+			if ($dataGroup == 'ACCOMODATION') {
+				$sortName = 'ALPHA';
+				if (in_array('HOTEL', $subDataGroups))
+					$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hotel_sortName', 'paramSorting');
+				if (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups))
+					$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hCandGH_sortName', 'paramSorting');
+			}
+			if ($dataGroup == 'RESTAURANT') {
+				$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restaurant_sortName', 'paramSorting');
+			}
+			if ($dataGroup == 'EVENT') {
+				$sortName = 'DATE';
+			}
+		}
 		$this->conf['sort.']['name'] = $sortName? $sortName: $this->conf['sort.']['name'];
 
 		$sortExtra = $this->piVars['sortExtra']? $this->piVars['sortExtra']: '';
-		$sortExtra = $sortExtra? $sortExtra: $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'sortExtra', 'paramSorting');
 		$this->conf['sort.']['extra'] = $sortExtra? $sortExtra: $this->conf['sort.']['extra'];
 	}
 

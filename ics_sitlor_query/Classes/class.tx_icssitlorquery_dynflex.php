@@ -85,16 +85,19 @@ class tx_icssitlorquery_dynflex {
 		switch ($dataGroup) {
 			case 'ACCOMODATION':
 				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Accomodation(), $content);
+				if (!isset($flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF']) || in_array($flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF'], array('HOTEL', 'HOLLIDAY_COTTAGE_GUESTHOUSE')))
+					$content = str_replace('<!-- ###PARAMSORTING### -->', $this->flexPartSorting($pi_row), $content);
 				break;
 			case 'RESTAURANT':
 				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Restaurant(), $content);
+				$content = str_replace('<!-- ###PARAMSORTING### -->', $this->flexPartSorting($pi_row), $content);
 				break;
 			case 'EVENT':
 				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Event(), $content);
 				break;
 			default:
 		}
-		
+
 		return $content;
 	}
 	
@@ -265,6 +268,121 @@ class tx_icssitlorquery_dynflex {
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'noFeeEvent');
 		
 		return $xmlFlexPart;
+	}
+	
+	private function flexPartSorting(&$pi_row) {
+		$flexData = (!empty($pi_row['pi_flexform'])) ? (t3lib_div::xml2array($pi_row['pi_flexform'])) : (array('data' => array()));
+		if ($flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF']=='ACCOMODATION') {
+			if ($flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF']=='HOTEL') {
+				return '
+				<paramSorting>
+				<ROOT>
+					<TCEforms>
+						<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
+					</TCEforms>
+					<el>
+						<hotel_sortName>
+							<TCEforms>
+								<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName</label>
+								<config type="array">
+									<type>select</type>
+									<displayCond>FIELD:subDataGroup:=:HOTEL</displayCond>
+									<items type="array">
+										<numIndex index="0" type="array">
+											<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_alpha</numIndex>
+											<numIndex index="1">ALPHA</numIndex>
+										</numIndex>
+										<numIndex index="1" type="array">
+											<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_hotelRating</numIndex>
+											<numIndex index="1">HOTELRATING</numIndex>
+										</numIndex>
+										<numIndex index="2" type="array">
+											<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_price</numIndex>
+											<numIndex index="1">PRICE</numIndex>
+										</numIndex>
+									</items>
+									<size>1</size>
+									<minitems>0</minitems>
+									<maxitems>1</maxitems>
+								</config>
+							</TCEforms>
+						</hotel_sortName>
+					</el>
+				</ROOT>
+				</paramSorting>
+				';
+			}
+			if ($flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF']=='HOLLIDAY_COTTAGE_GUESTHOUSE') {
+				return '
+				<paramSorting>
+				<ROOT>
+					<TCEforms>
+						<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
+					</TCEforms>
+					<el>
+						<hCandGH_sortName>
+							<TCEforms>
+								<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName</label>
+								<config type="array">
+									<type>select</type>
+									<displayCond>FIELD:subDataGroup:=:HOLLIDAY_COTTAGE_GUESTHOUSE</displayCond>
+									<items type="array">
+										<numIndex index="0" type="array">
+											<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_random</numIndex>
+											<numIndex index="1">RANDOM</numIndex>
+										</numIndex>
+										<numIndex index="1" type="array">
+											<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_alpha</numIndex>
+											<numIndex index="1">ALPHA</numIndex>
+										</numIndex>
+									</items>
+									<size>1</size>
+									<minitems>0</minitems>
+									<maxitems>1</maxitems>
+								</config>
+							</TCEforms>
+						</hCandGH_sortName>
+					</el>
+				</ROOT>
+			</paramSorting>
+				';
+			}
+		}
+		if ($flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF']=='RESTAURANT') {
+			return '
+			<paramSorting>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
+				</TCEforms>
+				<el>
+					<restaurant_sortName>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName</label>
+							<config type="array">
+								<type>select</type>
+								<displayCond>FIELD:dataGroup:=:RESTAURANT</displayCond>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_random</numIndex>
+										<numIndex index="1">RANDOM</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName_price</numIndex>
+										<numIndex index="1">PRICE</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+							</config>
+						</TCEforms>
+					</restaurant_sortName>
+				</el>
+			</ROOT>
+			</paramSorting>
+			';
+		}
 	}
 	
 }

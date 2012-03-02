@@ -140,8 +140,9 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
 			if (isset($sorting))
 				$sorting->apply($this->query);
+			$this->query->setPage($this->page, $this->pageSize);
 		}
-		$this->query->setPage($this->page, $this->pageSize);
+		
 		$xmlContent = $this->query->execute();
 
 		$reader = new XMLReader();
@@ -203,8 +204,8 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setCriteria(tx_icssitlorquery_Restaurant::getRequiredCriteria());
 			if (isset($sorting))
 				$sorting->apply($this->query);
+			$this->query->setPage($this->page, $this->pageSize);
 		}
-		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
 		
 		$reader = new XMLReader();
@@ -267,8 +268,8 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setCriteria(tx_icssitlorquery_Event::getRequiredCriteria());
 			if (isset($sorting))
 				$sorting->apply($this->query);
+			$this->query->setPage($this->page, $this->pageSize);
 		}
-		$this->query->setPage($this->page, $this->pageSize);
 		$xmlContent = $this->query->execute();
 		
 		$reader = new XMLReader();

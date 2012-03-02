@@ -1,7 +1,9 @@
 2012-03-01 Tsi Yang <tsi@in-cite.net>
 	* Feature: Plugin sorting.
-	* Refactor: Cleaned unuseless code
-	* Feature: Added little map with marker position for coordinates
+	* Refactor: Cleaned unuseless code.
+	* Feature: Added little map with marker position for coordinates.
+	* Feature: Displayed dynamic flexform sorting.
+	* Feature: Removed Query service action on query "SetPage" when query full element.
 
 2012-03-01 Tsi Yang <tsi@in-cite.net>
 	* Feature: Typoscript configuration for Restaurant service open
