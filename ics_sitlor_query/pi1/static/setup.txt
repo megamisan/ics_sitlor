@@ -37,6 +37,12 @@ plugin.tx_icssitlorquery_pi1 {
 		extra = 
 	}
 	
+	geocode {
+		zoom = 12
+		canvas.width = 320px
+		canvas.height = 200px
+	}
+	
 	# Default primitive rendering
 	defaultConf {
 		Phone.field = phone

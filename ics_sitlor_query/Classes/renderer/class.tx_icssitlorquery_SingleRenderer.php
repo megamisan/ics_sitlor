@@ -35,6 +35,9 @@
  * @subpackage	tx_icssitlorquery
  */
 class tx_icssitlorquery_SingleRenderer {
+	private static $mapsIncluded = false;
+	private static $jsIncluded = false;
+
 	/**
 	 * Constructor
 	 *
@@ -101,8 +104,27 @@ class tx_icssitlorquery_SingleRenderer {
 			'COORDINATES_LABEL' => $this->pi->pi_getLL('coordinates', 'Coordinates', true),
 			'COORDINATES' => $element->Coordinates,
 		);
+		$subparts = array();
+		if (is_null($element->Coordinates)) {
+			$subparts['###SUBPART_MAPCANVAS###'] = '';
+		} else {
+			$locMarkers['MAPCANVAS_SIZE'] = ' style="width: ' . $this->conf['geocode.']['canvas.']['width'] . '; height: ' .$this->conf['geocode.']['canvas.']['height']  . ';"';
+			self::includeLibGMaps();
+			self::includeLibJS(
+				array_merge(
+					$this->conf['geocode.'], 
+					array(
+						'latitude' => $element->Coordinates->Latitude, 
+						'longitude' => $element->Coordinates->Longitude
+					)
+				), 
+				$this->prefixId
+			);
+		}
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_GENERIC###');
+		$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		$markers = array_merge($markers, $locMarkers);
-		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL_GENERIC###');
+		return $template;
 	}
 
 	/**
@@ -336,4 +358,29 @@ class tx_icssitlorquery_SingleRenderer {
 		
 		$markers = array_merge($markers, $locMarkers);
 	}
+	
+	private static function includeLibGMaps() {
+		if (self::$mapsIncluded)
+			return;
+		$file = 'https://maps.googleapis.com/maps/api/js?sensor=false';
+		$tag = '	<script src="' . htmlspecialchars($file) . '" type="text/javascript"></script>' . PHP_EOL;
+		$GLOBALS['TSFE']->additionalHeaderData['geoloc_map'] = $tag;
+		self::$mapsIncluded = true;
+	}
+	
+	private static function includeLibJS($conf, $prefixId) {
+		if (self::$jsIncluded)
+			return;
+		$file = t3lib_div::resolveBackPath($GLOBALS['TSFE']->tmpl->getFileName('EXT:ics_sitlor_query/res/geoloc.js'));
+		$tag = '	<script src="' . htmlspecialchars($file) . '" type="text/javascript"></script>' . PHP_EOL;		
+		$mapOptions = array();
+		$mapOptions[] = '\'lat\': ' . $conf['latitude'];
+		$mapOptions[] = '\'lng\': ' . $conf['longitude'];
+		$mapOptions[] = '\'zoom\': ' . $conf['zoom'];
+		$mapOptions = '{ ' . implode(',', $mapOptions) . ' }';
+		$tag .= '	<script type="text/javascript">google.maps.event.addDomListener(window, "load", function() {new ics.geoloc().initMap(' . $mapOptions . ');});</script>';
+		$GLOBALS['TSFE']->additionalHeaderData['geoloc'] = $tag;
+		self::$jsIncluded = true;
+	}
+	
 }

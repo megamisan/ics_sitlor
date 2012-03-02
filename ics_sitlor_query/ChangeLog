@@ -1,5 +1,7 @@
 2012-03-01 Tsi Yang <tsi@in-cite.net>
 	* Feature: Plugin sorting.
+	* Refactor: Cleaned unuseless code
+	* Feature: Added little map with marker position for coordinates
 
 2012-03-01 Tsi Yang <tsi@in-cite.net>
 	* Feature: Typoscript configuration for Restaurant service open

@@ -80,6 +80,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	var $defaultSize = 20;
 
 	private static $default_startDate = '01/01/2000';
+	private static $geoc_zoom = 12;
+	private static $geoc_canvas = array('340px', '200px');
 
     /**
  * The main method of the PlugIn
@@ -209,6 +211,11 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Get param sorting
 		$this->initSortingParams();
+		
+		
+		$this->conf['geocode.']['zoom'] = $this->conf['geocode.']['zoom']? $this->conf['geocode.']['zoom']: self::$geoc_zoom;
+		$this->conf['geocode.']['canvas.']['width'] = $this->conf['geocode.']['canvas.']['width'] ? $this->conf['geocode.']['canvas.']['width'] : self::$geoc_canvas[0] ;
+		$this->conf['geocode.']['canvas.']['height'] = $this->conf['geocode.']['canvas.']['height'] ? $this->conf['geocode.']['canvas.']['height'] : self::$geoc_canvas[1] ;
 	}
 
 	/**
