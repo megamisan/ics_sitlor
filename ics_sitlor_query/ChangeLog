@@ -1,4 +1,7 @@
 2012-03-01 Tsi Yang <tsi@in-cite.net>
+	* Feature: Plugin sorting.
+
+2012-03-01 Tsi Yang <tsi@in-cite.net>
 	* Feature: Typoscript configuration for Restaurant service open
 	* Feature: Sorting Accomodations, Restaurants and Events
 	* Fix: Bad parameter on title link in ListRenderer

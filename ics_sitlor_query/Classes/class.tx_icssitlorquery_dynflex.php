@@ -61,11 +61,11 @@ class tx_icssitlorquery_dynflex {
 		t3lib_div::loadTCA($pi_table);
 		$conf = &$GLOBALS['TCA'][$pi_table]['columns'][$pi_field];
 		$this->id = $pi_row['pid'];
-		$flexData = (!empty($pi_row['pi_flexform'])) ? (t3lib_div::xml2array($pi_row['pi_flexform'])) : (array('data' => array()));
+		$this->flexData = (!empty($pi_row['pi_flexform'])) ? (t3lib_div::xml2array($pi_row['pi_flexform'])) : (array('data' => array()));
 		
 		switch ($pi_row['list_type']) {
 			case 'ics_sitlor_query_pi1' :
-				if ($xmlFlex = $this->preProcess_pi1($flexData))
+				if ($xmlFlex = $this->preProcess_pi1())
 					$conf['config']['ds']['ics_sitlor_query_pi1,list'] = $xmlFlex;
 			break;
 			
@@ -77,31 +77,47 @@ class tx_icssitlorquery_dynflex {
 	/**
 	 * Pre process pi1
 	 *
-	 * @param	array		$flexData	Flexform data
+	 * @param	array		$this->flexData	Flexform data
 	 * @return	string		Xml flexform
 	 */
-	function preProcess_pi1(array $flexData) {
+	function preProcess_pi1() {
 		$xmlFlexPart = '';
-		$dataGroup = $flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF'];
+		$dataGroup = $this->flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF'];
+		$content = file_get_contents(t3lib_div::getFileAbsFileName($this->ffds['pi1']));
 		switch ($dataGroup) {
 			case 'ACCOMODATION':
-				$xmlFlexPart = $this->flexPart_Accomodation();
+				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Accomodation(), $content);
+				$sortings = array('alpha');
+				if ($subDataGroup = $this->flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF']) {
+					switch($subDataGroup) {
+						case 'HOTEL':
+							$sortings = array_merge($sortings, array('hotelRating', 'price'));
+							break;
+						case 'CAMPING_YOUTHHOSTEL':
+							break;
+						case 'STRANGE':
+							break;
+						case 'HOLLIDAY_COTTAGE_GUESTHOUSE':
+							$sortings[] = 'random';
+							break;
+						default:
+					}
+				}
+				// $content = str_replace('<!-- ###PARAMSORTING_NAME### -->', $this->flexPartSorting($sortings), $content);
 				break;
 			case 'RESTAURANT':
-				$xmlFlexPart = $this->flexPart_Restaurant();
+				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Restaurant(), $content);
+				// $content = str_replace('<!-- ###PARAMSORTING_NAME### -->', $this->flexPartSorting(array('random', 'price')), $content);
 				break;
 			case 'EVENT':
-				$xmlFlexPart = $this->flexPart_Event();
+				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Event(), $content);
+				// $content = str_replace('<!-- ###PARAMSORTING_NAME### -->', $this->flexPartSorting(array('date')), $content);
 				break;
 			default:
-				$xmlFlexPart = '';
+				
 		}
 		
-		return  str_replace(
-			'<!-- ###PARAMSELECT_SPECIFIC### -->',
-			$xmlFlexPart,
-			file_get_contents(t3lib_div::getFileAbsFileName($this->ffds['pi1']))
-		);
+		return $content;
 	}
 	
 	/**
@@ -109,7 +125,7 @@ class tx_icssitlorquery_dynflex {
 	 *
 	 * @return	string		XML flex part content
 	 */
-	private function flexPart_Accomodation() {
+	private function flexPartFilter_Accomodation() {
 		$llang_ffds = $this->llang_ffds['pi1'];
 		$xmlFlexPart = '';
 		$flexArray = array();
@@ -123,6 +139,7 @@ class tx_icssitlorquery_dynflex {
 		);
 		$flexArray['TCEforms'] = array(
 			'label' => $llang_ffds . ':subDataGroup',
+			'onChange' => 'reload',
 			'config' => array(
 				'type' => 'select',
 				'items' => $subDataGroup_options,
@@ -132,41 +149,42 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'subDataGroup');
-		
-		// Hotel types
-		$hotelType_options = array(
-			array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
-			array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
-		);
-		$flexArray['TCEforms'] = array(
-			'label' => $llang_ffds . ':hotelType',
-			'config' => array(
-				'type' => 'select',
-				'items' => $hotelType_options,
-				'size' => '3',
-				'minitems' => '0',
-				'maxitems' => '2',
-			),
-		);
-		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelTypes');
-		
-		// Hotel equipments
-		$hotelEquipment_options = array(
-			array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
-			array($llang_ffds . ':hotelEquipment_allowedPets', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS.':'.tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES),
-			array($llang_ffds . ':hotelEquipment_wifi', tx_icssitlorquery_CriterionUtils::COMFORT_ROOM.':'.tx_icssitlorquery_CriterionUtils::WIFI),
-		);
-		$flexArray['TCEforms'] = array(
-			'label' => $llang_ffds . ':hotelEquipment',
-			'config' => array(
-				'type' => 'select',
-				'items' => $hotelEquipment_options,
-				'size' => '4',
-				'minitems' => '0',
-				'maxitems' => '3',
-			),
-		);
-		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelEquipments');
+		if (!isset($this->flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF']) || ($this->flexData['data']['paramSelect']['lDEF']['subDataGroup']['vDEF'] == 'HOTEL')) {
+			// Hotel types
+			$hotelType_options = array(
+				array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
+				array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
+			);
+			$flexArray['TCEforms'] = array(
+				'label' => $llang_ffds . ':hotelType',
+				'config' => array(
+					'type' => 'select',
+					'items' => $hotelType_options,
+					'size' => '3',
+					'minitems' => '0',
+					'maxitems' => '2',
+				),
+			);
+			$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelTypes');
+			
+			// Hotel equipments
+			$hotelEquipment_options = array(
+				array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
+				array($llang_ffds . ':hotelEquipment_allowedPets', tx_icssitlorquery_CriterionUtils::ALLOWED_PETS.':'.tx_icssitlorquery_CriterionUtils::ALLOWED_PETS_YES),
+				array($llang_ffds . ':hotelEquipment_wifi', tx_icssitlorquery_CriterionUtils::COMFORT_ROOM.':'.tx_icssitlorquery_CriterionUtils::WIFI),
+			);
+			$flexArray['TCEforms'] = array(
+				'label' => $llang_ffds . ':hotelEquipment',
+				'config' => array(
+					'type' => 'select',
+					'items' => $hotelEquipment_options,
+					'size' => '4',
+					'minitems' => '0',
+					'maxitems' => '3',
+				),
+			);
+			$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelEquipments');
+		}
 		
 		return $xmlFlexPart;
 	}
@@ -176,7 +194,7 @@ class tx_icssitlorquery_dynflex {
 	 *
 	 * @return	string		XML flex part content
 	 */
-	private function flexPart_Restaurant() {
+	private function flexPartFilter_Restaurant() {
 		$llang_ffds = $this->llang_ffds['pi1'];
 		$xmlFlexPart = '';
 		$flexArray = array();
@@ -225,7 +243,7 @@ class tx_icssitlorquery_dynflex {
 	 *
 	 * @return	string		XML flex part content
 	 */
-	private function flexPart_Event() {
+	private function flexPartFilter_Event() {
 		$llang_ffds = $this->llang_ffds['pi1'];
 		$xmlFlexPart = '';
 		$flexArray = array();
@@ -270,4 +288,28 @@ class tx_icssitlorquery_dynflex {
 		
 		return $xmlFlexPart;
 	}
+	
+	/**
+	 * Retrieves Accomodation sorting flex part
+	 *
+	 * @return	string		XML flex part content
+	 */
+	// private function flexPartSorting($sortNames) {
+		// $llang_ffds = $this->llang_ffds['pi1'];
+		// $options = array();
+		// foreach ($sortNames as $name) {
+			// $options[] = array($llang_ffds . ':sortName_' . $name, strtoupper($name));
+		// }
+		// $flexArray['TCEforms'] = array(
+			// 'label' => $llang_ffds . ':sortName',
+			// 'config' => array(
+				// 'type' => 'select',
+				// 'items' => $options,
+				// 'size' => '1',
+				// 'minitems' => '0',
+				// 'maxitems' => '1',
+			// ),
+		// );
+		// return t3lib_div::array2xml($flexArray, '', 0, 'sortName');
+	// }
 }

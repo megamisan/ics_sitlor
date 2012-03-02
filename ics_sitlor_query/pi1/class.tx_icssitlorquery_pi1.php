@@ -346,13 +346,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$params = $this->piVars['search'];
 
 		$this->sword = $params['sword'];
-
 		$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
-
 		$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
-
 		$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
-
 		$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
 
 		if ($params['startDate'])

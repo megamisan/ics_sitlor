@@ -77,6 +77,12 @@
             <label index="morning">Morning</label>
             <label index="afternoon">Afternoon</label>
             <label index="currency">Eur</label>
+            <label index="sorting">Sorting</label>
+            <label index="sort_alpha">Alphabetic</label>
+            <label index="sort_hotelrating">Hotel rating</label>
+            <label index="sort_price">Price</label>
+            <label index="sort_random">Random</label>
+            <label index="sort_date">Date</label>
 		</languageKey>
 		<languageKey index="default" type="array">
 			<label index="data_not_available">Aucune données accessibles.</label>
@@ -150,6 +156,12 @@
             <label index="morning">Matin</label>
             <label index="afternoon">Après-midi</label>
             <label index="currency">Eur</label>
+            <label index="sorting">Tier par</label>
+			<label index="sort_alpha">Alphabétique</label>
+            <label index="sort_hotelrating">Classement</label>
+            <label index="sort_price">Prix</label>
+            <label index="sort_random">Aléatoire</label>
+            <label index="sort_date">Date</label>
        </languageKey>
 	</data>
 </T3locallang>

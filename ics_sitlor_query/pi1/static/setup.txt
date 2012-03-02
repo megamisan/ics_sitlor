@@ -350,8 +350,14 @@ plugin.tx_icssitlorquery_pi1 {
 			append = TEXT
 			append {
 				field = value
-				noTrimWrap = |&nbsp;: ||
+				noTrimWrap = | : ||
 			}
+		}
+		sortings {
+			prepend = TEXT
+			prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sorting
+			noTrimWrap = | : ||
+			separator = |
 		}
 	}
 	

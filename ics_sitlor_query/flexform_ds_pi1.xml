@@ -58,6 +58,7 @@
 							<config>
 								<type>input</type>
 								<size>30</size>
+								<eval>password </eval>
 							</config>
 						</TCEforms>
 					</password>
@@ -181,6 +182,7 @@
 					<sheetTitle>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:paramSorting</sheetTitle>
 				</TCEforms>
 				<el>
+					<!-- ###PARAMSORTING_NAME### -->
 					<sortName>
 						<TCEforms>
 							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:sortName</label>

@@ -99,10 +99,40 @@
 			'PREFIXID' => $this->prefixId,
 			'PAGE_BROWSER' => $this->getListGetPageBrowser(intval(ceil($this->pi->queryService->getLastTotalCount()/$this->conf['view.']['size']))),
 		);
+		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+		$sortNames = array();
+		switch($dataGroup) {
+			case 'ACCOMODATION':
+				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+				if (in_array('HOTEL', $subDataGroups)) {
+					$sortNames = array('ALPHA', 'HOTELRATING', 'PRICE');
+				} elseif (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups)) {
+					$sortNames = array('ALPHA', 'RANDOM');
+				}
+				break;
+			case 'RESTAURANT':
+				$sortNames = array('RANDOM', 'PRICE');
+				break;
+			case 'EVENT':
+				break;
+			default:
+		}
+		$sortings = array();
+		if (!empty($sortNames)) {
+			foreach ($sortNames as $sortName) {
+				$sortings[] = $this->pi->pi_linkTP_keepPIvars(
+					$this->pi->pi_getLL('sort_' . strtolower($sortName), 'Sort on ' . strtolower($sortName), true),
+					array('sortName' => $sortName,'sortExtra'=>'', 'page' =>0)
+				);
+			}
+		}
+		$markers['SORTING'] = $this->pi->renderData('sortings', $sortings);
+		
 		$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
-
+	
 	/**
 	 * Render list item generic
 	 *

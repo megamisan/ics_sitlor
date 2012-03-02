@@ -178,8 +178,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
-		t3lib_div::devLog('Accomodations count', 'ics_sitlor_query', 0, array(count($accomodations)));
-		t3lib_div::devLog('Total Accomodations count', 'ics_sitlor_query', 0, array($this->totalSize));
+		t3lib_div::devLog('Accomodations count, total, random session', 'ics_sitlor_query', 0, array('Accomodations' => count($accomodations), 'Total' => $this->totalSize, 'Random session' =>$this->randomSession));
 		return $accomodations;
 	}
 
@@ -242,8 +241,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
-		t3lib_div::devLog('Restaurants count', 'ics_sitlor_query', 0, array(count($restaurants)));
-		t3lib_div::devLog('Total Restaurants count', 'ics_sitlor_query', 0, array($this->totalSize));
+		t3lib_div::devLog('Restaurants count, total, random session', 'ics_sitlor_query', 0, array('Restaurants' => count($restaurants), 'Total' => $this->totalSize, 'Random session' =>$this->randomSession));
 		return $restaurants;
 	}
 
@@ -308,8 +306,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
-		t3lib_div::devLog('Events count', 'ics_sitlor_query', 0, array(count($events)));
-		t3lib_div::devLog('Total Events count', 'ics_sitlor_query', 0, array($this->totalSize));
+		t3lib_div::devLog('Events count, total, random session', 'ics_sitlor_query', 0, array('Events' => count($events), 'Total' => $this->totalSize, 'Random session' =>$this->randomSession));
 		return $events;
 	}
 }
