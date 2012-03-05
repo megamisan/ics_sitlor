@@ -24,7 +24,22 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   53: class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf
+ *   67:     private function __construct()
+ *   76:     public function __get($name)
+ *   97:     public static function FromXML(XMLReader $reader)
+ *  168:     public static function SetDefaultConf(array $conf)
+ *  177:     public function __toString()
+ *  188:     public function toString()
+ *  213:     public function toStringConf(array $conf)
+ *  226:     public function toStringObj(tslib_cObj $cObj)
+ *  239:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 9
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -76,7 +91,7 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 	/**
 	 * Retrieves TimeTable
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
 	 * @return	void
 	 */
 	public static function FromXML(XMLReader $reader) {

@@ -24,7 +24,17 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   49: class tx_icssitlorquery_ValuedTermTupleList extends tx_icssitlorquery_AbstractList
+ *   58:     public function __construct(tx_icssitlorquery_ValuedTermTupleList $source=null)
+ *   68:     public function Add(tx_icssitlorquery_ValuedTermTuple $element)
+ *   79:     public function Remove(tx_icssitlorquery_ValuedTermTuple $element)
+ *   91:     public function Set($position, tx_icssitlorquery_ValuedTermTuple $element)
+ *
+ * TOTAL FUNCTIONS: 4
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -42,7 +52,7 @@ class tx_icssitlorquery_ValuedTermTupleList extends tx_icssitlorquery_AbstractLi
 	 * Initializes the list.
 	 * Optionaly copy the elements from another list.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTermTupleList $source: The source list to copy. Optional.
+	 * @param	tx_icssitlorquery_ValuedTermTupleList		$source: The source list to copy. Optional.
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_ValuedTermTupleList $source=null) {

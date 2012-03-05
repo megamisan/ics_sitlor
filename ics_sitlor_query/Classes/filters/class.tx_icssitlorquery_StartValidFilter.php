@@ -30,14 +30,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_StartValidFilter implements tx_icssitquery_IFilter {
 	private $value=0;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	int timestamp $value : The start valid
+	 * @param	int		timestamp $value : The start valid
+	 * @return	void
 	 */
 	public function __construct($value) {
 		if (is_int($value))
@@ -49,9 +49,8 @@ class tx_icssitlorquery_StartValidFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('startValid', $this->value);

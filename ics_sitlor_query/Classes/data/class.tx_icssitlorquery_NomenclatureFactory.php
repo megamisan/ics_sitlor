@@ -24,7 +24,26 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   57: class tx_icssitlorquery_NomenclatureFactory
+ *   76:     private static function FetchValues()
+ *  133:     private static function readElement_Genres(XMLReader $reader)
+ *  164:     private static function LoadFromCache()
+ *  204:     private static function initialize()
+ *  220:     public static function GetCategory($id)
+ *  237:     public static function GetCategories(array $ids)
+ *  255:     public static function GetType($id)
+ *  272:     public static function GetTypes(array $ids)
+ *  289:     public static function GetAllCategories()
+ *  300:     public static function GetCategoryTypes(tx_icssitlorquery_Category $category)
+ *  311:     public static function GetTypeCategory(tx_icssitlorquery_Type $type)
+ *  323:     public static function FilterTypesByIds(tx_icssitlorquery_TypeList $source, array $ids)
+ *  343:     public static function SetConnectionParameters($login, $password, $url)
+ *
+ * TOTAL FUNCTIONS: 13
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -108,7 +127,7 @@ class tx_icssitlorquery_NomenclatureFactory {
 	/**
 	 * Read Element
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
 	 * @return	void
 	 */
 	private static function readElement_Genres(XMLReader $reader) {
@@ -140,7 +159,7 @@ class tx_icssitlorquery_NomenclatureFactory {
 	/**
 	 * Load from cache
 	 *
-	 * @return	[type]		...
+	 * @return	void
 	 */
 	private static function LoadFromCache() {
 		t3lib_cache::initializeCachingFramework();
@@ -316,9 +335,9 @@ class tx_icssitlorquery_NomenclatureFactory {
 	/**
 	 * Set connection parameters
 	 *
-	 * @param	string $login
-	 * @param	string $password
-	 * @param	string $url
+	 * @param	string		$login
+	 * @param	string		$password
+	 * @param	string		$url
 	 * @return	void
 	 */
 	public static function SetConnectionParameters($login, $password, $url) {

@@ -24,7 +24,20 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *   63: protected function __construct(tx_icssitlorquery_AbstractList $source = null)
+ *   75: protected function _Add($element)
+ *   86: protected function _Remove($element)
+ *   96: public function RemoveAt($position)
+ *  110: public function Get($position)
+ *  128: protected function _Set($position, $element)
+ *  141: public function Count()
+ *  150: public function __toString()
+ *  161: public function toString()
+ *  183: public static function setDefaultSeparator($separator, $type=null)
+ *
+ * TOTAL FUNCTIONS: 10
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -39,7 +52,7 @@
 abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToString {
 	private $elements = array();	/**< List elements */
 	private static $separator = array('tx_icssitlorquery_abstractlist' => ',');	/**< Default list separator for string representation. */
-		
+
 	/**
 	 * Initializes the list.
 	 * Optionaly copy the elements from another list.
@@ -78,7 +91,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 	 * Removes the element at the specified position from the list.
 	 *
 	 * @param	int		$position: Position of the element to remove.
-	 * @return void
+	 * @return	void
 	 */
 	public function RemoveAt($position) {
 		if (!is_int($position) || ($position < 0) || ($position >= count($this->elements))) {
@@ -152,7 +165,7 @@ abstract class tx_icssitlorquery_AbstractList implements tx_icssitquery_IToStrin
 		} else {
 			$separator = self::$separator[strtolower(__CLASS__)];
 		}
-		
+
 		$args = func_get_args();
 		if (!empty($args) && is_string($args[0])) {
 			$separator = $args[0];

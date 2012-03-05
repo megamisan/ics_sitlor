@@ -29,7 +29,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation {
 	private $phones = null;
 	private $fax;
@@ -78,6 +77,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 
 	/**
 	 * Constructor
+	 *
+	 * @return	void
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -97,9 +98,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	/**
 	 * Retrieves properties
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @param	string		$name : Property's name
+	 * @return	mixed		: name 's value
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -173,7 +173,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	/**
 	 * Read the current XML element in the XMLReader
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
@@ -318,7 +319,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 * Parse the current XML node in the XMLReader
 	 * Parse TimeTable
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	private function parseTimeTable(XMLReader $reader) {
 		$reader->read();
@@ -341,7 +343,8 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	/**
 	 * Set criterion
 	 *
-	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm
+	 * @return	void
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		parent::setCriterion($valuedTerm);
@@ -377,6 +380,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
+	 * @return	void
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
@@ -400,7 +404,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	/**
 	 * Retrieves required criteria
 	 *
-	 * @return mixed : Array of criteria IDs
+	 * @return	mixed		Array of required criteria IDs
 	 */
 	public static function getRequiredCriteria() {
 		$criteria = array(

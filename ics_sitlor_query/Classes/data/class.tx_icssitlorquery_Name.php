@@ -24,7 +24,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   52: class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf
+ *   67:     public function __construct($title, $firstname, $lastname)
+ *   79:     public function __get($name)
+ *   98:     public static function SetDefaultConf(array $conf)
+ *  107:     public function __toString()
+ *  118:     public function toString()
+ *  143:     public function toStringConf(array $conf)
+ *  156:     public function toStringObj(tslib_cObj $cObj)
+ *  170:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -35,7 +49,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
 	private $title = '';
 	private $firstname = '';
@@ -46,9 +59,9 @@ class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
 	/**
 	 * Initializes this name definition.
 	 *
-	 * @param	string $title: Title of the person.
-	 * @param	string $firstname: First name.
-	 * @param	string $lastname: Last name.
+	 * @param	string		$title: Title of the person.
+	 * @param	string		$firstname: First name.
+	 * @param	string		$lastname: Last name.
 	 * @return	void
 	 */
 	public function __construct($title, $firstname, $lastname) {

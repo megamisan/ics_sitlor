@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	protected $tmpAddress = array(
 		'number' => '',
@@ -250,7 +249,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	/**
 	 * Retrieves required criteria.
 	 *
-	 * @return	array		Criterion IDs.
+	 * @return	mixed		Arrau of required criteria IDs.
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);

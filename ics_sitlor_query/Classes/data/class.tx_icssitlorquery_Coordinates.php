@@ -24,7 +24,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   52: class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToStringObjConf
+ *   58:     public function __construct($latitude, $longitude)
+ *   71:     public function __get($name)
+ *   88:     public static function SetDefaultConf(array $conf)
+ *   97:     public function __toString()
+ *  108:     public function toString()
+ *  133:     public function toStringConf(array $conf)
+ *  146:     public function toStringObj(tslib_cObj $cObj)
+ *  161:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 

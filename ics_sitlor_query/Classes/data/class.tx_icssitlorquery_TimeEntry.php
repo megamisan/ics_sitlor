@@ -26,11 +26,17 @@
  *
  *
  *
- *   46: class tx_icssitlorquery_TimeEntry
- *   52:     public function __construct($dow, $start=0, $end=0, $isPM=false)
- *   68:     public function __get($name)
+ *   52: class tx_icssitlorquery_TimeEntry implements tx_icssitquery_IToStringObjConf
+ *   60:     public function __construct($dow, $start=0, $end=0, $isPM=false)
+ *   76:     public function __get($name)
+ *   97:     public static function SetDefaultConf(array $conf)
+ *  106:     public function __toString()
+ *  117:     public function toString()
+ *  142:     public function toStringConf(array $conf)
+ *  155:     public function toStringObj(tslib_cObj $cObj)
+ *  172:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
  *
- * TOTAL FUNCTIONS: 2
+ * TOTAL FUNCTIONS: 8
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -43,7 +49,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_TimeEntry implements tx_icssitquery_IToStringObjConf {
 	private $dayOfWeek;	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
 	private $start;	// int

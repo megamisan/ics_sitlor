@@ -26,31 +26,27 @@
  *
  *
  *
- *   67: class tx_icssitlorquery_pi1 extends tslib_pibase
- *   91:     function main($content, $conf)
- *  167:     function init ()
- *  219:     private function initMode()
- *  248:     private function initFilterParams()
- *  329:     private function initSortingParams()
- *  344:     function setPIVars_searchParams()
- *  383:     function setConnection()
- *  395:     function setDefaultConf()
- *  425:     function setDefaultSeparator()
- *  439:     function renderPhones($phones)
- *  449:     function renderFax($fax)
- *  459:     function renderPrice(tx_icssitlorquery_ValuedTerm $price)
- *  469:     function renderOpenCloseDay(tx_icssitlorquery_ValuedTerm $day)
- *  479:     function renderDate(tx_icssitlorquery_TimeTable $timeTable)
- *  488:     function displayList()
- *  518:     function displaySingle()
- *  552:     private function getElements()
- *  600:     private function getAccomodations()
- *  683:     private function getRestaurants()
- *  710:     private function getEvents()
- *  729:     private function addCriterionFilter($criterionID, $terms=null)
- *  752:     private function process_criterionTermArray(array $criterionTermArray)
+ *   63: class tx_icssitlorquery_pi1 extends tslib_pibase
+ *   89:     function main($content, $conf)
+ *  165:     function init ()
+ *  222:     private function initMode()
+ *  252:     private function initFilterParams()
+ *  333:     private function initSortingParams()
+ *  364:     function setPIVars_searchParams()
+ *  391:     function setConnection()
+ *  403:     function setDefaultConf()
+ *  433:     function setDefaultSeparator()
+ *  447:     function renderData($name, $element)
+ *  464:     function displayList()
+ *  494:     function displaySingle()
+ *  528:     private function getElements()
+ *  576:     private function getAccomodations()
+ *  661:     private function getRestaurants()
+ *  703:     private function getEvents()
+ *  725:     private function addCriterionFilter($criterionID, $terms=null)
+ *  748:     private function process_criterionTermArray(array $criterionTermArray)
  *
- * TOTAL FUNCTIONS: 22
+ * TOTAL FUNCTIONS: 18
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -211,8 +207,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Get param sorting
 		$this->initSortingParams();
-		
-		
+
+
 		$this->conf['geocode.']['zoom'] = $this->conf['geocode.']['zoom']? $this->conf['geocode.']['zoom']: self::$geoc_zoom;
 		$this->conf['geocode.']['canvas.']['width'] = $this->conf['geocode.']['canvas.']['width'] ? $this->conf['geocode.']['canvas.']['width'] : self::$geoc_canvas[0] ;
 		$this->conf['geocode.']['canvas.']['height'] = $this->conf['geocode.']['canvas.']['height'] ? $this->conf['geocode.']['canvas.']['height'] : self::$geoc_canvas[1] ;
@@ -239,7 +235,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		if (!empty($modes))
 			$codes = array_merge($codes, $modes);
 		$this->codes = array_unique($codes);
-		
+
 
 		$PIDitemDisplay = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'PIDitemDisplay', 'main');
 		if ($PIDitemDisplay)
@@ -378,7 +374,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->conf['filter.']['startDate']= $params['startDate'];
 		if ($params['endDate'])
 			$this->conf['filter.']['endDate']= $params['endDate'];
-		
+
 		$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
 
 		$this->navParams = array('search' => $params);
@@ -444,21 +440,27 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Render data
 	 *
-	 * @param	string 		$name : Name of element to render
-	 * @param	mixed 		$element : Element to render
+	 * @param	string		$name : Name of element to render
+	 * @param	mixed		$element : Element to render
+	 * @return	string
 	 */
 	function renderData($name, $element) {
 		$content = '';
-		if ($element instanceof tx_icssitlorquery_TimeTable || $element instanceof tx_icssitlorquery_ValuedTerm) {
-			$content = $element->toStringConf($this->conf['renderConf.'][$name . '.']);
-		} elseif(is_array($element)) {
-			$content = $this->cObj->stdWrap(implode($this->conf['renderConf.'][$name . '.']['separator'], $element), $this->conf['renderConf.'][$name . '.']);
+		$lConf = $this->conf['renderConf.'][$name . '.'];
+		if (empty($lConf)) {
+			$content .= $element;
 		} else {
-			$content = $this->cObj->stdWrap($element, $this->conf['renderConf.'][$name . '.']);
+			if ($element instanceof tx_icssitlorquery_TimeTable || $element instanceof tx_icssitlorquery_ValuedTerm) {
+				$content = $element->toStringConf($lConf);
+			} elseif(is_array($element)) {
+				$content = $this->cObj->stdWrap(implode($lConf['separator'], $element), $this->lConf);
+			} else {
+				$content = $this->cObj->stdWrap($element, $lConf);
+			}
 		}
 		return $content;
 	}
-	
+
 	/**
 	 * Display the list view of elements
 	 *

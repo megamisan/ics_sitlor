@@ -24,7 +24,18 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   50: class tx_icssitlorquery_Type implements tx_icssitquery_IToString
+ *   60:     private function __construct()
+ *   69:     public static function FromXML(XMLReader $reader)
+ *   98:     public function __get($name)
+ *  116:     public function __toString()
+ *  126:     public function toString()
+ *
+ * TOTAL FUNCTIONS: 5
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 

@@ -24,7 +24,24 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   55: class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjConf
+ *   69:     public function __construct($count, $tag='')
+ *   86:     public function __get($name)
+ *  108:     public function __set($name, $value)
+ *  127:     public function Get($number)
+ *  141:     public function Set($number, tx_icssitlorquery_ValuedTerm $value = null)
+ *  154:     public function SetDefaultConf($tag, array $conf)
+ *  163:     public function __toString()
+ *  174:     public function toString()
+ *  199:     public function toStringConf(array $conf)
+ *  212:     public function toStringObj(tslib_cObj $cObj)
+ *  233:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 11
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -45,8 +62,8 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	/**
 	 * Constructor
 	 *
-	 * @param	int $count
-	 * @param	string $tag
+	 * @param	int		$count
+	 * @param	string		$tag
 	 * @return	void
 	 */
 	public function __construct($count, $tag='') {
@@ -104,8 +121,8 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	/**
 	 * Retrieves ValuedTerm
 	 *
-	 * @param	int $number
-	 * @return ValuedTerm
+	 * @param	int		$number
+	 * @return	ValuedTerm
 	 */
 	public function Get($number) {
 		if ($number<$this->count && $number>=0)
@@ -117,9 +134,9 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	/**
 	 * Set ValuedTerm
 	 *
-	 * @param	int $number
-	 * @param	ValuedTerm $value
-	 * @return void
+	 * @param	int		$number
+	 * @param	ValuedTerm		$value
+	 * @return	void
 	 */
 	public function Set($number, tx_icssitlorquery_ValuedTerm $value = null) {
 		if ($number<$this->count)
@@ -205,13 +222,13 @@ class tx_icssitlorquery_ValuedTermTuple implements tx_icssitquery_IToStringObjCo
 	 * TypoScript special elements:
 	 * * item_n__conf: The rendering configuration of an item. _n_ is the item number, starting at one (1).
 	 *
-	 * @remarks The rendering is done in two pass. First, each item for which there
 	 * is a item_n__conf is rendered using default rendering for other items.
 	 * Finally, stdWrap is called on the updated data to give the final value.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
 	 * @return	string		Representation of the object.
+	 * @remarks The rendering is done in two pass. First, each item for which there
 	 */
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');

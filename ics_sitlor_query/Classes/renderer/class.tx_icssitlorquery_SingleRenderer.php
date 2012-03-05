@@ -42,8 +42,8 @@ class tx_icssitlorquery_SingleRenderer {
 	 * Constructor
 	 *
 	 * @param	tx_icssitlorquery_pi1		$pi: Instance of tx_icssitlorquery_pi1
-	 * @param	tslib_cObj					$cObj: tx_icssitlorquery_pi1 cObj
-	 * @param	array						$lConf: Local conf
+	 * @param	tslib_cObj		$cObj: tx_icssitlorquery_pi1 cObj
+	 * @param	array		$lConf: Local conf
 	 * @return	void
 	 */
  	function __construct($pi, $cObj, $lConf) {
@@ -112,12 +112,12 @@ class tx_icssitlorquery_SingleRenderer {
 			self::includeLibGMaps();
 			self::includeLibJS(
 				array_merge(
-					$this->conf['geocode.'], 
+					$this->conf['geocode.'],
 					array(
-						'latitude' => $element->Coordinates->Latitude, 
+						'latitude' => $element->Coordinates->Latitude,
 						'longitude' => $element->Coordinates->Longitude
 					)
-				), 
+				),
 				$this->prefixId
 			);
 		}
@@ -161,9 +161,10 @@ class tx_icssitlorquery_SingleRenderer {
 	/**
 	 * Render Accomodation
 	 *
-	 * @param	tx_icssitlorquery_Accomodation	$element: Accomodation
+	 * @param	tx_icssitlorquery_Accomodation		$element: Accomodation
 	 * @param	&array		$markers: The marker array
 	 * @param	&array		$subparts: The subpart array
+	 * @return	void
 	 */
 	private function renderAccomodation(tx_icssitlorquery_Accomodation $element, array &$markers, array &$subparts) {
 		$locMarkers = array(
@@ -214,9 +215,9 @@ class tx_icssitlorquery_SingleRenderer {
 			'HOTEL_SERVICE_LABEL' => $this->pi->pi_getLL('hotel_service', 'Hotel service', true),
 			'HOTEL_SERVICE' => $element->HotelService,
 		);
-		
+
 		$markers = array_merge($markers, $locMarkers);
-		
+
 		if ($element->ReceptionLanguage->Count()<=0)
 			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
 		if ($element->ReservationLanguage->Count()<=0)
@@ -240,10 +241,11 @@ class tx_icssitlorquery_SingleRenderer {
 	/**
 	 * Render Restaurant
 	 *
-	 * @param	tx_icssitlorquery_Restaurant	$element: Restaurant
+	 * @param	tx_icssitlorquery_Restaurant		$element: Restaurant
 	 * @param	&array		$markers: The marker array
 	 * @param	&array		$subparts: The subpart array
-	 */	
+	 * @return	void
+	 */
 	private function renderRestaurant(tx_icssitlorquery_Restaurant $element, array &$markers, array &$subparts) {
 		$locMarkers = array(
 				// Provider
@@ -287,9 +289,9 @@ class tx_icssitlorquery_SingleRenderer {
 			'MENU_PRICE_LABEL' => $this->pi->pi_getLL('menu_price', 'Menu price', true),
 			'MENU_PRICE' => $element->CurrentMenuPrice,
 		);
-		
+
 		$markers = array_merge($markers, $locMarkers);
-		
+
 		if ($element->ReceptionLanguage->Count()<=0)
 			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
 		if ($element->MenuLanguage->Count()<=0)
@@ -314,14 +316,15 @@ class tx_icssitlorquery_SingleRenderer {
 		if ($element->CurrentMenuPrice->Count()<=0)
 			$subparts['###SUBPART_MENU_PRICE###'] = '';
 	}
-	
+
 	/**
 	 * Render Event
 	 *
 	 * @param	tx_icssitlorquery_Event		$element: Event
 	 * @param	&array		$markers: The marker array
 	 * @param	&array		$subparts: The subpart array
-	 */	
+	 * @return	void
+	 */
 	private function renderEvent(tx_icssitlorquery_Event $element, array &$markers, array &$subparts) {
 		$locMarkers = array(
 			'EVENT_INFORMATION' => $this->pi->pi_getLL('event_infos', 'Event informations', true),
@@ -346,23 +349,23 @@ class tx_icssitlorquery_SingleRenderer {
 		} else {
 			$subparts['###SUBPART_PRICE###'] = '';
 		}
-		
+
 		if (!$element->KindOfEvent)
 			$subparts['###SUBPART_KIND_EVENT###'] = '';
 		if (!$element->TypeEvent)
 			$subparts['###SUBPART_TYPE_EVENT###'] = '';
 		if ($element->Information->Count()<=0)
-			$subparts['###SUBPART_INFORMATION###'] = '';			
+			$subparts['###SUBPART_INFORMATION###'] = '';
 		if (!$element->Festival)
-			$subparts['###SUBPART_FESTIVAL###'] = '';			
-		
+			$subparts['###SUBPART_FESTIVAL###'] = '';
+
 		$markers = array_merge($markers, $locMarkers);
 	}
-	
+
 	/**
 	 * Include lib GMaps
 	 *
-	 * @return void
+	 * @return	void
 	 */
 	private static function includeLibGMaps() {
 		if (self::$mapsIncluded)
@@ -372,17 +375,19 @@ class tx_icssitlorquery_SingleRenderer {
 		$GLOBALS['TSFE']->additionalHeaderData['geoloc_map'] = $tag;
 		self::$mapsIncluded = true;
 	}
-	
+
 	/**
 	 * Include lib JS
 	 *
-	 * @return void
+	 * @param	array		$conf: ...
+	 * @param	string		$prefixId: ...
+	 * @return	void
 	 */
 	private static function includeLibJS($conf, $prefixId) {
 		if (self::$jsIncluded)
 			return;
 		$file = t3lib_div::resolveBackPath($GLOBALS['TSFE']->tmpl->getFileName('EXT:ics_sitlor_query/res/geoloc.js'));
-		$tag = '	<script src="' . htmlspecialchars($file) . '" type="text/javascript"></script>' . PHP_EOL;		
+		$tag = '	<script src="' . htmlspecialchars($file) . '" type="text/javascript"></script>' . PHP_EOL;
 		$mapOptions = array();
 		$mapOptions[] = '\'lat\': ' . $conf['latitude'];
 		$mapOptions[] = '\'lng\': ' . $conf['longitude'];
@@ -392,5 +397,5 @@ class tx_icssitlorquery_SingleRenderer {
 		$GLOBALS['TSFE']->additionalHeaderData['geoloc'] = $tag;
 		self::$jsIncluded = true;
 	}
-	
+
 }

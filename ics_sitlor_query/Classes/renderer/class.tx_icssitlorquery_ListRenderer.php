@@ -40,8 +40,8 @@
 	 * Constructor
 	 *
 	 * @param	tx_icssitlorquery_pi1		$pi: Instance of tx_icssitlorquery_pi1
-	 * @param	tslib_cObj					$cObj: tx_icssitlorquery_pi1 cObj
-	 * @param	array						$lConf: Local conf
+	 * @param	tslib_cObj		$cObj: tx_icssitlorquery_pi1 cObj
+	 * @param	array		$lConf: Local conf
 	 * @return	void
 	 */
 	function __construct($pi, $cObj, $lConf) {
@@ -128,11 +128,11 @@
 			}
 		}
 		$markers['SORTING'] = $this->pi->renderData('sortings', $sortings);
-		
+
 		$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
-	
+
 	/**
 	 * Render list item generic
 	 *
@@ -163,7 +163,7 @@
 			return '';
 
 		$locMarkers = array();
-		
+
 		// Render Accomodations
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_ACCOMODATION###');
@@ -214,15 +214,16 @@
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
 			);
 		}
-		
+
 		$markers = array_merge($markers, $locMarkers);
 		return $template;
 	}
-	
+
 	/**
 	 * Render title link
 	 *
-	 * @return	string		Title link content	
+	 * @param	tx_icssitquery_AbstractData		$element: Data element
+	 * @return	string		Title link content
 	 */
 	private function renderTitleLink($element) {
 		return $this->pi->pi_linkTP	($element->Name,
@@ -234,7 +235,8 @@
 	/**
 	 * Page browser
 	 *
-	 * @return 		page browser content
+	 * @param	int		$numberOfPages
+	 * @return	page	browser content
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		// Get default configuration
@@ -250,6 +252,6 @@
 		/* @var $cObj tslib_cObj */
 		$cObj->start(array(), '');
 		return $cObj->cObjGetSingle('USER', $conf);
-	}	
-	
+	}
+
  }

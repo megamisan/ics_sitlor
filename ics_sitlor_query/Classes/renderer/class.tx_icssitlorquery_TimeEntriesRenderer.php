@@ -24,7 +24,18 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   49: class tx_icssitlorquery_TimeEntriesRenderer
+ *   65:     private function renderHead()
+ *   77:     private function renderRows()
+ *  127:     private function renderRows_addEntry(array &$entries, & $currentDay, & $currentPM, tx_icssitlorquery_TimeEntry $entry = null)
+ *  146:     private function getSortedEntries()
+ *  158:     public static function timeEntryComparer(tx_icssitlorquery_TimeEntry $te0, tx_icssitlorquery_TimeEntry $te1)
+ *
+ * TOTAL FUNCTIONS: 5
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -36,6 +47,11 @@
  * @subpackage	tx_icssitlorquery
  */
 class tx_icssitlorquery_TimeEntriesRenderer {
+	/**
+	 * Render time entries
+	 *
+	 * @return	string		Time entries HTML content
+	 */
 	public function renderTimeEntries($content, $conf) {
 		$this->conf = $conf;
 		$content = $this->renderRows();
@@ -45,14 +61,24 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 			$content = $this->renderHead() . $content;
 		return $content;
 	}
-	
+
+	/**
+	 * Render head
+	 *
+	 * @return	string		Head content
+	 */
 	private function renderHead() {
 		$content = '';
 		$content .= $this->cObj->stdWrap($this->conf['headAM'], $this->conf['headAM.']);
 		$content .= $this->cObj->stdWrap($this->conf['headPM'], $this->conf['headPM.']);
 		return $this->cObj->stdWrap($content, $this->conf['head.']);
 	}
-	
+
+	/**
+	 * Render rows
+	 *
+	 * @return	string		Rows content
+	 */
 	private function renderRows() {
 		$entries = $this->getSortedEntries();
 		if (!empty($this->conf['addMissingEntries'])) {
@@ -94,7 +120,16 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 		}
 		return $content;
 	}
-	
+
+	/**
+	 * Adds renderRows entry
+	 *
+	 * @param	&array		$entries: Entries
+	 * @param	int			$currentDay: Current day
+	 * @param	int			$currentPM: Current PM
+	 * @param	tx_icssitlorquery_TimeEntry $entry: TimeEntry
+	 * @return	void
+	 */
 	private function renderRows_addEntry(array &$entries, & $currentDay, & $currentPM, tx_icssitlorquery_TimeEntry $entry = null) {
 		if ($currentPM) {
 			$currentDay++;
@@ -108,13 +143,25 @@ class tx_icssitlorquery_TimeEntriesRenderer {
 		}
 		$entries[] = $entry;
 	}
-	
+
+	/**
+	 * Retrieves sorted entries
+	 *
+	 * @return	mixed
+	 */
 	private function getSortedEntries() {
 		$entries = $this->cObj->data['timeEntries'];
 		usort($entries, array(__CLASS__, 'timeEntryComparer'));
 		return $entries;
 	}
-	
+
+	/**
+	 * Compares TimeEntry
+	 *
+	 * @param	tx_icssitlorquery_TimeEntry		$te0: TimeEntry 0
+	 * @param	tx_icssitlorquery_TimeEntry		$te1: TimeEntry 1
+	 * @return	int		Compare result
+	 */
 	public static function timeEntryComparer(tx_icssitlorquery_TimeEntry $te0, tx_icssitlorquery_TimeEntry $te1) {
 		if ($te0->DayOfWeek != $te1->DayOfWeek) {
 			return $te0->DayOfWeek - $te1->DayOfWeek;

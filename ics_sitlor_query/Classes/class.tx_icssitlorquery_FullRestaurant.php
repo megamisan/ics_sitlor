@@ -29,7 +29,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $phones = null;
 	private $fax;
@@ -99,8 +98,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	 * Retrieves properties
 	 *
 	 * @param	string		$name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @return	mixed		: name 's value
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -174,7 +172,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	/**
 	 * Read the current XML element in the XMLReader
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
@@ -313,7 +312,8 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	/**
 	 * Set criterion
 	 *
-	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm
+	 * @return	void
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		parent::setCriterion($valuedTerm);
@@ -348,6 +348,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
+	 * @return	[type]		...
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
@@ -371,7 +372,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	/**
 	 * Retrieves required criteria
 	 *
-	 * @return mixed : Array of criteria IDs
+	 * @return	mixed		Array of required criteria IDs
 	 */
 	public static function getRequiredCriteria() {
 		$criteria = array(

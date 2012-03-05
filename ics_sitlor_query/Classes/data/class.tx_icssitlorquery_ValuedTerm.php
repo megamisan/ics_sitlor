@@ -24,7 +24,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   53: class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf
+ *   65:     private function __construct()
+ *   77:     public static function FromXML(XMLReader $reader)
+ *   94:     public function __get($name)
+ *  114:     public function __set($name, $value)
+ *  134:     public static function SetDefaultConf(array $conf)
+ *  143:     public function __toString()
+ *  154:     public function toString()
+ *  184:     public function toStringConf(array $conf)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -160,12 +174,12 @@ class tx_icssitlorquery_ValuedTerm implements tx_icssitquery_IToStringConf {
 	 * * value_conf: The rendering configuration of an item if it is an object
 	 *   implementing IToStringConf or IToStringObjConf.
 	 *
-	 * @remarks The rendering is done in two pass. First, the value is rendered
 	 * using its specified configuration and not configured data, if supported.
 	 * Finally, stdWrap is called on the updated data to give the final value.
 	 *
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
 	 * @return	string		Representation of the object.
+	 * @remarks The rendering is done in two pass. First, the value is rendered
 	 */
 	public function toStringConf(array $conf) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');

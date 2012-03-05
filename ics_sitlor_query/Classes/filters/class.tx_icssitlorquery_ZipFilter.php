@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_ZipFilter implements tx_icssitquery_IFilter {
 	private $value;
 
@@ -48,7 +47,7 @@ class tx_icssitlorquery_ZipFilter implements tx_icssitquery_IFilter {
 	 * Applies filter.
 	 *
 	 * @param	tx_icssitquery_IQuery		$query The query to apply the filter to.
-	 * @return void
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('zip', $this->value);

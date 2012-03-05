@@ -24,7 +24,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   53: class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf
+ *   64:     public function __construct($phone)
+ *   74:     public function __get($name)
+ *   89:     public static function SetDefaultConf(array $conf)
+ *   98:     public function __toString()
+ *  109:     public function toString()
+ *  134:     public function toStringConf(array $conf)
+ *  147:     public function toStringObj(tslib_cObj $cObj)
+ *  161:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 

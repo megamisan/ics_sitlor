@@ -40,13 +40,13 @@
 	private static $foreignFood = array();
 	private static $hotelEquipment = array();
 	private static $dayOfWeek = array(1,2,3,4,5,6,7);	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
-	
+
 	/**
 	 * Constructor
 	 *
 	 * @param	tx_icssitlorquery_pi1		$pi: Instance of tx_icssitlorquery_pi1
-	 * @param	tslib_cObj					$cObj: tx_icssitlorquery_pi1 cObj
-	 * @param	array						$lConf: Local conf
+	 * @param	tslib_cObj		$cObj: tx_icssitlorquery_pi1 cObj
+	 * @param	array		$lConf: Local conf
 	 * @return	void
 	 */
  	function __construct($pi, $cObj, $lConf) {
@@ -56,10 +56,10 @@
 		$this->prefixId = $pi->prefixId;
 		$this->templateCode = $pi->templateCode;
 		$this->search = $pi->piVars['search'];
-		
+
 		$this->setDataForm();
 	}
-	
+
 	/**
 	 * Sets data form
 	 *
@@ -92,33 +92,33 @@
 		);
 		self::$restaurantCategories = array(
 			'fastfood' => array(
-				'label' => $this->pi->pi_getLL('fastfood', 'Fast food', true), 
+				'label' => $this->pi->pi_getLL('fastfood', 'Fast food', true),
 				'value' => tx_icssitlorquery_CriterionUtils::RCATEGORIE . ':' . tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD
 			),
 			'icecream_theahouse' => array(
-				'label' => $this->pi->pi_getLL('icecream_theahouse', 'Ice cream and thea house', true), 
+				'label' => $this->pi->pi_getLL('icecream_theahouse', 'Ice cream and thea house', true),
 				'value' => tx_icssitlorquery_CriterionUtils::RCATEGORIE . ':' . tx_icssitlorquery_CriterionUtils::RCATEGORIE_ICECREAM_THEAHOUSE
 			),
 			'creperie' => array(
-				'label' => $this->pi->pi_getLL('creperie', 'Creperie', true), 
+				'label' => $this->pi->pi_getLL('creperie', 'Creperie', true),
 				'value' => tx_icssitlorquery_CriterionUtils::RCATEGORIE . ':' . tx_icssitlorquery_CriterionUtils::RCATEGORIE_CREPERIE
 			),
 		);
 		self::$foreignFood = array(
 			'asian' => array(
-				'label' => $this->pi->pi_getLL('asian_food', 'Asian food', true), 
+				'label' => $this->pi->pi_getLL('asian_food', 'Asian food', true),
 				'value' => tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD . ':' . tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN
 			),
 			'sa' => array(
-				'label' => $this->pi->pi_getLL('sa_food', 'South american food', true), 
+				'label' => $this->pi->pi_getLL('sa_food', 'South american food', true),
 				'value' => tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD . ':' . tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_SA
 			),
 			'oriental' => array(
-				'label' => $this->pi->pi_getLL('oriental_food', 'Oriental food', true), 
+				'label' => $this->pi->pi_getLL('oriental_food', 'Oriental food', true),
 				'value' => tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD . ':' . tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ORIENTAL
 			),
 		);
-		
+
 	}
 
 	/**
@@ -139,7 +139,7 @@
 			($dataGroup == 'EVENT')) {
 			$locMarkers['MORE'] = $this->renderMore($markers);
 		}
-		
+
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH_FORM###');
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
 		$template = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
@@ -162,10 +162,10 @@
 			default:
 				$markers['MAIN_SEARCH_TITLE'] = '';
 		}
-		
+
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
 	}
-	
+
 	/**
 	 * Render search form generic
 	 *
@@ -178,7 +178,7 @@
 		$markers['SEARCH'] = $this->pi->pi_getLL('search', 'Search', true);
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_GENERIC###');
 	}
-	
+
 	/**
 	 * Render search form  specific
 	 *
@@ -233,10 +233,10 @@
 			}
 			$subparts['###SUBPART_HOTEL###'] = $this->cObj->substituteSubpartArray($hotelTemplate, $itemSubparts);
 		}
-		
+
 		return $this->cObj->substituteSubpartArray($template, $subparts);
 	}
-	
+
 	/**
 	 * Render restaurant search form specific
 	 *
@@ -245,7 +245,7 @@
 	 */
 	function renderSpecific_Restaurant(&$markers) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_RESTAURANT###');
-		
+
 		// Category
 		$markers['RESTAURANT_CATEGORY_LABEL'] = $this->pi->pi_getLL('restaurantCategory', 'Restaurant category', true);
 		$categoryTemplate = $this->cObj->getSubpart($template, '###SUBPART_CATEGORY###');
@@ -261,7 +261,7 @@
 			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
 		$subparts['###SUBPART_CATEGORY###'] = $this->cObj->substituteSubpartArray($categoryTemplate, $itemSubparts);
-		
+
 		// Speciality
 		$markers['CULINARY_SPECIALITY_LABEL'] = $this->pi->pi_getLL('culinarySpeciality', 'Culinary speciality', true);
 		$specialityTemplate = $this->cObj->getSubpart($template, '###SUBPART_SPECIALITY###');
@@ -277,7 +277,7 @@
 			$itemSubparts['###ITEM###'] .= $itemContent;
 		}
 		$subparts['###SUBPART_SPECIALITY###'] = $this->cObj->substituteSubpartArray($specialityTemplate, $itemSubparts);
-		
+
 		return $this->cObj->substituteSubpartArray($template, $subparts);
 	}
 
@@ -295,9 +295,9 @@
 		$markers['ENDDATE'] = $this->pi->pi_getLL('endDate', 'End date', true);
 		$markers['ENDDATE_VALUE'] = $this->search['endDate'];
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_EVENT###');
-	} 
-	
-	
+	}
+
+
 	/**
 	 * Render search form more
 	 *
@@ -321,14 +321,14 @@
 			default:
 				$locMarkers['SPECIFIC'] = '';
 		}
-		
+
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_MORE###');
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
-		
+
 		$markers['SEARCH_MORE_TITLE'] = $this->pi->pi_getLL('search_more', 'Search more', true);
 		return $template;
 	}
-	
+
 	/**
 	 * Render  accomodation search form more
 	 *
@@ -358,11 +358,11 @@
 			}
 			$subparts['###SUBPART_HOTEL###'] = $this->cObj->substituteSubpartArray($hotelTemplate, $itemSubparts);
 		}
-		
+
 		return $this->cObj->substituteSubpartArray($template, $subparts);
 	}
-	
-	 
+
+
 	/**
 	 * Render  event search form more
 	 *

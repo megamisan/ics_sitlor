@@ -30,14 +30,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_NoDateFilter implements tx_icssitquery_IFilter {
 	private $value;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	boolean $value
+	 * @param	boolean		$value
+	 * @return	void
 	 */
 	public function __construct($value=true) {
 		$this->value = $value;
@@ -46,9 +46,8 @@ class tx_icssitlorquery_NoDateFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('noDate', $this->value);

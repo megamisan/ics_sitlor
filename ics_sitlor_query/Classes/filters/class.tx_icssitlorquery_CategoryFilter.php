@@ -30,14 +30,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_CategoryFilter implements tx_icssitquery_IFilter {
 	private $value =  array();
 
 	/**
 	 * Constructor
 	 *
-	 * @param	string $value : The category
+	 * @param	string		$value : The category
+	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_CategoryList $categories) {
 		for ($i=0; $i<$categories->Count(); $i++) {
@@ -49,9 +49,8 @@ class tx_icssitlorquery_CategoryFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('category', $this->value);

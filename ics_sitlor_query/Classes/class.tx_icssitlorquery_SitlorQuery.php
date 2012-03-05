@@ -35,13 +35,13 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	private $login;		// The login
 	private $password;	// The password
 	private $url;		// The url
-	
+
 	private $start = 1;	// Begin of page
 	private $end = 20;	// End of page
-	
+
 	private $filters = array();	// Associative array
 	private $sorting = null;
-	
+
 	static private $outputList = array(	// SITLOR Output value
 		'xml' => '1',
 		'csv' => '3',
@@ -147,7 +147,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			if (in_array('keyword', $filterArray)) {
 				$params['libtext'] = $this->filters['keyword'];
 			}
-		
+
 			if (in_array('gender', $filterArray)) { // && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
 				$pnames[] = 'elgendro';
 				$pvalues[] = $this->filters['gender'];
@@ -178,14 +178,14 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$this->makeAvailableFilter($params, $pnames, $pvalues, $filterArray);
 		}
 		//-- End of Filter on params
-		
+
 		//-- Sorting
 		if (isset($this->sorting))
 			$this->putSorting($params, $pnames, $pvalues);
-			
+
 		$params['PNAMES'] = utf8_decode(implode(',', $pnames));
 		$params['PVALUES'] = utf8_decode(implode(',', $pvalues));
-		
+
 		$urlQuery = $this->url . '?' . http_build_query($params);
 		t3lib_div::devLog('Url', 'ics_sitlor_query', 0, array(urldecode($urlQuery)));
 		return tx_icssitlorquery_XMLTools::getXMLDocument($urlQuery);
@@ -212,12 +212,12 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 *
 	 * @param	string		$name Parameter name
 	 * @param	mixed		$value Parameter value
-	 * @return void
+	 * @return	void
 	 */
 	public function setParameter($name, $value) {
 		if (!is_string($name))
 			throw new Exception('Parameter\'s name must be string.');
-			
+
 		switch ($name) {
 			// Filters parameters
 			case 'type':	// Type is an int array of types IDs
@@ -250,7 +250,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			case 'entity':
 				$this->filters[$name] = $value;
 				break;
-				
+
 			// Sorting parameters
 			case 'accomodationSorting':
 			case 'restaurantSorting':
@@ -261,7 +261,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 					$value[1]
 				);
 				break;
-			
+
 			default:
 				tx_icssitquery_Debug::warning('Undefined parameter in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
@@ -294,7 +294,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	/**
 	 * Adds a field.
 	 *
-	 * @param	string	$field Fieldname.
+	 * @param	string		$field Fieldname.
 	 * @return	void
 	 */
 	public function addField($field=null) {
@@ -334,11 +334,11 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		else
 			tx_icssitquery_Debug::warning('Table "' . $value . '" is undefined.');
 	}
-	
+
 	/**
 	 * Set scheme
 	 *
-	 * @param	string 		$value The scheme
+	 * @param	string		$value The scheme
 	 * @return	void
 	 */
 	public function setScheme($value) {
@@ -346,16 +346,17 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			throw new Exception('The scheme ' . $value . 'is not defined.');
 		$this->scheme = $value;
 	}
-	
+
 	/**
 	 * Set entity
 	 *
-	 * @param	string 		$value The entity
+	 * @param	string		$value The entity
+	 * @return	void
 	 */
 	public function setEntity($value) {
 		$this->entity = $value;
 	}
-	
+
 	/**
 	 * Makes a filter on category.
 	 *
@@ -383,8 +384,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	/**
 	 * Make filter on Criterion
 	 *
-	 * @param	array $pnames
-	 * @param	array $pvalues
+	 * @param	array		$pnames
+	 * @param	array		$pvalues
+	 * @return	void
 	 */
 	private function makeCriterionFilter(array &$pnames, array &$pvalues) {
 		foreach ($this->filters['criterion'] as $key=>$criterionTerms) {
@@ -396,7 +398,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			}
 		}
 	}
-	
+
 	/**
 	 * Makes filters on Date.
 	 *
@@ -501,7 +503,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			$params['tsdispo'] = utf8_decode('Y');
 		}
 	}
-	
+
 	/**
 	 * @param	array&		$pnames Parameters names.
 	 * @param	array&		$pvalues Parameters values.
@@ -511,7 +513,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	private function putSorting(array &$params, array &$pnames, array &$pvalues) {
 		if (!in_array($this->sorting[0], array('accomodationSorting', 'restaurantSorting', 'eventSorting')))
 			return;
-	
+
 		switch ($this->sorting[1]) {
 			case 'alpha':
 				$params['lestris'] = '"Nom"';
@@ -561,7 +563,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 					tx_icssitquery_Debug::warning('Sorting ' . $this->sorting[1] . ' is not implemented for ' . $this->sorting[0]);
 				}
 				break;
-				
+
 			default:
 				tx_icssitquery_Debug::warning('Sorting ' . $this->sorting[1] . ' is not implemented.');
 		}

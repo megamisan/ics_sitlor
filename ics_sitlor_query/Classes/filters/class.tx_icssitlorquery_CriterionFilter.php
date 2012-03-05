@@ -30,15 +30,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 	private $value;
-	
+
 	/**
 	 * Constructor
 	 *
-	 * @param	tx_icssitlorquery_CriterionList $criterion : The criterion
-	 * @param	tx_icssitlorquery_TermList $terms : Criterion terms
+	 * @param	tx_icssitlorquery_CriterionList		$criterion : The criterion
+	 * @param	tx_icssitlorquery_TermList		$terms : Criterion terms
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_Criterion $criterion, tx_icssitlorquery_TermList $terms=null) {
@@ -51,11 +50,11 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 		}
 		$this->value = array($criterion->ID,$termIDs);
 	}
-	
+
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
+	 * @param	IQuery		$query : The IQuery
 	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {

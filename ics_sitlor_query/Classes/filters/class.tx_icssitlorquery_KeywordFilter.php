@@ -30,27 +30,26 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_KeywordFilter implements tx_icssitquery_IFilter {
 	private $value;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	string $value : Keywords
+	 * @param	string		$value : Keywords
+	 * @return	void
 	 */
 	public function __construct($value) {
 		if (!is_string($value))
 			throw new Exception('Keywords must be string.');
 		$this->value = $value;
 	}
-	
+
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('keyword', $this->value);

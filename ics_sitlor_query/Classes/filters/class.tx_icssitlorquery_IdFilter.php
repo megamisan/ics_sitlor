@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_IdFilter implements tx_icssitquery_IFilter {
 	private $value;
 
@@ -48,9 +47,8 @@ class tx_icssitlorquery_IdFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('idFilter', $this->value);

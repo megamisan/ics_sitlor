@@ -24,7 +24,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   52: class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf
+ *   62:     public function __construct($uri)
+ *   72:     public function __get($name)
+ *   87:     public static function SetDefaultConf(array $conf)
+ *   96:     public function __toString()
+ *  107:     public function toString()
+ *  132:     public function toStringConf(array $conf)
+ *  145:     public function toStringObj(tslib_cObj $cObj)
+ *  159:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 

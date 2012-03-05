@@ -29,7 +29,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_NomenclatureUtils {
 	/*******************************************************
 	 *
@@ -45,7 +44,7 @@ class tx_icssitlorquery_NomenclatureUtils {
 		self::HOTEL_RESTAURANT,
 		self::FURNISHED,
 	);
-	
+
 	const HOLLIDAY_CAMPSITE = 4000007;	// Type "Terrain de Camping saisonnie"
 	const CATEGORIZED_CAMPSITE = 4000004;	// Type "Terrain de Camping classé"
 	const FARM_CAMPING = 4000006;	// Type "Camping à la ferme"
@@ -57,8 +56,8 @@ class tx_icssitlorquery_NomenclatureUtils {
 	);
 	const GUESTHOUSE = 4000001;	// Category "Chambres d'hôtes"
 	const HOLLIDAY_COTTAGE = 4000005; // Category "Meublé "
-	
-	
+
+
 	/*******************************************************
 	 *
 	 * Restaurant

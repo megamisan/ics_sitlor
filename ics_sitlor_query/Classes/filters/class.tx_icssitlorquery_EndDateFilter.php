@@ -35,7 +35,8 @@ class tx_icssitlorquery_EndDateFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Constructor
 	 *
-	 * @param	int timestamp $value : The start date
+	 * @param	int		timestamp $value : The start date
+	 * @return	void
 	 */
 	public function __construct($value) {
 		if (!is_int($value))
@@ -46,9 +47,8 @@ class tx_icssitlorquery_EndDateFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('endDate', $this->value);

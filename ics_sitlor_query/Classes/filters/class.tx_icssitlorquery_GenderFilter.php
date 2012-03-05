@@ -30,14 +30,13 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
 	private $value;
-	
+
 	/**
 	 * Constructor
 	 *
-	 * @param	int $value
+	 * @param	int		$value
 	 * @return	void
 	 */
 	public function __construct($value) {
@@ -45,11 +44,11 @@ class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
 			throw new Exception('Gender value filter must be integer.');
 		$this->value = $value;
 	}
-	
+
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
+	 * @param	IQuery		$query : The IQuery
 	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {

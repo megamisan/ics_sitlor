@@ -29,14 +29,14 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_EndValidFilter implements tx_icssitquery_IFilter {
 	private $value=0;
 
 	/**
 	 * Constructor
 	 *
-	 * @param	int timestamp $value : The end valid
+	 * @param	int		timestamp $value : The end valid
+	 * @return	void
 	 */
 	public function __construct($value) {
 		if (is_int($value))
@@ -47,9 +47,8 @@ class tx_icssitlorquery_EndValidFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Apply filter
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply($query) {
 		$query->setParameter('endValid', $this->value);

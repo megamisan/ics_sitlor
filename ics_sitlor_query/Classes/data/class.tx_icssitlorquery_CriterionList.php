@@ -24,7 +24,17 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   49: class tx_icssitlorquery_CriterionList extends tx_icssitlorquery_AbstractList
+ *   58:     public function __construct(tx_icssitlorquery_CriterionList $source=null)
+ *   68:     public function Add(tx_icssitlorquery_Criterion $element)
+ *   79:     public function Remove(tx_icssitlorquery_Criterion $element)
+ *   91:     public function Set($position, tx_icssitlorquery_Criterion $element)
+ *
+ * TOTAL FUNCTIONS: 4
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -36,14 +46,13 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_CriterionList extends tx_icssitlorquery_AbstractList {
 
 	/**
 	 * Initializes the list.
 	 * Optionaly copy the elements from another list.
 	 *
-	 * @param	tx_icssitlorquery_CriterionList $source: The source list to copy. Optional.
+	 * @param	tx_icssitlorquery_CriterionList		$source: The source list to copy. Optional.
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_CriterionList $source=null) {

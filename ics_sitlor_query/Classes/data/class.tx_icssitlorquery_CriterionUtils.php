@@ -29,7 +29,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_CriterionUtils {
 	/*******************************************************
 	 *
@@ -69,11 +68,11 @@ class tx_icssitlorquery_CriterionUtils {
 	/**
 	 * Adds an element in a tuple list, with an associated element.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTermTupleList $list
-	 * @param	tx_icssitlorquery_ValuedTerm $element
-	 * @param	int $elIndex
-	 * @param	int $searchIndex
-	 * @param	int $searchedID
+	 * @param	tx_icssitlorquery_ValuedTermTupleList		$list
+	 * @param	tx_icssitlorquery_ValuedTerm		$element
+	 * @param	int		$elIndex
+	 * @param	int		$searchIndex
+	 * @param	int		$searchedID
 	 * @return	void
 	 */
 	public static function addToTupleList(tx_icssitlorquery_ValuedTermTupleList $list, tx_icssitlorquery_ValuedTerm $element, $elIndex, $searchIndex, $searchedID, $tag) {
@@ -169,18 +168,18 @@ class tx_icssitlorquery_CriterionUtils {
 	const RCATEGORIE_FASTFOOD = 9;
 	const RCATEGORIE_ICECREAM_THEAHOUSE = 12;
 	const RCATEGORIE_CREPERIE = 3;
-	
+
 	const FOREIGN_FOOD = 736000237;
 		// Term of Criterion FOREIGN_FOOD
 	const FOREIGN_FOOD_ASIAN = 11;
 	const FOREIGN_FOOD_SA = 8;
 	const FOREIGN_FOOD_ORIENTAL = 13;
-	
+
 	/*******************************************************
 	 *
 	 * Event
 	 *
-	 *******************************************************/	
+	 *******************************************************/
 	const KIND_OF_EVENT = 736001150;
 	const TYPE_EVENT = 736001148;
 	const COMPLEMENTARY_INFORMATION = 736001151;
@@ -189,13 +188,13 @@ class tx_icssitlorquery_CriterionUtils {
 		// Term of Criterion CURRENT_FREE
 	const CURRENT_FREE_YES = 4000014;
 	const CURRENT_FREE_NO = 4000015;
-	
+
 	const CURRENT_BASE_PRICE = 4000004;
 
-	
-	
-	
-	
+
+
+
+
 	const OTNANCY2011 = 737000028;
 	const OTNANCY2012 = 737000029;
 }

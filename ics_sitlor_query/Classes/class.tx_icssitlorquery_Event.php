@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	protected $tmpAddress = array(
 		'number' => '',
@@ -41,9 +40,11 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	);
 
 	private $typeEvent = null;
-	
-	/** 
+
+	/**
 	 * Constructor
+	 *
+	 * @return	void
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
@@ -53,41 +54,40 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	/**
 	 * Retrieves properties
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @param	string		$name : Property's name
+	 * @return	mixed		Name 's value
 	 */
 	public function __get($name) {
 		switch ($name) {
 			case 'TypeEvent':
 				return $this->typeEvent;
-			default : 
+			default :
 				return parent::__get($name);
 		}
-		
-	}	
-	
+
+	}
+
 	/**
 	 * Set name
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
+	 * @param	string		$name : Property's name
+	 * @param	mixed		$value : Property's value
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
 			case 'TypeEvent':
 				$this->typeEvent = $value;
-			default : 
+			default :
 				parent::__set($name, $value);
-		}		
-	}	
-	
+		}
+	}
+
 	/**
 	 * Parse the current XML node in the XMLReader
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	public function parseXML(XMLReader $reader) {
 		$reader->read();
@@ -99,11 +99,12 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		}
 		$this->afterParseXML();
 	}
-	
+
 	/**
 	 * Read the current XML element in the XMLReader
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
@@ -111,12 +112,12 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				$this->ID = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
-			case 'NOM':	
+
+			case 'NOM':
 				$this->Name = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'COMMENTAIRE':
 				$this->Description = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -132,7 +133,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				$this->tmpAddress['number'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_LIB_VOIE' :
 				$this->tmpAddress['street'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -147,7 +148,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				$this->tmpAddress['zip'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
-				
+
 			case 'ADRPROD_LIBELLE_COMMUNE' :
 				$this->tmpAddress['city'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -167,12 +168,13 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 		}
 	}
-			
+
 	/**
 	 * Parse the current XML node in the XMLReader
 	 * Parse criteria
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	protected function parseCriteria(XMLReader $reader) {
 		$reader->read();
@@ -185,7 +187,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 							$this->setCriterion($valuedTerm);
 						}
 						break;
-						
+
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
@@ -193,30 +195,31 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 			$reader->read();
 		}
  	}
-	
-	/** 
+
+	/**
 	 * Set criterion
 	 *
-	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm
+	 * @return	void
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
 			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
-				$this->Illustration, 
-				$valuedTerm, 
-				0, 
-				1, 
+				$this->Illustration,
+				$valuedTerm,
+				0,
+				1,
 				tx_icssitlorquery_CriterionUtils::$creditPhotos[$index],
 				'illustration'
 			);
 		}
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$creditPhotos)) !== false) {
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
-				$this->Illustration, 
-				$valuedTerm, 
-				1, 
-				0, 
+				$this->Illustration,
+				$valuedTerm,
+				1,
+				0,
 				tx_icssitlorquery_CriterionUtils::$photos[$index],
 				'illustration'
 			);
@@ -225,12 +228,13 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 			$this->TypeEvent = $valuedTerm;
 		}
 	}
-	
+
 	/**
 	 * Parse the current XML node in the XMLReader
 	 * Parse TimeTable
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	private function parseTimeTable(XMLReader $reader) {
 		$reader->read();
@@ -249,10 +253,11 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 			$reader->read();
 		}
 	}
-	
+
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
+	 * @return	void
 	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
@@ -264,11 +269,11 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 			$this->tmpAddress['city']
 		);
 	}
-	
+
 	/**
 	 * Retrieves required criteria
 	 *
-	 * @return mixed : Array of criteria IDs
+	 * @return	mixed		Array of required criteria IDs
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
@@ -277,5 +282,5 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}
-	
+
 }

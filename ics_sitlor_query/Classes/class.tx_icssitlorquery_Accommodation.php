@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation {
 	protected $tmpAddress = array(
 		'number' => '',
@@ -41,9 +40,11 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	);
 
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
-	
-	/** 
+
+	/**
 	 * Constructor
+	 *
+	 * @return	void
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
@@ -53,9 +54,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Retrieves properties
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @param	string		$name : Property's name
+	 * @return	mixed		: name 's value
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -70,10 +70,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Set name
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
+	 * @param	string		$name : Property's name
+	 * @param	mixed		: Property's value
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
@@ -85,7 +84,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Parse the current XML node in the XMLReader
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	public function parseXML(XMLReader $reader) {
 		$reader->read();
@@ -101,7 +101,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Read the current XML element in the XMLReader
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
@@ -165,7 +166,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * Parse the current XML node in the XMLReader
 	 * Parse criteria
 	 *
-	 * @param	XMLReader $reader : Reader to the parsed document
+	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @return	void
 	 */
 	protected function parseCriteria(XMLReader $reader) {
 		$reader->read();
@@ -190,7 +192,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Set criterion
 	 *
-	 * @param	tx_icssitlorquery_ValuedTerm $valuedTerm
+	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm
+	 * @return	void
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
@@ -224,6 +227,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Process after parsing the current XML node in the XMLReader
 	 *
+	 * @return	void
 	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
@@ -239,7 +243,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	/**
 	 * Retrieves required criteria
 	 *
-	 * @return array equired criterion identifiers for object construction.
+	 * @return	array		Required criterion identifiers for object construction.
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);

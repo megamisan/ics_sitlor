@@ -24,7 +24,22 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   53: class tx_icssitlorquery_CriterionFactory
+ *   70:     private static function FetchValues()
+ *  129:     private static function LoadFromCache()
+ *  163:     private static function initialize()
+ *  179:     public static function GetCriterion($id)
+ *  196:     public static function GetCriteria(array $ids)
+ *  213:     public static function GetAllCriteria()
+ *  224:     public static function GetCriterionTerms(tx_icssitlorquery_Criterion $criterion)
+ *  236:     public static function GetCriterionTerm(tx_icssitlorquery_Criterion $criterion, $termID)
+ *  259:     public static function SetConnectionParameters($login, $password, $url)
+ *
+ * TOTAL FUNCTIONS: 9
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -203,8 +218,8 @@ class tx_icssitlorquery_CriterionFactory {
 	/**
 	 * Retrieves Terms from criterion
 	 *
-	 * @param	tx_icssitlorquery_Criterion $criterion
-	 * @return TermList
+	 * @param	tx_icssitlorquery_Criterion		$criterion
+	 * @return	TermList
 	 */
 	public static function GetCriterionTerms(tx_icssitlorquery_Criterion $criterion) {
 		self::initialize();
@@ -214,14 +229,14 @@ class tx_icssitlorquery_CriterionFactory {
 	/**
 	 * Retrieves Criterion Term
 	 *
-	 * @param	tx_icssitlorquery_Criterion $criterion
-	 * @param	int $termID : ID Term
-	 * @return Term
+	 * @param	tx_icssitlorquery_Criterion		$criterion
+	 * @param	int		$termID : ID Term
+	 * @return	Term
 	 */
 	public static function GetCriterionTerm(tx_icssitlorquery_Criterion $criterion, $termID) {
 		if (!is_int($termID))
 			throw new Exception('Term ID must be integer.');
-			
+
 		self::initialize();
 		$terms = self::$criteriaTerms[$criterion->ID];
 		for ($i=0; $i<$terms->Count(); $i++) {
@@ -232,13 +247,13 @@ class tx_icssitlorquery_CriterionFactory {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Set connection parameters
 	 *
-	 * @param	string $login
-	 * @param	string $password
-	 * @param	string $url
+	 * @param	string		$login
+	 * @param	string		$password
+	 * @param	string		$url
 	 * @return	void
 	 */
 	public static function SetConnectionParameters($login, $password, $url) {

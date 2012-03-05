@@ -57,17 +57,16 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	/**
 	 * Sets pager position.
 	 *
-	 * @param	int $page Page number.
-	 * @param	int $size Number of element per page.
-	 *
-	 * @return void
+	 * @param	int		$page Page number.
+	 * @param	int		$size Number of element per page.
+	 * @return	void
 	 */
 	public function setPager($page, $size) {
 		if (!is_int($page))
 			throw new Exception('Page number must be integer.');
 		if (!is_int($size))
 			throw new Exception('Number of element must be integer');
-			
+
 		$this->page = $page;
 		$this->pageSize = $size;
 	}
@@ -91,7 +90,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		$this->filters[] = $filter;
 	}
 
-	
+
 	/**
 	 * Retrieves last total count
 	 *
@@ -100,20 +99,20 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	public function getLastTotalCount() {
 		return $this->totalSize;
 	}
-	
+
 	/**
 	 * Retrieves random session
 	 *
-	 * @return random session
+	 * @return	random		session
 	 */
 	public function getLastRandomSession() {
 		return $this->randomSession;
 	}
-	
+
 	/**
 	 * Retrieves the last query.
 	 *
-	 * @return tx_icssitquery_IQuery		The last executed query.
+	 * @return	tx_icssitquery_IQuery		The last executed query.
 	 */
 	public function getLastQuery() {
 		return $this->query;
@@ -142,7 +141,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 				$sorting->apply($this->query);
 			$this->query->setPage($this->page, $this->pageSize);
 		}
-		
+
 		$xmlContent = $this->query->execute();
 
 		$reader = new XMLReader();
@@ -207,7 +206,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setPage($this->page, $this->pageSize);
 		}
 		$xmlContent = $this->query->execute();
-		
+
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
 
@@ -250,12 +249,11 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * Retrieves events.
 	 *
 	 * @param	ISortingProvider		$sorting Sorting provider to use.
-	 *
 	 * @return	array		The accomodations found by the API.
 	 */
 	public function getEvents(tx_icssitquery_ISortingProvider $sorting=null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
-		
+
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
@@ -271,7 +269,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$this->query->setPage($this->page, $this->pageSize);
 		}
 		$xmlContent = $this->query->execute();
-		
+
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
 
@@ -300,7 +298,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 						t3lib_div::devLog('Event', 'ics_sitlor_query', 0, array($event));
 						$events[] = $event;
 						break;
-						
+
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}

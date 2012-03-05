@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-
 class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_ISortingProvider {
 	private $value;
 	private $sortings = array(
@@ -43,26 +42,26 @@ class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_IS
 	/**
 	 * Constructor
 	 *
-	 * @param	string $value : Sorting's value
-	 * @param	string $extra : order "ASC"/"DESC" or random extra data
+	 * @param	string		$value : Sorting's value
+	 * @param	string		$extra : order "ASC"/"DESC" or random extra data
+	 * @return	[type]		...
 	 */
 	function __construct($value, $extra='') {
 		if (!is_string($value))
 			throw new Exception('Type must be a string.');
 		if (!in_array($value, $this->sortings))
 			throw new Exception('Unkown type sorting ' . $value . '.');
-		if ($value != 'random' && $extra && !in_array(strtoupper($extra), array('ASC', 'DESC'))) 
+		if ($value != 'random' && $extra && !in_array(strtoupper($extra), array('ASC', 'DESC')))
 			$extra = 'ASC';
-		
+
 		$this->value = array($value, $extra);
 	}
 
 	/**
 	 * Apply sorting
 	 *
-	 * @param	IQuery $query : The IQuery
-	 *
-	 * @return void
+	 * @param	IQuery		$query : The IQuery
+	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('accomodationSorting', $this->value);

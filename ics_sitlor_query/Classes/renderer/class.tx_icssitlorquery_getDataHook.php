@@ -36,21 +36,6 @@
  * @subpackage	tx_icssitlorquery
  */
 class tx_icssitlorquery_getDataHook implements tslib_content_getDataHook {
-	/**
-	 * Hooks the tslib_cObj::getData behaviour.
-	 * Render new data types:
-	 * * context		The value format is: [n,]field
-	 * 					The square bracket indicates optional elements.
-	 *					n is the number of levels to go up, positive integer or zero (0).
-	 *					field is the name of the field to access the value.
-	 *
-	 * @param	string		$getDataString: full content of getData-request.
-	 * @param	array		$fields: current field-array.
-	 * @param	string		$sectionValue: currently examined section value.
-	 * @param	string		$returnValue: current returnValue processed so far.
-	 * @param	tslib_cObj		&$parentObject: parent content object
-	 * @return	string		get data result
-	 */
 	public function getDataExtension($getDataString, array $fields, $sectionValue, $returnValue, tslib_cObj &$parentObject) {
 		$retVal = $returnValue;
 		$parts = explode(':', $sectionValue, 2);

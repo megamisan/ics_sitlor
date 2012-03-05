@@ -3,6 +3,9 @@
 	* Feature: Removed login section and code OT Nancy.
 	* Fix: Retrieved extra address bad field.
 	* Feature: Rendered hotel rating throw render function.
+	* Comments: Updated comments.
+	* Feature: Regenerated autoload.
+	* Fix: Plugin renderData
 
 2012-03-02 Tsi Yang <tsi@in-cite.net>
 	* Feature: Plugin sorting.

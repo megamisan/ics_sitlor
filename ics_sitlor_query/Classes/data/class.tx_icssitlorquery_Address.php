@@ -24,7 +24,21 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   52: class tx_icssitlorquery_Address implements tx_icssitquery_IToStringObjConf
+ *   71:     public function __construct($number, $street, $extra, $zip = null, $city = null)
+ *   85:     public function __get($name)
+ *  108:     public static function SetDefaultConf(array $conf)
+ *  117:     public function __toString()
+ *  128:     public function toString()
+ *  153:     public function toStringConf(array $conf)
+ *  166:     public function toStringObj(tslib_cObj $cObj)
+ *  184:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 

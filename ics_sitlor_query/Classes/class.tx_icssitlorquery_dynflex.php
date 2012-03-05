@@ -30,7 +30,6 @@
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
- 
 class tx_icssitlorquery_dynflex {
 	var	$list_types = array('ics_sitlor_query_pi1');	// List of available list_type to process on dynamic dynflex
 	var $ffds = array(
@@ -51,7 +50,7 @@ class tx_icssitlorquery_dynflex {
 	 * @param	string		$pi_extra
 	 * @param	integer		$pi_pal
 	 * @param	object		&$pi_tce
-	 * @return	[type]		...
+	 * @return	void
 	 */
 	function getSingleField_preProcess($pi_table, $pi_field, & $pi_row, $pi_altName, $pi_palette, $pi_extra, $pi_pal, &$pi_tce) {
 
@@ -61,21 +60,22 @@ class tx_icssitlorquery_dynflex {
 		t3lib_div::loadTCA($pi_table);
 		$conf = &$GLOBALS['TCA'][$pi_table]['columns'][$pi_field];
 		$this->id = $pi_row['pid'];
-		
+
 		switch ($pi_row['list_type']) {
 			case 'ics_sitlor_query_pi1' :
 				if ($xmlFlex = $this->preProcess_pi1($pi_row))
 					$conf['config']['ds']['ics_sitlor_query_pi1,list'] = $xmlFlex;
 			break;
-			
-			default:			
+
+			default:
 		}
-		
+
 	}
 
 	/**
 	 * Pre process pi1
 	 *
+	 * @param	array		$pi_row		Table record to edit
 	 * @return	string		Xml flexform
 	 */
 	function preProcess_pi1(&$pi_row) {
@@ -100,7 +100,7 @@ class tx_icssitlorquery_dynflex {
 
 		return $content;
 	}
-	
+
 	/**
 	 * Retrieves Accomodation flex part
 	 *
@@ -110,7 +110,7 @@ class tx_icssitlorquery_dynflex {
 		$llang_ffds = $this->llang_ffds['pi1'];
 		$xmlFlexPart = '';
 		$flexArray = array();
-		
+
 		// Subdata group
 		$subDataGroup_options = array(
 			array(),
@@ -148,7 +148,7 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelTypes');
-		
+
 		// Hotel equipments
 		$hotelEquipment_options = array(
 			array($llang_ffds . ':hotelEquipment_park', tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK.':'.tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK_YES),
@@ -167,10 +167,10 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'hotelEquipments');
-		
+
 		return $xmlFlexPart;
 	}
-	
+
 	/**
 	 * Retrieves Restaurant flex part
 	 *
@@ -180,7 +180,7 @@ class tx_icssitlorquery_dynflex {
 		$llang_ffds = $this->llang_ffds['pi1'];
 		$xmlFlexPart = '';
 		$flexArray = array();
-		
+
 		// Restaurant categories
 		$category_options = array(
 			array($llang_ffds . ':restaurantCategory_fastfood', tx_icssitlorquery_CriterionUtils::RCATEGORIE.':'.tx_icssitlorquery_CriterionUtils::RCATEGORIE_FASTFOOD),
@@ -198,7 +198,7 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'restaurantCategories');
-		
+
 		// Restaurant spéciality
 		$foreignFood_options = array(
 			array($llang_ffds . ':foreignFood_asian', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN),
@@ -216,10 +216,10 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'foreignFoods');
-		
+
 		return $xmlFlexPart;
 	}
-	
+
 	/**
 	 * Retrieves Event flex part
 	 *
@@ -229,7 +229,7 @@ class tx_icssitlorquery_dynflex {
 		$llang_ffds = $this->llang_ffds['pi1'];
 		$xmlFlexPart = '';
 		$flexArray = array();
-	
+
 		// Dates
 		$flexArray['TCEforms'] = array(
 			'label' => $llang_ffds . ':startDate',
@@ -249,7 +249,7 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'endDate');
-		
+
 		// Period
 		$flexArray['TCEforms'] = array(
 			'label' => $llang_ffds . ':period',
@@ -258,7 +258,7 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'period');
-		
+
 		// No fee
 		$flexArray['TCEforms'] = array(
 			'label' => $llang_ffds . ':noFeeEvent',
@@ -267,10 +267,10 @@ class tx_icssitlorquery_dynflex {
 			),
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'noFeeEvent');
-		
+
 		return $xmlFlexPart;
 	}
-	
+
 	/**
 	 * Retrieves sorting flex part
 	 *
@@ -391,5 +391,5 @@ class tx_icssitlorquery_dynflex {
 			';
 		}
 	}
-	
+
 }
