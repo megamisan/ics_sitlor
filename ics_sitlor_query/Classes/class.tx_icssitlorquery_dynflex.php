@@ -43,10 +43,10 @@ class tx_icssitlorquery_dynflex {
 	/**
 	 * Pre process flexform's field
 	 *
-	 * @param	string		$pi_table	Le nom de la table
-	 * @param	string		$pi_field	Le nom du champ
-	 * @param	array		$pi_row		l'enregistrement de la table à éditer
-	 * @param	string		$pi_altName	Le nom alternatif du champ
+	 * @param	string		$pi_table	Table name
+	 * @param	string		$pi_field	Field name
+	 * @param	array		$pi_row		Table record to edit
+	 * @param	string		$pi_altName	Alternative field name
 	 * @param	integer		$pi_palette
 	 * @param	string		$pi_extra
 	 * @param	integer		$pi_pal
@@ -113,6 +113,7 @@ class tx_icssitlorquery_dynflex {
 		
 		// Subdata group
 		$subDataGroup_options = array(
+			array(),
 			array($llang_ffds . ':subDataGroup_hotel', 'HOTEL'),
 			array($llang_ffds . ':subDataGroup_camping_youthHostel', 'CAMPING_YOUTHHOSTEL'),
 			array($llang_ffds . ':subDataGroup_strange', 'STRANGE'),
@@ -270,6 +271,12 @@ class tx_icssitlorquery_dynflex {
 		return $xmlFlexPart;
 	}
 	
+	/**
+	 * Retrieves sorting flex part
+	 *
+	 * @param	array		$pi_row		Table record to edit
+	 * @return	string		XML flex part content
+	 */
 	private function flexPartSorting(&$pi_row) {
 		$flexData = (!empty($pi_row['pi_flexform'])) ? (t3lib_div::xml2array($pi_row['pi_flexform'])) : (array('data' => array()));
 		if ($flexData['data']['paramSelect']['lDEF']['dataGroup']['vDEF']=='ACCOMODATION') {

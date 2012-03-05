@@ -1,4 +1,8 @@
-2012-03-01 Tsi Yang <tsi@in-cite.net>
+2012-03-05 Tsi Yang <tsi@in-cite.net>
+	* Comments: Commented function
+	* Feature: Removed login section and code OT Nancy.
+
+2012-03-02 Tsi Yang <tsi@in-cite.net>
 	* Feature: Plugin sorting.
 	* Refactor: Cleaned unuseless code.
 	* Feature: Added little map with marker position for coordinates.

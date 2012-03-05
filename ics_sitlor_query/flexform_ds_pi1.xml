@@ -34,34 +34,6 @@
 							</config>
 						</TCEforms>
 					</template>
-					<url>
-						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:url</label>
-							<config>
-								<type>input</type>
-								<size>50</size>
-							</config>
-						</TCEforms>
-					</url>
-					<login>
-						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:login</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</login>
-					<password>
-						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:password</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-								<eval>password </eval>
-							</config>
-						</TCEforms>
-					</password>
 					<what_to_display>
 						<TCEforms>
 							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display</label>
@@ -102,15 +74,6 @@
 						</config>
 						</TCEforms>
 					</PIDitemDisplay>
-					<OTNancySubscriber>
-						<TCEforms>
-							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:OTNancySubscriber</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</OTNancySubscriber>
 					<size>
 						<TCEforms>
 							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:size</label>
@@ -137,15 +100,16 @@
 							<config type="array">
 								<type>select</type>
 								<items type="array">
-									<numIndex index="0" type="array">
+									<numIndex index="0" type="array"/>
+									<numIndex index="1" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_accomodation</numIndex>
 										<numIndex index="1">ACCOMODATION</numIndex>
 									</numIndex>
-									<numIndex index="1" type="array">
+									<numIndex index="2" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_restaurant</numIndex>
 										<numIndex index="1">RESTAURANT</numIndex>
 									</numIndex>
-									<numIndex index="2" type="array">
+									<numIndex index="3" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_event</numIndex>
 										<numIndex index="1">EVENT</numIndex>
 									</numIndex>
