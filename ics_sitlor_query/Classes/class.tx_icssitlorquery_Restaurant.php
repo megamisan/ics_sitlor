@@ -143,7 +143,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
-			case 'ADRPEC_COMPL_ADRESSE':
+			case 'ADRPROD_COMPL_ADRESSE':
 				$this->tmpAddress['extra'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;

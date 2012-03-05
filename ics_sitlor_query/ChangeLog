@@ -1,6 +1,7 @@
 2012-03-05 Tsi Yang <tsi@in-cite.net>
 	* Comments: Commented function
 	* Feature: Removed login section and code OT Nancy.
+	* Fix: Mistake on retry extra address.
 
 2012-03-02 Tsi Yang <tsi@in-cite.net>
 	* Feature: Plugin sorting.

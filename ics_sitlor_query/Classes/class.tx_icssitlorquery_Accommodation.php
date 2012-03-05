@@ -136,7 +136,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
-			case 'ADRPEC_COMPL_ADRESSE':
+			case 'ADRPROD_COMPL_ADRESSE':
 				$this->tmpAddress['extra'] = $reader->readString();
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
