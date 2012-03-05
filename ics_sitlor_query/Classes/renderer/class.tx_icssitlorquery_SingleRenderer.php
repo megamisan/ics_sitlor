@@ -180,7 +180,7 @@ class tx_icssitlorquery_SingleRenderer {
 			'TIMETABLE' => $element->TimeTable,
 				// Rating
 			'HOTEL_RATING_LABEL' => $this->pi->pi_getLL('rating_star', 'Rating', true),
-			'HOTEL_RATING' => $element->RatingStar,
+			'HOTEL_RATING' => $this->pi->renderData('ratingStar', $element->RatingStar),
 				// Reception
 			'RECEPTION_LABEL' => $this->pi->pi_getLL('reception', 'Reception', true),
 			'RECEPTION_LANGUAGE_LABEL' => $this->pi->pi_getLL('reception_language', 'Reception language', true),
@@ -359,6 +359,11 @@ class tx_icssitlorquery_SingleRenderer {
 		$markers = array_merge($markers, $locMarkers);
 	}
 	
+	/**
+	 * Include lib GMaps
+	 *
+	 * @return void
+	 */
 	private static function includeLibGMaps() {
 		if (self::$mapsIncluded)
 			return;
@@ -368,6 +373,11 @@ class tx_icssitlorquery_SingleRenderer {
 		self::$mapsIncluded = true;
 	}
 	
+	/**
+	 * Include lib JS
+	 *
+	 * @return void
+	 */
 	private static function includeLibJS($conf, $prefixId) {
 		if (self::$jsIncluded)
 			return;
