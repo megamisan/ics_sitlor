@@ -1,3 +1,6 @@
+2012-03-08 Pierrick Caillon <pierrick@in-cite.net>
+	* Bug fix: Invalid array path for NomenclatureFactory and CriterionFactory connexion parameters initialization. (TypoScript)
+
 2012-03-05 Tsi Yang <tsi@in-cite.net>
 	* Comments: Commented function
 	* Feature: Removed login section and code OT Nancy.

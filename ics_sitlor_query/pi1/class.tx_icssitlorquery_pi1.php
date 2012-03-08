@@ -391,8 +391,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	function setConnection() {
 		$this->queryService = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQueryService', $this->conf['login'], $this->conf['password'], $this->conf['url']);
 		$this->queryService->setPager(intval($this->conf['page']), intval($this->conf['view.']['size']));
-		tx_icssitlorquery_NomenclatureFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['nomenclatureUrl']);
-		tx_icssitlorquery_CriterionFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['criterionUrl']);
+		tx_icssitlorquery_NomenclatureFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['sitlor.']['nomenclatureUrl']);
+		tx_icssitlorquery_CriterionFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['sitlor.']['criterionUrl']);
 	}
 
 	/**
