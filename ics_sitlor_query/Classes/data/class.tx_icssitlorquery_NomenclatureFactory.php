@@ -55,10 +55,13 @@
  * @subpackage	tx_icssitlorquery
  */
 class tx_icssitlorquery_NomenclatureFactory {
+	static $kinds;	// tx_icssitlorquery_KindList
+	static $kindsCategories = array();	// tx_icssitlorquery_CategoryList[]
 	static $categories;	// tx_icssitlorquery_CategoryList
 	static $types;		// tx_icssitlorquery_TypeList
-	static $categoriesTypes = array();	// TypeList[]
-	static $typesCategory = array();	// Category[]
+	static $categoriesTypes = array();	// tx_icssitlorquery_TypeList[]
+	static $categoriesKind = array();	// tx_icssitlorquery_Kind[]
+	static $typesCategory = array();	// tx_icssitlorquery_Category[]
 
 	static $login;
 	static $password;
@@ -105,54 +108,28 @@ class tx_icssitlorquery_NomenclatureFactory {
 			if ($reader->nodeType == XMLReader::ELEMENT) {
 				switch ($reader->name) {
 					case 'Genres':
-						$hasGenres = true;
-						$elements = self::readElement_Genres($reader);
-						$all = array_merge($all, $elements);
+						$categories = t3lib_div::makeInstance('tx_icssitlorquery_CategoryList');
+						$categoriesTypes = array();
+						if ($kind = tx_icssitlorquery_Kind::FromXML($reader, $categories, $categoriesTypes)) {
+							$all[] = array(
+								$kind,
+								$categories,
+								$categoriesTypes
+							);
+						}
 						break;
-
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
 				}
 			}
 			$reader->read();
 		}
-		if (!$hasGenres)
-			throw new Exception('Nomenclature has any Genres.');
+		if (empty($all))
+			throw new Exception('Nomenclature has no Kind.');
 
 		self::$cacheInstance->set(self::$hash, serialize($all), array(), self::$lifetime);
 
 		return $all;
-	}
-
-	/**
-	 * Read Element
-	 *
-	 * @param	XMLReader		$reader : Reader to the parsed document
-	 * @return	void
-	 */
-	private static function readElement_Genres(XMLReader $reader) {
-		$reader->read();
-		$elements = array();
-		while ($reader->nodeType != XMLReader::END_ELEMENT) {
-			if ($reader->nodeType == XMLReader::ELEMENT) {
-				switch ($reader->name) {
-					case 'Categories':
-						$types = t3lib_div::makeInstance('tx_icssitlorquery_TypeList');
-						if ($category = tx_icssitlorquery_Category::FromXML($reader, $types)) {
-							$elements[] = array(
-								$category,
-								$types
-							);
-						}
-						break;
-
-					default:
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-				}
-			}
-			$reader->read();
-		}
-		return $elements;
 	}
 
 
@@ -174,6 +151,7 @@ class tx_icssitlorquery_NomenclatureFactory {
             );
         }
 
+		self::$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
 		self::$categories = t3lib_div::makeInstance('tx_icssitlorquery_CategoryList');
 		self::$types = t3lib_div::makeInstance('tx_icssitlorquery_TypeList');
 
@@ -185,13 +163,18 @@ class tx_icssitlorquery_NomenclatureFactory {
 			throw new Exception('Nomenclature on cache is broken.');
 		}
 
-		foreach ($all as $element) {
-			self::$categories->Add($element[0]);
-			self::$categoriesTypes[$element[0]->ID] = $element[1];
-			for ($i=0; $i<$element[1]->Count(); $i++) {
-				$type = $element[1]->Get($i);
-				self::$types->Add($type);
-				self::$typesCategory[$type->ID] = $element[0];
+		foreach ($all as $kindDef) {
+			self::$kinds->Add($kindDef[0]);
+			self::$kindsCategories[$kindDef[0]->ID] = $kindDef[1];
+			foreach ($kindDef[2] as $categoryDef) {
+				self::$categories->Add($categoryDef[0]);
+				self::$categoriesTypes[$categoryDef[0]->ID] = $categoryDef[1];
+				self::$categoriesKind[$categoryDef[0]->ID] = $kindDef[0];
+				for ($i = 0; $i < $categoryDef[1]->Count(); $i++) {
+					$type = $categoryDef[1]->Get($i);
+					self::$types->Add($type);
+					self::$typesCategory[$type->ID] = $categoryDef[0];
+				}
 			}
 		}
 	}
@@ -212,10 +195,45 @@ class tx_icssitlorquery_NomenclatureFactory {
 	}
 
 	/**
+	 * Retrieves Kind
+	 *
+	 * @param	int		$id : id of Kind
+	 * @return	tx_icssitlorquery_Kind
+	 */
+	public static function GetKind($id) {
+		self::initialize();
+		for ($i = 0; $i < self::$kinds->Count(); $i++) {
+			$kind = self::$kinds->Get($i);
+			if ($kind->ID == $id) {
+				return $kind;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieves KindList
+	 *
+	 * @param	int		array $ids : ids of kinds
+	 * @return	tx_icssitlorquery_KindList
+	 */
+	public static function GetKinds(array $ids) {
+		self::initialize();
+		$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
+		for ($i = 0; $i < self::$categories->Count(); $i++) {
+			$kind = self::$kinds->Get($i);
+			if (in_array($kind->ID, $ids)) {
+				$kinds->Add($kind);
+			}
+		}
+		return $kinds;
+	}
+
+	/**
 	 * Retrieves Category
 	 *
 	 * @param	int		$id : id of Category
-	 * @return	Category
+	 * @return	tx_icssitlorquery_Category
 	 */
 	public static function GetCategory($id) {
 		self::initialize();
@@ -232,7 +250,7 @@ class tx_icssitlorquery_NomenclatureFactory {
 	 * Retrieves CategoryList
 	 *
 	 * @param	int		array $ids : ids of categories
-	 * @return	CategoryList
+	 * @return	tx_icssitlorquery_CategoryList
 	 */
 	public static function GetCategories(array $ids) {
 		self::initialize();
@@ -250,7 +268,7 @@ class tx_icssitlorquery_NomenclatureFactory {
 	 * Retrieves Type
 	 *
 	 * @param	int		$id : id of type
-	 * @return	Type
+	 * @return	tx_icssitlorquery_Type
 	 */
 	public static function GetType($id) {
 		self::initialize();
@@ -267,7 +285,7 @@ class tx_icssitlorquery_NomenclatureFactory {
 	 * Retrieves TypeList
 	 *
 	 * @param	int		array $ids : ids of types
-	 * @return	TypeList
+	 * @return	tx_icssitlorquery_TypeList
 	 */
 	public static function GetTypes(array $ids) {
 		self::initialize();
@@ -282,9 +300,19 @@ class tx_icssitlorquery_NomenclatureFactory {
 	}
 
 	/**
+	 * Retrieves KindList
+	 *
+	 * @return	tx_icssitlorquery_KindList
+	 */
+	public static function GetAllKinds() {
+		self::initialize();
+		return self::$kinds;
+	}
+
+	/**
 	 * Retrieves CategoryList
 	 *
-	 * @return	CategoryList
+	 * @return	tx_icssitlorquery_CategoryList
 	 */
 	public static function GetAllCategories() {
 		self::initialize();
@@ -292,10 +320,21 @@ class tx_icssitlorquery_NomenclatureFactory {
 	}
 
 	/**
+	 * Retrieves Categories from Kind
+	 *
+	 * @param	tx_icssitlorquery_Kind		$kind
+	 * @return	tx_icssitlorquery_CategoryList
+	 */
+	public static function GetKindCategories(tx_icssitlorquery_Category $kind) {
+		self::initialize();
+		return self::$kindsCategories[$kind->ID];
+	}
+
+	/**
 	 * Retrieves Types from Category
 	 *
 	 * @param	tx_icssitlorquery_Category		$Category
-	 * @return	TypeList
+	 * @return	tx_icssitlorquery_TypeList
 	 */
 	public static function GetCategoryTypes(tx_icssitlorquery_Category $category) {
 		self::initialize();
@@ -303,10 +342,21 @@ class tx_icssitlorquery_NomenclatureFactory {
 	}
 
 	/**
+	 * Retrieves Kind from Category
+	 *
+	 * @param	tx_icssitlorquery_Category		$category
+	 * @return	tx_icssitlorquery_Kind
+	 */
+	public static function GetCategoryKind(tx_icssitlorquery_Category $category) {
+		self::initialize();
+		return self::$categoriesKind[$category->ID];
+	}
+
+	/**
 	 * Retrieves Category from Type
 	 *
 	 * @param	tx_icssitlorquery_Type		$type
-	 * @return	Category
+	 * @return	tx_icssitlorquery_Category
 	 */
 	public static function GetTypeCategory(tx_icssitlorquery_Type $type) {
 		self::initialize();
@@ -314,11 +364,30 @@ class tx_icssitlorquery_NomenclatureFactory {
 	}
 
 	/**
+	 * Retrieves Categories
+	 *
+	 * @param	tx_icssitlorquery_CategoryList		$source
+	 * @param	int		array $ids
+	 * @return	tx_icssitlorquery_CategoryList
+	 */
+	public static function FilterCategoriesByIds(tx_icssitlorquery_CategoryList $source, array $ids) {
+		self::initialize();
+		$categories = t3lib_div::makeInstance('tx_icssitlorquery_CategoryList');
+		for ($i = 0; $i < $source->Count(); $i++) {
+			$category = $source->Get($i);
+			if (in_array($category->ID, $ids)) {
+				$categories->Add($category);
+			}
+		}
+		return $categories;
+	}
+
+	/**
 	 * Retrieves Types
 	 *
 	 * @param	tx_icssitlorquery_TypeList		$source
 	 * @param	int		array $ids
-	 * @return	TypeList
+	 * @return	tx_icssitlorquery_TypeList
 	 */
 	public static function FilterTypesByIds(tx_icssitlorquery_TypeList $source, array $ids) {
 		self::initialize();
@@ -341,9 +410,12 @@ class tx_icssitlorquery_NomenclatureFactory {
 	 * @return	void
 	 */
 	public static function SetConnectionParameters($login, $password, $url) {
+		self::$kinds = null;
+		self::$kindsCategories = array();
 		self::$categories = null;
 		self::$types = null;
 		self::$categoriesTypes = array();
+		self::$categoriesKind = array();
 		self::$typesCategory = array();
 
 		self::$login = $login;

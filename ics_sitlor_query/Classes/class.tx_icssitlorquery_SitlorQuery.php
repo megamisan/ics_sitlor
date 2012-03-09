@@ -148,9 +148,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 				$params['libtext'] = $this->filters['keyword'];
 			}
 
-			if (in_array('gender', $filterArray)) { // && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
+			if (in_array('kind', $filterArray)) { // && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
 				$pnames[] = 'elgendro';
-				$pvalues[] = $this->filters['gender'];
+				$pvalues[] = $this->filters['kind'];
 			}
 			if (in_array('category', $filterArray)) { // && (!in_array('type', $filterArray))) {
 				$this->makeCategoryFilter($pnames, $pvalues);
@@ -236,7 +236,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			case 'idFilter':
 			case 'title':
 			case 'keyword':
-			case 'gender':
+			case 'kind':
 			case 'startDate':
 			case 'endDate':
 			case 'noDate':

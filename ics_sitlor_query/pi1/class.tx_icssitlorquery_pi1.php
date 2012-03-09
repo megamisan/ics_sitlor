@@ -580,7 +580,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 */
 	private function getAccomodations() {
 		if (!$this->conf['view.']['subDataGroups']) {
-			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::ACCOMODATION));
+			$this->queryService->addFilter(
+				t3lib_div::makeInstance(
+					'tx_icssitlorquery_KindFilter',
+					tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::ACCOMODATION)
+				)
+			);
 		} else {
 			$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 			$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
@@ -706,8 +711,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	mixed		Array of elements
 	 */
 	private function getEvents() {
-		$filter = t3lib_div::makeInstance('tx_icssitlorquery_GenderFilter', tx_icssitlorquery_NomenclatureUtils::EVENT);
-		$this->queryService->addFilter($filter);
+		$this->queryService->addFilter(
+			t3lib_div::makeInstance(
+				'tx_icssitlorquery_KindFilter',
+				tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT)
+			)
+		);
 		$this->addCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT);
 		if ($this->conf['filter.']['noFeeEvent']) {
 			list($crit, $term) = t3lib_div::trimExplode(':', $this->conf['filter.']['noFeeEvent']);

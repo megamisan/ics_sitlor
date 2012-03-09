@@ -36,7 +36,7 @@ class tx_icssitlorquery_CategoryFilter implements tx_icssitquery_IFilter {
 	/**
 	 * Constructor
 	 *
-	 * @param	string		$value : The category
+	 * @param	string		$categories: The categories
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_CategoryList $categories) {

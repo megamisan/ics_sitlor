@@ -24,25 +24,27 @@
 
 
 /**
- * Class 'tx_icssitlorquery_GenderFilter' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitlorquery_KindFilter' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
+ * @author	Pierrick Caillon <pierrick@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
-	private $value;
+class tx_icssitlorquery_KindFilter implements tx_icssitquery_IFilter {
+	private $value = array();
 
 	/**
 	 * Constructor
 	 *
-	 * @param	int		$value
+	 * @param	tx_icssitlorquery_Kind		$kinds
 	 * @return	void
 	 */
-	public function __construct($value) {
-		if (!is_int($value))
-			throw new Exception('Gender value filter must be integer.');
-		$this->value = $value;
+	public function __construct(tx_icssitlorquery_KindList $kinds) {
+		for ($i = 0; $i < $kinds->Count(); $i++) {
+			$kind = $kinds->Get($i);
+			$this->value[] = $kind->ID;
+		}
 	}
 
 	/**
@@ -52,6 +54,6 @@ class tx_icssitlorquery_GenderFilter implements tx_icssitquery_IFilter {
 	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
-		$query->setParameter('gender', $this->value);
+		$query->setParameter('kind', $this->value);
 	}
 }
