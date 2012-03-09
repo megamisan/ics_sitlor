@@ -67,7 +67,6 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	private $allowedGroup;
 	private $allowedGroupNumber;	// tx_icssitlorquery_ValuedTermList
 	private $motorCoachPark;
-	// private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
 
 	private $capacity;				// tx_icssitlorquery_ValuedTermList
 
@@ -88,17 +87,16 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->menuLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->allowedGroupNumber = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
-		// $this->serviceOpen = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->capacity = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentSaleFormula = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentCartePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @return	mixed		: name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -149,8 +147,6 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->allowedGroupNumber;
 			case 'MotorCoachPark':
 				return $this->motorCoachPark;
-			// case 'ServiceOpen':
-				// return $this->serviceOpen;
 
 			//-- CAPACITY
 			case 'Capacity':
@@ -161,12 +157,24 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 				return $this->currentSaleFormula;
 			case 'CurrentCartePrice':
 				return $this->currentCartePrice;
-			// case 'CurrentMenuPrice':
-				// return $this->currentMenuPrice;
 
-			default :
+			default:
 				return parent::__get($name);
 		}
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('Phones', 'Fax', 'Email', 'WebSite', 
+			'Coordinates', 'ProviderName', 'ProviderAddress', 'ProviderPhones', 
+			'ProviderFax', 'ProviderEmail', 'ProviderWebSite', 'Class', 
+			'ReceptionLanguage', 'MenuLanguage', 'Pets', 'AllowedPets', 'AllowedGroup', 
+			'AllowedGroupNumber', 'MotorCoachPark', 'Capacity', 'CurrentSaleFormula', 
+			'CurrentCartePrice');
 	}
 
 	/**
@@ -180,7 +188,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			//-- IDENTITY
 			case 'ADRPROD_TEL':
 				array_unshift($this->phones, t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -188,7 +196,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPROD_TEL2':
 				array_push($this->phones, t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -196,7 +204,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPROD_FAX':
 				$this->fax = t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -204,14 +212,14 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPROD_EMAIL':
 				$email = $reader->readString();
-				$this->email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
+				$this->email = t3lib_div::makeInstance('tx_icssitquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
-				$this->webSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				$this->webSite =  t3lib_div::makeInstance('tx_icssitquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -269,7 +277,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPREST_TEL':
 				array_unshift($this->providerPhones, t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -277,7 +285,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPREST_TEL2':
 				array_push($this->providerPhones, t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -285,7 +293,7 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPREST_FAX':
 				$this->providerFax = t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -293,14 +301,14 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 
 			case 'ADRPREST_EMAIL':
 				$email = $reader->readString();
-				$this->providerEmail = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
+				$this->providerEmail = t3lib_div::makeInstance('tx_icssitquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPREST_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
-				$this->providerWebSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				$this->providerWebSite =  t3lib_div::makeInstance('tx_icssitquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -333,16 +341,12 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			$this->allowedGroupNumber->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK)
 			$this->motorCoachPark = $valuedTerm;
-		// if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::SERVICEOPEN)
-			// $this->serviceOpen->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY)
 			$this->capacity->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA)
 			$this->currentSaleFormula->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE)
 			$this->currentCartePrice->Add($valuedTerm);
-		// if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE)
-			// $this->currentMenuPrice->Add($valuedTerm);
 	}
 
 	/**
@@ -352,15 +356,15 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
-		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 		$this->providerName = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Name',
+			'tx_icssitquery_Name',
 			$this->tmpProviderName['title'],
 			$this->tmpProviderName['firstname'],
 			$this->tmpProviderName['lastname']
 		);
 		$this->providerAddress = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address',
+			'tx_icssitquery_Address',
 			$this->tmpProviderAddress['number'],
 			$this->tmpProviderAddress['street'],
 			$this->tmpProviderAddress['extra'],
@@ -384,11 +388,9 @@ class tx_icssitlorquery_FullRestaurant extends tx_icssitlorquery_Restaurant {
 			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP,
 			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP_NUMBER,
 			tx_icssitlorquery_CriterionUtils::MOTORCOACH_PARK,
-			// tx_icssitlorquery_CriterionUtils::SERVICEOPEN,
 			tx_icssitlorquery_CriterionUtils::RESTAURANT_CAPACITY,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SALE_FORMULA,
 			tx_icssitlorquery_CriterionUtils::CURRENT_CARTE_PRICE,
-			// tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}

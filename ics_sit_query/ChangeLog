@@ -1,3 +1,10 @@
+2012-03-09 Pierrick Caillon <pierrick@in-cite.net>
+	* Refactor: Promotted Address, Coordinates, Link, Name, Phone and Picture object from ics_sitlor_query.
+	* Refactor: Changed some class folders.
+	* Feature: Added a new method in AbstractData called getProperties with overrides in all child classes.
+	* Refactor: Promotted common properties in AbstractAccomodation, AbstractEvent and AbstractRestaurant to AbstractData. Removed Category property.
+	* Feature: Added a new method in IQueryService called getRecords for any record querying.
+
 2012-01-27 Tsi Yang <tsi@in-cite.net>
 	* Feature : Implementation of AbstractEvent
 

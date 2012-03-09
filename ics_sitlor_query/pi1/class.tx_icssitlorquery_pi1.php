@@ -401,11 +401,17 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	void
 	 */
 	function setDefaultConf() {
+		$common = array('Address', 'Coordinates', 'Link', 'Name', 'Phone', 'Picture');
 		foreach ($this->conf['defaultConf.'] as $type => $conf) {
 			if ($type{strlen($type) - 1} != '.')
 				continue;
 			$type = substr($type, 0, -1);
-			$class = 'tx_icssitlorquery_' . $type;
+			if (in_array($type, $common)) {
+				$class = 'tx_icssitquery_' . $type;
+			}
+			else {
+				$class = 'tx_icssitlorquery_' . $type;
+			}
 			if ($type == 'ValuedTermTuple') {
 				foreach ($conf as $tag => $subconf) {
 					if ($tag{strlen($tag) - 1} != '.')
@@ -580,10 +586,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 */
 	private function getAccomodations() {
 		if (!$this->conf['view.']['subDataGroups']) {
+			$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
+			$kinds->Add(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::ACCOMODATION));
 			$this->queryService->addFilter(
 				t3lib_div::makeInstance(
 					'tx_icssitlorquery_KindFilter',
-					tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::ACCOMODATION)
+					$kinds
 				)
 			);
 		} else {
@@ -711,10 +719,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	mixed		Array of elements
 	 */
 	private function getEvents() {
+		$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
+		$kinds->Add(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT));
 		$this->queryService->addFilter(
 			t3lib_div::makeInstance(
 				'tx_icssitlorquery_KindFilter',
-				tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT)
+				$kinds
 			)
 		);
 		$this->addCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT);

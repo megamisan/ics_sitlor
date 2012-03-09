@@ -23,69 +23,93 @@
 ***************************************************************/
 
 /**
- * Class 'AbstractRestaurant' for the 'ics_sit_query' extension.
+ * Class 'AbstractData' for the 'ics_sit_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
 
-abstract class tx_icssitquery_AbstractRestaurant extends tx_icssitquery_AbstractData{
-	private $type;		// Type of restaurant
-	private $category;	// Category of restaurant
-	private $address;	// Address of accomodation: an object Address with street, zip, city, ...
-	private $illustration;	// Illustration of restaurant
-	private $chainAndLabel;	// Restaurant chain or label
+abstract class tx_icssitquery_AbstractData {
+	private $id; // ID
+	private $name; // Name/Title
+	private $description; // Description
+	private $type;		// Type of the element, a definition of its categorization
+	private $address;	// Address: an Address object with street, zip, city, ...
+	private $illustration;	// Illustrations
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @return	mixed		: name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'ID':
+				return $this->id;
+			case 'Name':
+				return $this->name;
+			case 'Description':
+				return $this->description;
 			case 'Type':
 				return $this->type;
-			case 'Category':
-				return $this->category;
 			case 'Address':
 				return $this->address;
 			case 'Illustration':
 				return $this->illustration;
-			case 'ChainAndLabel':
-				return $this->chainAndLabel;
 			default :
-				return parent::__get($name);
+				tx_icssitquery_debug::notice('Undefined property via __get(): ' . $name);
 		}
 	}
 
 	/**
-	 * Set name
+	 * Defines a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @param	mixed		$value : Property's value
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
 	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
+			case 'ID':
+				$this->id = $value;
+			break;
+			case 'Name':
+				$this->name = $value;
+			break;
+			case 'Description':
+				$this->description = $value;
+			break;
 			case 'Type':
 				$this->type = $value;
 			break;
-			case 'Category':
-				$this->category = $value;
-			break;
 			case 'Address':
+				if (!$value instanceof tx_icssitquery_Address) {
+				}
 				$this->address = $value;
 			break;
 			case 'Illustration':
 				$this->illustration = $value;
 			break;
-			case 'ChainAndLabel':
-				$this->chainAndLabel = $value;
-			break;
 			default :
-				parent::__set($name, $value);
+				tx_icssitquery_debug::notice('Undefined property via __set(): ' . $name);
 		}
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return array(
+			'ID',
+			'Name',
+			'Description',
+			'Type',
+			'Address',
+			'Illustration',
+		);
 	}
 }

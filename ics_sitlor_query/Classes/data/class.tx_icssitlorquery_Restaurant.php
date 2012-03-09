@@ -24,13 +24,13 @@
 
 
 /**
- * Class 'Accomodation' for the 'ics_sitlor_query' extension.
+ * Interface 'Restaurant' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation {
+class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	protected $tmpAddress = array(
 		'number' => '',
 		'street' => '',
@@ -39,52 +39,66 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		'city' => '',
 	);
 
-	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
+	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
+	private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
 
 	/**
-	 * Constructor
+	 * Initializes the restaurant.
 	 *
 	 * @return	void
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
-		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->ChainAndLabel = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->serviceOpen = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @return	mixed		: name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'CurrentSingleClientsRate':
-				return $this->currentSingleClientsRate;
-			default :
+			case 'CurrentMenuPrice':
+				return $this->currentMenuPrice;
+			case 'ServiceOpen':
+				return $this->serviceOpen;
+			default:
 				return parent::__get($name);
 		}
 
 	}
 
 	/**
-	 * Set name
+	 * Defines a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @param	mixed		: Property's value
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
 	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			default :
+			default:
 				parent::__set($name, $value);
 		}
 	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('CurrentMenuPrice', 'ServiceOpen');
+	}
 
 	/**
-	 * Parse the current XML node in the XMLReader
+	 * Parses the current XML node in the XMLReader.
 	 *
-	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @param	XMLReader		$reader Reader to the parsed document.
 	 * @return	void
 	 */
 	public function parseXML(XMLReader $reader) {
@@ -99,9 +113,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	}
 
 	/**
-	 * Read the current XML element in the XMLReader
+	 * Reads the current XML element in the XMLReader.
 	 *
-	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @param	XMLReader		$reader Reader to the parsed document.
 	 * @return	void
 	 */
 	protected function readElement(XMLReader $reader) {
@@ -163,10 +177,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	}
 
 	/**
-	 * Parse the current XML node in the XMLReader
-	 * Parse criteria
+	 * Parses the criteria XML node in the XMLReader.
 	 *
-	 * @param	XMLReader		$reader : Reader to the parsed document
+	 * @param	XMLReader		$reader Reader to the parsed document.
 	 * @return	void
 	 */
 	protected function parseCriteria(XMLReader $reader) {
@@ -190,14 +203,14 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
  	}
 
 	/**
-	 * Set criterion
+	 * Sets a criterion.
 	 *
-	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm
+	 * @param	tx_icssitlorquery_ValuedTerm		$valuedTerm Valued term to associate.
 	 * @return	void
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
-			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
+			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitquery_Picture', $valuedTerm->Value);
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
 				$this->Illustration,
 				$valuedTerm,
@@ -217,21 +230,23 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				'illustration'
 			);
 		}
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
-			$this->RatingStar = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CHAIN_LABEL) {
+			$this->ChainAndLabel->Add($valuedTerm);
 		}
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
-			$this->currentSingleClientsRate->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE)
+			$this->currentMenuPrice->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::SERVICEOPEN)
+			$this->serviceOpen->Add($valuedTerm);
 	}
 
 	/**
-	 * Process after parsing the current XML node in the XMLReader
+	 * Processes after parsing the current XML node in the XMLReader.
 	 *
 	 * @return	void
 	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address',
+			'tx_icssitquery_Address',
 			$this->tmpAddress['number'],
 			$this->tmpAddress['street'],
 			$this->tmpAddress['extra'],
@@ -241,15 +256,16 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	}
 
 	/**
-	 * Retrieves required criteria
+	 * Retrieves required criteria.
 	 *
-	 * @return	array		Required criterion identifiers for object construction.
+	 * @return	mixed		Arrau of required criteria IDs.
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
-			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
-			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
+			tx_icssitlorquery_CriterionUtils::CHAIN_LABEL,
+			tx_icssitlorquery_CriterionUtils::CURRENT_MENU_PRICE,
+			tx_icssitlorquery_CriterionUtils::SERVICEOPEN,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

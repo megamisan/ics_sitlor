@@ -2,12 +2,12 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011-2012 In Cite Solution <technique@in-cite.net>
+*  (c) 2012 In Cite Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
-*  it under the Pictures of the GNU General Public License as published by
+*  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
 *
@@ -26,15 +26,15 @@
  *
  *
  *
- *   52: class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf
- *   62:     public function __construct($uri)
- *   72:     public function __get($name)
- *   87:     public static function SetDefaultConf(array $conf)
- *   96:     public function __toString()
- *  107:     public function toString()
- *  132:     public function toStringConf(array $conf)
- *  145:     public function toStringObj(tslib_cObj $cObj)
- *  159:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *   52: class tx_icssitquery_Name implements tx_icssitquery_IToStringObjConf
+ *   67:     public function __construct($title, $firstname, $lastname)
+ *   79:     public function __get($name)
+ *   98:     public static function SetDefaultConf(array $conf)
+ *  107:     public function __toString()
+ *  118:     public function toString()
+ *  143:     public function toStringConf(array $conf)
+ *  156:     public function toStringObj(tslib_cObj $cObj)
+ *  170:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
  *
  * TOTAL FUNCTIONS: 8
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -43,24 +43,31 @@
 
 
 /**
- * Class 'tx_icssitlorquery_Picture' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitquery_Name' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
- * @subpackage	tx_icssitlorquery
+ * @subpackage	tx_icssitquery
  */
-class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
-	private $uri;
+class tx_icssitquery_Name implements tx_icssitquery_IToStringObjConf {
+	private $title = '';
+	private $firstname = '';
+	private $lastname = '';
+
 	private static $lConf = array();
 
 	/**
-	 * Initializes this image instance.
+	 * Initializes this name definition.
 	 *
-	 * @param	string		$uri: The image URI.
+	 * @param	string		$title: Title of the person.
+	 * @param	string		$firstname: First name.
+	 * @param	string		$lastname: Last name.
 	 * @return	void
 	 */
-	public function __construct($uri) {
-		$this->uri = $uri;
+	public function __construct($title, $firstname, $lastname) {
+		$this->title = $title;
+		$this->firstname = $firstname;
+		$this->lastname = $lastname;
 	}
 
 	/**
@@ -71,8 +78,12 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	 */
 	public function __get($name) {
 		switch ($name) 	{
-			case 'Uri':
-				return $this->uri;
+			case 'Title':
+				return $this->title;
+			case 'Firstname':
+				return $this->firstname;
+			case 'Lastname':
+				return $this->lastname;
 			default :
 				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
@@ -159,10 +170,13 @@ class tx_icssitlorquery_Picture implements tx_icssitquery_IToStringObjConf {
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
 		$data = array(
-			'url' => $this->uri,
+			'title' => $this->title,
+			'lastname' => $this->lastname,
+			'firstname' => $this->firstname,
 		);
-		$local_cObj->start($data, 'Picture');
+		$local_cObj->start($data, 'Name');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
 		return $local_cObj->stdWrap('', $conf);
 	}
+
 }

@@ -24,13 +24,13 @@
 
 
 /**
- * Interface 'Event' for the 'ics_sitlor_query' extension.
+ * Class 'Accomodation' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
+class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation {
 	protected $tmpAddress = array(
 		'number' => '',
 		'street' => '',
@@ -39,7 +39,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		'city' => '',
 	);
 
-	private $typeEvent = null;
+	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
 
 	/**
 	 * Constructor
@@ -48,39 +48,46 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
-		$this->TimeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
+		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @return	mixed		Name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'TypeEvent':
-				return $this->typeEvent;
-			default :
+			case 'CurrentSingleClientsRate':
+				return $this->currentSingleClientsRate;
+			default:
 				return parent::__get($name);
 		}
 
 	}
 
 	/**
-	 * Set name
+	 * Defines a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @param	mixed		$value : Property's value
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
 	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			case 'TypeEvent':
-				$this->typeEvent = $value;
-			default :
+			default:
 				parent::__set($name, $value);
 		}
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('CurrentSingleClientsRate');
 	}
 
 	/**
@@ -159,11 +166,6 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 					$this->parseCriteria($reader);
 				break;
 
-			//-- TIMETABLE
-			case 'HORAIRES':
-				$this->parseTimeTable($reader);
-				break;
-
 			default :
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 		}
@@ -204,7 +206,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		if (($index = array_search($valuedTerm->Criterion->ID, tx_icssitlorquery_CriterionUtils::$photos)) !== false) {
-			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitlorquery_Picture', $valuedTerm->Value);
+			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitquery_Picture', $valuedTerm->Value);
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
 				$this->Illustration,
 				$valuedTerm,
@@ -224,34 +226,11 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				'illustration'
 			);
 		}
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::TYPE_EVENT) {
-			$this->TypeEvent = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
+			$this->RatingStar = $valuedTerm;
 		}
-	}
-
-	/**
-	 * Parse the current XML node in the XMLReader
-	 * Parse TimeTable
-	 *
-	 * @param	XMLReader		$reader : Reader to the parsed document
-	 * @return	void
-	 */
-	private function parseTimeTable(XMLReader $reader) {
-		$reader->read();
-		while ($reader->nodeType != XMLReader::END_ELEMENT) {
-			if($reader->nodeType == XMLReader::ELEMENT){
-				switch ($reader->name) {
-					case 'Horaire':
-						if ($timeTable = tx_icssitlorquery_TimeTable::FromXML($reader))
-							$this->TimeTable->Add($timeTable);
-						break;
-
-					default:
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-				}
-			}
-			$reader->read();
-		}
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
+			$this->currentSingleClientsRate->Add($valuedTerm);
 	}
 
 	/**
@@ -261,7 +240,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	protected function afterParseXML() {
 		$this->Address = t3lib_div::makeInstance(
-			'tx_icssitlorquery_Address',
+			'tx_icssitquery_Address',
 			$this->tmpAddress['number'],
 			$this->tmpAddress['street'],
 			$this->tmpAddress['extra'],
@@ -273,12 +252,13 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	/**
 	 * Retrieves required criteria
 	 *
-	 * @return	mixed		Array of required criteria IDs
+	 * @return	array		Required criterion identifiers for object construction.
 	 */
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
-			tx_icssitlorquery_CriterionUtils::TYPE_EVENT,
+			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
+			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

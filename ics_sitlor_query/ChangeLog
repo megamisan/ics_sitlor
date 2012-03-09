@@ -1,9 +1,16 @@
-2012-03-09 Virginie Sugere <virginie@in-cite.net>
+2012-03-09 Virginie Sugère <virginie@in-cite.net>
 	* Fix: Change translation.
-2012-03-08 Pierrick Caillon <pierrick@in-cite.net>
+
+2012-03-09 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Added Kind object for Nomenclature.
 	* Refactor: Changed parsing in NomenclatureFactory to use the new Kind object. All the nomenclature objects are now converted.
 	* Refactor: Changed GenderFilter to KindFilter with the usage of the new Kind object. Dependances are updated.
+	* Refactor: Promotted Address, Coordinates, Link, Name, Phone and Picture object to ics_sit_query.
+	* Refactor: Changed some class folders.
+	* Feature: Added override to the new getProperties method in AbstractData to all child classes.
+	* Feature: Added an new GenericRecord object for non-specific or unknow records.
+	* Refactor: Changed getAccomodations, getRestaurants, getEvents in SitlorQueryService to share code in private methods.
+	* Feature: Implementation of the new getRecords method in SitlorQueryService using GenericRecord as record object.
 
 2012-03-08 Pierrick Caillon <pierrick@in-cite.net>
 	* Bug fix: Invalid array path for NomenclatureFactory and CriterionFactory connexion parameters initialization. (TypoScript)

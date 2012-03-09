@@ -40,7 +40,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	private $longitude = 0;
 
 	private $kindOfEvent;
-	private $typeEvent;
 	private $information;	// tx_icssitlorquery_ValuedTermList
 	private $festival;
 
@@ -60,10 +59,10 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	}
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string		$name : Property's name
-	 * @return	mixed		Name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
@@ -83,8 +82,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 
 			case 'KindOfEvent':
 				return $this->kindOfEvent;
-			case 'TypeEvent':
-				return $this->typeEvent;
 			case 'Information':
 				return $this->information;
 			case 'Festival':
@@ -95,10 +92,20 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 			case 'CurrentBasePrice':
 				return $this->currentBasePrice;
 
-			default :
+			default:
 				return parent::__get($name);
 		}
-
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('Phones', 'Fax', 'Email', 'WebSite', 
+			'Coordinates', 'KindOfEvent', 'Information', 'Festival', 'CurrentFree', 
+			'CurrentBasePrice');
 	}
 
 	/**
@@ -112,7 +119,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 			//-- IDENTITY
 			case 'ADRPROD_TEL':
 				array_unshift($this->phones, t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -120,7 +127,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 
 			case 'ADRPROD_TEL2':
 				array_push($this->phones, t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -128,7 +135,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 
 			case 'ADRPROD_FAX':
 				$this->fax = t3lib_div::makeInstance(
-					'tx_icssitlorquery_Phone',
+					'tx_icssitquery_Phone',
 					$reader->readString()
 				);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -136,14 +143,14 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 
 			case 'ADRPROD_EMAIL':
 				$email = $reader->readString();
-				$this->email = t3lib_div::makeInstance('tx_icssitlorquery_Link', $email);
+				$this->email = t3lib_div::makeInstance('tx_icssitquery_Link', $email);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
 			case 'ADRPROD_URL':
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
-				$this->webSite =  t3lib_div::makeInstance('tx_icssitlorquery_Link', $url);
+				$this->webSite =  t3lib_div::makeInstance('tx_icssitquery_Link', $url);
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -199,8 +206,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 		parent::setCriterion($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT)
 			$this->kindOfEvent = $valuedTerm;
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::TYPE_EVENT)
-			$this->typeEvent = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION)
 			$this->information->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL)
@@ -218,7 +223,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
-		$this->coordinates = t3lib_div::makeInstance('tx_icssitlorquery_Coordinates', $this->latitude, $this->longitude);
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 	}
 
 	/**
@@ -229,7 +234,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	public static function getRequiredCriteria() {
 		$criteria = array(
 			tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT,
-			tx_icssitlorquery_CriterionUtils::TYPE_EVENT,
 			tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION,
 			tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL,
 			tx_icssitlorquery_CriterionUtils::CURRENT_FREE,

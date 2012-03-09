@@ -150,7 +150,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 
 			if (in_array('kind', $filterArray)) { // && (!(in_array('category', $filterArray)) || !in_array('type', $filterArray))) {
 				$pnames[] = 'elgendro';
-				$pvalues[] = $this->filters['kind'];
+				$pvalues[] = implode('|', $this->filters['kind']);
 			}
 			if (in_array('category', $filterArray)) { // && (!in_array('type', $filterArray))) {
 				$this->makeCategoryFilter($pnames, $pvalues);

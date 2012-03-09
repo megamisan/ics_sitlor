@@ -23,71 +23,53 @@
 ***************************************************************/
 
 /**
- * Class 'AbstractAccomodation' for the 'ics_sit_query' extension.
+ * Class 'AbstractEvent' for the 'ics_sit_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
-
-abstract class tx_icssitquery_AbstractAccomodation extends tx_icssitquery_AbstractData{
-	private $type;		// Type of accomodation
-	private $category;	// Category of accomodation
-	private $address;	// Address of accomodation: an object Address with street, zip, city, ...
-	private $illustration;	// Illustration of accomodation
-	private $ratingStar;	// Accomodation rating with stars
+abstract class tx_icssitquery_AbstractEvent extends tx_icssitquery_AbstractData {
+	private $timeTable;		// Schedule of event
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return mixed : name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'Type':
-				return $this->type;
-			case 'Category':
-				return $this->category;
-			case 'Address':
-				return $this->address;
-			case 'Illustration':
-				return $this->illustration;
-			case 'RatingStar':
-				return $this->ratingStar;
+			case 'TimeTable':
+				return $this->timeTable;
 			default :
 				return parent::__get($name);
 		}
 	}
 
 	/**
-	 * Set name
+	 * Defines a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			case 'Type':
-				$this->type = $value;
-			break;
-			case 'Category':
-				$this->category = $value;
-			break;
-			case 'Address':
-				$this->address = $value;
-			break;
-			case 'Illustration':
-				$this->illustration = $value;
-			break;
-			case 'RatingStar':
-				$this->ratingStar = $value;
+			case 'TimeTable':
+				$this->timeTable = $value;
 			break;
 			default :
 				parent::__set($name, $value);
 		}
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('TimeTable');
 	}
 }

@@ -29,63 +29,67 @@
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
-
 interface tx_icssitquery_IQueryService {
 	/**
 	 * Set pager
 	 *
-	 * @param	int $page : The page
-	 * @param	int $size : Size of elements
-	 *
-	 * @return void
+	 * @param	int		$page: The page
+	 * @param	int		$size: Size of elements
+	 * @return	void
 	 */
 	public function setPager($page, $size);
 
 	/**
 	 * Reset filters
 	 *
-	 * @return void
+	 * @return	void
 	 */
 	public function resetFilters();
 
 	/**
 	 * Add filter
 	 *
-	 * @param	IFilter $filter : The filter
+	 * @param	tx_icssitquery_IFilter $filter: The filter
+	 * @return	void
 	 */
 	public function addFilter(tx_icssitquery_IFilter $filter);
 
 	/**
 	 * Retrieves the last query
 	 *
-	 * @return IQuery
+	 * @return	tx_icssitquery_IQuery
 	 */
 	public function getLastQuery();
 
 	/**
+	 * Retrieves Records
+	 *
+	 * @param	tx_icssitquery_ISortingProvider $sorting: The sorting
+	 * @return	mixed		array of Records
+	 */
+	public function getRecords(tx_icssitquery_ISortingProvider $sorting=null);
+
+	/**
 	 * Retrieves Accomodations
 	 *
-	 * @param	ISortingProvider $sorting : The sorting
-	 *
-	 * @return mixed : array of Accomodations
+	 * @param	ISortingProvider $sorting: The sorting
+	 * @return	mixed		array of Accomodations
 	 */
 	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null);
 
 	/**
 	 * Retrieves Restaurants
 	 *
-	 * @param	ISortingProvider $sorting : The sorting
-	 *
-	 * @return mixed : array of Restaurants
+	 * @param	ISortingProvider $sorting: The sorting
+	 * @return	mixed		array of Restaurants
 	 */
 	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting=null);
 
 	/**
 	 * Retrieves Events
 	 *
-	 * @param	ISortingProvider $sorting : The sorting
-	 *
-	 * @return mixed : array of Events
+	 * @param	ISortingProvider $sorting: The sorting
+	 * @return	mixed		array of Events
 	 */
 	public function getEvents(tx_icssitquery_ISortingProvider $sorting=null);
 

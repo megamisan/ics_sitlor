@@ -23,62 +23,53 @@
 ***************************************************************/
 
 /**
- * Class 'AbstractData' for the 'ics_sit_query' extension.
+ * Class 'AbstractRestaurant' for the 'ics_sit_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitquery
  */
-
-abstract class tx_icssitquery_AbstractData {
-	private $id; // Data's ID
-	private $name; // Data's Name
-	private $description; // Data's Description
+abstract class tx_icssitquery_AbstractRestaurant extends tx_icssitquery_AbstractData {
+	private $chainAndLabel;	// Restaurant chain or label
 
 	/**
-	 * Retrieves properties
+	 * Obtains a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 *
-	 * @return name 's value
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
 	 */
 	public function __get($name) {
 		switch ($name) {
-			case 'ID':
-				return $this->id;
-			case 'Name':
-				return $this->name;
-			case 'Description':
-				return $this->description;
+			case 'ChainAndLabel':
+				return $this->chainAndLabel;
 			default :
-				tx_icssitquery_debug::notice('Undefined property via __get(): ' . $name);
+				return parent::__get($name);
 		}
 	}
 
 	/**
-	 * Set name
+	 * Defines a property. PHP magic function.
 	 *
-	 * @param	string $name : Property's name
-	 * @param	mixed : Property's value
-	 *
-	 * @return void
+	 * @param	string		$name: Property's name.
+	 * @param	mixed		$value: Property's value.
+	 * @return	void
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
-			case 'ID':
-				$this->id = $value;
+			case 'ChainAndLabel':
+				$this->chainAndLabel = $value;
 			break;
-
-			case 'Name':
-				$this->name = $value;
-			break;
-
-			case 'Description':
-				$this->description = $value;
-			break;
-
 			default :
-				tx_icssitquery_debug::notice('Undefined property via __set(): ' . $name);
+				parent::__set($name, $value);
 		}
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('ChainAndLabel');
 	}
 }

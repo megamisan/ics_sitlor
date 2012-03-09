@@ -117,33 +117,23 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	public function getLastQuery() {
 		return $this->query;
 	}
-
-	/**
-	 * Retrieves accomodations.
-	 *
-	 * @param	ISortingProvider		$sorting Sorting provider to use.
-	 * @return	array		The accomodations found by the API.
-	 */
-	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null) {
+	
+	private function initQuery(tx_icssitquery_ISortingProvider $sorting = null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
 
-		$full = false;
 		foreach ($this->filters as $filter) {
-			if ($filter instanceof tx_icssitlorquery_IdFilter)
-				$full = true;
 			$filter->apply($this->query);
 		}
-		if ($full) {
-			$this->query->setCriteria(tx_icssitlorquery_FullAccomodation::getRequiredCriteria());
-		} else {
-			$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
-			if (isset($sorting))
-				$sorting->apply($this->query);
-			$this->query->setPage($this->page, $this->pageSize);
-		}
-
-		$xmlContent = $this->query->execute();
-
+		if ($sorting != null)
+			$sorting->apply($this->query);
+		$this->query->setPage($this->page, $this->pageSize);
+	}
+	
+	private function executeQuery() {
+		return $this->query->execute();
+	}
+	
+	private function buildList($xmlContent, $forcedElementType = null) {
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
 
@@ -159,18 +149,14 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
 		$this->randomSession = $reader->getAttribute('SESSIONALEA');
 		$reader->read();
-		$accomodations = array();
+		$records = array();
 		while ($reader->nodeType != XMLReader::END_ELEMENT) {
 			if ($reader->nodeType == XMLReader::ELEMENT) {
 				switch ($reader->name) {
 					case 'sit_liste':
-						if ($full)
-							$accomodation = t3lib_div::makeInstance('tx_icssitlorquery_FullAccomodation');
-						else
-							$accomodation = t3lib_div::makeInstance('tx_icssitlorquery_Accomodation');
-						$accomodation->parseXML($reader);
-						t3lib_div::devLog('Accomodation', 'ics_sitlor_query', 0, array($accomodation));
-						$accomodations[] = $accomodation;
+						$record = t3lib_div::makeInstance($forcedElementType);
+						$record->parseXML($reader);
+						$records[] = $record;
 						break;
 					default:
 						tx_icssitlorquery_XMLTools::skipChildren($reader);
@@ -178,7 +164,47 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
-		t3lib_div::devLog('Accomodations count, total, random session', 'ics_sitlor_query', 0, array('Accomodations' => count($accomodations), 'Total' => $this->totalSize, 'Random session' =>$this->randomSession));
+		return $records;
+	}
+	
+	/**
+	 * Retrieves records, with type guessing.
+	 *
+	 * @param	ISortingProvider		$sorting Sorting provider to use.
+	 * @return	array		The records found by the API.
+	 */
+	public function getRecords(tx_icssitquery_ISortingProvider $sorting=null) {
+		// TODO: Element type guessing.
+		$this->initQuery($sorting);
+		$this->query->setCriteria(tx_icssitlorquery_GenericRecord::getRequiredCriteria());
+		$xmlContent = $this->executeQuery();
+		$records = $this->buildList($xmlContent, 'tx_icssitlorquery_GenericRecord');
+		t3lib_div::devLog('Records', 'ics_sitlor_query', 0, array('Count' => count($records), 'Total' => $this->totalSize, 'Random session' => $this->randomSession, 'Records' => $records));
+		return $records;
+	}
+
+	/**
+	 * Retrieves accomodations.
+	 *
+	 * @param	ISortingProvider		$sorting Sorting provider to use.
+	 * @return	array		The accomodations found by the API.
+	 */
+	public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null) {
+		$this->initQuery($sorting);
+
+		$full = false;
+		foreach ($this->filters as $filter) {
+			if ($filter instanceof tx_icssitlorquery_IdFilter)
+				$full = true;
+		}
+		if ($full) {
+			$this->query->setCriteria(tx_icssitlorquery_FullAccomodation::getRequiredCriteria());
+		} else {
+			$this->query->setCriteria(tx_icssitlorquery_Accomodation::getRequiredCriteria());
+		}
+		$xmlContent = $this->executeQuery();
+		$accomodations = $this->buildList($xmlContent, $full ? 'tx_icssitlorquery_FullAccomodation' : 'tx_icssitlorquery_Accomodation');
+		t3lib_div::devLog('Accomodations', 'ics_sitlor_query', 0, array('Count' => count($accomodations), 'Total' => $this->totalSize, 'Random session' => $this->randomSession, 'Records' => $accomodations));
 		return $accomodations;
 	}
 
@@ -189,59 +215,21 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * @return	array		The restaurants found by the API.
 	 */
 	public function getRestaurants(tx_icssitquery_ISortingProvider $sorting=null) {
-		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
+		$this->initQuery($sorting);
 
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
 				$full = true;
-			$filter->apply($this->query);
 		}
 		if ($full) {
 			$this->query->setCriteria(tx_icssitlorquery_FullRestaurant::getRequiredCriteria());
 		} else {
 			$this->query->setCriteria(tx_icssitlorquery_Restaurant::getRequiredCriteria());
-			if (isset($sorting))
-				$sorting->apply($this->query);
-			$this->query->setPage($this->page, $this->pageSize);
 		}
-		$xmlContent = $this->query->execute();
-
-		$reader = new XMLReader();
-		$reader->XML($xmlContent);
-
-		if (!tx_icssitlorquery_XMLTools::XMLMoveToRootElement($reader, 'LEI')) {
-			tx_icssitquery_Debug::error('Invalid response from SITLOR.');
-			return false;
-		}
-		$reader->read();
-		if (!$reader->next('Resultat')) {
-			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
-			return false;
-		}
-		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
-		$this->randomSession = $reader->getAttribute('SESSIONALEA');
-		$reader->read();
-		$restaurants = array();
-		while ($reader->nodeType != XMLReader::END_ELEMENT) {
-			if ($reader->nodeType == XMLReader::ELEMENT) {
-				switch ($reader->name) {
-					case 'sit_liste':
-						if ($full)
-							$restaurant = t3lib_div::makeInstance('tx_icssitlorquery_FullRestaurant');
-						else
-							$restaurant = t3lib_div::makeInstance('tx_icssitlorquery_Restaurant');
-						$restaurant->parseXML($reader);
-						t3lib_div::devLog('Restaurant', 'ics_sitlor_query', 0, array($restaurant));
-						$restaurants[] = $restaurant;
-						break;
-					default:
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-				}
-			}
-			$reader->read();
-		}
-		t3lib_div::devLog('Restaurants count, total, random session', 'ics_sitlor_query', 0, array('Restaurants' => count($restaurants), 'Total' => $this->totalSize, 'Random session' =>$this->randomSession));
+		$xmlContent = $this->executeQuery();;
+		$restaurants = $this->buildList($xmlContent, $full ? 'tx_icssitlorquery_FullRestaurant' : 'tx_icssitlorquery_Restaurant');
+		t3lib_div::devLog('Restaurants', 'ics_sitlor_query', 0, array('Count' => count($restaurants), 'Total' => $this->totalSize, 'Random session' => $this->randomSession, 'Records' => $restaurants));
 		return $restaurants;
 	}
 
@@ -252,60 +240,21 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * @return	array		The accomodations found by the API.
 	 */
 	public function getEvents(tx_icssitquery_ISortingProvider $sorting=null) {
-		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
+		$this->initQuery($sorting);
 
 		$full = false;
 		foreach ($this->filters as $filter) {
 			if ($filter instanceof tx_icssitlorquery_IdFilter)
 				$full = true;
-			$filter->apply($this->query);
 		}
 		if ($full) {
 			$this->query->setCriteria(tx_icssitlorquery_FullEvent::getRequiredCriteria());
 		} else {
 			$this->query->setCriteria(tx_icssitlorquery_Event::getRequiredCriteria());
-			if (isset($sorting))
-				$sorting->apply($this->query);
-			$this->query->setPage($this->page, $this->pageSize);
 		}
-		$xmlContent = $this->query->execute();
-
-		$reader = new XMLReader();
-		$reader->XML($xmlContent);
-
-		if (!tx_icssitlorquery_XMLTools::XMLMoveToRootElement($reader, 'LEI')) {
-			tx_icssitquery_Debug::error('Invalid response from SITLOR.');
-			return false;
-		}
-		$reader->read();
-		if (!$reader->next('Resultat')) {
-			tx_icssitquery_Debug::error('Can not reach "Resultat" node from SITLOR.');
-			return false;
-		}
-		$this->totalSize = intval($reader->getAttribute('TOTAL_FENETRE'));
-		$this->randomSession = $reader->getAttribute('SESSIONALEA');
-		$reader->read();
-		$events = array();
-		while ($reader->nodeType != XMLReader::END_ELEMENT) {
-			if ($reader->nodeType == XMLReader::ELEMENT) {
-				switch ($reader->name) {
-					case 'sit_liste':
-						if ($full)
-							$event = t3lib_div::makeInstance('tx_icssitlorquery_FullEvent');
-						else
-							$event = t3lib_div::makeInstance('tx_icssitlorquery_Event');
-						$event->parseXML($reader);
-						t3lib_div::devLog('Event', 'ics_sitlor_query', 0, array($event));
-						$events[] = $event;
-						break;
-
-					default:
-						tx_icssitlorquery_XMLTools::skipChildren($reader);
-				}
-			}
-			$reader->read();
-		}
-		t3lib_div::devLog('Events count, total, random session', 'ics_sitlor_query', 0, array('Events' => count($events), 'Total' => $this->totalSize, 'Random session' =>$this->randomSession));
+		$xmlContent = $this->executeQuery();;
+		$events = $this->buildList($xmlContent, $full ? 'tx_icssitlorquery_FullEvent' : 'tx_icssitlorquery_Event');
+		t3lib_div::devLog('Events', 'ics_sitlor_query', 0, array('Count' => count($events), 'Total' => $this->totalSize, 'Random session' => $this->randomSession, 'Records' => $events));
 		return $events;
 	}
 }

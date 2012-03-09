@@ -7,7 +7,7 @@
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
 *  free software; you can redistribute it and/or modify
-*  it under the ValuedTermTuples of the GNU General Public License as published by
+*  it under the Pictures of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
 *
@@ -26,8 +26,8 @@
  *
  *
  *
- *   52: class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf
- *   62:     public function __construct($url)
+ *   52: class tx_icssitquery_Picture implements tx_icssitquery_IToStringObjConf
+ *   62:     public function __construct($uri)
  *   72:     public function __get($name)
  *   87:     public static function SetDefaultConf(array $conf)
  *   96:     public function __toString()
@@ -43,24 +43,24 @@
 
 
 /**
- * Class 'tx_icssitlorquery_Link' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitquery_Picture' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
- * @subpackage	tx_icssitlorquery
+ * @subpackage	tx_icssitquery
  */
-class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
-	private $url;
-	static $lConf = array();
+class tx_icssitquery_Picture implements tx_icssitquery_IToStringObjConf {
+	private $uri;
+	private static $lConf = array();
 
 	/**
-	 * Initializes this link definition.
+	 * Initializes this image instance.
 	 *
-	 * @param	string		$url: The target URI.
+	 * @param	string		$uri: The image URI.
 	 * @return	void
 	 */
-	public function __construct($url) {
-		$this->url = $url;
+	public function __construct($uri) {
+		$this->uri = $uri;
 	}
 
 	/**
@@ -71,8 +71,8 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	 */
 	public function __get($name) {
 		switch ($name) 	{
-			case 'Url':
-				return $this->url;
+			case 'Uri':
+				return $this->uri;
 			default :
 				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
@@ -159,12 +159,10 @@ class tx_icssitlorquery_Link implements tx_icssitquery_IToStringObjConf {
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
 		$data = array(
-			'url' => $this->url,
+			'url' => $this->uri,
 		);
-		$local_cObj->start($data, 'Link');
+		$local_cObj->start($data, 'Picture');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
 		return $local_cObj->stdWrap('', $conf);
 	}
-
-
 }

@@ -26,15 +26,15 @@
  *
  *
  *
- *   52: class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf
- *   67:     public function __construct($title, $firstname, $lastname)
- *   79:     public function __get($name)
- *   98:     public static function SetDefaultConf(array $conf)
- *  107:     public function __toString()
- *  118:     public function toString()
- *  143:     public function toStringConf(array $conf)
- *  156:     public function toStringObj(tslib_cObj $cObj)
- *  170:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
+ *   52: class tx_icssitquery_Address implements tx_icssitquery_IToStringObjConf
+ *   71:     public function __construct($number, $street, $extra, $zip = null, $city = null)
+ *   85:     public function __get($name)
+ *  108:     public static function SetDefaultConf(array $conf)
+ *  117:     public function __toString()
+ *  128:     public function toString()
+ *  153:     public function toStringConf(array $conf)
+ *  166:     public function toStringObj(tslib_cObj $cObj)
+ *  184:     public function toStringObjConf(tslib_cObj $cObj, array $conf)
  *
  * TOTAL FUNCTIONS: 8
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -43,31 +43,37 @@
 
 
 /**
- * Class 'tx_icssitlorquery_Name' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitquery_Address' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
- * @subpackage	tx_icssitlorquery
+ * @subpackage	tx_icssitquery
  */
-class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
-	private $title = '';
-	private $firstname = '';
-	private $lastname = '';
+class tx_icssitquery_Address implements tx_icssitquery_IToStringObjConf {
+	private $number = '';
+	private $street = '';
+	private $extra = '';
+	private $zip = '';
+	private $city = '';
 
 	private static $lConf = array();
 
 	/**
-	 * Initializes this name definition.
+	 * Initializes the address.
 	 *
-	 * @param	string		$title: Title of the person.
-	 * @param	string		$firstname: First name.
-	 * @param	string		$lastname: Last name.
+	 * @param	string		$number: Street number.
+	 * @param	string		$street: Street name.
+	 * @param	string		$extra: Complement.
+	 * @param	string		$zip: Zip code. Optional.
+	 * @param	string		$city: City name. Optional.
 	 * @return	void
 	 */
-	public function __construct($title, $firstname, $lastname) {
-		$this->title = $title;
-		$this->firstname = $firstname;
-		$this->lastname = $lastname;
+	public function __construct($number, $street, $extra, $zip = null, $city = null) {
+		$this->number = $number;
+		$this->street = $street;
+		$this->extra = $extra;
+		$this->zip = $zip;
+		$this->city = $city;
 	}
 
 	/**
@@ -78,12 +84,16 @@ class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
 	 */
 	public function __get($name) {
 		switch ($name) 	{
-			case 'Title':
-				return $this->title;
-			case 'Firstname':
-				return $this->firstname;
-			case 'Lastname':
-				return $this->lastname;
+			case 'Number':
+				return $this->number;
+			case 'Street':
+				return $this->street;
+			case 'Extra':
+				return $this->extra;
+			case 'Zip':
+				return $this->zip;
+			case 'City':
+				return $this->city;
 			default :
 				tx_icssitquery_debug::notice('Undefined property in ' . __CLASS__ . ' via ' . __FUNCTION__ . '(): ' . $name);
 		}
@@ -161,7 +171,11 @@ class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
 	 * Converts this object to its string representation.
 	 * Uses the specified TypoScript configuration and content object.
 	 * Data fields:
-	 * * url: string.
+	 * * number: int.
+	 * * street: string.
+	 * * extra: string.
+	 * * zip: string.
+	 * * city: string.
 	 *
 	 * @param	tslib_cObj		$cobj: Content object used as parent.
 	 * @param	array		$conf: TypoScript configuration to use to render this object.
@@ -170,11 +184,13 @@ class tx_icssitlorquery_Name implements tx_icssitquery_IToStringObjConf {
 	public function toStringObjConf(tslib_cObj $cObj, array $conf) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj');
 		$data = array(
-			'title' => $this->title,
-			'lastname' => $this->lastname,
-			'firstname' => $this->firstname,
+			'number' => $this->number,
+			'street' => $this->street,
+			'extra' => $this->extra,
+			'zip' => $this->zip,
+			'city' => $this->city,
 		);
-		$local_cObj->start($data, 'Name');
+		$local_cObj->start($data, 'Address');
 		$local_cObj->setParent($cObj->data, $cObj->currentRecord);
 		return $local_cObj->stdWrap('', $conf);
 	}

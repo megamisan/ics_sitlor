@@ -26,7 +26,7 @@
  *
  *
  *
- *   52: class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToStringObjConf
+ *   52: class tx_icssitquery_Coordinates implements tx_icssitquery_IToStringObjConf
  *   58:     public function __construct($latitude, $longitude)
  *   71:     public function __get($name)
  *   88:     public static function SetDefaultConf(array $conf)
@@ -43,13 +43,13 @@
 
 
 /**
- * Class 'tx_icssitlorquery_Coordinates' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitquery_Coordinates' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
- * @subpackage	tx_icssitlorquery
+ * @subpackage	tx_icssitquery
  */
-class tx_icssitlorquery_Coordinates implements tx_icssitquery_IToStringObjConf {
+class tx_icssitquery_Coordinates implements tx_icssitquery_IToStringObjConf {
 	private $latitude;
 	private $longitude;
 

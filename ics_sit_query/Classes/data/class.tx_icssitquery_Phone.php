@@ -26,7 +26,7 @@
  *
  *
  *
- *   53: class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf
+ *   53: class tx_icssitquery_Phone implements tx_icssitquery_IToStringObjConf
  *   64:     public function __construct($phone)
  *   74:     public function __get($name)
  *   89:     public static function SetDefaultConf(array $conf)
@@ -43,14 +43,14 @@
 
 
 /**
- * Class 'tx_icssitlorquery_Phone' for the 'ics_sitlor_query' extension.
+ * Class 'tx_icssitquery_Phone' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @author	Pierrick Caillon <pierrick@in-cite.net>
  * @package	TYPO3
- * @subpackage	tx_icssitlorquery
+ * @subpackage	tx_icssitquery
  */
-class tx_icssitlorquery_Phone implements tx_icssitquery_IToStringObjConf {
+class tx_icssitquery_Phone implements tx_icssitquery_IToStringObjConf {
 	private $phone = '';
 
 	private static $lConf = array();
