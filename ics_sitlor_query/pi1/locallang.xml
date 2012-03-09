@@ -89,7 +89,7 @@
 			<label index="search_accomodation">Rechercher un hébergement</label>
 			<label index="search_restaurant">Rechercher un restaurant</label>
 			<label index="search_event">Rechercher un évènement</label>
-			<label index="keyword">Rechercher par mot-clé</label>
+			<label index="keyword">Par mot-clé</label>
             <label index="search">Rechercher</label>
             <label index="search_more">Affiner votre recherche</label>
             <label index="hotelType">Type d'hôtel</label>
