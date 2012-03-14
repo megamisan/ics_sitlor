@@ -219,7 +219,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 						}
 						elseif ($condition instanceof tx_icssitlorquery_CriterionFilter) {
 							$condValue = $condition->getValue();
-							$criterion = tx_icssitlorquery_CriterionFactory::getCriterion($condValue[0])
+							$criterion = tx_icssitlorquery_CriterionFactory::getCriterion($condValue[0]);
 							if ($record->hasCriterion($criterion)) {
 								$terms = $record->getTerms($criterion);
 								for ($i = 0; $i < $terms->Count(); $i++) {

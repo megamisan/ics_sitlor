@@ -227,7 +227,7 @@
 	 */
 	private function renderTitleLink($element) {
 		return $this->pi->pi_linkTP	($element->Name,
-			array($this->prefixId . '[showUid]' => $element->ID, $this->prefixId . '[mode]' => 'SINGLE'),
+			array($this->prefixId . '[showUid]' => $element->ID),
 			0,
 			$this->conf['PIDitemDisplay']
 		);
