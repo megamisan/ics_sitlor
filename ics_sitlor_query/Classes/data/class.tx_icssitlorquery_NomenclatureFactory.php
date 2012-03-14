@@ -132,7 +132,6 @@ class tx_icssitlorquery_NomenclatureFactory {
 		return $all;
 	}
 
-
 	/**
 	 * Load from cache
 	 *

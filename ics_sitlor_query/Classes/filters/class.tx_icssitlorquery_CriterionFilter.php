@@ -48,7 +48,7 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 				$termIDs[] = $term->ID;
 			}
 		}
-		$this->value = array($criterion->ID,$termIDs);
+		$this->value = array($criterion->ID, $termIDs);
 	}
 
 	/**
@@ -59,5 +59,9 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
 		$query->setParameter('criterion', $this->value);
+	}
+	
+	public function getValue() {
+		return $this->value;
 	}
 }

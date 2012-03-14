@@ -6,7 +6,7 @@
 	</meta>
 	<data agda_type="array">
       <languageKey index="default" type="array">
-			<label index="data_not_available">Can not reach data</label>
+			<label index="data_not_available">Invalid service parameters</label>
 			<label index="search_accomodation">Search accomodation</label>
 			<label index="search_restaurant">Search restaurant</label>
 			<label index="search_event">Search event</label>
@@ -85,7 +85,7 @@
             <label index="sort_date">Date</label>
 		</languageKey>
 		<languageKey index="default" type="array">
-			<label index="data_not_available">Aucune données accessibles.</label>
+			<label index="data_not_available">Paramètres de service invalides.</label>
 			<label index="search_accomodation">Rechercher un hébergement</label>
 			<label index="search_restaurant">Rechercher un restaurant</label>
 			<label index="search_event">Rechercher un évènement</label>

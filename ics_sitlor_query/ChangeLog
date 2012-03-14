@@ -1,3 +1,10 @@
+2012-03-14 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: Implemented type guessing in SitlorQueryService::getRecords.
+	* Feature: Changed display mode computation in pi1.
+	* Feature: Added type guessing configuration in pi1.
+	* Feature: Use getRecords as fallback to record querying in single view (pi1).
+	* Comments: TODO in SingleRenderer.
+
 2012-03-09 Virginie Sugère <virginie@in-cite.net>
 	* Fix: Change translation.
 

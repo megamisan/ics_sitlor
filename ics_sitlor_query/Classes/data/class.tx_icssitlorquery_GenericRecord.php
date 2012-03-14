@@ -38,6 +38,7 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 		'zip' => '',
 		'city' => '',
 	);
+	protected $criteriaValues;
 
 	/**
 	 * Constructor
@@ -46,6 +47,7 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 	 */
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
+		$this->criteriaValues = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -183,6 +185,7 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 				'illustration'
 			);
 		}
+		$this->criteriaValues->Add($valuedTerm);
 	}
 
 	/**
@@ -210,4 +213,22 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 		return array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 	}
 
+	public function hasCriterion(tx_icssitlorquery_Criterion $criterion) {
+		for ($i = 0; $i < $this->criteriaValues->Count(); $i++) {
+			if ($this->criteriaValues->Get($i)->Criterion->ID == $criterion->ID) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public function getTerms(tx_icssitlorquery_Criterion $criterion) {
+		$terms = t3lib_div::makeInstance('tx_icssitlorquery_TermList');
+		for ($i = 0; $i < $this->criteriaValues->Count(); $i++) {
+			if ($this->criteriaValues->Get($i)->Criterion->ID == $criterion->ID) {
+				$terms->Add($this->criteriaValues->Get($i)->Term);
+			}
+		}
+		return $terms;
+	}
 }

@@ -83,7 +83,7 @@ class tx_icssitlorquery_SingleRenderer {
 	 * @param	array&		$markers: Markers array
 	 * @return	string		HTML detail content
 	 */
-	private function renderGeneric($element, &$markers) {
+	private function renderGeneric($element, &$markers) {// TODO: Case of Generic Data. (May some elements be transfered to Specific?)
 		if (!($element instanceof tx_icssitquery_AbstractData))
 			return '';
 		$locMarkers = array(

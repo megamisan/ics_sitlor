@@ -39,6 +39,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	private $filters = array();	// Array of IFilters
 	private $totalSize;		// Elements size
 	private $randomSession;
+	private $typeGuessingConf = array();
 
 	/**
 	 * Initializes service access.
@@ -167,6 +168,10 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		return $records;
 	}
 	
+	public function setTypeGuessingConf(array $conf) {
+		$this->typeGuessingConf = $conf;
+	}
+	
 	/**
 	 * Retrieves records, with type guessing.
 	 *
@@ -174,11 +179,92 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	 * @return	array		The records found by the API.
 	 */
 	public function getRecords(tx_icssitquery_ISortingProvider $sorting=null) {
-		// TODO: Element type guessing.
+		$full = false;
+		foreach ($this->filters as $filter) {
+			if ($filter instanceof tx_icssitlorquery_IdFilter)
+				$full = true;
+		}
 		$this->initQuery($sorting);
-		$this->query->setCriteria(tx_icssitlorquery_GenericRecord::getRequiredCriteria());
+		$criteria = tx_icssitlorquery_GenericRecord::getRequiredCriteria();
+		foreach ($this->typeGuessingConf as $className => $conditions) {
+			foreach ($conditions as $condition) {
+				if (is_object($condition) && $condition instanceof tx_icssitlorquery_CriterionFilter) {
+					$condValue = $condition->getValue();
+					$criteria[] = $condValue[0];
+				}
+			}
+		}
+		$this->query->setCriteria($criteria);
 		$xmlContent = $this->executeQuery();
 		$records = $this->buildList($xmlContent, 'tx_icssitlorquery_GenericRecord');
+		$lastMatch = null;
+		foreach ($records as $record) {
+			$isMatch = false;
+			foreach ($this->typeGuessingConf as $className => $conditions) {
+				foreach ($conditions as $condition) {
+					$isLocalMatch = false;
+					if (is_string($condition)) {
+						$isLocalMatch = $isLocalMatch || (($condition == 'id') && ($full));
+					}
+					else if (is_object($condition)) {
+						$catCheck = null;
+						if ($condition instanceof tx_icssitlorquery_Kind) {
+							$catCheck = 0;
+						}
+						elseif ($condition instanceof tx_icssitlorquery_Category) {
+							$catCheck = 1;
+						}
+						elseif ($condition instanceof tx_icssitlorquery_Type) {
+							$catCheck = 2;
+						}
+						elseif ($condition instanceof tx_icssitlorquery_CriterionFilter) {
+							$condValue = $condition->getValue();
+							$criterion = tx_icssitlorquery_CriterionFactory::getCriterion($condValue[0])
+							if ($record->hasCriterion($criterion)) {
+								$terms = $record->getTerms($criterion);
+								for ($i = 0; $i < $terms->Count(); $i++) {
+									$isLocalMatch = $isLocalMatch || in_array($terms->Get($i)->ID, $condValue[1]);
+								}
+							}
+						}
+						if ($catCheck !== null) {
+							$currentLevel = $record->Type;
+							if ($catLevel < 2) {
+								$currentLevel = tx_icssitlorquery_NomenclatureFactory::GetTypeCategory($currentLevel);
+							}
+							if ($catLevel < 1) {
+								$currentLevel = tx_icssitlorquery_NomenclatureFactory::GetCategoryKind($currentLevel);
+							}
+							$isLocalMatch = $currentLevel->ID == $condition->ID;
+						}
+					}
+					$isMatch = $isLocalMatch;
+					if (!$isLocalMatch) {
+						break;
+					}
+				}
+				if ($isMatch) {
+					$currentMatch = $className;
+					break;
+				}
+				$isMatch = false;
+			}
+			if ($isMatch) {
+				if ($lastMatch == null) {
+					$lastMatch = $currentMatch;
+				}
+				elseif ($lastMatch != $currentMatch) {
+					$lastMatch = null;
+					break;
+				}
+			}
+		}
+		if ($lastMatch != null) {
+			$criteria = call_user_func(array($lastMatch, 'getRequiredCriteria'));
+			$this->query->setCriteria($criteria);
+			$xmlContent = $this->executeQuery();
+			$records = $this->buildList($xmlContent, $lastMatch);
+		}
 		t3lib_div::devLog('Records', 'ics_sitlor_query', 0, array('Count' => count($records), 'Total' => $this->totalSize, 'Random session' => $this->randomSession, 'Records' => $records));
 		return $records;
 	}
