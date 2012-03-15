@@ -40,6 +40,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	);
 
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
+	private $mobilityImpaired;
 
 	/**
 	 * Constructor
@@ -61,6 +62,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		switch ($name) {
 			case 'CurrentSingleClientsRate':
 				return $this->currentSingleClientsRate;
+			case 'MobilityImpaired':
+				return $this->mobilityImpaired;
 			default:
 				return parent::__get($name);
 		}
@@ -87,7 +90,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('CurrentSingleClientsRate');
+		return parent::getProperties() + array('CurrentSingleClientsRate', 'mobilityImpaired');
 	}
 
 	/**
@@ -231,6 +234,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		}
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
 			$this->currentSingleClientsRate->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED)
+			$this->mobilityImpaired = $valuedTerm;
 	}
 
 	/**
@@ -259,6 +264,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		$criteria = array(
 			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
+			tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

@@ -62,7 +62,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 
 	private $receptionLanguage;		// tx_icssitlorquery_ValuedTermList
 	private $reservationLanguage;	// tx_icssitlorquery_ValuedTermList
-	private $mobilityImpaired;
 	private $pets;
 	private $allowedPets;
 	private $allowedGroup;
@@ -138,8 +137,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				return $this->receptionLanguage;
 			case 'ReservationLanguage':
 				return $this->reservationLanguage;
-			case 'MobilityImpaired':
-				return $this->mobilityImpaired;
 			case 'Pets':
 				return $this->pets;
 			case 'AllowedPets':
@@ -175,7 +172,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		return parent::getProperties() + array('Phones', 'Fax', 'Email', 'WebSite', 
 			'Coordinates', 'ProviderName', 'ProviderAddress', 'ProviderPhones', 
 			'ProviderFax', 'ProviderEmail', 'ProviderWebSite', 'TimeTable', 
-			'ReceptionLanguage', 'ReservationLanguage', 'MobilityImpaired', 'Pets', 
+			'ReceptionLanguage', 'ReservationLanguage', 'Pets', 
 			'AllowedPets', 'AllowedGroup', 'ReceptionGroup', 'MotorCoachPark', 
 			'Opening24_24', 'ComfortRoom', 'HotelEquipement', 'HotelService');
 	}
@@ -363,8 +360,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->receptionLanguage->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RESERVATION_LANGUAGE)
 			$this->reservationLanguage->Add($valuedTerm);
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED)
-			$this->mobilityImpaired = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::PETS)
 			$this->pets = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ALLOWED_PETS)
@@ -418,7 +413,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		$criteria = array(
 			tx_icssitlorquery_CriterionUtils::RECEPTION_LANGUAGE,
 			tx_icssitlorquery_CriterionUtils::RESERVATION_LANGUAGE,
-			tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED,
 			tx_icssitlorquery_CriterionUtils::PETS,
 			tx_icssitlorquery_CriterionUtils::ALLOWED_PETS,
 			tx_icssitlorquery_CriterionUtils::ALLOWED_GROUP,
