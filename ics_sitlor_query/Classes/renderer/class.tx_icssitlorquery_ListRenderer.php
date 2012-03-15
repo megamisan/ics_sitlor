@@ -174,7 +174,7 @@
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $this->renderTitleLink($element),
-				'DESCRIPTION' => $element->Description,
+				'DESCRIPTION' => $this->pi->renderData(('description', $element->Description),
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'RATINGSTAR' => $this->pi->renderData('ratingStar', $element->RatingStar),

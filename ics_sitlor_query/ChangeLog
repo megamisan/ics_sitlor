@@ -1,3 +1,5 @@
+2012-03-15 Virginie Sugere <virginie@in-cite.net>
+	* Feature: Typoscript conf to render description (crop)
 2012-03-14 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Implemented type guessing in SitlorQueryService::getRecords.
 	* Feature: Changed display mode computation in pi1.
