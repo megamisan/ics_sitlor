@@ -1,5 +1,7 @@
 2012-03-15 Tsi Yang <tsi@in-cite.net>
 	* Feature: Moved data from FullAccomodation to Accomodation.
+	* Fix: Mistakes in renderData conf.
+	* Feature: Completed description render.
 
 2012-03-15 Virginie Sugere <virginie@in-cite.net>
 	* Feature: Typoscript conf to render description (crop)

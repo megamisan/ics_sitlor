@@ -174,7 +174,7 @@
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $this->renderTitleLink($element),
-				'DESCRIPTION' => $this->pi->renderData(('description', $element->Description),
+				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'RATINGSTAR' => $this->pi->renderData('ratingStar', $element->RatingStar),
@@ -198,7 +198,7 @@
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $this->renderTitleLink($element),
-				'DESCRIPTION' => $element->Description,
+				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'LABELCHAIN' => $element->LabelChain,
@@ -211,7 +211,7 @@
 			$locMarkers = array(
 				'TYPE' => $element->TypeEvent,
 				'TITLE' => $this->renderTitleLink($element),
-				'DESCRIPTION' => $element->Description,
+				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
 			);
 		}

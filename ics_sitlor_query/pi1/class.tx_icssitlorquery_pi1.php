@@ -451,7 +451,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			if ($element instanceof tx_icssitlorquery_TimeTable || $element instanceof tx_icssitlorquery_ValuedTerm) {
 				$content = $element->toStringConf($lConf);
 			} elseif(is_array($element)) {
-				$content = $this->cObj->stdWrap(implode($lConf['separator'], $element), $this->lConf);
+				$content = $this->cObj->stdWrap(implode($lConf['separator'], $element), $lConf);
 			} else {
 				$content = $this->cObj->stdWrap($element, $lConf);
 			}
