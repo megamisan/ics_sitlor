@@ -1,3 +1,5 @@
+2012-03-16 Virginie Sugère <virginie@in-cite.net>
+	* Fix: Change translation.
 2012-03-15 Tsi Yang <tsi@in-cite.net>
 	* Feature: Moved data from FullAccomodation to Accomodation.
 	* Fix: Mistakes in renderData conf.

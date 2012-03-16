@@ -156,7 +156,7 @@
             <label index="morning">Matin</label>
             <label index="afternoon">Après-midi</label>
             <label index="currency">Eur</label>
-            <label index="sorting">Tier par</label>
+            <label index="sorting">Trier par</label>
 			<label index="sort_alpha">Alphabétique</label>
             <label index="sort_hotelrating">Classement</label>
             <label index="sort_price">Prix</label>
