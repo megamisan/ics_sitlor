@@ -1,3 +1,5 @@
+2012-03-19 Virginie Sugère <virginie@in-cite.net>
+	* Fix: Change the variable name ($element->MobilityImpaired) in ListRenderer.
 2012-03-16 Virginie Sugère <virginie@in-cite.net>
 	* Fix: Change translation.
 2012-03-15 Tsi Yang <tsi@in-cite.net>

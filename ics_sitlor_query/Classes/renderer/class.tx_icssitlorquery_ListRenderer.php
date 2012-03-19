@@ -178,7 +178,7 @@
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'RATINGSTAR' => $this->pi->renderData('ratingStar', $element->RatingStar),
-				'MOBILITYIMPAIRED' => $this->pi->renderData('mobilityImpaired', $element->mobilityImpaired),
+				'MOBILITYIMPAIRED' => $this->pi->renderData('mobilityImpaired', $element->MobilityImpaired),
 			);
 		}
 		// Render Restaurants
