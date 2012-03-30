@@ -1,7 +1,13 @@
 2012-03-19 Virginie Sugère <virginie@in-cite.net>
 	* Fix: Change the variable name ($element->MobilityImpaired) in ListRenderer.
+
 2012-03-16 Virginie Sugère <virginie@in-cite.net>
 	* Fix: Change translation.
+
+2012-03-16 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: New common properties in GenericRecord. With parsing and querying.
+	* Comments: Typo in IDENTITY.
+
 2012-03-15 Tsi Yang <tsi@in-cite.net>
 	* Feature: Moved data from FullAccomodation to Accomodation.
 	* Fix: Mistakes in renderData conf.

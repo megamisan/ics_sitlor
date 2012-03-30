@@ -40,6 +40,15 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 	);
 	protected $criteriaValues;
 
+	private $phones = null;
+	private $fax;
+	private $email;
+	private $webSite;
+
+	private $coordinates = null;
+	private $latitude = 0;
+	private $longitude = 0;
+
 	/**
 	 * Constructor
 	 *
@@ -48,6 +57,45 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 	public function __construct() {
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->criteriaValues = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->phones = array();
+	}
+
+	/**
+	 * Obtains a property. PHP magic function.
+	 *
+	 * @param	string		$name: Property's name.
+	 * @return	mixed		The property's value if exists.
+	 */
+	public function __get($name) {
+		switch ($name) {
+			//-- IDENTITY
+			case 'Phones':
+				return $this->phones;
+			case 'Fax':
+				return $this->fax;
+			case 'Email':
+				return $this->email;
+			case 'WebSite':
+				return $this->webSite;
+
+			//-- COORDINATES
+			case 'Coordinates':
+				return $this->coordinates;
+
+			default:
+				return parent::__get($name);
+		}
+
+	}
+	
+	/**
+	 * Obtains the property list.
+	 *
+	 * @return	array		The list of exisiting properties.
+	 */
+	public function getProperties() {
+		return parent::getProperties() + array('Phones', 'Fax', 'Email', 'WebSite', 
+			'Coordinates');
 	}
 
 	/**
@@ -117,6 +165,55 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 
 			case 'ADRPROD_LIBELLE_COMMUNE' :
 				$this->tmpAddress['city'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			//-- IDENTITY
+			case 'ADRPROD_TEL':
+				array_unshift($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_TEL2':
+				array_push($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_FAX':
+				$this->fax = t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				);
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_EMAIL':
+				$email = $reader->readString();
+				$this->email = t3lib_div::makeInstance('tx_icssitquery_Link', $email);
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_URL':
+				$url = $reader->readString();
+				// TODO : Check whether url is valid url
+				$this->webSite =  t3lib_div::makeInstance('tx_icssitquery_Link', $url);
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			//-- COORDINATES
+			case 'LATITUDE':
+				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'LONGITUDE':
+				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -194,6 +291,7 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 	 * @return	void
 	 */
 	protected function afterParseXML() {
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 		$this->Address = t3lib_div::makeInstance(
 			'tx_icssitquery_Address',
 			$this->tmpAddress['number'],

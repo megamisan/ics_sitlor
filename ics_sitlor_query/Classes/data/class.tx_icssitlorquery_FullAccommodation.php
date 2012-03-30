@@ -100,7 +100,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	public function __get($name) {
 		switch ($name) {
-			//-- IDENTITITY
+			//-- IDENTITY
 			case 'Phones':
 				return $this->phones;
 			case 'Fax':
