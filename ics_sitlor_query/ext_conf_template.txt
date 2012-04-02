@@ -1,0 +1,2 @@
+# cat=Basic//a; type=int; label=cache time (seconds)
+cacheTime = 3600
