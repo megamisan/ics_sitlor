@@ -1,2 +1,8 @@
 # cat=Basic//a; type=int; label=cache time (seconds)
 cacheTime = 3600
+
+# cat=Basic//b; type=int; label=cache time (seconds)
+nomenclature_cacheTime = 0
+
+# cat=Basic//c; type=int; label=cache time (seconds)
+criterion_cacheTime = 0

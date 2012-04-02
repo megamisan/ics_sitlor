@@ -69,7 +69,7 @@ class tx_icssitlorquery_NomenclatureFactory {
 
 	private static $hash;
 	private static $cacheInstance;
-	private static $lifetime = 0;
+	
 
 	/**
 	 * Fetch values
@@ -127,7 +127,9 @@ class tx_icssitlorquery_NomenclatureFactory {
 		if (empty($all))
 			throw new Exception('Nomenclature has no Kind.');
 
-		self::$cacheInstance->set(self::$hash, serialize($all), array(), self::$lifetime);
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+		$lifetime = intval($extConf['nomenclature_cacheTime']);
+		self::$cacheInstance->set(self::$hash, serialize($all), array(), $lifetime);
 
 		return $all;
 	}

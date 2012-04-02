@@ -20,10 +20,29 @@
 *  GNU General Public License for more details.
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************//**
+***************************************************************/
+
+/**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   56: class tx_icssitlorquery_FormRenderer
+ *   71:     function __construct($pi, $cObj, $lConf)
+ *   87:     private function setDataForm()
+ *  148:     function render()
+ *  194:     private function renderGeneric(&$markers)
+ *  207:     private function renderSpecific(&$markers)
+ *  232:     function renderSpecific_Accomodation(&$markers)
+ *  265:     function renderSpecific_Restaurant(&$markers)
+ *  310:     function renderSpecific_Event(&$markers)
+ *  326:     private function renderMore(&$markers)
+ *  357:     function renderMore_Accomodation(&$markers)
+ *  391:     function renderMore_Event(&$markers)
+ *
+ * TOTAL FUNCTIONS: 11
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -35,6 +54,7 @@
  * @subpackage	tx_icssitlorquery
  */
  class tx_icssitlorquery_FormRenderer {
+	private static $subAccomodations = array();
 	private static $hotelTypes = array();
 	private static $restaurantCategories = array();
 	private static $foreignFood = array();
@@ -66,6 +86,12 @@
 	 * @return	void
 	 */
 	private function setDataForm() {
+		self::$subAccomodations = array(
+			'hotel' => 'HOTEL',
+			'camping_youthHostel' => 'CAMPING, YOUTHHOSTEL',
+			'strange' => 'STRANGE',
+			'hollidayCottage_guesthouse' => 'HOLLIDAY_COTTAGE, GUESTHOUSE',
+		);
 		self::$hotelTypes = array(
 			'hotel_restaurant' => array(
 				'label' => $this->pi->pi_getLL('hotel_restaurant', 'Hotel-restaurant', true),
@@ -215,6 +241,30 @@
 		$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
 
+		// Any sub-data group
+		$subparts['###SUBPART_ANY_SUBDATAGROUP###'] = '';
+		if (empty($subDataGroups)) {
+			$locMarckers = array(
+				'HOTEL_LABEL' => $this->pi->pi_getLL('hotel', 'Hotel', true),
+				'HOTEL_VALUE' => self::$subAccomodations['hotel'],
+				'SELECTED_HOTEL' => in_array(self::$subAccomodations['hotel'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				
+				'CAMPING_YOUTHHOSTEL_LABEL' => $this->pi->pi_getLL('camping_youthHostel', 'Camping and youth hostel<', true),
+				'CAMPING_YOUTHHOSTEL_VALUE' => self::$subAccomodations['camping_youthHostel'],
+				'SELECTED_CAMPING_YOUTHHOSTEL' => in_array(self::$subAccomodations['camping_youthHostel'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				
+				'STRANGE_LABEL' => $this->pi->pi_getLL('strange', 'Strange', true),
+				'STRANGE_VALUE' => self::$subAccomodations['strange'],
+				'SELECTED_STRANGE' => in_array(self::$subAccomodations['strange'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				
+				'HOLLIDAY_COTTAGE_GUESTHOUSE_LABEL' => $this->pi->pi_getLL('hollidayCottage_guesthouse', 'Holliday cottage and guesthouse', true),
+				'HOLLIDAY_COTTAGE_GUESTHOUSE_VALUE' => self::$subAccomodations['hollidayCottage_guesthouse'],
+				'SELECTED_HOLLIDAY_COTTAGE_GUESTHOUSE' => in_array(self::$subAccomodations['hollidayCottage_guesthouse'], $this->search['subDataGroups'])? 'checked="checked"': '',
+			);
+			$markers = array_merge($locMarckers, $markers);
+			$subparts['###SUBPART_ANY_SUBDATAGROUP###'] = $this->cObj->getSubpart($template, '###SUBPART_ANY_SUBDATAGROUP###');
+		}
+		
 		// Hotel
 		$subparts['###SUBPART_HOTEL###'] = '';
 		if (in_array('HOTEL', $subDataGroups)) {

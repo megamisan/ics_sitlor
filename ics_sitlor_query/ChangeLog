@@ -1,3 +1,10 @@
+2012-04-02 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added cache time configuration.
+	* Feature: Added nomenclature and criterion cache time configuration.
+	* Feature: Added module to clear cache.
+	* Feature: Added HTML cache on LIST and SINGLE view.
+	* Feature: Added search form on accomodation (without subdatagroup).
+
 2012-03-19 Virginie Sugère <virginie@in-cite.net>
 	* Fix: Change the variable name ($element->MobilityImpaired) in ListRenderer.
 

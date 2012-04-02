@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;web_txicssitlorqueryM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">SITLOR</label>
+			<label index="function1">Manage cache</label>
+			<label index="function2">Function #2</label>
+			<label index="function3">Function #3</label>
+			<label index="cleanCache">Clean cache</label>
+			<label index="clearCache">Clear cache</label>
+			<label index="cleanCache_msg">Cache has been cleaned</label>
+			<label index="clearCache_msg">Cache has been cleared</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="title">SITLOR</label>
+			<label index="function1">Gérer le cache</label>
+			<label index="cleanCache">Nettoyer le cache SITLOR</label>
+			<label index="clearCache">Vider le cache SITLOR</label>
+			<label index="cleanCache_msg">Le cache SITLOR a été nettoyé</label>
+			<label index="clearCache_msg">Le cache SITLOR a été vidé</label>
+		</languageKey>
+	</data>
+</T3locallang>

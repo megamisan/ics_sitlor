@@ -55,6 +55,29 @@
 
 
 <!-- ###TEMPLATE_FORM_ACCOMODATION### start-->
+	<!-- ###SUBPART_ANY_SUBDATAGROUP### start-->
+		<ul class="###PREFIXID###_checkList">
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_HOTEL### name="###PREFIXID###[search][subDataGroups][]" id="accomodation_hotel" value="###HOTEL_VALUE###"/>
+				<label for="accomodation_hotel">###HOTEL_LABEL###</label>
+			</li>
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_CAMPING_YOUTHHOSTEL### name="###PREFIXID###[search][subDataGroups][]" id="accomodation_camping_youthhostel" value="###CAMPING_YOUTHHOSTEL_VALUE###"/>
+				<label for="accomodation_camping_youthhostel">###CAMPING_YOUTHHOSTEL_LABEL###</label>
+			</li>
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_STRANGE### name="###PREFIXID###[search][subDataGroups][]" id="accomodation_strange" value="###STRANGE_VALUE###"/>
+				<label for="accomodation_strange">###STRANGE_LABEL###</label>
+			</li>
+			<li class="###PREFIXID###_checkListItem">
+				<input type="checkbox" ###SELECTED_HOLLIDAY_COTTAGE_GUESTHOUSE### name="###PREFIXID###[search][subDataGroups][]" id="accomodation_holliday_cottage_guesthouse" value="###HOLLIDAY_COTTAGE_GUESTHOUSE_VALUE###"/>
+				<label for="accomodation_holliday_cottage_guesthouse">###HOLLIDAY_COTTAGE_GUESTHOUSE_LABEL###</label>
+			</li>
+		</ul>
+		<div class="button">
+			<input type="submit"  name="###PREFIXID###[btn_hotelEquipment]" value="###SEARCH###" />
+		</div>
+	<!-- ###SUBPART_ANY_SUBDATAGROUP### end-->
 	<!-- ###SUBPART_HOTEL### start-->
 		<p><label>###HOTEL_TYPE_LABEL###</label></p>
 		<ul class="###PREFIXID###_checkList">

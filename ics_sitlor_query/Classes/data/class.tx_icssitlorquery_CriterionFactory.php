@@ -60,7 +60,7 @@ class tx_icssitlorquery_CriterionFactory {
 
 	private static $hash;
 	private static $cacheInstance;
-	private static $lifetime = 0;
+	
 
 	/**
 	 * Fetch values
@@ -116,7 +116,9 @@ class tx_icssitlorquery_CriterionFactory {
 			$reader->read();
 		}
 
-		self::$cacheInstance->set(self::$hash, serialize($elements), array(), self::$lifetime);
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+		$lifetime = intval($extConf['criterion_cacheTime']);
+		self::$cacheInstance->set(self::$hash, serialize($elements), array(), $lifetime);
 
 		return $elements;
 	}

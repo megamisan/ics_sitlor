@@ -13,6 +13,10 @@
             <label index="keyword">Keyword</label>
             <label index="search">search</label>
             <label index="search_more">Search more</label>
+			<label index="hotel">Hotel</label>
+			<label index="camping_youthHostel">Camping and youth hostel</label>
+			<label index="strange">Strange</label>
+			<label index="hollidayCottage_guesthouse">Holliday cottage and guesthouse</label>
             <label index="hotelType">Hotel type</label>
             <label index="hotel_restaurant">Hotel-restaurant</label>
             <label index="furnished">Furnished</label>
@@ -92,6 +96,10 @@
 			<label index="keyword">Par mot-clé</label>
             <label index="search">Rechercher</label>
             <label index="search_more">Affiner votre recherche</label>
+			<label index="hotel">Hôtel</label>
+			<label index="camping_youthHostel">Camping et auberge de jeunesse</label>
+			<label index="strange">Insolite</label>
+			<label index="hollidayCottage_guesthouse">Gîte et chambres d'hôtes</label>
             <label index="hotelType">Type d'hôtel</label>
             <label index="hotel_restaurant">Hôtel-Hôtel restaurant</label>
             <label index="furnished">Meublé</label>

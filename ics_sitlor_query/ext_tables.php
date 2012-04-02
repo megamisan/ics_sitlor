@@ -22,4 +22,12 @@ if (TYPO3_MODE == 'BE') {
 }
 
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','SITLOR query');
+
+
+if (TYPO3_MODE == 'BE') {
+    t3lib_extMgm::addModulePath('web_txicssitlorqueryM1', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+        
+    t3lib_extMgm::addModule('web', 'txicssitlorqueryM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+}
+
 ?>
