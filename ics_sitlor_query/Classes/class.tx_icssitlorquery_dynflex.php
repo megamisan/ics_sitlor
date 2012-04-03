@@ -21,7 +21,23 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ *
+ *
+ *   49: class tx_icssitlorquery_dynflex
+ *   71:     function getSingleField_preProcess($pi_table, $pi_field, & $pi_row, $pi_altName, $pi_palette, $pi_extra, $pi_pal, &$pi_tce)
+ *   97:     function preProcess_pi1(&$pi_row)
+ *  125:     private function flexPartFilter_Accomodation()
+ *  195:     private function flexPartFilter_Restaurant()
+ *  244:     private function flexPartFilter_Event()
+ *  296:     private function flexPartSorting(&$pi_row)
+ *
+ * TOTAL FUNCTIONS: 6
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
+ */
 /**
  * Class 'tx_icsistlorquery_dynflex' for 'ics_sitlor_query' extension
  * Generates dynamic flex.
@@ -268,6 +284,15 @@ class tx_icssitlorquery_dynflex {
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'noFeeEvent');
 
+		// With illustration
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':illustration',
+			'config' => array(
+				'type' => 'check',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'illustration');
+		
 		return $xmlFlexPart;
 	}
 

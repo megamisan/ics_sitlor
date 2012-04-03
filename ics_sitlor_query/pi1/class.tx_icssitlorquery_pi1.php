@@ -306,6 +306,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Init startDate
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = self::$default_startDate;
+			
+		
+		// Select params on illustration
+		if (isset($this->piVars['select']['illustration']))
+			$filterIllustration = $this->piVars['select']['illustration'];
+		$filterIllustration = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'illustration', 'paramSelect');
+		$this->conf['filter.']['illustration'] = $filterIllustration? $filterIllustration : $this->conf['filter.']['illustration'];
+
 	}
 
 	/**
@@ -683,6 +691,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			default:
 				$sorting = null;
 		}
+		
 		return $this->queryService->getAccomodations($sorting);
 	}
 
@@ -747,6 +756,11 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			list($crit, $term) = t3lib_div::trimExplode(':', $this->conf['filter.']['noFeeEvent']);
 			$this->queryService->addFilter($this->getCriterionFilter($crit, array($term)));
 		}
+		
+		if ($this->conf['filter.']['illustration']) {
+			$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::PHOTO));
+		}
+		
 		$sorting = null;
 		if ($this->conf['sort.']['name'] && $this->conf['sort.']['name']=='DATE') {
 			$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider', 'endDate', strtoupper($this->conf['sort.']['extra']));
@@ -820,7 +834,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$params['code'] = $mode;
 		$params['templateFile'] = $this->templateFile;
 
-		$params['filter'] = $this->conf['filter.']['OTNancy'] . $this->conf['filter.']['entity_737'] . $this->conf['filter.']['startDate'] . $this->conf['filter.']['endDate'] . $this->conf['filter.']['hotelTypes'] . $this->conf['filter.']['hotelEquipments'] . $this->conf['filter.']['restaurantCategories'] . $this->conf['filter.']['foreignFoods'] . $this->conf['filter.']['noFeeEvent'];
+		$params['filter'] = $this->conf['filter.']['OTNancy'] . $this->conf['filter.']['entity_737'] . $this->conf['filter.']['startDate'] . $this->conf['filter.']['endDate'] . $this->conf['filter.']['hotelTypes'] . $this->conf['filter.']['hotelEquipments'] . $this->conf['filter.']['restaurantCategories'] . $this->conf['filter.']['foreignFoods'] . $this->conf['filter.']['noFeeEvent'] . $this->conf['filter.']['subDataGroups'] . $this->conf['filter.']['illustration'];
 
 		$params['sorting'] = $this->conf['sort.']['name'] . $this->conf['sort.']['extra'];
 	

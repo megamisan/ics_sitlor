@@ -51,6 +51,7 @@
 			<label index="endDate">End date</label>
 			<label index="period">For a week (checked, start date and end date not consider)</label>
 			<label index="noFeeEvent">No fee event</label>
+			<label index="illustration">With illustration</label>
 			<label index="OTNancySubscriber">OT Nancy subscriber code</label>
 			<label index="OTNancyFilter">Filter on OT Nancy</label>
 			<label index="entity_737">Filter on entity "737 - OT Nancy"</label>
@@ -112,6 +113,7 @@
 			<label index="endDate">Date de fin</label>
 			<label index="period">Sur une semaine (Si cocher, dates non prise en compte)</label>
 			<label index="noFeeEvent">Evènements gratuits</label>
+			<label index="illustration">Avec image</label>
 			<label index="OTNancySubscriber">Adhérent OT Nancy "OUI" (ex: 737000029:737000238)</label>
 			<label index="OTNancyFilter">Filtrer sur Adhérent OT Nancy "OUI"</label>
 			<label index="entity_737">Filtrer sur l'entité "737 - OT Nancy"</label>
