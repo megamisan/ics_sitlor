@@ -1,5 +1,12 @@
 2012-04-03 Tsi Yang <tsi@in-cite.net>
-	* Feature: Added filter on element with "PHOTO"
+	* Feature: Added filter on element with "PHOTO".
+	* Feature: Added filter on free time for generic records.
+	* Feature: Added generic records SortingProvider.
+	* Comments: Updated comments on SortingProvider.
+	* Feature: Added flexform configuration to select free time.
+	* Feature: Added generic renderList.
+	* Feature: Added no_cache configuration to disable cache on list view and single view.
+	* Fix: Missing break instruction on Event.
 
 2012-04-02 Tsi Yang <tsi@in-cite.net>
 	* Feature: Added cache time configuration.

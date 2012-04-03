@@ -21,7 +21,21 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ *
+ *
+ *   45: class tx_icssitlorquery_XMLTools
+ *   56:     public static function SkipChildren(XMLReader $reader)
+ *   75:     public static function XMLMoveToRootElement(XMLReader $reader, $name)
+ *   90:     public static function getXMLDocument($url, $timeout=5)
+ *
+ * TOTAL FUNCTIONS: 3
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
+ */
+ 
 /**
  * Class 'tx_icssitlorquery_XMLTools' for the 'ics_sitlor_query' extension.
  *

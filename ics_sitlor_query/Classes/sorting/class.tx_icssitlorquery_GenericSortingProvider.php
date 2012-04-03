@@ -24,18 +24,18 @@
 
 
 /**
- * Class 'RestaurantSortingProvider' for the 'ics_sitlor_query' extension.
+ * Class 'GenericSortingProvider' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery
  */
-class tx_icssitlorquery_RestaurantSortingProvider implements tx_icssitquery_ISortingProvider {
+class tx_icssitlorquery_GenericSortingProvider implements tx_icssitquery_ISortingProvider {
 	private $value;
 	private $sortings = array(
+		'alpha',
 		'random',
-		// 'rating',	// TODO : stand by till Nancy get the classment to use
-		'price',
+		'endDate',
 	);
 
 	/**
@@ -63,6 +63,6 @@ class tx_icssitlorquery_RestaurantSortingProvider implements tx_icssitquery_ISor
 	 * @return	void
 	 */
 	function apply(tx_icssitquery_IQuery $query) {
-		$query->setParameter('restaurantSorting', $this->value);
+		$query->setParameter('GenericSorting', $this->value);
 	}
 }

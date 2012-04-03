@@ -78,6 +78,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		switch ($name) {
 			case 'TypeEvent':
 				$this->typeEvent = $value;
+				break;
 			default:
 				parent::__set($name, $value);
 		}

@@ -21,6 +21,32 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ *
+ *
+ *   59: class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryService
+ *   78:     function __construct($login, $password, $url)
+ *   91:     public function setPager($page, $size)
+ *  106:     public function resetFilters()
+ *  116:     public function addFilter(tx_icssitquery_IFilter $filter)
+ *  126:     public function getLastTotalCount()
+ *  135:     public function getLastRandomSession()
+ *  144:     public function getLastQuery()
+ *  154:     private function initQuery(tx_icssitquery_ISortingProvider $sorting = null)
+ *  170:     private function executeQuery()
+ *  181:     private function buildList($xmlContent, $forcedElementType = null)
+ *  221:     public function setTypeGuessingConf(array $conf)
+ *  231:     public function getRecords(tx_icssitquery_ISortingProvider $sorting=null)
+ *  328:     public function getAccomodations(tx_icssitquery_ISortingProvider $sorting=null)
+ *  353:     public function getRestaurants(tx_icssitquery_ISortingProvider $sorting=null)
+ *  378:     public function getEvents(tx_icssitquery_ISortingProvider $sorting=null)
+ *
+ * TOTAL FUNCTIONS: 15
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
+ */
 
 
 /**
@@ -118,7 +144,13 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 	public function getLastQuery() {
 		return $this->query;
 	}
-	
+
+	/**
+	 * Initializes the query
+	 *
+	 * @param	tx_icssitquery_ISortingProvider		$sorting: The sorting provider
+	 * @return	void
+	 */
 	private function initQuery(tx_icssitquery_ISortingProvider $sorting = null) {
 		$this->query = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQuery', $this->login, $this->password, $this->url);
 
@@ -129,11 +161,23 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			$sorting->apply($this->query);
 		$this->query->setPage($this->page, $this->pageSize);
 	}
-	
+
+	/**
+	 * Executes the query
+	 *
+	 * @return	string	The XML content
+	 */
 	private function executeQuery() {
 		return $this->query->execute();
 	}
-	
+
+	/**
+	 * Builds list
+	 *
+	 * @param	string		$xmlContent: The XML content to process
+	 * @param	string		$forcedElementType: The element type to force
+	 * @return	mixed		Elements records
+	 */
 	private function buildList($xmlContent, $forcedElementType = null) {
 		$reader = new XMLReader();
 		$reader->XML($xmlContent);
@@ -167,11 +211,17 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 		}
 		return $records;
 	}
-	
+
+	/**
+	 * Sets type gusseing
+	 *
+	 * @param	array		$conf: The conf array
+	 * @return	void
+	 */
 	public function setTypeGuessingConf(array $conf) {
 		$this->typeGuessingConf = $conf;
 	}
-	
+
 	/**
 	 * Retrieves records, with type guessing.
 	 *

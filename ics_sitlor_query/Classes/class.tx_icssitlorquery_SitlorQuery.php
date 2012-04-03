@@ -21,6 +21,36 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ *
+ *
+ *   63: class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery
+ *  117:     function __construct($login, $password, $url)
+ *  128:     public function execute()
+ *  231:     public function setPage($number, $size)
+ *  247:     public function setParameter($name, $value)
+ *  306:     public function setOutput($value)
+ *  320:     public function setFields(array $fields)
+ *  330:     public function addField($field=null)
+ *  340:     public function setCriteria(array $criteria)
+ *  350:     public function addCriterion($criterion)
+ *  360:     public function setTable($value)
+ *  374:     public function setScheme($value)
+ *  386:     public function setEntity($value)
+ *  397:     private function makeCategoryFilter(array &$pnames, array &$pvalues)
+ *  409:     private function makeTypeFilter(array &$pnames, array &$pvalues)
+ *  421:     private function makeCriterionFilter(array &$pnames, array &$pvalues)
+ *  440:     private function makeDateFilter(array &$params, array &$pnames, array &$pvalues, array $filterArray)
+ *  476:     private function makeValidFilter(array &$params, array &$pnames, array &$pvalues, array $filterArray)
+ *  509:     private function makeAvailableFilter(array &$params, array &$pnames, array &$pvalues, array $filterArray)
+ *  543:     private function putSorting(array &$params, array &$pnames, array &$pvalues)
+ *
+ * TOTAL FUNCTIONS: 19
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
+ */
 
 
 /**
@@ -255,6 +285,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 			case 'accomodationSorting':
 			case 'restaurantSorting':
 			case 'eventSorting':
+			case 'GenericSorting':
 				$this->sorting = array(
 					$name,
 					$value[0],

@@ -26,27 +26,29 @@
  *
  *
  *
- *   63: class tx_icssitlorquery_pi1 extends tslib_pibase
- *   89:     function main($content, $conf)
- *  165:     function init ()
- *  222:     private function initMode()
- *  252:     private function initFilterParams()
- *  333:     private function initSortingParams()
- *  364:     function setPIVars_searchParams()
- *  391:     function setConnection()
- *  403:     function setDefaultConf()
- *  433:     function setDefaultSeparator()
- *  447:     function renderData($name, $element)
- *  464:     function displayList()
- *  494:     function displaySingle()
- *  528:     private function getElements()
- *  576:     private function getAccomodations()
- *  661:     private function getRestaurants()
- *  703:     private function getEvents()
- *  725:     private function addCriterionFilter($criterionID, $terms=null)
- *  748:     private function process_criterionTermArray(array $criterionTermArray)
+ *   65: class tx_icssitlorquery_pi1 extends tslib_pibase
+ *   92:     function main($content, $conf)
+ *  159:     function init ()
+ *  215:     private function initMode()
+ *  237:     private function initFilterParams()
+ *  326:     private function initSortingParams()
+ *  357:     function setPIVars_searchParams()
+ *  387:     function setConnection()
+ *  409:     function setDefaultConf()
+ *  445:     function setDefaultSeparator()
+ *  459:     function renderData($name, $element)
+ *  481:     function displayList()
+ *  517:     function displaySingle()
+ *  559:     private function getElements()
+ *  607:     private function getAccomodations()
+ *  705:     private function getRestaurants()
+ *  747:     private function getEvents()
+ *  780:     private function getCriterionFilter($criterionID, $terms=null)
+ *  802:     private function process_criterionTermArray(array $criterionTermArray)
+ *  820:     private function renderCachedContent($mode)
+ *  860:     function storeCachedContent($content)
  *
- * TOTAL FUNCTIONS: 18
+ * TOTAL FUNCTIONS: 20
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -306,8 +308,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Init startDate
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = self::$default_startDate;
-			
-		
+
+
 		// Select params on illustration
 		if (isset($this->piVars['select']['illustration']))
 			$filterIllustration = $this->piVars['select']['illustration'];
@@ -340,6 +342,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			if ($dataGroup == 'EVENT') {
 				$sortName = 'DATE';
 			}
+			if ($dataGroup == 'FREETIME') {
+				$sortName = 'ALPHA';
+			}
 		}
 		$this->conf['sort.']['name'] = $sortName ? $sortName : $this->conf['sort.']['name'];
 
@@ -367,7 +372,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->conf['filter.']['endDate'] = $params['endDate'];
 
 		$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
-		
+
 		if (is_array($params['subDataGroups']) && !empty($params['subDataGroups'])) {
 			$this->conf['filter.']['subDataGroups'] = implode(',', $params['subDataGroups']);
 		}
@@ -486,13 +491,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_NOSEARCH###');
 		}
 		if (in_array('LIST', $this->codes)) {
-			if ($content = $this->renderCachedContent('SINGLE')) {
+			$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+			if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('SINGLE'))) {
 				$locMarkers['RESULT_LIST'] = $content;
 			} else {
 				$renderList = t3lib_div::makeInstance('tx_icssitlorquery_ListRenderer', $this, $this->cObj, $this->conf);
 				$content = $renderList->render($this->getElements());
 				$locMarkers['RESULT_LIST'] = $content;
-				$this->storeCachedContent($content);
+				if (!$extConf['no_cache'])
+					$this->storeCachedContent($content);
 			}
 		}
 		else {
@@ -513,9 +520,10 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	string		HTML content for single view
 	 */
 	function displaySingle() {
-		if ($content = $this->renderCachedContent('SINGLE'))
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+		if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('SINGLE')))
 			return $content;
-	
+
 		// Set filter on date to get date data
 		list($day, $month, $year) = explode('/', $this->conf['filter.']['startDate']);
 		$startDate = mktime(0,0,0,$month,$day,$year);
@@ -543,9 +551,10 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		$renderSingle = t3lib_div::makeInstance('tx_icssitlorquery_SingleRenderer', $this, $this->cObj, $this->conf);
 		$content =  $renderSingle->render($elements[0]);
-		
-		$this->storeCachedContent($content);
-		
+
+		if (!$extConf['no_cache'])
+			$this->storeCachedContent($content);
+
 		return $content;
 	}
 
@@ -591,6 +600,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				return $this->getRestaurants();
 			case 'EVENT':
 				return $this->getEvents();
+			case 'FREETIME':
+				return $this->getFreeTime();
 			default:
 				tx_icssitquery_Debug::warning('List view datagroup ' . $dataGroup . ' is not defined.');
 		}
@@ -606,7 +617,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$subDataGroups = (string)strtoupper(trim($this->conf['filter.']['subDataGroups']));
 		$subDataGroups = $subDataGroups? $subDataGroups: (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
-	
+
 		// if (!$this->conf['view.']['subDataGroups']) {
 		if (empty($subDataGroups)) {
 			$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
@@ -691,7 +702,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			default:
 				$sorting = null;
 		}
-		
+
 		return $this->queryService->getAccomodations($sorting);
 	}
 
@@ -756,17 +767,32 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			list($crit, $term) = t3lib_div::trimExplode(':', $this->conf['filter.']['noFeeEvent']);
 			$this->queryService->addFilter($this->getCriterionFilter($crit, array($term)));
 		}
-		
+
 		if ($this->conf['filter.']['illustration']) {
 			$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::PHOTO));
 		}
-		
+
 		$sorting = null;
-		if ($this->conf['sort.']['name'] && $this->conf['sort.']['name']=='DATE') {
+		if ($this->conf['sort.']['name']=='DATE') {
 			$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider', 'endDate', strtoupper($this->conf['sort.']['extra']));
 		}
 		return $this->queryService->getEvents($sorting);
 	}
+	
+	/**
+	 * Retrieves FreeTime 
+	 *
+	 * @return	mixed		Array of elements
+	 */
+	private function getFreeTime() {
+		$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
+		$sorting = null;
+		if ($this->conf['sort.']['name']=='ALPHA') {
+			$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
+		}
+		return $this->queryService->getRecords($sorting);
+	}
+	
 
 	/**
 	 * Add criterion filter
@@ -813,7 +839,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * Render cached content
 	 *
 	 * @param	string		$mode: 'SINGLE' or 'LIST' mode
-	 * @return	The HTML content or false whether any cached
+	 * @return	mixed		The HTML content or false whether any cached
 	 */
 	private function renderCachedContent($mode) {
 		t3lib_cache::initializeCachingFramework();
@@ -827,7 +853,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
                 $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['icssitlorquery_cache']['options']
             );
         }
-		
+
 		$params['connection'] = $this->conf['url'] . $this->conf['login'] . $this->conf['password'];
 		$params['view'] = $this->conf['view.']['size'] . $this->conf['view.']['dataGroup'] . $this->conf['view.']['subDataGroups'];
 		$params['page'] = $this->conf['page'];
@@ -837,18 +863,18 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$params['filter'] = $this->conf['filter.']['OTNancy'] . $this->conf['filter.']['entity_737'] . $this->conf['filter.']['startDate'] . $this->conf['filter.']['endDate'] . $this->conf['filter.']['hotelTypes'] . $this->conf['filter.']['hotelEquipments'] . $this->conf['filter.']['restaurantCategories'] . $this->conf['filter.']['foreignFoods'] . $this->conf['filter.']['noFeeEvent'] . $this->conf['filter.']['subDataGroups'] . $this->conf['filter.']['illustration'];
 
 		$params['sorting'] = $this->conf['sort.']['name'] . $this->conf['sort.']['extra'];
-	
+
 		$this->hash = md5(implode(';', $params));
-		
+
 		if (!$this->sword && $this->cacheInstance->has($this->hash)) {
 
 			$content = $this->cacheInstance->get($this->hash);
 			return $content;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Store cached content
 	 *
@@ -858,10 +884,10 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	function storeCachedContent($content) {
 		if ($this->sword)
 			return;
-		
+
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
 		$lifetime = intval($extConf['cacheTime']);
-		
+
 		$this->cacheInstance->set($this->hash, $content, array(), $lifetime);
 	}
 

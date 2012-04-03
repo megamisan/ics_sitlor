@@ -24,7 +24,7 @@
 
 
 /**
- * Interface 'EventSortingProvider' for the 'ics_sitlor_query' extension.
+ * Class 'EventSortingProvider' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3

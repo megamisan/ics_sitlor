@@ -24,7 +24,7 @@
 
 
 /**
- * Interface 'AccomodationSortingProvider' for the 'ics_sitlor_query' extension.
+ * Class 'AccomodationSortingProvider' for the 'ics_sitlor_query' extension.
  *
  * @author	Tsi YANG <tsi@in-cite.net>
  * @package	TYPO3
@@ -44,7 +44,7 @@ class tx_icssitlorquery_AccomodationSortingProvider implements tx_icssitquery_IS
 	 *
 	 * @param	string		$value : Sorting's value
 	 * @param	string		$extra : order "ASC"/"DESC" or random extra data
-	 * @return	[type]		...
+	 * @return	void
 	 */
 	function __construct($value, $extra='') {
 		if (!is_string($value))

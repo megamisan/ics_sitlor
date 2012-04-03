@@ -1,8 +1,11 @@
-# cat=Basic//a; type=int; label=cache time (seconds)
+# cat=Basic//a; type=boolean; label=Set no cache:Set no cache on list and single view 
+no_cache =
+
+# cat=Basic//a; type=int; label=Cache time:List view and single view cache lifetime (seconds)
 cacheTime = 3600
 
-# cat=Basic//b; type=int; label=cache time (seconds)
+# cat=Basic//b; type=int; label=Nomenclature cache time (seconds)
 nomenclature_cacheTime = 0
 
-# cat=Basic//c; type=int; label=cache time (seconds)
+# cat=Basic//c; type=int; label=Criterion cache time (seconds)
 criterion_cacheTime = 0

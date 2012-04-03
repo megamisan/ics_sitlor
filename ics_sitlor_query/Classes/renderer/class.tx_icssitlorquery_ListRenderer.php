@@ -20,10 +20,25 @@
 *  GNU General Public License for more details.
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************//**
+***************************************************************/
+/**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- * Hint: use extdeveval to insert/update function index above.
+ *
+ *
+ *   52: class tx_icssitlorquery_ListRenderer
+ *   62:     function __construct($pi, $cObj, $lConf)
+ *   76:     function render($elements=null)
+ *   87:     private function renderListEmpty()
+ *  101:     private function renderList(array $elements)
+ *  158:     private function renderListItemGeneric($element, &$markers)
+ *  176:     private function renderListItemSpecific($element, &$markers)
+ *  244:     private function renderTitleLink($element)
+ *  257:     protected function getListGetPageBrowser($numberOfPages)
+ *
+ * TOTAL FUNCTIONS: 8
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
  */
 
 
@@ -182,7 +197,7 @@
 			);
 		}
 		// Render Restaurants
-		if ($element instanceof tx_icssitlorquery_Restaurant) {
+		elseif ($element instanceof tx_icssitlorquery_Restaurant) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_RESTAURANT###');
 			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
 			for ($i=0; $i<$element->CurrentMenuPrice->Count(); $i++) {
@@ -206,13 +221,22 @@
 			);
 		}
 		// Render Events
-		if ($element instanceof tx_icssitlorquery_Event) {
+		elseif ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
-				'TYPE' => $element->TypeEvent,
+				'TYPE_EVENT' => $element->TypeEvent,
 				'TITLE' => $this->renderTitleLink($element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
+			);
+		}
+		// Render records
+		else {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_RECORD###');
+			$locMarkers = array(
+				'TYPE' => $element->Type,
+				'TITLE' => $this->renderTitleLink($element),
+				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 			);
 		}
 
@@ -237,7 +261,7 @@
 	 * Page browser
 	 *
 	 * @param	int		$numberOfPages
-	 * @return	page	browser content
+	 * @return	string 	page browser content
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		// Get default configuration
