@@ -199,7 +199,7 @@ class tx_icssitlorquery_CriterionUtils {
 	const FREETIME = 737000034;
 	const FT_FAMILY = 737000249;
 	const FT_NOFEE = 737000248;
-	const FT_EVENNING = 737000250;
+	const FT_EVENING = 737000250;
 	const FT_OUTDOOR = 737000247;
 	const FT_RAIN = 737000246;
 	const FT_WEEKEND = 737000251;

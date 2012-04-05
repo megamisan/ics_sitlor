@@ -309,12 +309,17 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		if (!$this->conf['filter.']['startDate'])
 			$this->conf['filter.']['startDate'] = self::$default_startDate;
 
-
 		// Select params on illustration
 		if (isset($this->piVars['select']['illustration']))
 			$filterIllustration = $this->piVars['select']['illustration'];
 		$filterIllustration = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'illustration', 'paramSelect');
 		$this->conf['filter.']['illustration'] = $filterIllustration? $filterIllustration : $this->conf['filter.']['illustration'];
+		
+		// Select free time theme
+		if (isset($this->piVars['select']['freeTimeTheme']))
+			$freeTimeTheme = $this->piVars['select']['freeTimeTheme'];
+		$freeTimeTheme = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'freeTimeThemes', 'paramSelect');
+		$this->conf['filter.']['freeTimeTheme'] = $freeTimeTheme? $freeTimeTheme: $this->conf['filter.']['freeTimeTheme'];
 
 	}
 
@@ -785,7 +790,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	mixed		Array of elements
 	 */
 	private function getFreeTime() {
-		$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
+		if ($this->conf['filter.']['freeTimeTheme']) {
+			$criterionTerms = $this->process_criterionTermArray(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
+			foreach ($criterionTerms as $criterionID=>$termIDs) {
+				$this->queryService->addFilter($this->getCriterionFilter($criterionID, $termIDs));
+			}
+		} else {
+			$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
+		}
 		$sorting = null;
 		if ($this->conf['sort.']['name']=='ALPHA') {
 			$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));

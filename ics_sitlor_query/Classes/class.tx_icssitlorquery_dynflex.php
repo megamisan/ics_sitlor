@@ -111,6 +111,9 @@ class tx_icssitlorquery_dynflex {
 			case 'EVENT':
 				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Event(), $content);
 				break;
+			case 'FREETIME':
+				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_FreeTime(), $content);
+				break;
 			default:
 		}
 
@@ -296,6 +299,42 @@ class tx_icssitlorquery_dynflex {
 		return $xmlFlexPart;
 	}
 
+	
+	/**
+	 * Retrieves FreeTime flex part
+	 *
+	 * @return	string		XML flex part content
+	 */
+	private function flexPartFilter_FreeTime() {
+		$llang_ffds = $this->llang_ffds['pi1'];
+		$xmlFlexPart = '';
+		$flexArray = array();
+		
+		$themes = array(
+			array('', ''),
+			array($llang_ffds . ':ft_family', tx_icssitlorquery_CriterionUtils::FREETIME.':'.tx_icssitlorquery_CriterionUtils::FT_FAMILY),
+			array($llang_ffds . ':ft_noFee', tx_icssitlorquery_CriterionUtils::FREETIME.':'.tx_icssitlorquery_CriterionUtils::FT_NOFEE),
+			array($llang_ffds . ':ft_evening', tx_icssitlorquery_CriterionUtils::FREETIME.':'.tx_icssitlorquery_CriterionUtils::FT_EVENING),
+			array($llang_ffds . ':ft_outdoor', tx_icssitlorquery_CriterionUtils::FREETIME.':'.tx_icssitlorquery_CriterionUtils::FT_OUTDOOR),
+			array($llang_ffds . ':fr_rain', tx_icssitlorquery_CriterionUtils::FREETIME.':'.tx_icssitlorquery_CriterionUtils::FT_RAIN),
+			array($llang_ffds . ':ft_weekend', tx_icssitlorquery_CriterionUtils::FREETIME.':'.tx_icssitlorquery_CriterionUtils::FT_WEEKEND),
+		);
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':freeTimeThemes',
+			'config' => array(
+				'type' => 'select',
+				'items' => $themes,
+				'size' => '1',
+				'minitems' => '0',
+				'maxitems' => '1',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'freeTimeThemes');
+		
+		
+		return $xmlFlexPart;
+	}
+	
 	/**
 	 * Retrieves sorting flex part
 	 *
