@@ -1,4 +1,5 @@
 2012-04-10 Tsi Yang <tsi@in-cite.net>
+	* Fix: Mistakes on button name.
 	* Refactor: Reworked render on link title.
 	* Feature: Added link "More".
 	* Refactor: Reworked title and sorting typoscript configuration.
