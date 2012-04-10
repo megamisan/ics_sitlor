@@ -2,6 +2,7 @@
 	* Refactor: Reworked render on link title.
 	* Feature: Added link "More".
 	* Refactor: Reworked title and sorting typoscript configuration.
+	* Refactor: Replace checkbox with radio on search form on accomodation.
 
 2012-04-05 Tsi Yang <tsi@in-cite.net>
 	* Feature: Added filter on Free time themes
