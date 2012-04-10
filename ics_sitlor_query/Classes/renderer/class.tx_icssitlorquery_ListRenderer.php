@@ -26,17 +26,16 @@
  *
  *
  *
- *   52: class tx_icssitlorquery_ListRenderer
- *   62:     function __construct($pi, $cObj, $lConf)
- *   76:     function render($elements=null)
- *   87:     private function renderListEmpty()
- *  101:     private function renderList(array $elements)
- *  158:     private function renderListItemGeneric($element, &$markers)
- *  176:     private function renderListItemSpecific($element, &$markers)
- *  244:     private function renderTitleLink($element)
- *  257:     protected function getListGetPageBrowser($numberOfPages)
+ *   51: class tx_icssitlorquery_ListRenderer
+ *   61:     function __construct($pi, $cObj, $lConf)
+ *   75:     function render($elements=null)
+ *   86:     private function renderListEmpty()
+ *  100:     private function renderList(array $elements)
+ *  129:     private function renderListItemGeneric($element, &$markers)
+ *  147:     private function renderListItemSpecific($element, &$markers)
+ *  228:     protected function getListGetPageBrowser($numberOfPages)
  *
- * TOTAL FUNCTIONS: 8
+ * TOTAL FUNCTIONS: 7
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -113,36 +112,8 @@
 		$markers = array(
 			'PREFIXID' => $this->prefixId,
 			'PAGE_BROWSER' => $this->getListGetPageBrowser(intval(ceil($this->pi->queryService->getLastTotalCount()/$this->conf['view.']['size']))),
+			'SORTING' => $this->pi->renderSortings(),
 		);
-		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
-		$sortNames = array();
-		switch($dataGroup) {
-			case 'ACCOMODATION':
-				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
-				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
-				if (in_array('HOTEL', $subDataGroups)) {
-					$sortNames = array('ALPHA', 'HOTELRATING', 'PRICE');
-				} elseif (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups)) {
-					$sortNames = array('ALPHA', 'RANDOM');
-				}
-				break;
-			case 'RESTAURANT':
-				$sortNames = array('RANDOM', 'PRICE');
-				break;
-			case 'EVENT':
-				break;
-			default:
-		}
-		$sortings = array();
-		if (!empty($sortNames)) {
-			foreach ($sortNames as $sortName) {
-				$sortings[] = $this->pi->pi_linkTP_keepPIvars(
-					$this->pi->pi_getLL('sort_' . strtolower($sortName), 'Sort on ' . strtolower($sortName), true),
-					array('sortName' => $sortName,'sortExtra'=>'', 'page' =>0)
-				);
-			}
-		}
-		$markers['SORTING'] = $this->pi->renderData('sortings', $sortings);
 
 		$template = $this->cObj->substituteSubpartArray($template, $subparts);
 		return $this->cObj->substituteMarkerArray($template, $markers, '###|###');
@@ -188,12 +159,13 @@
 				$price = $this->pi->renderData('price', $valudeTerm);
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $this->renderTitleLink($element),
+				'TITLE' => $this->pi->renderSingleLink('title', $element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'RATINGSTAR' => $this->pi->renderData('ratingStar', $element->RatingStar),
 				'MOBILITYIMPAIRED' => $this->pi->renderData('mobilityImpaired', $element->MobilityImpaired),
+				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
 		}
 		// Render Restaurants
@@ -212,12 +184,13 @@
 			}
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $this->renderTitleLink($element),
+				'TITLE' => $this->pi->renderSingleLink('title', $element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
 				'LABELCHAIN' => $element->LabelChain,
 				'SERVICE_OPEN' => isset($day)? $this->pi->renderData('openCloseDay', $day): '',
+				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
 		}
 		// Render Events
@@ -225,9 +198,10 @@
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
 				'TYPE_EVENT' => $element->TypeEvent,
-				'TITLE' => $this->renderTitleLink($element),
+				'TITLE' => $this->pi->renderSingleLink('title', $element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
+				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
 		}
 		// Render records
@@ -235,8 +209,9 @@
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_RECORD###');
 			$locMarkers = array(
 				'TYPE' => $element->Type,
-				'TITLE' => $this->renderTitleLink($element),
+				'TITLE' => $this->pi->renderSingleLink('title', $element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
+				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
 		}
 
@@ -245,23 +220,10 @@
 	}
 
 	/**
-	 * Render title link
-	 *
-	 * @param	tx_icssitquery_AbstractData		$element: Data element
-	 * @return	string		Title link content
-	 */
-	private function renderTitleLink($element) {
-		return $this->pi->pi_linkTP	($element->Name,
-			array($this->prefixId . '[showUid]' => $element->ID),
-			0,
-			$this->conf['PIDitemDisplay']
-		);
-	}
-	/**
 	 * Page browser
 	 *
 	 * @param	int		$numberOfPages
-	 * @return	string 	page browser content
+	 * @return	string		page browser content
 	 */
 	protected function getListGetPageBrowser($numberOfPages) {
 		// Get default configuration

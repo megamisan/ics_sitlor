@@ -359,14 +359,71 @@ plugin.tx_icssitlorquery_pi1 {
 				noTrimWrap = | : ||
 			}
 		}
-		sortings {
-			prepend = TEXT
-			prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sorting
-			noTrimWrap = | : ||
-			separator = |
-		}
 		description {
 			cropHTML = 250 |...| 1
+		}
+		title {
+			cObject = TEXT
+			cObject {
+				field = title
+			}
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icssitlorquery_pi1[showUid]={field:id}
+				additionalParams.insertData = 1
+			}
+			
+		}
+		more {
+			cObject = TEXT
+			cObject {
+				value = En savoir plus
+			}
+			typolink {
+				parameter.data = tsfe:id
+				additionalParams=&tx_icssitlorquery_pi1[showUid]={field:id}
+				additionalParams.insertData = 1
+			}
+			
+		}
+		sortings {
+			cObject = TEXT
+			cObject {
+				if.isTrue.field = sortNames
+				field = sortNames
+				split {
+					token = ,
+					cObjNum = 1
+					1.current = 1
+					1 {
+						cObject = CASE
+						cObject {
+							key.current = 1
+							ALPHA = TEXT
+							ALPHA.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sort_alpha
+							HOTELRATING = TEXT
+							HOTELRATING.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sort_hotelrating
+							PRICE = TEXT
+							PRICE.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sort_price
+							RANDOM = TEXT
+							RANDOM.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sort_random
+						}
+						typolink {
+							parameter.data = tsfe:id
+							additionalParams=&tx_icssitlorquery_pi1[sortName]={current:data}&tx_icssitlorquery_pi1[sortExtra]=
+							additionalParams.insertData = 1
+						}
+						outerWrap = <li >|</li>
+						outerWrap.addParams {
+							class = sorting
+						}
+					}
+				}
+				prepend = TEXT
+				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:sorting
+				prepend.wrap = <p>|</p>
+				wrap = <ul>|</ul>
+			}
 		}
 	}
 	

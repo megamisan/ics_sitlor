@@ -249,7 +249,7 @@
 				'HOTEL_VALUE' => self::$subAccomodations['hotel'],
 				'SELECTED_HOTEL' => in_array(self::$subAccomodations['hotel'], $this->search['subDataGroups'])? 'checked="checked"': '',
 				
-				'CAMPING_YOUTHHOSTEL_LABEL' => $this->pi->pi_getLL('camping_youthHostel', 'Camping and youth hostel<', true),
+				'CAMPING_YOUTHHOSTEL_LABEL' => $this->pi->pi_getLL('camping_youthHostel', 'Camping and youth hostel', true),
 				'CAMPING_YOUTHHOSTEL_VALUE' => self::$subAccomodations['camping_youthHostel'],
 				'SELECTED_CAMPING_YOUTHHOSTEL' => in_array(self::$subAccomodations['camping_youthHostel'], $this->search['subDataGroups'])? 'checked="checked"': '',
 				

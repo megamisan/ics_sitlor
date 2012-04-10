@@ -26,29 +26,32 @@
  *
  *
  *
- *   65: class tx_icssitlorquery_pi1 extends tslib_pibase
- *   92:     function main($content, $conf)
- *  159:     function init ()
- *  215:     private function initMode()
- *  237:     private function initFilterParams()
- *  326:     private function initSortingParams()
- *  357:     function setPIVars_searchParams()
- *  387:     function setConnection()
- *  409:     function setDefaultConf()
- *  445:     function setDefaultSeparator()
- *  459:     function renderData($name, $element)
- *  481:     function displayList()
- *  517:     function displaySingle()
- *  559:     private function getElements()
- *  607:     private function getAccomodations()
- *  705:     private function getRestaurants()
- *  747:     private function getEvents()
- *  780:     private function getCriterionFilter($criterionID, $terms=null)
- *  802:     private function process_criterionTermArray(array $criterionTermArray)
- *  820:     private function renderCachedContent($mode)
- *  860:     function storeCachedContent($content)
+ *   68: class tx_icssitlorquery_pi1 extends tslib_pibase
+ *   95:     function main($content, $conf)
+ *  162:     function init ()
+ *  218:     private function initMode()
+ *  240:     private function initFilterParams()
+ *  334:     private function initSortingParams()
+ *  368:     function setPIVars_searchParams()
+ *  398:     function setConnection()
+ *  420:     function setDefaultConf()
+ *  456:     function setDefaultSeparator()
+ *  470:     function renderData($name, $element)
+ *  494:     function renderSingleLink($name, $element)
+ *  511:     function renderSortings()
+ *  547:     function displayList()
+ *  585:     function displaySingle()
+ *  629:     private function getElements()
+ *  679:     private function getAccomodations()
+ *  777:     private function getRestaurants()
+ *  819:     private function getEvents()
+ *  850:     private function getFreeTime()
+ *  874:     private function getCriterionFilter($criterionID, $terms=null)
+ *  896:     private function process_criterionTermArray(array $criterionTermArray)
+ *  914:     private function renderCachedContent($mode)
+ *  954:     function storeCachedContent($content)
  *
- * TOTAL FUNCTIONS: 20
+ * TOTAL FUNCTIONS: 23
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -314,7 +317,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$filterIllustration = $this->piVars['select']['illustration'];
 		$filterIllustration = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'illustration', 'paramSelect');
 		$this->conf['filter.']['illustration'] = $filterIllustration? $filterIllustration : $this->conf['filter.']['illustration'];
-		
+
 		// Select free time theme
 		if (isset($this->piVars['select']['freeTimeTheme']))
 			$freeTimeTheme = $this->piVars['select']['freeTimeTheme'];
@@ -479,6 +482,61 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			}
 		}
 		return $content;
+	}
+
+	/**
+	 * Render single link
+	 *
+	 * @param	string		$name : Name of element to render
+	 * @param	tx_icssitlorquery_AbstractData		$element : Element to render
+	 * @return	string
+	 */
+	function renderSingleLink($name, $element) {
+		$data = array(
+			'id' => $element->ID,
+			'title' => $element->Name,
+		);
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start($data, 'Sitlor');
+		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+
+		return $cObj->stdWrap('', $this->conf['renderConf.'][$name . '.']);
+	}
+
+	/**
+	 * Render sortings
+	 *
+	 * @return	string
+	 */
+	function renderSortings() {
+		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+		$sortNames = array();
+		switch($dataGroup) {
+			case 'ACCOMODATION':
+				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+				if (in_array('HOTEL', $subDataGroups)) {
+					$sortNames = array('ALPHA', 'HOTELRATING', 'PRICE');
+				} elseif (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups)) {
+					$sortNames = array('ALPHA', 'RANDOM');
+				}
+				break;
+			case 'RESTAURANT':
+				$sortNames = array('RANDOM', 'PRICE');
+				break;
+			case 'EVENT':
+				break;
+			default:
+		}
+		$data = array(
+			'sortNames' => implode(',', $sortNames),
+			'active' => $this->conf['sort.']['name'],
+		);
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start($data, 'Sorting');
+		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+
+		return $cObj->stdWrap('', $this->conf['renderConf.']['sortings.']);
 	}
 
 	/**
@@ -783,9 +841,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		return $this->queryService->getEvents($sorting);
 	}
-	
+
 	/**
-	 * Retrieves FreeTime 
+	 * Retrieves FreeTime
 	 *
 	 * @return	mixed		Array of elements
 	 */
@@ -804,7 +862,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		return $this->queryService->getRecords($sorting);
 	}
-	
+
 
 	/**
 	 * Add criterion filter
