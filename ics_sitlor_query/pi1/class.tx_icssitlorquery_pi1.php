@@ -521,11 +521,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				if (in_array('HOTEL', $subDataGroups)) {
 					$sortNames = array('ALPHA', 'HOTELRATING', 'PRICE');
 				} elseif (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups)) {
-					$sortNames = array('ALPHA', 'RANDOM');
+					// $sortNames = array('ALPHA', 'RANDOM');
+					$sortNames = array('ALPHA');
 				}
 				break;
 			case 'RESTAURANT':
-				$sortNames = array('RANDOM', 'PRICE');
+				// $sortNames = array('RANDOM', 'PRICE');
+				$sortNames = array('PRICE');
 				break;
 			case 'EVENT':
 				break;
