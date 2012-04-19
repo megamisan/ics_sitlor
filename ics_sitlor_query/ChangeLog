@@ -1,3 +1,13 @@
+2012-04-19 Pierrick Caillon <pierrick@in-cite.net>
+	* Refactor: Moved definition of default data rendering configuration setup to a Configurator class from pi1.
+	* Refactor: Moved type guessing setup as default and factory connection parameters to Configurator class from pi1.
+	* Refactor: Moved pi1::getCriterionFilter to CriterionUtils as a static method.
+	* Refactor: Reordered methods and renamed some methods in pi1.
+	* Refactor: Normalized some similar methods algorithm in pi1.
+	* Refactor: Explicited method visibility in pi1.
+	* Comments: Updated some pi1 comments.
+	* Refactor: Moved pi1 Single and List mode date filter definition to a single method.
+
 2012-04-12 Tsi Yang <tsi@in-cite.net>
 	* Feature: Removed random sorting choice on list view.
 

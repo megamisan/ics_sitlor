@@ -4,6 +4,7 @@
 
 $extensionPath = t3lib_extMgm::extPath('ics_sitlor_query');
 return array(
+	'tx_icssitlorquery_configurator' => $extensionPath . 'Classes/class.tx_icssitlorquery_Configurator.php',
 	'tx_icssitlorquery_sitlorquery' => $extensionPath . 'Classes/class.tx_icssitlorquery_SitlorQuery.php',
 	'tx_icssitlorquery_sitlorqueryservice' => $extensionPath . 'Classes/class.tx_icssitlorquery_SitlorQueryService.php',
 	'tx_icssitlorquery_xmltools' => $extensionPath . 'Classes/class.tx_icssitlorquery_XMLTools.php',

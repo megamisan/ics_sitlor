@@ -94,6 +94,29 @@ class tx_icssitlorquery_CriterionUtils {
 		}
 	}
 
+	/**
+	 * Creates a criterion filter.
+	 *
+	 * @param	int		$criterionID: The criterion ID.
+	 * @param	array		$terms: The criterions' terms IDs. Optional.
+	 * @return	tx_icssitlorquery_CriterionFilter		The criterion filter.
+	 */
+	public static function getCriterionFilter($criterionID, $terms=null) {
+		if (!is_int($criterionID))
+			$criterionID = intval($criterionID);
+
+		$criterion = tx_icssitlorquery_CriterionFactory::GetCriterion($criterionID);
+		if (!$terms || empty($terms)) {
+			$list = null;
+		} else {
+			$list = t3lib_div::makeInstance('tx_icssitlorquery_TermList');
+			foreach ($terms as $term) {
+				$list->Add(tx_icssitlorquery_CriterionFactory::GetCriterionTerm($criterion, intval($term)));
+			}
+		}
+		return t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criterion, $list);
+	}
+
 	/*******************************************************
 	 *
 	 * Accomodation's category - Rating star

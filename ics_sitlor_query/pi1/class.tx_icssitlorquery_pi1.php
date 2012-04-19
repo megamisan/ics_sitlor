@@ -47,7 +47,7 @@
  *  819:     private function getEvents()
  *  850:     private function getFreeTime()
  *  874:     private function getCriterionFilter($criterionID, $terms=null)
- *  896:     private function process_criterionTermArray(array $criterionTermArray)
+ *  896:     private function parseCriterionsTermsDefinition(array $criterionTermArray)
  *  914:     private function renderCachedContent($mode)
  *  954:     function storeCachedContent($content)
  *
@@ -85,14 +85,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	private static $geoc_zoom = 12;
 	private static $geoc_canvas = array('340px', '200px');
 
-    /**
- * The main method of the PlugIn
- *
- * @param	string		$content: The PlugIn content
- * @param	array		$conf: The PlugIn configuration
- * @return	string		The content that is displayed on the website
- */
-    function main($content, $conf) {
+	/**
+	 * The main method of the PlugIn
+	 *
+	 * @param	string		$content: The PlugIn content
+	 * @param	array		$conf: The PlugIn configuration
+	 * @return	string		The content that is displayed on the website
+	 */
+	public function main($content, $conf) {
         $this->conf = $conf;
         $this->pi_setPiVarDefaults();
         $this->pi_loadLL();
@@ -127,8 +127,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Initialize query, connection
 		$this->setConnection();
 		// Set typoscript defaultConf
-		$this->setDefaultConf();
-		$this->setDefaultSeparator();
+		tx_icssitlorquery_Configurator::setDefaultConf($this->conf['defaultConf.']);
+		tx_icssitlorquery_Configurator::setDefaultSeparator($this->conf['defaultSeparator.']);
 		// Set search params
 		if (isset($this->piVars['search']))
 			$this->setPIVars_searchParams();
@@ -159,7 +159,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	void
 	 */
-	function init () {
+	private function init() {
 		// Get template code
 		$this->templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'template', 'main');
 		$this->templateFile = $this->templateFile ? $this->templateFile : $this->conf['template'];
@@ -361,11 +361,26 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	}
 
 	/**
+	 * Set the queryService
+	 *
+	 * @param	string		$login The login
+	 * @param	string		password The password
+	 * @param	string		$url The url
+	 * @return	void
+	 */
+	private function setConnection() {
+		$this->queryService = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQueryService', $this->conf['login'], $this->conf['password'], $this->conf['url']);
+		$this->queryService->setPager(intval($this->conf['page']), intval($this->conf['view.']['size']));
+		tx_icssitlorquery_Configurator::setConnection($this->conf['login'], $this->conf['password'], $this->conf['sitlor.']['nomenclatureUrl'], $this->conf['sitlor.']['criterionUrl']);
+		tx_icssitlorquery_Configurator::setDefaultTypeGuessing($this->queryService);
+	}
+
+	/**
 	 * Sets search params from piVars
 	 *
 	 * @return	void
 	 */
-	function setPIVars_searchParams() {
+	private function setPIVars_searchParams() {
 		$params = $this->piVars['search'];
 
 		$this->sword = '';
@@ -391,165 +406,68 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Set the queryService
+	 * Displays the single view of an element.
 	 *
-	 * @param	string		$login The login
-	 * @param	string		password The password
-	 * @param	string		$url The url
-	 * @return	void
+	 * @return	string		HTML content for single view.
 	 */
-	function setConnection() {
-		$this->queryService = t3lib_div::makeInstance('tx_icssitlorquery_SitlorQueryService', $this->conf['login'], $this->conf['password'], $this->conf['url']);
-		$this->queryService->setPager(intval($this->conf['page']), intval($this->conf['view.']['size']));
-		tx_icssitlorquery_NomenclatureFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['sitlor.']['nomenclatureUrl']);
-		tx_icssitlorquery_CriterionFactory::SetConnectionParameters($this->conf['login'], $this->conf['password'], $this->conf['sitlor.']['criterionUrl']);
-		$this->queryService->setTypeGuessingConf(
-			array(
-				'tx_icssitlorquery_FullAccomodation' => array('id', tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::ACCOMODATION)),
-				'tx_icssitlorquery_Accomodation' => array(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::ACCOMODATION)),
-				'tx_icssitlorquery_FullRestaurant' => array('id', tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESTAURANT)),
-				'tx_icssitlorquery_Restaurant' => array(tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESTAURANT)),
-				'tx_icssitlorquery_FullEvent' => array('id', tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT), $this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT)),
-				'tx_icssitlorquery_Event' => array(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT), $this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT)),
-			)
-		);
-	}
-
-	/**
-	 * Sets default TypoScript configuration
-	 *
-	 * @return	void
-	 */
-	function setDefaultConf() {
-		$common = array('Address', 'Coordinates', 'Link', 'Name', 'Phone', 'Picture');
-		foreach ($this->conf['defaultConf.'] as $type => $conf) {
-			if ($type{strlen($type) - 1} != '.')
-				continue;
-			$type = substr($type, 0, -1);
-			if (in_array($type, $common)) {
-				$class = 'tx_icssitquery_' . $type;
-			}
-			else {
-				$class = 'tx_icssitlorquery_' . $type;
-			}
-			if ($type == 'ValuedTermTuple') {
-				foreach ($conf as $tag => $subconf) {
-					if ($tag{strlen($tag) - 1} != '.')
-						continue;
-					$tag = substr($tag, 0, -1);
-					call_user_func(array($class, 'SetDefaultConf'), $tag, $subconf);
-				}
-			}
-			else {
-				try {
-					call_user_func(array($class, 'SetDefaultConf'), $conf);
-				}
-				catch (Exception $e) {
-					t3lib_div::devLog($class . ' default conf', 'ics_sitlor_query', 0, $conf);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Sets default separator
-	 *
-	 * @return	void
-	 */
-	function setDefaultSeparator() {
-		foreach ($this->conf['defaultSeparator.'] as $type => $conf) {
-			$class = 'tx_icssitlorquery_' . $type . 'List';
-			tx_icssitlorquery_AbstractList::setDefaultSeparator($conf, $class);
-		}
-	}
-
-	/**
-	 * Render data
-	 *
-	 * @param	string		$name : Name of element to render
-	 * @param	mixed		$element : Element to render
-	 * @return	string
-	 */
-	function renderData($name, $element) {
-		$content = '';
-		$lConf = $this->conf['renderConf.'][$name . '.'];
-		if (empty($lConf)) {
-			$content .= $element;
-		} else {
-			if ($element instanceof tx_icssitlorquery_TimeTable || $element instanceof tx_icssitlorquery_ValuedTerm) {
-				$content = $element->toStringConf($lConf);
-			} elseif(is_array($element)) {
-				$content = $this->cObj->stdWrap(implode($lConf['separator'], $element), $lConf);
-			} else {
-				$content = $this->cObj->stdWrap($element, $lConf);
-			}
-		}
-		return $content;
-	}
-
-	/**
-	 * Render single link
-	 *
-	 * @param	string		$name : Name of element to render
-	 * @param	tx_icssitlorquery_AbstractData		$element : Element to render
-	 * @return	string
-	 */
-	function renderSingleLink($name, $element) {
-		$data = array(
-			'id' => $element->ID,
-			'title' => $element->Name,
-		);
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		$cObj->start($data, 'Sitlor');
-		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
-
-		return $cObj->stdWrap('', $this->conf['renderConf.'][$name . '.']);
-	}
-
-	/**
-	 * Render sortings
-	 *
-	 * @return	string
-	 */
-	function renderSortings() {
+	private function displaySingle() {
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+		if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('SINGLE')))
+			return $content;
+		$this->setQueryDateFilter(false);
+		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', intval($this->sitlor_uid));
+		$this->queryService->addFilter($idFilter);
 		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
-		$sortNames = array();
 		switch($dataGroup) {
 			case 'ACCOMODATION':
-				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
-				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
-				if (in_array('HOTEL', $subDataGroups)) {
-					$sortNames = array('ALPHA', 'HOTELRATING', 'PRICE');
-				} elseif (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups)) {
-					// $sortNames = array('ALPHA', 'RANDOM');
-					$sortNames = array('ALPHA');
-				}
+				$elements = $this->queryService->getAccomodations();
 				break;
 			case 'RESTAURANT':
-				// $sortNames = array('RANDOM', 'PRICE');
-				$sortNames = array('PRICE');
+				$elements = $this->queryService->getRestaurants();
 				break;
 			case 'EVENT':
+				$elements = $this->queryService->getEvents();
 				break;
 			default:
+				$elements = $this->queryService->getRecords();
+				break;
 		}
-		$data = array(
-			'sortNames' => implode(',', $sortNames),
-			'active' => $this->conf['sort.']['name'],
-		);
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
-		$cObj->start($data, 'Sorting');
-		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+		$renderSingle = t3lib_div::makeInstance('tx_icssitlorquery_SingleRenderer', $this, $this->cObj, $this->conf);
+		$content =  $renderSingle->render($elements[0]);
 
-		return $cObj->stdWrap('', $this->conf['renderConf.']['sortings.']);
+		if (!$extConf['no_cache'])
+			$this->storeCachedContent($content);
+
+		return $content;
+	}
+	
+	/**
+	 * Adds the filters on date on the query service.
+	 *
+	 * @param	bool		$addEndDate: Wether to add the end date filter. Optional, default to true.
+	 * @return	void
+	 */
+	private function setQueryDateFilter($addEndDate = true) {
+		list($day, $month, $year) = explode('/', $this->conf['filter.']['startDate']);
+		$startDate = mktime(0,0,0,$month,$day,$year);
+		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
+		$this->queryService->addFilter($StartDateFilter);
+		if ($addEndDate && $this->conf['filter.']['endDate']) {
+			list($day, $month, $year) = explode('/', $this->conf['filter.']['endDate']);
+			$endDate = mktime(23,59,59,$month,$day,$year);
+			$EndDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_EndDateFilter', $endDate);
+			$this->queryService->addFilter($EndDateFilter);
+		}
+		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
+		$this->queryService->addFilter($noDateFilter);
 	}
 
 	/**
-	 * Display the list view of elements
+	 * Displays the list view of elements and the search form.
 	 *
-	 * @return	string		HTML content for list view
+	 * @return	string		HTML content for list view and search form.
 	 */
-	function displayList() {
+	private function displayList() {
 		if (in_array('SEARCH', $this->codes)) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH###');
 			$renderForm = t3lib_div::makeInstance('tx_icssitlorquery_FormRenderer', $this, $this->cObj, $this->conf);
@@ -583,50 +501,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Display the single view of an element
-	 *
-	 * @return	string		HTML content for single view
-	 */
-	function displaySingle() {
-		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
-		if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('SINGLE')))
-			return $content;
-
-		// Set filter on date to get date data
-		list($day, $month, $year) = explode('/', $this->conf['filter.']['startDate']);
-		$startDate = mktime(0,0,0,$month,$day,$year);
-		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
-		$this->queryService->addFilter($StartDateFilter);
-		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
-		$this->queryService->addFilter($noDateFilter);
-
-		$idFilter = t3lib_div::makeInstance('tx_icssitlorquery_idFilter', intval($this->sitlor_uid));
-		$this->queryService->addFilter($idFilter);
-		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
-		switch($dataGroup) {
-			case 'ACCOMODATION':
-				$elements = $this->queryService->getAccomodations();
-				break;
-			case 'RESTAURANT':
-				$elements = $this->queryService->getRestaurants();
-				break;
-			case 'EVENT':
-				$elements = $this->queryService->getEvents();
-				break;
-			default:
-				$elements = $this->queryService->getRecords();
-				break;
-		}
-		$renderSingle = t3lib_div::makeInstance('tx_icssitlorquery_SingleRenderer', $this, $this->cObj, $this->conf);
-		$content =  $renderSingle->render($elements[0]);
-
-		if (!$extConf['no_cache'])
-			$this->storeCachedContent($content);
-
-		return $content;
-	}
-
-	/**
 	 * Retrieves data
 	 *
 	 * @return	mixed		Array of elements
@@ -635,27 +509,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Set filter on OT Nancy
 		if ($this->conf['sitlor.']['OTNancy'] && $this->conf['filter.']['OTNancy']) {
 			list($code, $value) = t3lib_div::trimExplode(':', $this->conf['sitlor.']['OTNancy']);
-			$this->queryService->addFilter($this->getCriterionFilter(intval($code), ($value? array($value): null)));
+			$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(intval($code), ($value? array($value): null)));
 		}
 		// Set filter on entity 737
 		if ($this->conf['filter.']['entity_737'])
 			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_EntityFilter', 737));
-
 		// Set filter on date to get date data
-		list($day, $month, $year) = explode('/', $this->conf['filter.']['startDate']);
-		$startDate = mktime(0,0,0,$month,$day,$year);
-		$StartDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_StartDateFilter', $startDate);
-		$this->queryService->addFilter($StartDateFilter);
-		if ($this->conf['filter.']['endDate']) {
-			list($day, $month, $year) = explode('/', $this->conf['filter.']['endDate']);
-			$endDate = mktime(23,59,59,$month,$day,$year);
-			$EndDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_EndDateFilter', $endDate);
-			$this->queryService->addFilter($EndDateFilter);
-		}
-		// Always retrieves elements without date
-		$noDateFilter = t3lib_div::makeInstance('tx_icssitlorquery_NoDateFilter', true);
-		$this->queryService->addFilter($noDateFilter);
-
+		$this->setQueryDateFilter();
 		// Set filter on keyword
 		if ($this->sword)
 			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_KeywordFilter', $this->sword));
@@ -683,26 +543,18 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 */
 	private function getAccomodations() {
 		$subDataGroups = (string)strtoupper(trim($this->conf['filter.']['subDataGroups']));
-		$subDataGroups = $subDataGroups? $subDataGroups: (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+		$subDataGroups = $subDataGroups ? $subDataGroups : (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
 
-		// if (!$this->conf['view.']['subDataGroups']) {
 		if (empty($subDataGroups)) {
 			$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
 			$kinds->Add(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::ACCOMODATION));
-			$this->queryService->addFilter(
-				t3lib_div::makeInstance(
-					'tx_icssitlorquery_KindFilter',
-					$kinds
-				)
-			);
+			$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_KindFilter', $kinds));
 		} else {
-			// $subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
-			// $subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
 			$types = array();
 			$categories = array();
-			foreach($subDataGroups as $subDataGroup) {
-				switch($subDataGroup) {
+			foreach ($subDataGroups as $subDataGroup) {
+				switch ($subDataGroup) {
 					case 'HOTEL':
 						if ($this->conf['filter.']['hotelTypes']) {
 							$hotelTypes = t3lib_div::trimExplode(',', $this->conf['filter.']['hotelTypes'], true);
@@ -711,9 +563,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 							$types = array_merge($types, tx_icssitlorquery_NomenclatureUtils::$hotel);
 						}
 						if ($this->conf['filter.']['hotelEquipments']) {
-							$criterionTerms = $this->process_criterionTermArray(t3lib_div::trimExplode(',', $this->conf['filter.']['hotelEquipments'], true));
+							$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['hotelEquipments'], true));
 							foreach ($criterionTerms as $criterionID=>$termIDs) {
-								$this->queryService->addFilter($this->getCriterionFilter($criterionID, $termIDs));
+								$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 							}
 						}
 						break;
@@ -724,7 +576,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 						$types[] = tx_icssitlorquery_NomenclatureUtils::YOUTH_HOSTEL;
 						break;
 					case 'STRANGE':
-						$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION, array(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION_YES)));
+						$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION, array(tx_icssitlorquery_CriterionUtils::STRANGE_ACCOMODATION_YES)));
 						break;
 					case 'HOLLIDAY_COTTAGE':
 						$categories[] = tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE;
@@ -737,17 +589,11 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				}
 			}
 			if (!empty($types)) {
-				$filter = t3lib_div::makeInstance(
-					'tx_icssitlorquery_TypeFilter',
-					tx_icssitlorquery_NomenclatureFactory::GetTypes($types)
-				);
+				$filter = t3lib_div::makeInstance('tx_icssitlorquery_TypeFilter', tx_icssitlorquery_NomenclatureFactory::GetTypes($types));
 				$this->queryService->addFilter($filter);
 			}
 			if (!empty($categories)) {
-				$filter = t3lib_div::makeInstance(
-					'tx_icssitlorquery_CategoryFilter',
-					tx_icssitlorquery_NomenclatureFactory::GetCategories($categories)
-				);
+				$filter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', tx_icssitlorquery_NomenclatureFactory::GetCategories($categories));
 				$this->queryService->addFilter($filter);
 			}
 		}
@@ -786,15 +632,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$filter = t3lib_div::makeInstance('tx_icssitlorquery_CategoryFilter', $categoryList);
 		$this->queryService->addFilter($filter);
 		if ($this->conf['filter.']['restaurantCategories']) {
-			$criterionTerms = $this->process_criterionTermArray(t3lib_div::trimExplode(',', $this->conf['filter.']['restaurantCategories'], true));
+			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['restaurantCategories'], true));
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
-				$this->queryService->addFilter($this->getCriterionFilter($criterionID, $termIDs));
+				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 			}
 		}
 		if ($this->conf['filter.']['foreignFoods']) {
-			$criterionTerms = $this->process_criterionTermArray(t3lib_div::trimExplode(',', $this->conf['filter.']['foreignFoods'], true));
+			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['foreignFoods'], true));
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
-				$this->queryService->addFilter($this->getCriterionFilter($criterionID, $termIDs));
+				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 			}
 		}
 		switch ($this->conf['sort.']['name']) {
@@ -804,9 +650,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				else
 					$sorting = t3lib_div::makeInstance('tx_icssitlorquery_RestaurantSortingProvider', 'random', 'start');
 				break;
-			// case 'RATING':
-				// $sorting = t3lib_div::makeInstance('tx_icssitlorquery_RestaurantSortingProvider', 'rating', strtoupper($this->conf['sort.']['extra']));
-				// break;
 			case 'PRICE':
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_RestaurantSortingProvider', 'price', strtoupper($this->conf['sort.']['extra']));
 				break;
@@ -824,25 +667,22 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	private function getEvents() {
 		$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
 		$kinds->Add(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT));
-		$this->queryService->addFilter(
-			t3lib_div::makeInstance(
-				'tx_icssitlorquery_KindFilter',
-				$kinds
-			)
-		);
-		$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT));
+		$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_KindFilter', $kinds));
+		$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT));
 		if ($this->conf['filter.']['noFeeEvent']) {
 			list($crit, $term) = t3lib_div::trimExplode(':', $this->conf['filter.']['noFeeEvent']);
-			$this->queryService->addFilter($this->getCriterionFilter($crit, array($term)));
+			$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($crit, array($term)));
 		}
 
 		if ($this->conf['filter.']['illustration']) {
-			$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::PHOTO));
+			$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(tx_icssitlorquery_CriterionUtils::PHOTO));
 		}
-
-		$sorting = null;
-		if ($this->conf['sort.']['name']=='DATE') {
-			$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider', 'endDate', strtoupper($this->conf['sort.']['extra']));
+		switch ($this->conf['sort.']['name']) {
+			case 'DATE':
+				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider', 'endDate', strtoupper($this->conf['sort.']['extra']));
+				break;
+			default:
+				$sorting = null;
 		}
 		return $this->queryService->getEvents($sorting);
 	}
@@ -854,51 +694,31 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 */
 	private function getFreeTime() {
 		if ($this->conf['filter.']['freeTimeTheme']) {
-			$criterionTerms = $this->process_criterionTermArray(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
+			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
-				$this->queryService->addFilter($this->getCriterionFilter($criterionID, $termIDs));
+				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 			}
 		} else {
-			$this->queryService->addFilter($this->getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
+			$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
 		}
-		$sorting = null;
-		if ($this->conf['sort.']['name']=='ALPHA') {
-			$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
+		switch ($this->conf['sort.']['name']) {
+			case 'ALPHA':
+				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
+				break;
+			default:
+				$sorting = null;
 		}
 		return $this->queryService->getRecords($sorting);
 	}
 
-
 	/**
-	 * Add criterion filter
+	 * Parses an array of criterion and term definition.
+	 * Each element is of the form criterion:term. The term can be omitted.
 	 *
-	 * @param	int		$criterionID: Criterion ID
-	 * @param	array		int	$terms: Array of Criterion's terms IDs
-	 * @return	void
+	 * @param	array		$criterionTermArray: Array of criterion and term definition.
+	 * @return	array		A map of terms attached to their criterion.
 	 */
-	private function getCriterionFilter($criterionID, $terms=null) {
-		if (!is_int($criterionID))
-			$criterionID = intval($criterionID);
-
-		$criterion = tx_icssitlorquery_CriterionFactory::GetCriterion($criterionID);
-		if (!$terms || empty($terms)) {
-			$list = null;
-		} else {
-			$list = t3lib_div::makeInstance('tx_icssitlorquery_TermList');
-			foreach ($terms as $term) {
-				$list->Add(tx_icssitlorquery_CriterionFactory::GetCriterionTerm($criterion, intval($term)));
-			}
-		}
-		return t3lib_div::makeInstance('tx_icssitlorquery_CriterionFilter', $criterion, $list);
-	}
-
-	/**
-	 * Process criterionTermArray
-	 *
-	 * @param	array		$criterionTermArray: Array of criterion and term
-	 * @return	mixed		An array of criterionTerms
-	 */
-	private function process_criterionTermArray(array $criterionTermArray){
+	private function parseCriterionsTermsDefinition(array $criterionTermArray){
 		$criterionTerms = array();
 		foreach ($criterionTermArray as $criterionTerm) {
 			list($criterionID, $termID) = t3lib_div::trimExplode(':', $criterionTerm, true);
@@ -911,10 +731,11 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Render cached content
+	 * Retrieves content from cache.
+	 * Search by keyword cannot be cached.
 	 *
-	 * @param	string		$mode: 'SINGLE' or 'LIST' mode
-	 * @return	mixed		The HTML content or false whether any cached
+	 * @param	string		$mode: Current view mode. 'SINGLE' or 'LIST' mode.
+	 * @return	mixed		The content if set in cache. False if not found.
 	 */
 	private function renderCachedContent($mode) {
 		t3lib_cache::initializeCachingFramework();
@@ -930,14 +751,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
         }
 
 		$params['connection'] = $this->conf['url'] . $this->conf['login'] . $this->conf['password'];
-		$params['view'] = $this->conf['view.']['size'] . $this->conf['view.']['dataGroup'] . $this->conf['view.']['subDataGroups'];
+		$params['view'] = implode('', $this->conf['view.']);
 		$params['page'] = $this->conf['page'];
 		$params['code'] = $mode;
 		$params['templateFile'] = $this->templateFile;
-
-		$params['filter'] = $this->conf['filter.']['OTNancy'] . $this->conf['filter.']['entity_737'] . $this->conf['filter.']['startDate'] . $this->conf['filter.']['endDate'] . $this->conf['filter.']['hotelTypes'] . $this->conf['filter.']['hotelEquipments'] . $this->conf['filter.']['restaurantCategories'] . $this->conf['filter.']['foreignFoods'] . $this->conf['filter.']['noFeeEvent'] . $this->conf['filter.']['subDataGroups'] . $this->conf['filter.']['illustration'];
-
-		$params['sorting'] = $this->conf['sort.']['name'] . $this->conf['sort.']['extra'];
+		$params['filter'] = implode('', $this->conf['filter.']);
+		$params['sorting'] = implode('', $this->conf['sort.']);
 
 		$this->hash = md5(implode(';', $params));
 
@@ -951,12 +770,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	}
 
 	/**
-	 * Store cached content
+	 * Stores content to cache.
+	 * Uses the hash computed when querying the cache.
 	 *
-	 * @param	string		$content: The content to store in cache
+	 * @param	string		$content: The content to store in cache.
 	 * @return	void
 	 */
-	function storeCachedContent($content) {
+	private function storeCachedContent($content) {
 		if ($this->sword)
 			return;
 
@@ -966,6 +786,84 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->cacheInstance->set($this->hash, $content, array(), $lifetime);
 	}
 
+	/**
+	 * Render data
+	 *
+	 * @param	string		$name : Name of element to render
+	 * @param	mixed		$element : Element to render
+	 * @return	string
+	 */
+	public function renderData($name, $element) {
+		$content = '';
+		$lConf = $this->conf['renderConf.'][$name . '.'];
+		if (empty($lConf)) {
+			$content .= $element;
+		} else {
+			if ($element instanceof tx_icssitlorquery_TimeTable || $element instanceof tx_icssitlorquery_ValuedTerm) {
+				$content = $element->toStringConf($lConf);
+			} elseif(is_array($element)) {
+				$content = $this->cObj->stdWrap(implode($lConf['separator'], $element), $lConf);
+			} else {
+				$content = $this->cObj->stdWrap($element, $lConf);
+			}
+		}
+		return $content;
+	}
+
+	/**
+	 * Render single link
+	 *
+	 * @param	string		$name : Name of element to render
+	 * @param	tx_icssitlorquery_AbstractData		$element : Element to render
+	 * @return	string
+	 */
+	public function renderSingleLink($name, $element) {
+		$data = array(
+			'id' => $element->ID,
+			'title' => $element->Name,
+		);
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start($data, 'Sitlor');
+		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+
+		return $cObj->stdWrap('', $this->conf['renderConf.'][$name . '.']);
+	}
+
+	/**
+	 * Render sortings
+	 *
+	 * @return	string
+	 */
+	public function renderSortings() {
+		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
+		$sortNames = array();
+		switch ($dataGroup) {
+			case 'ACCOMODATION':
+				$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
+				$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
+				if (in_array('HOTEL', $subDataGroups)) {
+					$sortNames = array('ALPHA', 'HOTELRATING', 'PRICE');
+				} elseif (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups)) {
+					$sortNames = array('ALPHA');
+				}
+				break;
+			case 'RESTAURANT':
+				$sortNames = array('PRICE');
+				break;
+			case 'EVENT':
+				break;
+			default:
+		}
+		$data = array(
+			'sortNames' => implode(',', $sortNames),
+			'active' => $this->conf['sort.']['name'],
+		);
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj->start($data, 'Sorting');
+		$cObj->setParent($this->cObj->data, $this->cObj->currentRecord);
+
+		return $cObj->stdWrap('', $this->conf['renderConf.']['sortings.']);
+	}
 }
 
 
