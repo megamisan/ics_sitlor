@@ -15,9 +15,10 @@
 			<label index="size">Results per page (default: 20)</label>
 			<label index="what_to_display">What to display</label>
 			<label index="PIDitemDisplay">PID item display</label>
-			<label index="search">Search</label>
-			<label index="list">List</label>
-			<label index="single">Single</label>
+			<label index="what_to_display.I.search">Search</label>
+			<label index="what_to_display.I.list">List</label>
+			<label index="what_to_display.I.map">Map</label>
+			<label index="what_to_display.I.single">Single</label>
 			<label index="paramSelect">Select param</label>
 			<label index="dataGroup">Category</label>
 			<label index="dataGroup_accomodation">Accomodation</label>
@@ -85,9 +86,10 @@
 			<label index="size">Résultats par page (défaut : 20)</label>
 			<label index="what_to_display">Mode</label>
 			<label index="PIDitemDisplay">PID page détail</label>
-			<label index="search">Formulaire de recherche avec liste de résultat (SEARCH)</label>
-			<label index="list">Vue liste standard (LIST)</label>
-			<label index="single">Vue fiche détaillée (SINGLE)</label>
+			<label index="what_to_display.I.search">Formulaire de recherche avec liste de résultat (SEARCH)</label>
+			<label index="what_to_display.I.list">Vue liste standard (LIST)</label>
+			<label index="what_to_display.I.map">Vue carte standard (MAP)</label>
+			<label index="what_to_display.I.single">Vue fiche détaillée (SINGLE)</label>
 			<label index="paramSelect">Paramètre de sélection</label>
 			<label index="dataGroup">Groupe de données</label>
 			<label index="dataGroup_accomodation">Hébergement</label>

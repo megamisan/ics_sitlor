@@ -41,21 +41,25 @@
 								<type>select</type>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:search</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display.I.search</numIndex>
 										<numIndex index="1">SEARCH</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:list</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display.I.list</numIndex>
 										<numIndex index="1">LIST</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:single</numIndex>
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display.I.map</numIndex>
+										<numIndex index="1">MAP</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:what_to_display.I.single</numIndex>
 										<numIndex index="1">SINGLE</numIndex>
 									</numIndex>
 								</items>
 								<size>4</size>
 								<minitems>0</minitems>
-								<maxitems>3</maxitems>
+								<maxitems>4</maxitems>
 							</config>
 						</TCEforms>
 					</what_to_display>

@@ -1,3 +1,6 @@
+2012-04-20 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: Added switch logic for the new Map view mode and associated template and definition.
+
 2012-04-19 Pierrick Caillon <pierrick@in-cite.net>
 	* Refactor: Moved definition of default data rendering configuration setup to a Configurator class from pi1.
 	* Refactor: Moved type guessing setup as default and factory connection parameters to Configurator class from pi1.

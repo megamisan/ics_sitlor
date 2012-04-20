@@ -38,6 +38,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 /**
  * Module 'SITLOR cache' for the 'ics_sitlor_query' extension.
  *
+ * TODO: Transform to a clear cache command. And an item to the clear cache dropdown.
  * @author	In-Cite Solutions <technique@in-cite.net>
  * @package	TYPO3
  * @subpackage	tx_icssitlorquery

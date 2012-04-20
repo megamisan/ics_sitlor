@@ -140,7 +140,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				tx_icssitquery_Debug::error('Retrieves data set failed: ' . $e);
 			}
 		}
-		elseif (count(array_intersect(array('SEARCH', 'LIST'), $this->codes)) > 0) {
+		elseif (count(array_intersect(array('SEARCH', 'LIST', 'MAP'), $this->codes)) > 0) {
 			try {
 				$content .= $this->displayList();
 			} catch (Exception $e) {
@@ -473,16 +473,36 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$renderForm = t3lib_div::makeInstance('tx_icssitlorquery_FormRenderer', $this, $this->cObj, $this->conf);
 			$locMarkers['SEARCH_FORM'] = $renderForm->render();
 		}
+		else if (count(array_intersect($this->codes, array('LIST', 'MAP'))) == 2) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH_TABS###');
+			// TODO: Generate tabs.
+			// TODO: Remove inactive result view.
+			if (isset($this->piVars['viewTab'])) {
+				$this->codes = array_diff($this>codes, array($this->piVars['viewTab']));
+			}
+		}
 		else {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_NOSEARCH###');
 		}
 		if (in_array('LIST', $this->codes)) {
 			$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
-			if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('SINGLE'))) {
+			if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('LIST'))) {
 				$locMarkers['RESULT_LIST'] = $content;
 			} else {
 				$renderList = t3lib_div::makeInstance('tx_icssitlorquery_ListRenderer', $this, $this->cObj, $this->conf);
 				$content = $renderList->render($this->getElements());
+				$locMarkers['RESULT_LIST'] = $content;
+				if (!$extConf['no_cache'])
+					$this->storeCachedContent($content);
+			}
+		}
+		else if (in_array('MAP', $this->codes)) {
+			$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+			if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('MAP'))) {
+				$locMarkers['RESULT_LIST'] = $content;
+			} else {
+				$renderMap = t3lib_div::makeInstance('tx_icssitlorquery_MapRenderer', $this, $this->cObj, $this->conf);
+				$content = $renderMap->render($this->getElements(true));
 				$locMarkers['RESULT_LIST'] = $content;
 				if (!$extConf['no_cache'])
 					$this->storeCachedContent($content);
@@ -505,7 +525,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	mixed		Array of elements
 	 */
-	private function getElements() {
+	private function getElements($queryAll = false) {
 		// Set filter on OT Nancy
 		if ($this->conf['sitlor.']['OTNancy'] && $this->conf['filter.']['OTNancy']) {
 			list($code, $value) = t3lib_div::trimExplode(':', $this->conf['sitlor.']['OTNancy']);
@@ -523,13 +543,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$dataGroup = (string)strtoupper(trim($this->conf['view.']['dataGroup']));
 		switch($dataGroup) {
 			case 'ACCOMODATION':
-				return $this->getAccomodations();
+				return $this->getAccomodations($queryAll);
 			case 'RESTAURANT':
-				return $this->getRestaurants();
+				return $this->getRestaurants($queryAll);
 			case 'EVENT':
-				return $this->getEvents();
+				return $this->getEvents($queryAll);
 			case 'FREETIME':
-				return $this->getFreeTime();
+				return $this->getFreeTime($queryAll);
 			default:
 				tx_icssitquery_Debug::warning('List view datagroup ' . $dataGroup . ' is not defined.');
 		}
@@ -541,7 +561,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	mixed		Array of elements
 	 */
-	private function getAccomodations() {
+	private function getAccomodations($queryAll = false) { // TODO: Implement query ALL.
 		$subDataGroups = (string)strtoupper(trim($this->conf['filter.']['subDataGroups']));
 		$subDataGroups = $subDataGroups ? $subDataGroups : (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
@@ -625,7 +645,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	mixed		Array of elements
 	 */
-	private function getRestaurants() {
+	private function getRestaurants($queryAll = false) { // TODO: Implement query ALL.
 		$category = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESTAURANT);
 		$categoryList = t3lib_div::makeInstance('tx_icssitlorquery_CategoryList');
 		$categoryList->Add($category);
@@ -664,7 +684,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	mixed		Array of elements
 	 */
-	private function getEvents() {
+	private function getEvents($queryAll = false) { // TODO: Implement query ALL.
 		$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
 		$kinds->Add(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT));
 		$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_KindFilter', $kinds));
@@ -692,7 +712,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	mixed		Array of elements
 	 */
-	private function getFreeTime() {
+	private function getFreeTime($queryAll = false) { // TODO: Implement query ALL.
 		if ($this->conf['filter.']['freeTimeTheme']) {
 			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
