@@ -1,3 +1,6 @@
+2012-04-23 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Moved Phones properties from "full" element to element.
+
 2012-04-20 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Added switch logic for the new Map view mode and associated template and definition.
 

@@ -38,6 +38,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		'zip' => '',
 		'city' => '',
 	);
+	private $phones = null;
 
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
 	private $mobilityImpaired;
@@ -48,6 +49,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	void
 	 */
 	public function __construct() {
+		$this->phones = array();
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
@@ -60,6 +62,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'Phones':
+				return $this->phones;
 			case 'CurrentSingleClientsRate':
 				return $this->currentSingleClientsRate;
 			case 'MobilityImpaired':
@@ -90,7 +94,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('CurrentSingleClientsRate', 'mobilityImpaired');
+		return parent::getProperties() + array('Phones', 'CurrentSingleClientsRate', 'MobilityImpaired');
 	}
 
 	/**
@@ -164,6 +168,22 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
+			case 'ADRPROD_TEL':
+				array_unshift($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_TEL2':
+				array_push($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+				
 			case 'CRITERES':
 				if (!$reader->isEmptyElement)
 					$this->parseCriteria($reader);

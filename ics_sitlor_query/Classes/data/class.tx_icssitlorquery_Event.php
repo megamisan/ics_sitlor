@@ -38,6 +38,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		'zip' => '',
 		'city' => '',
 	);
+	private $phones = null;
 
 	private $typeEvent = null;
 
@@ -47,6 +48,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 * @return	void
 	 */
 	public function __construct() {
+		$this->phones = array();
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->TimeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 	}
@@ -59,6 +61,8 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'Phones':
+				return $this->phones;
 			case 'TypeEvent':
 				return $this->typeEvent;
 			default:
@@ -90,7 +94,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('TypeEvent');
+		return parent::getProperties() + array('Phones', 'TypeEvent');
 	}
 
 	/**
@@ -161,6 +165,22 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 
 			case 'ADRPROD_LIBELLE_COMMUNE' :
 				$this->tmpAddress['city'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_TEL':
+				array_unshift($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_TEL2':
+				array_push($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 

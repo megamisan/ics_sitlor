@@ -30,7 +30,6 @@
  * @subpackage	tx_icssitlorquery
  */
 class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation {
-	private $phones = null;
 	private $fax;
 	private $email;
 	private $webSite;
@@ -81,7 +80,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	public function __construct() {
 		parent::__construct();
 
-		$this->phones = array();
 		$this->providerPhones = array();
 		$this->timeTable = t3lib_div::makeInstance('tx_icssitlorquery_TimeTableList');
 		$this->receptionLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
@@ -101,8 +99,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	public function __get($name) {
 		switch ($name) {
 			//-- IDENTITY
-			case 'Phones':
-				return $this->phones;
 			case 'Fax':
 				return $this->fax;
 			case 'Email':
@@ -169,7 +165,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Phones', 'Fax', 'Email', 'WebSite', 
+		return parent::getProperties() + array('Fax', 'Email', 'WebSite', 
 			'Coordinates', 'ProviderName', 'ProviderAddress', 'ProviderPhones', 
 			'ProviderFax', 'ProviderEmail', 'ProviderWebSite', 'TimeTable', 
 			'ReceptionLanguage', 'ReservationLanguage', 'Pets', 
@@ -186,22 +182,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
 			//-- IDENTITY
-			case 'ADRPROD_TEL':
-				array_unshift($this->phones, t3lib_div::makeInstance(
-					'tx_icssitquery_Phone',
-					$reader->readString()
-				));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
-			case 'ADRPROD_TEL2':
-				array_push($this->phones, t3lib_div::makeInstance(
-					'tx_icssitquery_Phone',
-					$reader->readString()
-				));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
 			case 'ADRPROD_FAX':
 				$this->fax = t3lib_div::makeInstance(
 					'tx_icssitquery_Phone',

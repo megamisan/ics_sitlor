@@ -30,7 +30,6 @@
  * @subpackage	tx_icssitlorquery
  */
 class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
-	private $phones = null;
 	private $fax;
 	private $email;
 	private $webSite;
@@ -53,7 +52,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	public function __construct() {
 		parent::__construct();
-		$this->phones = array();
 		$this->information = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentBasePrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
@@ -67,8 +65,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	public function __get($name) {
 		switch ($name) {
 			//-- IDENTITITY
-			case 'Phones':
-				return $this->phones;
 			case 'Fax':
 				return $this->fax;
 			case 'Email':
@@ -103,7 +99,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Phones', 'Fax', 'Email', 'WebSite', 
+		return parent::getProperties() + array('Fax', 'Email', 'WebSite', 
 			'Coordinates', 'KindOfEvent', 'Information', 'Festival', 'CurrentFree', 
 			'CurrentBasePrice');
 	}
@@ -117,22 +113,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	protected function readElement(XMLReader $reader) {
 		switch ($reader->name) {
 			//-- IDENTITY
-			case 'ADRPROD_TEL':
-				array_unshift($this->phones, t3lib_div::makeInstance(
-					'tx_icssitquery_Phone',
-					$reader->readString()
-				));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
-			case 'ADRPROD_TEL2':
-				array_push($this->phones, t3lib_div::makeInstance(
-					'tx_icssitquery_Phone',
-					$reader->readString()
-				));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
 			case 'ADRPROD_FAX':
 				$this->fax = t3lib_div::makeInstance(
 					'tx_icssitquery_Phone',

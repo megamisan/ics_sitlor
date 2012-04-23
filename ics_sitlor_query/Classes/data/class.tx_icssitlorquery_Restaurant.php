@@ -38,6 +38,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 		'zip' => '',
 		'city' => '',
 	);
+	private $phones = null;
 
 	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
 	private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
@@ -48,6 +49,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	 * @return	void
 	 */
 	public function __construct() {
+		$this->phones = array();
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->ChainAndLabel = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentMenuPrice = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
@@ -62,6 +64,8 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	 */
 	public function __get($name) {
 		switch ($name) {
+			case 'Phones':
+				return $this->phones;
 			case 'CurrentMenuPrice':
 				return $this->currentMenuPrice;
 			case 'ServiceOpen':
@@ -92,7 +96,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('CurrentMenuPrice', 'ServiceOpen');
+		return parent::getProperties() + array('Phones', 'CurrentMenuPrice', 'ServiceOpen');
 	}
 
 	/**
@@ -163,6 +167,22 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 
 			case 'ADRPROD_LIBELLE_COMMUNE' :
 				$this->tmpAddress['city'] = $reader->readString();
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_TEL':
+				array_unshift($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'ADRPROD_TEL2':
+				array_push($this->phones, t3lib_div::makeInstance(
+					'tx_icssitquery_Phone',
+					$reader->readString()
+				));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
