@@ -188,7 +188,7 @@
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 				'PRICE' => $price,
-				'LABELCHAIN' => $element->LabelChain,
+				'LABELCHAIN' => $element->ChainAndLabel,
 				'SERVICE_OPEN' => isset($day)? $this->pi->renderData('openCloseDay', $day): '',
 				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
@@ -214,6 +214,9 @@
 				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
 		}
+		
+		$locMarkers['ADDRESS'] = $element->Address;
+		$locMarkers['PHONE'] = $this->pi->renderData('phones', $element->Phones);
 
 		$markers = array_merge($markers, $locMarkers);
 		return $template;

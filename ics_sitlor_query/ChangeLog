@@ -1,4 +1,5 @@
 2012-04-23 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added subscriber.
 	* Refactor: Moved Phones properties from "full" element to element.
 
 2012-04-20 Pierrick Caillon <pierrick@in-cite.net>

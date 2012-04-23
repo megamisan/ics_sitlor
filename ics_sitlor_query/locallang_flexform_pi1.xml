@@ -25,6 +25,7 @@
 			<label index="dataGroup_restaurant">Restaurant</label>
 			<label index="dataGroup_event">Event</label>
 			<label index="dataGroup_freetime">Free time</label>
+			<label index="dataGroup_subscriber">Subscriber</label>
 			<label index="subDataGroup">Subcaregory</label>
 			<label index="subDataGroup_hotel">Hotel</label>
 			<label index="subDataGroup_camping">Camping</label>
@@ -96,6 +97,7 @@
 			<label index="dataGroup_restaurant">Restaurant</label>
 			<label index="dataGroup_event">Evènement</label>
 			<label index="dataGroup_freetime">Idée temps libre</label>
+			<label index="dataGroup_subscriber">Adhérent</label>
 			<label index="subDataGroup">Sous-groupe</label>
 			<label index="subDataGroup_hotel">Hôtel</label>
 			<label index="subDataGroup_camping">Camping</label>

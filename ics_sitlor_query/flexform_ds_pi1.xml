@@ -15,15 +15,16 @@
 							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:template</label>
 						   <config>
 								<type>input</type>
+								<size>30</size>
+								<max>255</max>
 								<eval>trim</eval>
-								<default></default>
 								<wizards type="array">
 									<_PADDING>2</_PADDING>
 									<link type="array">
 										<type>popup</type>
 										<title>Link</title>
 										<icon>link_popup.gif</icon>
-										<script>browse_links.php?what_to_display=wizard&amp;act=file</script>
+										<script>browse_links.php?mode=wizard</script>
 										<params type="array">
 											<blindLinkOptions>page,url,mail,spec</blindLinkOptions>
 											<allowedExtensions>htm,html,tmpl,tpl</allowedExtensions>
@@ -120,6 +121,10 @@
 									<numIndex index="4" type="array">
 										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_freetime</numIndex>
 										<numIndex index="1">FREETIME</numIndex>
+									</numIndex>
+									<numIndex index="5" type="array">
+										<numIndex index="0">LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:dataGroup_subscriber</numIndex>
+										<numIndex index="1">SUBSCRIBER</numIndex>
 									</numIndex>
 								</items>
 								<size>1</size>

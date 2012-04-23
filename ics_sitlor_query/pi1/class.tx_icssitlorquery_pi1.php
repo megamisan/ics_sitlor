@@ -550,6 +550,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				return $this->getEvents($queryAll);
 			case 'FREETIME':
 				return $this->getFreeTime($queryAll);
+			case 'SUBSCRIBER':
+				return $this->getSubscriber($queryAll);
 			default:
 				tx_icssitquery_Debug::warning('List view datagroup ' . $dataGroup . ' is not defined.');
 		}
@@ -559,6 +561,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Retrieves Accomodations
 	 *
+	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
 	private function getAccomodations($queryAll = false) { // TODO: Implement query ALL.
@@ -643,6 +646,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Retrieves Restaurants
 	 *
+	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
 	private function getRestaurants($queryAll = false) { // TODO: Implement query ALL.
@@ -682,6 +686,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Retrieves Events
 	 *
+	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
 	private function getEvents($queryAll = false) { // TODO: Implement query ALL.
@@ -710,6 +715,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Retrieves FreeTime
 	 *
+	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
 	private function getFreeTime($queryAll = false) { // TODO: Implement query ALL.
@@ -721,6 +727,23 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		} else {
 			$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
 		}
+		switch ($this->conf['sort.']['name']) {
+			case 'ALPHA':
+				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
+				break;
+			default:
+				$sorting = null;
+		}
+		return $this->queryService->getRecords($sorting);
+	}
+	
+	/**
+	 * Retrieves Subscriber "Adhérent OT Nancy"
+	 *
+	 * @param	boolean		$queryAll
+	 * @return	mixed		Array of elements
+	 */
+	private function getSubscriber($queryAll = false) { // TODO: Implement query ALL.
 		switch ($this->conf['sort.']['name']) {
 			case 'ALPHA':
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
