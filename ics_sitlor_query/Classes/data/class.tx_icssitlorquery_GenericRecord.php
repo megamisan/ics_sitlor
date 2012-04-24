@@ -46,8 +46,8 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 	private $webSite;
 
 	private $coordinates = null;
-	private $latitude = 0;
-	private $longitude = 0;
+	private $latitude = 0.0;
+	private $longitude = 0.0;
 
 	/**
 	 * Constructor

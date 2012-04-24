@@ -56,6 +56,7 @@ class tx_icssitlorquery_NomenclatureUtils {
 	);
 	const GUESTHOUSE = 4000001;	// Category "Chambres d'hôtes"
 	const HOLLIDAY_COTTAGE = 4000005; // Category "Meublé "
+	const RESIDENCE = 4000004; // Category "Résidence "
 
 
 	/*******************************************************
@@ -71,4 +72,14 @@ class tx_icssitlorquery_NomenclatureUtils {
 	 *
 	 *******************************************************/
 	const EVENT = 4000003 ;	// Genre "A voir/ A faire"
+	
+	
+	/*******************************************************
+	 *
+	 * Subscriber
+	 *
+	 *******************************************************/
+	const ARTS_CRAFTS = 737000000;	// Category "2. Artisans" for "737000000 - OT NANCY LOCAL"
+	const COMMERCE = 737000001;			// Category "2. Commerces" for Gender "737000000 - OT NANCY LOCAL"
+	const ASSOCIATION = 737000005;		// Category "3. Associations" for Gender "737000000 - OT NANCY LOCAL"
 }

@@ -324,6 +324,32 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$freeTimeTheme = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'freeTimeThemes', 'paramSelect');
 		$this->conf['filter.']['freeTimeTheme'] = $freeTimeTheme? $freeTimeTheme: $this->conf['filter.']['freeTimeTheme'];
 
+		
+		// Select subscriber arts and crafts
+		if (isset($this->piVars['select']['subscriber_artsAndCrafts']))
+			$artsAndCrafts = $this->piVars['select']['subscriber_artsAndCrafts'];
+		if (isset($this->piVars['select']['subscriber_commerces']))
+			$commerces = $this->piVars['select']['subscriber_commerces'];
+		if (isset($this->piVars['select']['subscriber_nomenclatureCategory']))
+			$nomenclatureCategory = $this->piVars['select']['subscriber_nomenclatureCategory'];
+		
+		
+		if (!$artsAndCrafts && !$commerces && !$nomenclatureCategory) {
+			$subscriberDataArray = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subscriber_types', 'paramSelect'));
+			if ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS) {
+				$artsAndCrafts = $subscriberDataArray[2];
+			}
+			elseif ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::COMMERCE) {
+				$commerces = $subscriberDataArray[2];
+			}
+			elseif ($subscriberDataArray[0]==='NOMENCLATURE') {
+				$nomenclatureCategory = $subscriberDataArray[2];
+			}
+		}
+		
+		$this->conf['filter.']['subscriber_artsAndCrafts'] = $artsAndCrafts? $artsAndCrafts: $this->conf['filter.']['subscriber_artsAndCrafts'];
+		$this->conf['filter.']['subscriber_commerces'] = $commerces? $commerces: $this->conf['filter.']['subscriber_commerces'];
+		$this->conf['filter.']['subscriber_nomenclatureCategory'] = $nomenclatureCategory? $nomenclatureCategory: $this->conf['filter.']['subscriber_nomenclatureCategory'];
 	}
 
 	/**
@@ -721,6 +747,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	private function getFreeTime($queryAll = false) { // TODO: Implement query ALL.
 		if ($this->conf['filter.']['freeTimeTheme']) {
 			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
+			// var_dump($criterionTerms);
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
 				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 			}
@@ -744,6 +771,36 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	mixed		Array of elements
 	 */
 	private function getSubscriber($queryAll = false) { // TODO: Implement query ALL.
+		$filterConf = null;
+		if ($this->conf['filter.']['subscriber_artsAndCrafts']) {
+ 			$filter = t3lib_div::makeInstance(
+				'tx_icssitlorquery_CategoryFilter', 
+				tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::ARTS_CRAFTS))
+			);
+			$this->queryService->addFilter($filter);
+			$filterConf = $this->conf['filter.']['subscriber_artsAndCrafts'];
+		}
+		elseif ($this->conf['filter.']['subscriber_commerces']) {
+			$filter = t3lib_div::makeInstance(
+				'tx_icssitlorquery_CategoryFilter', 
+				tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::COMMERCE))
+			);
+			$this->queryService->addFilter($filter);
+			$filterConf = $this->conf['filter.']['subscriber_commerces'];
+		}
+		elseif ($this->conf['filter.']['subscriber_nomenclatureCategory']) {
+			$filter = t3lib_div::makeInstance(
+				'tx_icssitlorquery_CategoryFilter', 
+				tx_icssitlorquery_NomenclatureFactory::GetCategories(array($this->conf['filter.']['subscriber_nomenclatureCategory']))
+			);
+			$this->queryService->addFilter($filter);
+		}
+		if ($filterConf) {
+			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $filterConf, true));
+			foreach ($criterionTerms as $criterionID=>$termIDs) {
+				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
+			}
+		}
 		switch ($this->conf['sort.']['name']) {
 			case 'ALPHA':
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));

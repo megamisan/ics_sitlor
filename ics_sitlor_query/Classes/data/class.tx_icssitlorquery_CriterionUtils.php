@@ -21,7 +21,19 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
+/**
+ * [CLASS/FUNCTION INDEX of SCRIPT]
+ *
+ *
+ *
+ *   44: class tx_icssitlorquery_CriterionUtils
+ *   90:     public static function addToTupleList(tx_icssitlorquery_ValuedTermTupleList $list, tx_icssitlorquery_ValuedTerm $element, $elIndex, $searchIndex, $searchedID, $tag)
+ *  116:     public static function getCriterionFilter($criterionID, $terms=null)
+ *
+ * TOTAL FUNCTIONS: 2
+ * (This index is automatically created/updated by the extension "extdeveval")
+ *
+ */
 /**
  * Class 'tx_icssitlorquery_CriterionUtils' for the 'ics_sitlor_query' extension.
  *
@@ -174,7 +186,7 @@ class tx_icssitlorquery_CriterionUtils {
 	 *
 	 *******************************************************/
 	const COMFORT_ROOM = 736000018;
-	const WIFI = 155;	// Term of Criterion COMFORT_ROOM
+	const WIFI = 155;	// Term"// Term of Criterion COMFORT_ROOM
 	const HOTEL_EQUIPMENT = 736000019;
 	const HOTEL_SERVICE = 736000020;
 	const STRANGE_ACCOMODATION = 4000099;
@@ -226,6 +238,81 @@ class tx_icssitlorquery_CriterionUtils {
 	const FT_OUTDOOR = 737000247;
 	const FT_RAIN = 737000246;
 	const FT_WEEKEND = 737000251;
+
+
+	/*******************************************************
+	 *
+	 * Subscriber
+	 *
+	 *******************************************************/
+	const ARTS_CRAFTS = 737000002;
+	const SUBSCRIBER_JEWELS = 737000004;		// Term "Bijoux - Accessoires" of ARTS_CRAFTS
+	const SUBSCRIBER_WOOD = 737000005;			// Term "Bois" of ARTS_CRAFTS
+	const SUBSCRIBER_EMBROIDERY = 737000006;	// Term "Broderie" of ARTS_CRAFTS
+	const SUBSCRIBER_CERAMIC_FAIENCE = 737000013;	// Term "Céramique - Faïence" of ARTS_CRAFTS
+	const SUBSCRIBER_FASHION = 737000007;		// Term "Confection - Accessoires" of ARTS_CRAFTS
+	const SUBSCRIBER_GRAPHIC_CREATION = 737000229;	// Term "Création Graphique" of ARTS_CRAFTS
+	const SUBSCRIBER_CRYSTAL = 737000230;		// Term "Cristal" of ARTS_CRAFTS
+	const SUBSCRIBER_MISCELLANEAOUS = 737000016;	// Term "Divers" of ARTS_CRAFTS
+	const SUBSCRIBER_EMAIL = 737000008;		// Term "Email" of ARTS_CRAFTS
+	const SUBSCRIBER_METAL = 737000009;		// Term "Métal" of ARTS_CRAFTS
+	const SUBSCRIBER_MOSAIC = 737000015;		// Term "Mosaïque" of ARTS_CRAFTS
+	const SUBSCRIBER_PAINT = 737000010;		// Term "Peinture" of ARTS_CRAFTS
+	const SUBSCRIBER_SCULPTURE = 737000014;	// Term "Sculpture" of ARTS_CRAFTS
+	const SUBSCRIBER_GLASS = 737000011;		// Term "Verre" of ARTS_CRAFTS
+	const SUBSCRIBER_STAINED_GLASS = 737000012;	// Term "Vitrail" of ARTS_CRAFTS
+	static $artsAndCrafts = array(
+		'jewels' => self::SUBSCRIBER_JEWELS,
+		'wood' => self::SUBSCRIBER_WOOD,
+		'embroidery' => self::SUBSCRIBER_EMBROIDERY,
+		'ceramic' => self::SUBSCRIBER_CERAMIC_FAIENCE,
+		'fashion' => self::SUBSCRIBER_FASHION,
+		'graphic_creation' => self::SUBSCRIBER_GRAPHIC_CREATION,
+		'crystal' => self::SUBSCRIBER_CRYSTAL,
+		'miscellaneaous' => self::SUBSCRIBER_MISCELLANEAOUS,
+		'email' => self::SUBSCRIBER_EMAIL,
+		'metal' => self::SUBSCRIBER_METAL,
+		'mosaic' => self::SUBSCRIBER_MOSAIC,
+		'paint' => self::SUBSCRIBER_PAINT,
+		'sculpture' => self::SUBSCRIBER_SCULPTURE,
+		'glass' => self::SUBSCRIBER_GLASS,
+		'stained_glass' => self::SUBSCRIBER_STAINED_GLASS,
+	);
+	
+	const COMMERCE = 737000009;
+	const SUBSCRIBER_FOOD = 737000051;	// Alimentation
+	const SUBSCRIBER_ART_AND_CRATF = 737000052;	// Art - Création
+	const SUBSCRIBER_OTHER_COMMERCE = 737000063;	// Autres
+	const SUBSCRIBER_TOURISTIC_DRIVE = 737000053;	// Balades touristisques
+	const SUBSCRIBER_JEWELLERY = 737000054;	// Bijouterie
+	const SUBSCRIBER_COSMETIC_PARFUM = 737000232;	// Cosmétiques / Parfums
+	const SUBSCRIBER_LEARNED = 737000060;	// Culture
+	const SUBSCRIBER_FRAMING = 737000055;	// Galerie - Encadrement
+	const SUBSCRIBER_WEAR = 737000056;	// Habillement
+	const SUBSCRIBER_ACCOMODATION = 737000057;	// Hébergement
+	const SUBSCRIBER_ACTIVITIES = 737000058;	// Loisirs - Activités
+	const SUBSCRIBER_SPORTS = 737000059;	// Loisirs - Sports
+	const SUBSCRIBER_HOME_DECORATION = 737000061;	// Maison - Décoration
+	const SUBSCRIBER_SERVICES = 737000062;	// Services
+	const SUBSCRIBER_CATERER = 737000240;	// Traiteur
+	static $commerces = array(
+		'food' => self::SUBSCRIBER_FOOD,
+		'art_and_craft' => self::SUBSCRIBER_ART_AND_CRATF,
+		'other' => self::SUBSCRIBER_OTHER_COMMERCE,
+		'touristic_drive' => self::SUBSCRIBER_TOURISTIC_DRIVE,
+		'jewellery' => self::SUBSCRIBER_JEWELLERY,
+		'cosmetic_parfum' => self::SUBSCRIBER_COSMETIC_PARFUM ,
+		'learned' => self::SUBSCRIBER_LEARNED,
+		'framing' => self::SUBSCRIBER_FRAMING,
+		'wear' => self::SUBSCRIBER_WEAR,
+		'accomodation' => self::SUBSCRIBER_ACCOMODATION,
+		'activities' => self::SUBSCRIBER_ACTIVITIES,
+		'sports' => self::SUBSCRIBER_SPORTS,
+		'decoration' => self::SUBSCRIBER_HOME_DECORATION,
+		'services' => self::SUBSCRIBER_SERVICES,
+		'caterer' => self::SUBSCRIBER_CATERER,
+	);
+
 
 
 

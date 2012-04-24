@@ -114,6 +114,9 @@ class tx_icssitlorquery_dynflex {
 			case 'FREETIME':
 				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_FreeTime(), $content);
 				break;
+			case 'SUBSCRIBER':
+				$content = str_replace('<!-- ###PARAMSELECT_SPECIFIC### -->', $this->flexPartFilter_Subscriber(), $content);
+				break;
 			default:
 		}
 
@@ -331,6 +334,70 @@ class tx_icssitlorquery_dynflex {
 		);
 		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'freeTimeThemes');
 		
+		
+		return $xmlFlexPart;
+	}
+	
+	/**
+	 * Retrieves Subscriber flex part
+	 *
+	 * @return	string		XML flex part content
+	 */
+	private function flexPartFilter_Subscriber() {
+		$llang_ffds = $this->llang_ffds['pi1'];
+		$xmlFlexPart = '';
+		$flexArray = array();
+				
+		$subscriber_types = array(
+			array($llang_ffds . ':subscriber_types_anyType', ''),
+		);
+		foreach (tx_icssitlorquery_CriterionUtils::$artsAndCrafts as $key=>$artCraft) {
+			$subscriber_types[] = array(
+				$llang_ffds . ':artsAndCrafts_' . $key, 
+				'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $artCraft
+			);
+		}
+		foreach (tx_icssitlorquery_CriterionUtils::$commerces as $key=>$com) {
+			$subscriber_types[] = array(
+				$llang_ffds . ':commerces_' . $key, 
+				'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $com
+			);
+		}
+		$subscriber_types[] = array(
+				$llang_ffds . ':subscriber_typeHotel',
+				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOTEL
+		);
+		$subscriber_types[] = array(
+				$llang_ffds . ':subscriber_typeFurnishedHotel',
+				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE
+		);
+		$subscriber_types[] = array(
+				$llang_ffds . ':subscriber_typeResidence',
+				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESIDENCE
+		);
+		$subscriber_types[] = array(
+				$llang_ffds . ':subscriber_typehollidayCottage_guesthouse',
+				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE
+		);
+		$subscriber_types[] = array(
+				$llang_ffds . ':subscriber_typeRestaurant',
+				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESTAURANT
+		);
+		$subscriber_types[] = array(
+				$llang_ffds . ':subscriber_typeAssociation',
+				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::ASSOCIATION
+		);
+		
+		$flexArray['TCEforms'] = array(
+			'label' => $llang_ffds . ':subscriber_types',
+			'config' => array(
+				'type' => 'radio',
+				'items' => $subscriber_types,
+				'minitems' => '0',
+				'maxitems' => '1',
+			),
+		);
+		$xmlFlexPart .= t3lib_div::array2xml($flexArray, '', 0, 'subscriber_types');
 		
 		return $xmlFlexPart;
 	}
