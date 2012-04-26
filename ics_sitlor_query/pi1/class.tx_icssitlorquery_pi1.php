@@ -326,30 +326,28 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		
 		// Select subscriber arts and crafts
-		if (isset($this->piVars['select']['subscriber_artsAndCrafts']))
-			$artsAndCrafts = $this->piVars['select']['subscriber_artsAndCrafts'];
-		if (isset($this->piVars['select']['subscriber_commerces']))
-			$commerces = $this->piVars['select']['subscriber_commerces'];
-		if (isset($this->piVars['select']['subscriber_nomenclatureCategory']))
-			$nomenclatureCategory = $this->piVars['select']['subscriber_nomenclatureCategory'];
+		if (isset($this->piVars['select']['subscriber_type'])) {
 		
-		
-		if (!$artsAndCrafts && !$commerces && !$nomenclatureCategory) {
+			$subscriberDataArray = t3lib_div::trimExplode(',', $this->piVars['select']['subscriber_type'], true);
+		}
+		if (!$subscriberDataArray) {
 			$subscriberDataArray = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subscriber_types', 'paramSelect'));
-			if ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS) {
-				$artsAndCrafts = $subscriberDataArray[2];
-			}
-			elseif ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::COMMERCE) {
-				$commerces = $subscriberDataArray[2];
-			}
-			elseif ($subscriberDataArray[0]==='NOMENCLATURE') {
-				$nomenclatureCategory = $subscriberDataArray[2];
-			}
+		}
+		if ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS) {
+			$subscriber_typeCategory = 'ARTS_CRAFTS';
+			$subscriber_typeValue = $subscriberDataArray[2];
+		}
+		elseif ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::COMMERCE) {
+			$subscriber_typeCategory = 'COMMERCE';
+			$subscriber_typeValue = $subscriberDataArray[2];
+		}
+		elseif ($subscriberDataArray[0]==='NOMENCLATURE') {
+			$subscriber_typeCategory = 'NOMENCLATURE_CATEGORY';
+			$subscriber_typeValue = $subscriberDataArray[2];
 		}
 		
-		$this->conf['filter.']['subscriber_artsAndCrafts'] = $artsAndCrafts? $artsAndCrafts: $this->conf['filter.']['subscriber_artsAndCrafts'];
-		$this->conf['filter.']['subscriber_commerces'] = $commerces? $commerces: $this->conf['filter.']['subscriber_commerces'];
-		$this->conf['filter.']['subscriber_nomenclatureCategory'] = $nomenclatureCategory? $nomenclatureCategory: $this->conf['filter.']['subscriber_nomenclatureCategory'];
+		$this->conf['filter.']['subscriber_type.']['category'] = $subscriber_typeCategory? $subscriber_typeCategory: $this->conf['filter.']['subscriber_type.']['category'];
+		$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_typeValue? $subscriber_typeValue: $this->conf['filter.']['subscriber_type.']['value'];
 	}
 
 	/**
@@ -771,32 +769,32 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	mixed		Array of elements
 	 */
 	private function getSubscriber($queryAll = false) { // TODO: Implement query ALL.
-		$filterConf = null;
-		if ($this->conf['filter.']['subscriber_artsAndCrafts']) {
+		$criterionFilter = null;
+		if ($this->conf['filter.']['subscriber_type.']['category']=='ARTS_CRAFTS') {
  			$filter = t3lib_div::makeInstance(
 				'tx_icssitlorquery_CategoryFilter', 
 				tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::ARTS_CRAFTS))
 			);
 			$this->queryService->addFilter($filter);
-			$filterConf = $this->conf['filter.']['subscriber_artsAndCrafts'];
+			$criterionFilter = $this->conf['filter.']['subscriber_type.']['value'];
 		}
-		elseif ($this->conf['filter.']['subscriber_commerces']) {
+		elseif ($this->conf['filter.']['subscriber_type.']['category']=='COMMERCE') {
 			$filter = t3lib_div::makeInstance(
 				'tx_icssitlorquery_CategoryFilter', 
 				tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::COMMERCE))
 			);
 			$this->queryService->addFilter($filter);
-			$filterConf = $this->conf['filter.']['subscriber_commerces'];
+			$criterionFilter = $this->conf['filter.']['subscriber_type.']['value'];
 		}
-		elseif ($this->conf['filter.']['subscriber_nomenclatureCategory']) {
+		elseif ($this->conf['filter.']['subscriber_type.']['category']=='NOMENCLATURE_CATEGORY') {
 			$filter = t3lib_div::makeInstance(
 				'tx_icssitlorquery_CategoryFilter', 
-				tx_icssitlorquery_NomenclatureFactory::GetCategories(array($this->conf['filter.']['subscriber_nomenclatureCategory']))
+				tx_icssitlorquery_NomenclatureFactory::GetCategories(array($this->conf['filter.']['subscriber_type.']['value']))
 			);
 			$this->queryService->addFilter($filter);
 		}
-		if ($filterConf) {
-			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $filterConf, true));
+		if ($criterionFilter) {
+			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $criterionFilter, true));
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
 				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 			}

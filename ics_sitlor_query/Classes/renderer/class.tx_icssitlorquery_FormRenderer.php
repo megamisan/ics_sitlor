@@ -60,6 +60,10 @@
 	private static $foreignFood = array();
 	private static $hotelEquipment = array();
 	private static $dayOfWeek = array(1,2,3,4,5,6,7);	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
+	
+	private static $subscriber_types_artsAndCrafts = array();
+	private static $subscriber_types_commerce = array();
+	private static $subscriber_types_other = array();
 
 	/**
 	 * Constructor
@@ -76,6 +80,7 @@
 		$this->prefixId = $pi->prefixId;
 		$this->templateCode = $pi->templateCode;
 		$this->search = $pi->piVars['search'];
+		$this->select = $pi->piVars['select'];
 
 		$this->setDataForm();
 	}
@@ -145,6 +150,26 @@
 			),
 		);
 
+		
+		self::$subscriber_types_artsAndCrafts = array();
+		foreach (tx_icssitlorquery_CriterionUtils::$artsAndCrafts as $label=>$artCraft) {
+			self::$subscriber_types_artsAndCrafts['artsAndCrafts_'.$label] = 'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $artCraft;
+		}
+		
+		self::$subscriber_types_commerce = array();
+		foreach (tx_icssitlorquery_CriterionUtils::$commerces as $label=>$commerce) {
+			self::$subscriber_types_commerce['commerces_'.$label] = 'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $commerce;
+		}
+		
+		self::$subscriber_types_other = array(
+			'subscriber_typeHotel' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOTEL,
+			'subscriber_typeFurnishedHotel' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
+			'subscriber_typeResidence' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESIDENCE,
+			'subscriber_typehollidayCottage_guesthouse' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
+			'subscriber_typeRestaurant' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESTAURANT,
+			'subscriber_typeAssociation' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::ASSOCIATION,
+		);
+		
 	}
 
 	/**
@@ -223,6 +248,9 @@
 				break;
 			case 'EVENT':
 				$template = $this->renderSpecific_Event($markers);
+				break;
+			case 'SUBSCRIBER':
+				$template = $this->renderSpecific_Subscriber($markers);
 				break;
 			default:
 				$template = '';
@@ -347,6 +375,48 @@
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_EVENT###');
 	}
 
+	/**
+	 * Render Subscribers search form specific
+	 *
+	 * @param	array&		$markers: Markers array
+	 * @return	string	HTML content
+	 */
+	function renderSpecific_Subscriber(&$markers) {
+		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_SUBSCRIBER###');
+		$locMarckers = array(
+			'ANY_TYPE' => $this->renderSpecific_Subscriber_types(array('subscriber_types_anyType' => '')),
+			'ARTS_CRAFTS_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_artsAndCrafts),
+			'COMMERCE_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_commerce),
+			'OTHER_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_other),
+			'CATEGORY_ANY' => $this->pi->pi_getLL('subscriber_category_any', 'Any type', true),
+			'CATEGORY_ARTS_CRAFTS' => $this->pi->pi_getLL('subscriber_category_artsAndCrafts', 'Arts and cratfs', true),
+			'CATEGORY_COMMERCE' => $this->pi->pi_getLL('subscriber_category_commerce', 'Commerce', true),
+			'CATEGORY_OTHER' => $this->pi->pi_getLL('subscriber_category_other', 'Other category', true),
+		);
+		return $this->cObj->substituteMarkerArray($template, $locMarckers, '###|###');
+	}
+	
+	/**
+	 *
+	 *
+	 * @param	array	$types: Array of subscribers types
+	 *
+	 * @return	string	HTML content
+	 */
+	function renderSpecific_Subscriber_types(array $types) {
+		$itemTemplate = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_SUBSCRIBER_TYPE###');
+		foreach ($types as $label=>$type) {
+			$uniqId =  uniqid();
+			$locMarckers = array(
+				'UNIQID' => $uniqId,
+				'SUBSCRIBER_TYPE_VALUE' => $type,
+				'CHECKED' => ($this->select['subscriber_type']==$type)? 'checked="checked"': '',
+				'SUBSCRIBER_TYPE_LABEL' => $this->pi->pi_getLL($label, 'Subscriber type ' . $label, true),
+			);
+			$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarckers, '###|###');
+		}
+		return $itemContent;
+	}
 
 	/**
 	 * Render search form more

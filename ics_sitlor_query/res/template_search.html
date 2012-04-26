@@ -178,5 +178,37 @@
 	</div>
 <!-- ###TEMPLATE_FORM_MORE_EVENT### end-->
 
+
+
+<!-- ###TEMPLATE_FORM_SUBSCRIBER### start-->
+	<fieldset class="search_subscriber_category" title="###CATEGORY_ANY###">
+		<h3>###CATEGORY_ANY###</h3>
+		###ANY_TYPE###
+	</fieldset>
+	<fieldset class="search_subscriber_category" title="###CATEGORY_ARTS_CRAFTS###">
+		<h3>###CATEGORY_ARTS_CRAFTS###</h3>
+		###ARTS_CRAFTS_TYPE###
+	</fieldset>
+	<fieldset class="search_subscriber_category" title="###CATEGORY_COMMERCE###">
+		<h3>###CATEGORY_COMMERCE###</h3>
+		###COMMERCE_TYPE###
+	</fieldset>
+	<fieldset class="search_subscriber_category" title="###CATEGORY_OTHER###">
+		<h3>###CATEGORY_OTHER###</h3>
+		###OTHER_TYPE###
+	</fieldset>
+	<div class="button">
+		<input type="submit"  name="###PREFIXID###[btn_subscriber_type]" value="###SEARCH###" />
+	</div>
+<!-- ###TEMPLATE_FORM_SUBSCRIBER### end-->
+
+
+<!-- ###TEMPLATE_FORM_SUBSCRIBER_TYPE### start-->
+	<p>
+		<input type="radio" name="###PREFIXID###[select][subscriber_type]" id="subscriber_type###UNIQID###" value="###SUBSCRIBER_TYPE_VALUE###" ###CHECKED### />
+		<label for="subscriber_type###UNIQID###">###SUBSCRIBER_TYPE_LABEL###</label>
+	</p>
+<!-- ###TEMPLATE_FORM_SUBSCRIBER_TYPE### end-->
+
 </body>
 </html>

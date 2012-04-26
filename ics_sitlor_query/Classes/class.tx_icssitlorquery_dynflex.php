@@ -364,28 +364,28 @@ class tx_icssitlorquery_dynflex {
 			);
 		}
 		$subscriber_types[] = array(
-				$llang_ffds . ':subscriber_typeHotel',
-				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOTEL
+			$llang_ffds . ':subscriber_typeHotel',
+			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOTEL
 		);
 		$subscriber_types[] = array(
-				$llang_ffds . ':subscriber_typeFurnishedHotel',
-				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE
+			$llang_ffds . ':subscriber_typeFurnishedHotel',
+			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE
 		);
 		$subscriber_types[] = array(
-				$llang_ffds . ':subscriber_typeResidence',
-				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESIDENCE
+			$llang_ffds . ':subscriber_typeResidence',
+			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESIDENCE
 		);
 		$subscriber_types[] = array(
-				$llang_ffds . ':subscriber_typehollidayCottage_guesthouse',
-				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE
+			$llang_ffds . ':subscriber_typehollidayCottage_guesthouse',
+			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE
 		);
 		$subscriber_types[] = array(
-				$llang_ffds . ':subscriber_typeRestaurant',
-				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESTAURANT
+			$llang_ffds . ':subscriber_typeRestaurant',
+			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESTAURANT
 		);
 		$subscriber_types[] = array(
-				$llang_ffds . ':subscriber_typeAssociation',
-				'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::ASSOCIATION
+			$llang_ffds . ':subscriber_typeAssociation',
+			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::ASSOCIATION
 		);
 		
 		$flexArray['TCEforms'] = array(
