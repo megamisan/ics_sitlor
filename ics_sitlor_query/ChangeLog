@@ -1,3 +1,8 @@
+2012-04-27 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Harmonised form input name
+	* Fix: Forgotten subscriber categories locallang
+	* Fix: Retrieved criterion on LEI
+
 2012-04-26 Tsi Yang <tsi@in-cite.net>
 	* Feature: Added subscriber form. Implemented select on subscriber type.
 

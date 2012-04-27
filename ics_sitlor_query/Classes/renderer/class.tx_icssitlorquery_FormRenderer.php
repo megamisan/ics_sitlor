@@ -79,8 +79,8 @@
 		$this->conf = $lConf;
 		$this->prefixId = $pi->prefixId;
 		$this->templateCode = $pi->templateCode;
-		$this->search = $pi->piVars['search'];
-		$this->select = $pi->piVars['select'];
+		$this->search = $pi->FormFilter;
+		$this->sword = $pi->sword;
 
 		$this->setDataForm();
 	}
@@ -225,7 +225,7 @@
 	 */
 	private function renderGeneric(&$markers) {
 		$markers['KEYWORD_LABEL'] = $this->pi->pi_getLL('keyword', 'Keyword', true);
-		$markers['KEYWORD_VALUE'] = $this->search['sword']? $this->search['sword']: $this->pi->pi_getLL('keyword', 'Search', true);
+		$markers['KEYWORD_VALUE'] = $this->sword? $this->sword: $this->pi->pi_getLL('keyword', 'Search', true);
 		$markers['SEARCH'] = $this->pi->pi_getLL('search', 'Search', true);
 		return $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_GENERIC###');
 	}
@@ -410,8 +410,8 @@
 			$locMarckers = array(
 				'UNIQID' => $uniqId,
 				'SUBSCRIBER_TYPE_VALUE' => $type,
-				'CHECKED' => ($this->select['subscriber_type']==$type)? 'checked="checked"': '',
-				'SUBSCRIBER_TYPE_LABEL' => $this->pi->pi_getLL($label, 'Subscriber type ' . $label, true),
+				'CHECKED' => ($this->search['subscriber_type']==$type)? 'checked="checked"': '',
+				'SUBSCRIBER_TYPE_LABEL' => $this->pi->pi_getLL($label, $label, true),
 			);
 			$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarckers, '###|###');
 		}

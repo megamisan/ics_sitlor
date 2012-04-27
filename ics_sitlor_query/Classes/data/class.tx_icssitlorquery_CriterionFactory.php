@@ -61,7 +61,6 @@ class tx_icssitlorquery_CriterionFactory {
 	private static $hash;
 	private static $cacheInstance;
 	
-
 	/**
 	 * Fetch values
 	 *
@@ -71,6 +70,7 @@ class tx_icssitlorquery_CriterionFactory {
 		$params = array(
 			'user' => utf8_decode(self::$login),
 			'pwkey' => utf8_decode(self::$password),
+			'SCHEMA' => 'LEI',
 		);
 		$url = self::$url . '?' . http_build_query($params);
 		t3lib_div::devLog('Url criterion', 'ics_sitlor_query', 0, array(urldecode($url)));

@@ -326,28 +326,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		
 		// Select subscriber arts and crafts
-		if (isset($this->piVars['select']['subscriber_type'])) {
+		$subscriberDataArray = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subscriber_types', 'paramSelect'));
 		
-			$subscriberDataArray = t3lib_div::trimExplode(',', $this->piVars['select']['subscriber_type'], true);
-		}
-		if (!$subscriberDataArray) {
-			$subscriberDataArray = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subscriber_types', 'paramSelect'));
-		}
-		if ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS) {
-			$subscriber_typeCategory = 'ARTS_CRAFTS';
-			$subscriber_typeValue = $subscriberDataArray[2];
-		}
-		elseif ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::COMMERCE) {
-			$subscriber_typeCategory = 'COMMERCE';
-			$subscriber_typeValue = $subscriberDataArray[2];
-		}
-		elseif ($subscriberDataArray[0]==='NOMENCLATURE') {
-			$subscriber_typeCategory = 'NOMENCLATURE_CATEGORY';
-			$subscriber_typeValue = $subscriberDataArray[2];
-		}
+		$subscriber_type = $this->getSubscriberFilter($subscriberDataArray);
+		$subscriber_typeCategory = $subscriber_type[0];
+		$subscriber_typeValue = $subscriber_type[1];
 		
 		$this->conf['filter.']['subscriber_type.']['category'] = $subscriber_typeCategory? $subscriber_typeCategory: $this->conf['filter.']['subscriber_type.']['category'];
-		$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_typeValue? $subscriber_typeValue: $this->conf['filter.']['subscriber_type.']['value'];
+		$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_typeValue? $subscriber_typeValue: $this->conf['filter.']['subscriber_type.']['value'];	
+
 	}
 
 	/**
@@ -410,23 +397,78 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->sword = '';
 		if ($this->piVars['btn_sword'])
 			$this->sword = $params['sword'];
-		
-		$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
-		$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
-		$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
-		$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
-
-		if ($params['startDate'])
-			$this->conf['filter.']['startDate'] = $params['startDate'];
-		if ($params['endDate'])
-			$this->conf['filter.']['endDate'] = $params['endDate'];
-
-		$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
-
-		if (is_array($params['subDataGroups']) && !empty($params['subDataGroups'])) {
-			$this->conf['filter.']['subDataGroups'] = implode(',', $params['subDataGroups']);
+			
+		$this->FormFilter = array();
+		if ($this->piVars['btn_hotelType']) {
+			$this->FormFilter['hotelType'] = $params['hotelType'];
+			$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
+		}
+		if ($this->piVars['btn_hotelEquipment']) {
+			$this->FormFilter['hotelEquipment'] = $params['hotelEquipment'];
+			$this->conf['filter.']['hotelEquipments'] = implode(',', $params['hotelEquipment']);
+		}
+		if ($this->piVars['btn_restaurantCategory']) {
+			$this->FormFilter['restaurantCategory'] = $params['restaurantCategory'];
+			$this->conf['filter.']['restaurantCategories'] = implode(',', $params['restaurantCategory']);
+		}
+		if ($this->piVars['btn_restaurantSpeciality']) {
+			$this->FormFilter['culinarySpeciality'] = $params['culinarySpeciality'];
+			$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
+		}
+		if ($this->piVars['btn_eventDate']) {
+			$this->FormFilter['startDate'] = $params['startDate'];
+			$this->FormFilter['endDate'] = $params['endDate'];
+			if ($params['startDate'])
+				$this->conf['filter.']['startDate'] = $params['startDate'];
+			if ($params['endDate'])
+				$this->conf['filter.']['endDate'] = $params['endDate'];			
+		}
+		if ($this->piVars['btn_noFee']) {
+			$this->FormFilter['noFee'] = $params['noFee'];
+			$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
 		}
 
+		if ($this->piVars['btn_subDataGroup']) {
+			$this->FormFilter['subDataGroups'] = $params['subDataGroups'];
+			if (is_array($params['subDataGroups']) && !empty($params['subDataGroups'])) {
+				$this->conf['filter.']['subDataGroups'] = implode(',', $params['subDataGroups']);
+			}
+		}
+		
+		if ($this->piVars['btn_subscriber_type']) {
+			$this->FormFilter['subscriber_type'] = $params['subscriber_type'];
+			$subscriberDataArray = t3lib_div::trimExplode(',', $this->piVars['search']['subscriber_type'], true);
+			$subscriber_type = $this->getSubscriberFilter($subscriberDataArray);
+			$this->conf['filter.']['subscriber_type.']['category'] = $subscriber_type[0];
+			$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_type[1];	
+		}
+
+	}
+	
+	/**
+	 * Retrieves subscriber filter
+	 *
+	 * @param	array	$subscriberDataArray
+	 * @return	mixed	Subscriber type
+	 */
+	private function getSubscriberFilter(array $subscriberDataArray) {
+		$subscriber_type = null;
+		if ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS) {
+			$subscriber_typeCategory = 'ARTS_CRAFTS';
+			$subscriber_typeValue = $subscriberDataArray[2];
+			$subscriber_type = array($subscriber_typeCategory, $subscriber_typeValue);
+		}
+		elseif ($subscriberDataArray[0]==='CRITERION' && $subscriberDataArray[1]==tx_icssitlorquery_CriterionUtils::COMMERCE) {
+			$subscriber_typeCategory = 'COMMERCE';
+			$subscriber_typeValue = $subscriberDataArray[2];
+			$subscriber_type = array($subscriber_typeCategory, $subscriber_typeValue);
+		}
+		elseif ($subscriberDataArray[0]==='NOMENCLATURE') {
+			$subscriber_typeCategory = 'NOMENCLATURE_CATEGORY';
+			$subscriber_typeValue = $subscriberDataArray[2];
+			$subscriber_type = array($subscriber_typeCategory, $subscriber_typeValue);
+		}
+		return $subscriber_type;
 	}
 
 	/**
@@ -745,7 +787,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	private function getFreeTime($queryAll = false) { // TODO: Implement query ALL.
 		if ($this->conf['filter.']['freeTimeTheme']) {
 			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
-			// var_dump($criterionTerms);
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
 				$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter($criterionID, $termIDs));
 			}

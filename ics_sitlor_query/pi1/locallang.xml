@@ -127,6 +127,10 @@
 			<label index="subscriber_typehollidayCottage_guesthouse">Holliday cottage and guesthouse</label>
 			<label index="subscriber_typeRestaurant">Restaurant</label>
 			<label index="subscriber_typeAssociation">Association</label>
+			<label index="subscriber_category_any">Any type</label>
+			<label index="subscriber_category_artsAndCrafts">Arts and cratfs</label>
+			<label index="subscriber_category_commerce">Commerce</label>
+			<label index="subscriber_category_other">Other category</label>
 		</languageKey>
 		<languageKey index="default" type="array">
 			<label index="data_not_available">Paramètres de service invalides.</label>
@@ -250,6 +254,10 @@
 			<label index="subscriber_typehollidayCottage_guesthouse">Gîtes et chambres d'hôtes</label>
 			<label index="subscriber_typeRestaurant">Restaurant</label>
 			<label index="subscriber_typeAssociation">Association</label>
+			<label index="subscriber_category_any">Aucun type</label>
+			<label index="subscriber_category_artsAndCrafts">Arts-Artisanat / Loisirs créatifs</label>
+			<label index="subscriber_category_commerce">Commerces</label>
+			<label index="subscriber_category_other">Autres</label>
        </languageKey>
 	</data>
 </T3locallang>
