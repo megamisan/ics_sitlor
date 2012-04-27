@@ -67,8 +67,15 @@ class tx_icssitlorquery_SingleRenderer {
 		$markers = array();
 		$locMarkers['GENERIC'] = $this->renderGeneric($element, $markers);
 		$locMarkers['SPECIFIC'] = $this->renderSpecific($element, $markers);
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->pi->extKey]['singleRenderer'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->pi->extKey]['singleRenderer'] as $class) {
+				$procObj = & t3lib_div::getUserObj($class);
+				$procObj->singleRenderer($element->ID, $locMarkers, $this->conf, $this->pi, $this);
+			}
+		}
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
 		$template = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
+
 
 		$markers = array(
 			'PREFIXID' => $this->prefixId,

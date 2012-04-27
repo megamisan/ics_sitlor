@@ -1,4 +1,5 @@
 2012-04-27 Tsi Yang <tsi@in-cite.net>
+	* Feature; Added hook on single renderer
 	* Refactor: Harmonised form input name
 	* Fix: Forgotten subscriber categories locallang
 	* Fix: Retrieved criterion on LEI
