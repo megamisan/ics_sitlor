@@ -43,6 +43,10 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	private $currentMenuPrice;				// tx_icssitlorquery_ValuedTermList
 	private $serviceOpen;			// tx_icssitlorquery_ValuedTermList
 
+	private $coordinates = null;
+	private $latitude = 0;
+	private $longitude = 0;
+
 	/**
 	 * Initializes the restaurant.
 	 *
@@ -70,6 +74,10 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 				return $this->currentMenuPrice;
 			case 'ServiceOpen':
 				return $this->serviceOpen;
+
+			//-- COORDINATES
+			case 'Coordinates':
+				return $this->coordinates;
 			default:
 				return parent::__get($name);
 		}
@@ -96,7 +104,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Phones', 'CurrentMenuPrice', 'ServiceOpen');
+		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentMenuPrice', 'ServiceOpen');
 	}
 
 	/**
@@ -183,6 +191,17 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			//-- COORDINATES
+			case 'LATITUDE':
+				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'LONGITUDE':
+				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -273,6 +292,7 @@ class tx_icssitlorquery_Restaurant extends tx_icssitquery_AbstractRestaurant {
 			$this->tmpAddress['zip'],
 			$this->tmpAddress['city']
 		);
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 	}
 
 	/**

@@ -36,7 +36,8 @@
             <label index="startDate">Start date</label>
             <label index="endDate">End date</label>
             <label index="noFee">No fee</label>
-            <label index="empty_list">Empty list</label>
+            <label index="empty_list">There is no item to display.</label>
+            <label index="empty_map">There is no item to display or no item can be placed on the map.</label>
             <label index="noPrice">No price</label>
             <label index="price">Price</label>
             <label index="noDate">No date</label>
@@ -131,6 +132,8 @@
 			<label index="subscriber_category_artsAndCrafts">Arts and cratfs</label>
 			<label index="subscriber_category_commerce">Commerce</label>
 			<label index="subscriber_category_other">Other category</label>
+			<label index="results_list">Results</label>
+			<label index="results_map">Map</label>
 		</languageKey>
 		<languageKey index="default" type="array">
 			<label index="data_not_available">Paramètres de service invalides.</label>
@@ -163,7 +166,8 @@
             <label index="startDate">Date de début</label>
             <label index="endDate">Date de fin</label>
             <label index="noFee">Evènements gratuits</label>
-            <label index="empty_list">Aucun résultats</label>
+            <label index="empty_list">Il n'y a pas de résultat.</label>
+            <label index="empty_map">Il n'y a pas de résultat ou aucun résultat ne peut être placé sur la carte.</label>
             <label index="noPrice">N.C.</label>
             <label index="price">Tarif</label>
             <label index="noDate">N.C.</label>
@@ -258,6 +262,8 @@
 			<label index="subscriber_category_artsAndCrafts">Arts-Artisanat / Loisirs créatifs</label>
 			<label index="subscriber_category_commerce">Commerces</label>
 			<label index="subscriber_category_other">Autres</label>
-       </languageKey>
+ 			<label index="results_list">Résultats</label>
+			<label index="results_map">Carte</label>
+      </languageKey>
 	</data>
 </T3locallang>

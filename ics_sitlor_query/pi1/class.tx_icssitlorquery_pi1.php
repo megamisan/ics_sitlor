@@ -230,6 +230,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->conf['PIDitemDisplay'] = $PIDitemDisplay;
 		if (!$this->conf['PIDitemDisplay'])
 			$this->conf['PIDitemDisplay'] = $GLOBALS['TSFE']->id;
+
+		$mapControl = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'map_control', 'main');
+		if (!empty($mapControl))
+			$this->conf['view.']['map_control'] = $mapControl;
+
+		$dataKey = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'map_control_datakey', 'main');
+		if (!empty($mapControl))
+			$this->conf['view.']['map_control.']['datakey'] = $dataKey;
 	}
 
 	/**
@@ -534,21 +542,46 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @return	string		HTML content for list view and search form.
 	 */
 	private function displayList() {
-		if (in_array('SEARCH', $this->codes)) {
-			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH###');
-			$renderForm = t3lib_div::makeInstance('tx_icssitlorquery_FormRenderer', $this, $this->cObj, $this->conf);
-			$locMarkers['SEARCH_FORM'] = $renderForm->render();
-		}
-		else if (count(array_intersect($this->codes, array('LIST', 'MAP'))) == 2) {
-			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH_TABS###');
-			// TODO: Generate tabs.
-			// TODO: Remove inactive result view.
-			if (isset($this->piVars['viewTab'])) {
-				$this->codes = array_diff($this>codes, array($this->piVars['viewTab']));
+		$resultModes = array('LIST', 'MAP');
+		$resultTabs = array_map('strtolower', $resultModes);
+		if (count(array_intersect($this->codes, $resultModes)) == 2) {
+			$template = $this->cObj->getSubpart($this->templateCode, in_array('SEARCH', $this->codes) ? '###TEMPLATE_SEARCH_TABS###' : '###TEMPLATE_NOSEARCH_TABS###');
+			$tabTemplate = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_TAB###');
+			$tabs = '';
+			foreach ($resultTabs as $tab) {
+				$markers = array(
+					'TAB_ADDCLASS' => 'tab-' . $tab . ((($this->piVars['viewTab'] == strtoupper($tab)) || (!isset($this->piVars['viewTab']) && ($tab == 'list'))) ? ' current' : ''),
+					'TAB_LINK' => htmlspecialchars($this->cObj->typoLink_URL(array(
+						'parameter.' => array('data' => 'tsfe:id'),
+						'additionalParams' => t3lib_div::implodeArrayForUrl(
+							$this->prefixId,
+							array_merge(
+								$this->piVars,
+								array(
+									'viewTab' => strtoupper($tab),
+								)
+							)
+						),
+					))),
+					'TAB_LABEL' => $this->pi_getLL('results_' . $tab)
+				);
+				$tabs .= $this->cObj->substituteMarkerArray($tabTemplate, $markers, '###|###');
 			}
+			$locMarkers['RESULT_TABS'] = $tabs;
+			if (isset($this->piVars['viewTab'])) {
+				$this->codes = array_diff($this->codes, array_diff($resultModes, array($this->piVars['viewTab'])));
+			}
+		}
+		else if (in_array('SEARCH', $this->codes)) {
+			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH###');
 		}
 		else {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_NOSEARCH###');
+		}
+		if (in_array('SEARCH', $this->codes)) {
+			$renderForm = t3lib_div::makeInstance('tx_icssitlorquery_FormRenderer', $this, $this->cObj, $this->conf);
+			$renderForm->addViewTab = isset($locMarkers['RESULT_TABS']);
+			$locMarkers['SEARCH_FORM'] = $renderForm->render();
 		}
 		if (in_array('LIST', $this->codes)) {
 			$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
@@ -564,15 +597,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		else if (in_array('MAP', $this->codes)) {
 			$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
-			if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('MAP'))) {
-				$locMarkers['RESULT_LIST'] = $content;
+			if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('MAP'))) { // HTML could not be cached as the rendering is not really controlled.
+				$elements = unserialize($content);
 			} else {
-				$renderMap = t3lib_div::makeInstance('tx_icssitlorquery_MapRenderer', $this, $this->cObj, $this->conf);
-				$content = $renderMap->render($this->getElements(true));
-				$locMarkers['RESULT_LIST'] = $content;
+				$elements = $this->getElements(true);
 				if (!$extConf['no_cache'])
-					$this->storeCachedContent($content);
+					$this->storeCachedContent(serialize($elements));
 			}
+			$renderMap = t3lib_div::makeInstance('tx_icssitlorquery_MapRenderer', $this, $this->cObj, $this->conf);
+			$content = $renderMap->render($elements);
+			$locMarkers['RESULT_LIST'] = $content;
 		}
 		else {
 			$locMarkers['RESULT_LIST'] = '';
@@ -630,7 +664,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
-	private function getAccomodations($queryAll = false) { // TODO: Implement query ALL.
+	private function getAccomodations($queryAll = false) {
 		$subDataGroups = (string)strtoupper(trim($this->conf['filter.']['subDataGroups']));
 		$subDataGroups = $subDataGroups ? $subDataGroups : (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 		$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
@@ -706,6 +740,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				$sorting = null;
 		}
 
+		if ($queryAll) {
+			$result = $this->queryService->getAccomodations($sorting);
+			if ($result) {
+				$this->queryService->setPager(0, $this->queryService->getLastTotalCount());
+			}
+			else {
+				return $result;
+			}
+		}
 		return $this->queryService->getAccomodations($sorting);
 	}
 
@@ -715,7 +758,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
-	private function getRestaurants($queryAll = false) { // TODO: Implement query ALL.
+	private function getRestaurants($queryAll = false) {
 		$category = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESTAURANT);
 		$categoryList = t3lib_div::makeInstance('tx_icssitlorquery_CategoryList');
 		$categoryList->Add($category);
@@ -746,6 +789,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			default:
 				$sorting = null;
 		}
+
+		if ($queryAll) {
+			$result = $this->queryService->getRestaurants($sorting);
+			if ($result) {
+				$this->queryService->setPager(0, $this->queryService->getLastTotalCount());
+			}
+			else {
+				return $result;
+			}
+		}
 		return $this->queryService->getRestaurants($sorting);
 	}
 
@@ -755,7 +808,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
-	private function getEvents($queryAll = false) { // TODO: Implement query ALL.
+	private function getEvents($queryAll = false) {
 		$kinds = t3lib_div::makeInstance('tx_icssitlorquery_KindList');
 		$kinds->Add(tx_icssitlorquery_NomenclatureFactory::GetKind(tx_icssitlorquery_NomenclatureUtils::EVENT));
 		$this->queryService->addFilter(t3lib_div::makeInstance('tx_icssitlorquery_KindFilter', $kinds));
@@ -775,6 +828,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			default:
 				$sorting = null;
 		}
+
+		if ($queryAll) {
+			$result = $this->queryService->getEvents($sorting);
+			if ($result) {
+				$this->queryService->setPager(0, $this->queryService->getLastTotalCount());
+			}
+			else {
+				return $result;
+			}
+		}
 		return $this->queryService->getEvents($sorting);
 	}
 
@@ -784,7 +847,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
-	private function getFreeTime($queryAll = false) { // TODO: Implement query ALL.
+	private function getFreeTime($queryAll = false) {
 		if ($this->conf['filter.']['freeTimeTheme']) {
 			$criterionTerms = $this->parseCriterionsTermsDefinition(t3lib_div::trimExplode(',', $this->conf['filter.']['freeTimeTheme'], true));
 			foreach ($criterionTerms as $criterionID=>$termIDs) {
@@ -800,6 +863,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			default:
 				$sorting = null;
 		}
+
+		if ($queryAll) {
+			$result = $this->queryService->getRecords($sorting);
+			if ($result) {
+				$this->queryService->setPager(0, $this->queryService->getLastTotalCount());
+			}
+			else {
+				return $result;
+			}
+		}
 		return $this->queryService->getRecords($sorting);
 	}
 	
@@ -809,7 +882,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
 	 */
-	private function getSubscriber($queryAll = false) { // TODO: Implement query ALL.
+	private function getSubscriber($queryAll = false) {
 		$criterionFilter = null;
 		if ($this->conf['filter.']['subscriber_type.']['category']=='ARTS_CRAFTS') {
  			$filter = t3lib_div::makeInstance(
@@ -846,6 +919,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				break;
 			default:
 				$sorting = null;
+		}
+
+		if ($queryAll) {
+			$result = $this->queryService->getRecords($sorting);
+			if ($result) {
+				$this->queryService->setPager(0, $this->queryService->getLastTotalCount());
+			}
+			else {
+				return $result;
+			}
 		}
 		return $this->queryService->getRecords($sorting);
 	}

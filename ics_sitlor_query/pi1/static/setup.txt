@@ -22,6 +22,10 @@ plugin.tx_icssitlorquery_pi1 {
 		# HOLLIDAY_COTTAGE and GUESTHOUSE can match together
 		# HOTEL, CAMPING, YOUTHHOSTEL can match together
 		subDataGroups = 
+		# tt_content providing de map control.
+		map_control =
+		# KEy for source identification
+		map_control.datakey =
 	}
 	
 	# Select

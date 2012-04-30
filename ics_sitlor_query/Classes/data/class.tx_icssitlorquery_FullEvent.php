@@ -34,10 +34,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	private $email;
 	private $webSite;
 
-	private $coordinates = null;
-	private $latitude = 0;
-	private $longitude = 0;
-
 	private $kindOfEvent;
 	private $information;	// tx_icssitlorquery_ValuedTermList
 	private $festival;
@@ -71,10 +67,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 				return $this->email;
 			case 'WebSite':
 				return $this->webSite;
-
-			//-- COORDINATES
-			case 'Coordinates':
-				return $this->coordinates;
 
 			case 'KindOfEvent':
 				return $this->kindOfEvent;
@@ -134,18 +126,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
-			//-- COORDINATES
-			case 'LATITUDE':
-				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
-			case 'LONGITUDE':
-				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
-
 			default:	//-- CRITERION and other
 				parent::readElement($reader);
 		}
@@ -203,7 +183,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
-		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 	}
 
 	/**

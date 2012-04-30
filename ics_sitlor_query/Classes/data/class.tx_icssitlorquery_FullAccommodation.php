@@ -34,10 +34,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $email;
 	private $webSite;
 
-	private $coordinates = null;
-	private $latitude = 0;
-	private $longitude = 0;
-
 	private $providerName = null;
 	private $tmpProviderName = array(
 		'title' => '',
@@ -106,10 +102,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			case 'WebSite':
 				return $this->webSite;
 
-			//-- COORDINATES
-			case 'Coordinates':
-				return $this->coordinates;
-
 			//-- PROVIDER
 			case 'ProviderName':
 				return $this->providerName;
@@ -166,7 +158,7 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	public function getProperties() {
 		return parent::getProperties() + array('Fax', 'Email', 'WebSite', 
-			'Coordinates', 'ProviderName', 'ProviderAddress', 'ProviderPhones', 
+			'ProviderName', 'ProviderAddress', 'ProviderPhones', 
 			'ProviderFax', 'ProviderEmail', 'ProviderWebSite', 'TimeTable', 
 			'ReceptionLanguage', 'ReservationLanguage', 'Pets', 
 			'AllowedPets', 'AllowedGroup', 'ReceptionGroup', 'MotorCoachPark', 
@@ -200,17 +192,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 				$url = $reader->readString();
 				// TODO : Check whether url is valid url
 				$this->webSite =  t3lib_div::makeInstance('tx_icssitquery_Link', $url);
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
-			//-- COORDINATES
-			case 'LATITUDE':
-				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
-				tx_icssitlorquery_XMLTools::skipChildren($reader);
-				break;
-
-			case 'LONGITUDE':
-				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
@@ -367,7 +348,6 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	 */
 	protected function afterParseXML() {
 		parent::afterParseXML();
-		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 		$this->providerName = t3lib_div::makeInstance(
 			'tx_icssitquery_Name',
 			$this->tmpProviderName['title'],

@@ -19,6 +19,10 @@
 			<label index="what_to_display.I.list">List</label>
 			<label index="what_to_display.I.map">Map</label>
 			<label index="what_to_display.I.single">Single</label>
+			<label index="map_control">Underlying map plugin</label>
+			<label index="map_control_add">Add a new map plugin</label>
+			<label index="map_control_edit">Edit selected map plugin</label>
+			<label index="map_control_datakey">Key for source identification</label>
 			<label index="paramSelect">Select param</label>
 			<label index="dataGroup">Category</label>
 			<label index="dataGroup_accomodation">Accomodation</label>
@@ -131,6 +135,10 @@
 			<label index="what_to_display.I.list">Vue liste standard (LIST)</label>
 			<label index="what_to_display.I.map">Vue carte standard (MAP)</label>
 			<label index="what_to_display.I.single">Vue fiche détaillée (SINGLE)</label>
+			<label index="map_control">Plugin de carte sous-jacent</label>
+			<label index="map_control_add">Ajouter un nouveau plugin de carte</label>
+			<label index="map_control_edit">Editer le plugin de carte sélectionné</label>
+			<label index="map_control_datakey">Clé pour l'identification de la source</label>
 			<label index="paramSelect">Paramètre de sélection</label>
 			<label index="dataGroup">Groupe de données</label>
 			<label index="dataGroup_accomodation">Hébergement</label>

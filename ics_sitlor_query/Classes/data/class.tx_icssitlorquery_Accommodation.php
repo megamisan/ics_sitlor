@@ -43,6 +43,10 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
 	private $mobilityImpaired;
 
+	private $coordinates = null;
+	private $latitude = 0;
+	private $longitude = 0;
+
 	/**
 	 * Constructor
 	 *
@@ -68,6 +72,10 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				return $this->currentSingleClientsRate;
 			case 'MobilityImpaired':
 				return $this->mobilityImpaired;
+
+			//-- COORDINATES
+			case 'Coordinates':
+				return $this->coordinates;
 			default:
 				return parent::__get($name);
 		}
@@ -94,7 +102,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Phones', 'CurrentSingleClientsRate', 'MobilityImpaired');
+		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired');
 	}
 
 	/**
@@ -181,6 +189,17 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 					'tx_icssitquery_Phone',
 					$reader->readString()
 				));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			//-- COORDINATES
+			case 'LATITUDE':
+				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'LONGITUDE':
+				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 				
@@ -272,6 +291,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->tmpAddress['zip'],
 			$this->tmpAddress['city']
 		);
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 	}
 
 	/**

@@ -64,6 +64,8 @@
 	private static $subscriber_types_artsAndCrafts = array();
 	private static $subscriber_types_commerce = array();
 	private static $subscriber_types_other = array();
+	
+	public $addViewTab = false;
 
 	/**
 	 * Constructor
@@ -190,6 +192,10 @@
 			($dataGroup == 'EVENT')) {
 			$locMarkers['MORE'] = $this->renderMore($markers);
 		}
+		if ($this->addViewTab && isset($this->pi->piVars['viewTab'])) {
+			$locMarkers['MORE'] .= '<input type="hidden" name="###PREFIXID###[viewTab]" value="###VIEWTAB###" />';
+			$markers['VIEWTAB'] = $this->pi->piVars['viewTab'];
+		}
 
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_SEARCH_FORM###');
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
@@ -272,7 +278,7 @@
 		// Any sub-data group
 		$subparts['###SUBPART_ANY_SUBDATAGROUP###'] = '';
 		if (empty($subDataGroups)) {
-			$locMarckers = array(
+			$locMarkers = array(
 				'HOTEL_LABEL' => $this->pi->pi_getLL('hotel', 'Hotel', true),
 				'HOTEL_VALUE' => self::$subAccomodations['hotel'],
 				'SELECTED_HOTEL' => in_array(self::$subAccomodations['hotel'], $this->search['subDataGroups'])? 'checked="checked"': '',
@@ -289,7 +295,7 @@
 				'HOLLIDAY_COTTAGE_GUESTHOUSE_VALUE' => self::$subAccomodations['hollidayCottage_guesthouse'],
 				'SELECTED_HOLLIDAY_COTTAGE_GUESTHOUSE' => in_array(self::$subAccomodations['hollidayCottage_guesthouse'], $this->search['subDataGroups'])? 'checked="checked"': '',
 			);
-			$markers = array_merge($locMarckers, $markers);
+			$markers = array_merge($locMarkers, $markers);
 			$subparts['###SUBPART_ANY_SUBDATAGROUP###'] = $this->cObj->getSubpart($template, '###SUBPART_ANY_SUBDATAGROUP###');
 		}
 		
@@ -383,7 +389,7 @@
 	 */
 	function renderSpecific_Subscriber(&$markers) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_SUBSCRIBER###');
-		$locMarckers = array(
+		$locMarkers = array(
 			'ANY_TYPE' => $this->renderSpecific_Subscriber_types(array('subscriber_types_anyType' => '')),
 			'ARTS_CRAFTS_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_artsAndCrafts),
 			'COMMERCE_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_commerce),
@@ -393,7 +399,7 @@
 			'CATEGORY_COMMERCE' => $this->pi->pi_getLL('subscriber_category_commerce', 'Commerce', true),
 			'CATEGORY_OTHER' => $this->pi->pi_getLL('subscriber_category_other', 'Other category', true),
 		);
-		return $this->cObj->substituteMarkerArray($template, $locMarckers, '###|###');
+		return $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
 	}
 	
 	/**
@@ -407,13 +413,13 @@
 		$itemTemplate = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_SUBSCRIBER_TYPE###');
 		foreach ($types as $label=>$type) {
 			$uniqId =  uniqid();
-			$locMarckers = array(
+			$locMarkers = array(
 				'UNIQID' => $uniqId,
 				'SUBSCRIBER_TYPE_VALUE' => $type,
 				'CHECKED' => ($this->search['subscriber_type']==$type)? 'checked="checked"': '',
 				'SUBSCRIBER_TYPE_LABEL' => $this->pi->pi_getLL($label, $label, true),
 			);
-			$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarckers, '###|###');
+			$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
 		}
 		return $itemContent;
 	}

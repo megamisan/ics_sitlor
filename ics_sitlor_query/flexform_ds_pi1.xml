@@ -89,6 +89,55 @@
 							</config>
 						</TCEforms>
 					</size>
+					<map_control>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:map_control</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tt_content</allowed>
+								<size>1</size>
+								<minitems>0</minitems>
+								<maxitems>1</maxitems>
+								<wizards>
+									<_PADDING>4</_PADDING>
+									<_VERTICAL>1</_VERTICAL>
+									<suggest type="array">
+										<type>suggest</type>
+									</suggest>
+									<edit type="array">
+										<type>popup</type>
+										<title>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:map_control_edit</title>
+										<script>wizard_edit.php</script>
+										<popup_onlyOpenIfSelected>1</popup_onlyOpenIfSelected>
+										<icon>edit2.gif</icon>
+										<JSopenParams>height=350,width=580,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</edit>
+									<add type="array">
+										<type>script</type>
+										<title>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:map_control_add</title>
+										<icon>add.gif</icon>
+										<params>
+											<table>tt_content</table>
+											<pid>###CURRENT_PID###</pid>
+											<setValue>set</setValue>
+										</params>
+										<script>wizard_add.php</script>
+									</add>
+								</wizards>
+							</config>
+						</TCEforms>
+					</map_control>
+					<map_control_datakey>
+						<TCEforms>
+							<label>LLL:EXT:ics_sitlor_query/locallang_flexform_pi1.xml:map_control_datakey</label>
+							<config>
+								<type>input</type>
+								<eval>trim</eval>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</map_control_datakey>
 				</el>
 			</ROOT>
 		</main>

@@ -1,6 +1,13 @@
+2012-04-30 Pierrick Caillon <pierrick@in-cite.net>
+	* Feature: Implemented whole record set query for map view.
+	* Feature: Implemented view tab rendering and its keep-value between searches.
+	* Feature: Added necessary options in plugin flexform.
+	* Feature: Added MapRenderer.
+	* Refactor: Promoted Coordinates property from Full elements to intermediate elements (eg. FullAccomodation -> Accomodation)
+
 2012-04-27 Tsi Yang <tsi@in-cite.net>
-	* Feature; Added hook on single renderer
-	* Refactor: Harmonised form input name
+	* Feature: Added hook on single renderer
+	* Refactor: Harmonized form input name
 	* Fix: Forgotten subscriber categories locallang
 	* Fix: Retrieved criterion on LEI
 
@@ -8,7 +15,7 @@
 	* Feature: Added subscriber form. Implemented select on subscriber type.
 
 2012-04-24 Tsi Yang <tsi@in-cite.net>
-	* Fix: Mistakes on GenericRecord coordinates init.
+	* Fix: Corrected coordinates init in GenericRecord.
 	* Feature: Added subscriber filter on arts and crafts types, on commerces types, on accomodation, on restaurant, on association.
 	
 2012-04-23 Tsi Yang <tsi@in-cite.net>

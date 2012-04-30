@@ -42,6 +42,10 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 
 	private $typeEvent = null;
 
+	private $coordinates = null;
+	private $latitude = 0;
+	private $longitude = 0;
+
 	/**
 	 * Constructor
 	 *
@@ -65,6 +69,10 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				return $this->phones;
 			case 'TypeEvent':
 				return $this->typeEvent;
+
+			//-- COORDINATES
+			case 'Coordinates':
+				return $this->coordinates;
 			default:
 				return parent::__get($name);
 		}
@@ -184,6 +192,17 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				tx_icssitlorquery_XMLTools::skipChildren($reader);
 				break;
 
+			//-- COORDINATES
+			case 'LATITUDE':
+				$this->latitude =  floatval(str_replace(',', '.', $reader->readString()));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
+			case 'LONGITUDE':
+				$this->longitude =  floatval(str_replace(',', '.', $reader->readString()));
+				tx_icssitlorquery_XMLTools::skipChildren($reader);
+				break;
+
 			case 'CRITERES':
 				if (!$reader->isEmptyElement)
 					$this->parseCriteria($reader);
@@ -298,6 +317,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 			$this->tmpAddress['zip'],
 			$this->tmpAddress['city']
 		);
+		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
 	}
 
 	/**
