@@ -1,3 +1,6 @@
+2012-05-15 Tsi Yang <tsi@in-cite.net>
+	* Feature: Partial implementation of "FREETIME" RSS feed.
+
 2012-04-30 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Implemented whole record set query for map view.
 	* Feature: Implemented view tab rendering and its keep-value between searches.

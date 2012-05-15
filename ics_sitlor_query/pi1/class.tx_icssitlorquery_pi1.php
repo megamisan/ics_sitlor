@@ -27,29 +27,29 @@
  *
  *
  *   68: class tx_icssitlorquery_pi1 extends tslib_pibase
- *   95:     function main($content, $conf)
- *  162:     function init ()
+ *   95:     public function main($content, $conf)
+ *  162:     private function init()
  *  218:     private function initMode()
- *  240:     private function initFilterParams()
- *  334:     private function initSortingParams()
- *  368:     function setPIVars_searchParams()
- *  398:     function setConnection()
- *  420:     function setDefaultConf()
- *  456:     function setDefaultSeparator()
- *  470:     function renderData($name, $element)
- *  494:     function renderSingleLink($name, $element)
- *  511:     function renderSortings()
- *  547:     function displayList()
- *  585:     function displaySingle()
- *  629:     private function getElements()
- *  679:     private function getAccomodations()
- *  777:     private function getRestaurants()
- *  819:     private function getEvents()
- *  850:     private function getFreeTime()
- *  874:     private function getCriterionFilter($criterionID, $terms=null)
- *  896:     private function parseCriterionsTermsDefinition(array $criterionTermArray)
- *  914:     private function renderCachedContent($mode)
- *  954:     function storeCachedContent($content)
+ *  248:     private function initFilterParams()
+ *  353:     private function initSortingParams()
+ *  390:     private function setConnection()
+ *  402:     private function setPIVars_searchParams()
+ *  462:     private function getSubscriberFilter(array $subscriberDataArray)
+ *  487:     private function displaySingle()
+ *  524:     private function setQueryDateFilter($addEndDate = true)
+ *  544:     private function displayList()
+ *  629:     private function getElements($queryAll = false)
+ *  668:     private function getAccomodations($queryAll = false)
+ *  762:     private function getRestaurants($queryAll = false)
+ *  812:     private function getEvents($queryAll = false)
+ *  851:     private function getFreeTime($queryAll = false)
+ *  886:     private function getSubscriber($queryAll = false)
+ *  944:     private function parseCriterionsTermsDefinition(array $criterionTermArray)
+ *  963:     private function renderCachedContent($mode)
+ * 1002:     private function storeCachedContent($content)
+ * 1019:     public function renderData($name, $element)
+ * 1043:     public function renderSingleLink($name, $element)
+ * 1060:     public function renderSortings()
  *
  * TOTAL FUNCTIONS: 23
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -147,13 +147,22 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				tx_icssitquery_Debug::error('Retrieves data list failed: ' . $e);
 			}
 		}
+		elseif (in_array('RSS', $this->codes)) {
+			try {
+				$content = $this->displayList();
+				return $content;
+			} catch (Exception $e) {
+				tx_icssitquery_Debug::error('Retrieves data list failed: ' . $e);
+			}
+		}
 		else {
 			return '';
 		}
-
+		
+		
 		return $this->pi_wrapInBaseClass($content);
     }
-
+	
 	/**
 	 * Initialize the plugin
 	 *
@@ -221,6 +230,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->sitlor_uid = $this->piVars['showUid'];
 		}
 		$codes = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'what_to_display', 'main'), true);
+
 		if (empty($codes))
 			$codes = t3lib_div::trimExplode(',', $this->conf['view.']['modes'], true);
 		$this->codes = array_unique($codes);
@@ -332,16 +342,16 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$freeTimeTheme = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'freeTimeThemes', 'paramSelect');
 		$this->conf['filter.']['freeTimeTheme'] = $freeTimeTheme? $freeTimeTheme: $this->conf['filter.']['freeTimeTheme'];
 
-		
+
 		// Select subscriber arts and crafts
 		$subscriberDataArray = t3lib_div::trimExplode(',', $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'subscriber_types', 'paramSelect'));
-		
+
 		$subscriber_type = $this->getSubscriberFilter($subscriberDataArray);
 		$subscriber_typeCategory = $subscriber_type[0];
 		$subscriber_typeValue = $subscriber_type[1];
-		
+
 		$this->conf['filter.']['subscriber_type.']['category'] = $subscriber_typeCategory? $subscriber_typeCategory: $this->conf['filter.']['subscriber_type.']['category'];
-		$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_typeValue? $subscriber_typeValue: $this->conf['filter.']['subscriber_type.']['value'];	
+		$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_typeValue? $subscriber_typeValue: $this->conf['filter.']['subscriber_type.']['value'];
 
 	}
 
@@ -405,7 +415,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->sword = '';
 		if ($this->piVars['btn_sword'])
 			$this->sword = $params['sword'];
-			
+
 		$this->FormFilter = array();
 		if ($this->piVars['btn_hotelType']) {
 			$this->FormFilter['hotelType'] = $params['hotelType'];
@@ -429,7 +439,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			if ($params['startDate'])
 				$this->conf['filter.']['startDate'] = $params['startDate'];
 			if ($params['endDate'])
-				$this->conf['filter.']['endDate'] = $params['endDate'];			
+				$this->conf['filter.']['endDate'] = $params['endDate'];
 		}
 		if ($this->piVars['btn_noFee']) {
 			$this->FormFilter['noFee'] = $params['noFee'];
@@ -442,22 +452,22 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				$this->conf['filter.']['subDataGroups'] = implode(',', $params['subDataGroups']);
 			}
 		}
-		
+
 		if ($this->piVars['btn_subscriber_type']) {
 			$this->FormFilter['subscriber_type'] = $params['subscriber_type'];
 			$subscriberDataArray = t3lib_div::trimExplode(',', $this->piVars['search']['subscriber_type'], true);
 			$subscriber_type = $this->getSubscriberFilter($subscriberDataArray);
 			$this->conf['filter.']['subscriber_type.']['category'] = $subscriber_type[0];
-			$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_type[1];	
+			$this->conf['filter.']['subscriber_type.']['value'] = $subscriber_type[1];
 		}
 
 	}
-	
+
 	/**
 	 * Retrieves subscriber filter
 	 *
-	 * @param	array	$subscriberDataArray
-	 * @return	mixed	Subscriber type
+	 * @param	array		$subscriberDataArray
+	 * @return	mixed		Subscriber type
 	 */
 	private function getSubscriberFilter(array $subscriberDataArray) {
 		$subscriber_type = null;
@@ -514,7 +524,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		return $content;
 	}
-	
+
 	/**
 	 * Adds the filters on date on the query service.
 	 *
@@ -608,6 +618,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$content = $renderMap->render($elements);
 			$locMarkers['RESULT_LIST'] = $content;
 		}
+		elseif (in_array('RSS', $this->codes)) {
+			$templateCode = $this->cObj->fileResource($this->conf['displayXML.']['rss2_tmplFile']);
+			$template = $this->cObj->getSubpart($templateCode, '###TEMPLATE_RSS2###');
+			$renderRSS = t3lib_div::makeInstance('tx_icssitlorquery_RSSRenderer', $this, $this->cObj, $this->conf);
+			$locMarkers = array();
+			$subparts = array();
+			$template = $renderRSS->render($this->getElements(), $template, $locMarkers, $subparts);
+		}
 		else {
 			$locMarkers['RESULT_LIST'] = '';
 		}
@@ -623,6 +641,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	/**
 	 * Retrieves data
 	 *
+	 * @param	[type]		$queryAll: ...
 	 * @return	mixed		Array of elements
 	 */
 	private function getElements($queryAll = false) {
@@ -875,9 +894,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		return $this->queryService->getRecords($sorting);
 	}
-	
+
 	/**
-	 * Retrieves Subscriber "Adhérent OT Nancy"
+	 * Retrieves Subscriber "AdhÃ©rent OT Nancy"
 	 *
 	 * @param	boolean		$queryAll
 	 * @return	mixed		Array of elements
@@ -886,7 +905,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$criterionFilter = null;
 		if ($this->conf['filter.']['subscriber_type.']['category']=='ARTS_CRAFTS') {
  			$filter = t3lib_div::makeInstance(
-				'tx_icssitlorquery_CategoryFilter', 
+				'tx_icssitlorquery_CategoryFilter',
 				tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::ARTS_CRAFTS))
 			);
 			$this->queryService->addFilter($filter);
@@ -894,7 +913,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		elseif ($this->conf['filter.']['subscriber_type.']['category']=='COMMERCE') {
 			$filter = t3lib_div::makeInstance(
-				'tx_icssitlorquery_CategoryFilter', 
+				'tx_icssitlorquery_CategoryFilter',
 				tx_icssitlorquery_NomenclatureFactory::GetCategories(array(tx_icssitlorquery_NomenclatureUtils::COMMERCE))
 			);
 			$this->queryService->addFilter($filter);
@@ -902,7 +921,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		}
 		elseif ($this->conf['filter.']['subscriber_type.']['category']=='NOMENCLATURE_CATEGORY') {
 			$filter = t3lib_div::makeInstance(
-				'tx_icssitlorquery_CategoryFilter', 
+				'tx_icssitlorquery_CategoryFilter',
 				tx_icssitlorquery_NomenclatureFactory::GetCategories(array($this->conf['filter.']['subscriber_type.']['value']))
 			);
 			$this->queryService->addFilter($filter);

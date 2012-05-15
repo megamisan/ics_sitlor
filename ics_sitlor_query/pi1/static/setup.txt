@@ -431,4 +431,46 @@ plugin.tx_icssitlorquery_pi1 {
 		}
 	}
 	
+	displayXML {
+		rss2_tmplFile = typo3conf/ext/ics_sitlor_query/res/rss_2.tmpl
+		xmlTitle = {$plugin.tx_icssitlorquery_pi1.displayXML.xmlTitle}
+		xmlDesc = {$plugin.tx_icssitlorquery_pi1.displayXML.xmlDesc}
+		xmlLang = {$plugin.tx_icssitlorquery_pi1.displayXML.xmlLang}
+		xmlIcon = {$plugin.tx_icssitlorquery_pi1.displayXML.xmlIcon}
+		xmlWebmaster = 
+		xmlManagingEditor = 
+		xmlCopyright = 1
+	}
+	
+}
+
+xmlsitlor_IDT = PAGE
+xmlsitlor_IDT {
+	typeNum = 20
+	10 < plugin.tx_icssitlorquery_pi1
+	10 {
+		filter.entity_737 >
+		filter.entity_737 = 1
+		view >
+		view {
+			modes = RSS
+			dataGroup = FREETIME
+		}
+		displayXML {
+			xmlTitle = Idee temps libre
+			xmlDesc = Nancy Tourisme
+			xmlLang = fr
+			xmlIcon = 
+			xmlWebmaster = 
+			xmlManagingEditor = 
+			xmlCopyright = 1
+		}
+		userFunc = tx_icssitlorquery_pi1->main
+	}
+	config {
+		disableAllHeaderCode = 1
+		additionalHeaders = Content-type:text/xml
+		xhtml_cleaning = 0
+		admPanel = 0
+	}
 }
