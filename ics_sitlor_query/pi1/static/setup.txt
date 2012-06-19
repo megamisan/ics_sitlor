@@ -457,7 +457,7 @@ xmlsitlor_IDT {
 			dataGroup = FREETIME
 		}
 		displayXML {
-			xmlTitle = Idee temps libre
+			xmlTitle = Idée temps libre
 			xmlDesc = Nancy Tourisme
 			xmlLang = fr
 			xmlIcon = 
