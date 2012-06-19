@@ -469,8 +469,8 @@ xmlsitlor_IDT {
 	}
 	config {
 		disableAllHeaderCode = 1
-		additionalHeaders = Content-type:text/xml
+		additionalHeaders = Content-Type: text/rss+xml; charset=utf-8
+		no_cache = 1
 		xhtml_cleaning = 0
-		admPanel = 0
 	}
 }

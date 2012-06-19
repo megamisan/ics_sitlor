@@ -209,6 +209,7 @@ class tx_icssitlorquery_SitlorQueryService implements tx_icssitquery_IQueryServi
 			}
 			$reader->read();
 		}
+		$reader->close();
 		return $records;
 	}
 

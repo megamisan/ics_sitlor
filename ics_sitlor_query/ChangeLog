@@ -1,3 +1,8 @@
+2012-06-19 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added RSS2 template.
+	* Feature: Completed end of reading xml with XMLReader::close.
+	* Fix: Removed ob_flush and flush in XMLTools::getXMLDocument().
+
 2012-05-15 Tsi Yang <tsi@in-cite.net>
 	* Feature: Partial implementation of "FREETIME" RSS feed.
 

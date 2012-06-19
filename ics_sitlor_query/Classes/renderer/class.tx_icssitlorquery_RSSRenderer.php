@@ -146,6 +146,7 @@
 				'SITLOR_TITLE' => $element->Name,
 				'SITLOR_LINK' => htmlspecialchars(t3lib_div::linkThisUrl(t3lib_div::getIndpEnv('TYPO3_SITE_URL'), array('id' => $this->conf['displayXML.']['linkItems.']['page'], 'tx_icssitlorquery_pi1[showUid]' => $element->ID))),
 				'SITLOR_SUBHEADER' => htmlspecialchars($element->Description),
+				'PUBDATE' => '',
 			);
 			// TODO: if date $locMarkers['PUBDATE'] = '<pubdate>la date</pubdate>'
 			$subparts['###SITLOR###'] .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');

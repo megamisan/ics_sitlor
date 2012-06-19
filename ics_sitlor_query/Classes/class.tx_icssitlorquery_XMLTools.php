@@ -100,8 +100,6 @@ class tx_icssitlorquery_XMLTools {
 		while ((!feof($handle)) && (!$status['timed_out'])) {
 			$xmlContent .= fgets($handle, 1024);
 			$status = stream_get_meta_data($handle);
-			ob_flush;
-			flush();
         }
 		fclose($handle);
 

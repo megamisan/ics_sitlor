@@ -41,8 +41,8 @@ class tx_icssitlorquery_CriterionFilter implements tx_icssitquery_IFilter {
 	 * @return	void
 	 */
 	public function __construct(tx_icssitlorquery_Criterion $criterion, tx_icssitlorquery_TermList $terms=null) {
+		$termIDs = array();
 		if (isset($terms)) {
-			$termIDs = array();
 			for ($i=0; $i<$terms->Count(); $i++) {
 				$term = $terms->Get($i);
 				$termIDs[] = $term->ID;

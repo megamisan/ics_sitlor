@@ -115,7 +115,8 @@ class tx_icssitlorquery_CriterionFactory {
 			}
 			$reader->read();
 		}
-
+		$reader->close();
+		
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
 		$lifetime = intval($extConf['criterion_cacheTime']);
 		self::$cacheInstance->set(self::$hash, serialize($elements), array(), $lifetime);

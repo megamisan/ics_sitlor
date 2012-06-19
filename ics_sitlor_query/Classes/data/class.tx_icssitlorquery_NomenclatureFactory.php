@@ -124,6 +124,8 @@ class tx_icssitlorquery_NomenclatureFactory {
 			}
 			$reader->read();
 		}
+		$reader->close();
+		
 		if (empty($all))
 			throw new Exception('Nomenclature has no Kind.');
 
