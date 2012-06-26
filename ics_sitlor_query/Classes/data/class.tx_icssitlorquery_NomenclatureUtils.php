@@ -40,7 +40,7 @@ class tx_icssitlorquery_NomenclatureUtils {
 	const HOTEL_RESTAURANT = 4000003;	// Type "Hôtel - hôtel restaurant"
 	const FURNISHED = 4000012;			// Type "Meublé"
 	static $hotel = array(
-		// self::HOTEL,
+		self::HOTEL,
 		self::HOTEL_RESTAURANT,
 		self::FURNISHED,
 	);

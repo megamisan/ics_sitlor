@@ -1,3 +1,7 @@
+2012-06-26 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Modified RSS title
+	* Refactor: Added in nomenclature hotel code in hotel array.
+
 2012-06-19 Tsi Yang <tsi@in-cite.net>
 	* Feature: Updated TS setup.
 	* Feature: Added RSS2 template.
