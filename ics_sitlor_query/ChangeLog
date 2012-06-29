@@ -1,3 +1,6 @@
+2012-06-29 Tsi Yang <tsi@in-cite.net>
+	* Feature: Implemented TS object renderer.
+
 2012-06-26 Tsi Yang <tsi@in-cite.net>
 	* Refactor: Modified RSS title
 	* Refactor: Added in nomenclature hotel code in hotel array.

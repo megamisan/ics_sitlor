@@ -174,6 +174,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			return '';
 		}
 		
+		$content = $this->displayTsObjects($content);
+		
 		
 		return $this->pi_wrapInBaseClass($content);
     }
@@ -1121,6 +1123,20 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		return $cObj->stdWrap('', $this->conf['renderConf.']['sortings.']);
 	}
+
+	/**
+	 * Displays the tsObjects
+	 *
+	 * @return	string		HTML content with TsObjects markers replaced
+	 */
+	private function displayTsObjects($content) {
+		$renderTsObjects = t3lib_div::makeInstance('tx_icssitlorquery_TsObjectsRenderer', $this, $this->cObj, $this->conf);
+		
+		$html = $renderTsObjects->render($content);
+		
+		return $html;
+	}
+	
 }
 
 
