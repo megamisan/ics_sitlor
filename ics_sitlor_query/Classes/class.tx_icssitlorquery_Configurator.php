@@ -113,7 +113,9 @@ class tx_icssitlorquery_Configurator {
 	 */
 	public static function setDefaultSeparator(array $defaultConf) {
 		foreach ($defaultConf as $type => $conf) {
-			$class = 'tx_icssitlorquery_' . $type . 'List';
+			$class = 'tx_icssitlorquery_' . $type;
+			if ($class != 'tx_icssitlorquery_TimeTableList')
+				$class .= 'List';
 			tx_icssitlorquery_AbstractList::setDefaultSeparator($conf, $class);
 		}
 	}

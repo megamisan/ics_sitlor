@@ -334,6 +334,10 @@ class tx_icssitlorquery_SingleRenderer {
 	 */
 	private function renderEvent(tx_icssitlorquery_Event $element, array &$markers, array &$subparts) {
 		$locMarkers = array(
+				// Timetable
+			'TIMETABLE_LABEL' => $this->pi->pi_getLL('timetable', 'Timetable', true),
+			'TIMETABLE' => $element->TimeTable,
+			
 			'EVENT_INFORMATION' => $this->pi->pi_getLL('event_infos', 'Event informations', true),
 			'KIND_EVENT_LABEL' => $this->pi->pi_getLL('kind_event', 'Kind of event', true),
 			'KIND_EVENT' => $element->KindOfEvent,

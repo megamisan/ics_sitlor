@@ -299,6 +299,7 @@ plugin.tx_icssitlorquery_pi1 {
 	defaultSeparator {
 		ValuedTerm = </li><li>
 		ValuedTermTuple =
+		TimeTableList = 
 	}
 	
 	# Render data

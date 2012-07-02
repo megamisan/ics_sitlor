@@ -1,3 +1,8 @@
+2012-07-02 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Accomodations are automatically sorting random.
+	* Fix: Mistakes on tag name.
+	* Feature: Added timetable on event render.
+
 2012-06-29 Tsi Yang <tsi@in-cite.net>
 	* Feature: Implemented TS object renderer.
 

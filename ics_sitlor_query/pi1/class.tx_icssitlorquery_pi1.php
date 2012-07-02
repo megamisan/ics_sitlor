@@ -384,7 +384,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$subDataGroups = (string)strtoupper(trim($this->conf['view.']['subDataGroups']));
 			$subDataGroups = t3lib_div::trimExplode(',', $subDataGroups, true);
 			if ($dataGroup == 'ACCOMODATION') {
-				$sortName = 'ALPHA';
+				$sortName = 'RANDOM';
+				if ($subDataGroups)
+					$sortName = 'ALPHA';
 				if (in_array('HOTEL', $subDataGroups))
 					$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hotel_sortName', 'paramSorting');
 				if (in_array('HOLLIDAY_COTTAGE', $subDataGroups) && in_array('GUESTHOUSE', $subDataGroups))
