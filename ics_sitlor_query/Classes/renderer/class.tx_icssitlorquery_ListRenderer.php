@@ -197,7 +197,7 @@
 		elseif ($element instanceof tx_icssitlorquery_Event) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
-				'TYPE_EVENT' => $element->TypeEvent,
+				'KIND_EVENT' => $element->KindOfEvent,
 				'TITLE' => $this->pi->renderSingleLink('title', $element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
 				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),

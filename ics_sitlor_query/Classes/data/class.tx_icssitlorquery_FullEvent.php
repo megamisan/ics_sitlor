@@ -34,7 +34,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	private $email;
 	private $webSite;
 
-	private $kindOfEvent;
 	private $information;	// tx_icssitlorquery_ValuedTermList
 	private $festival;
 
@@ -68,8 +67,8 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 			case 'WebSite':
 				return $this->webSite;
 
-			case 'KindOfEvent':
-				return $this->kindOfEvent;
+			// case 'KindOfEvent':
+				// return $this->kindOfEvent;
 			case 'Information':
 				return $this->information;
 			case 'Festival':
@@ -92,7 +91,7 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	public function getProperties() {
 		return parent::getProperties() + array('Fax', 'Email', 'WebSite', 
-			'Coordinates', 'KindOfEvent', 'Information', 'Festival', 'CurrentFree', 
+			'Coordinates', 'Information', 'Festival', 'CurrentFree', 
 			'CurrentBasePrice');
 	}
 
@@ -164,8 +163,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	protected function setCriterion(tx_icssitlorquery_ValuedTerm $valuedTerm) {
 		parent::setCriterion($valuedTerm);
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT)
-			$this->kindOfEvent = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION)
 			$this->information->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL)
@@ -192,7 +189,6 @@ class tx_icssitlorquery_FullEvent extends tx_icssitlorquery_Event {
 	 */
 	public static function getRequiredCriteria() {
 		$criteria = array(
-			tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT,
 			tx_icssitlorquery_CriterionUtils::COMPLEMENTARY_INFORMATION,
 			tx_icssitlorquery_CriterionUtils::LORRAINE_FESTIVAL,
 			tx_icssitlorquery_CriterionUtils::CURRENT_FREE,

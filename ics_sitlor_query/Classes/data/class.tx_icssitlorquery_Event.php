@@ -40,6 +40,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	);
 	private $phones = null;
 
+	private $kindOfEvent;
 	private $typeEvent = null;
 
 	private $coordinates = null;
@@ -67,6 +68,8 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 		switch ($name) {
 			case 'Phones':
 				return $this->phones;
+			case 'KindOfEvent':
+				return $this->kindOfEvent;
 			case 'TypeEvent':
 				return $this->typeEvent;
 
@@ -88,6 +91,9 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 */
 	public function __set($name, $value) {
 		switch ($name) {
+			case 'KindOfEvent':
+				$this->kindOfEvent = $value;
+				break;
 			case 'TypeEvent':
 				$this->typeEvent = $value;
 				break;
@@ -102,7 +108,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Phones', 'TypeEvent');
+		return parent::getProperties() + array('Phones', 'KindOfEvent', 'TypeEvent');
 	}
 
 	/**
@@ -273,6 +279,8 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 				'illustration'
 			);
 		}
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT)
+			$this->kindOfEvent = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::TYPE_EVENT) {
 			$this->TypeEvent = $valuedTerm;
 		}
@@ -328,6 +336,7 @@ class tx_icssitlorquery_Event extends tx_icssitquery_AbstractEvent {
 	public static function getRequiredCriteria() {
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
+			tx_icssitlorquery_CriterionUtils::KIND_OF_EVENT,
 			tx_icssitlorquery_CriterionUtils::TYPE_EVENT,
 		);
 		return array_merge($criteriaPhotos, $criteria);

@@ -1,3 +1,6 @@
+2012-07-03 Tsi Yang <tsi@in-cite.net>
+	* Refactor: Moved KindOfEvent from fullEvent to Event and display KindOfEvent on list view.
+
 2012-07-02 Tsi Yang <tsi@in-cite.net>
 	* Refactor: Accomodations are automatically sorting random.
 	* Fix: Mistakes on tag name.
