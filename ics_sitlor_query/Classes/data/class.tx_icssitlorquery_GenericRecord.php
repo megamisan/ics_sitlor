@@ -39,6 +39,7 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 		'city' => '',
 	);
 	protected $criteriaValues;
+	private static $additionalCriteria = array();
 
 	private $phones = null;
 	private $fax;
@@ -308,7 +309,11 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 	 * @return	array		Required criterion identifiers for object construction.
 	 */
 	public static function getRequiredCriteria() {
-		return array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
+		return array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos, self::$additionalCriteria);
+	}
+	
+	public static function setAdditionalCriteria(array $criteria) {
+		self::$additionalCriteria = $criteria;
 	}
 
 	public function hasCriterion(tx_icssitlorquery_Criterion $criterion) {
@@ -328,5 +333,15 @@ class tx_icssitlorquery_GenericRecord extends tx_icssitquery_AbstractData {
 			}
 		}
 		return $terms;
+	}
+	
+	public function getValuedTerms(tx_icssitlorquery_Criterion $criterion) {
+		$valuedTerms = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		for ($i = 0; $i < $this->criteriaValues->Count(); $i++) {
+			if ($this->criteriaValues->Get($i)->Criterion->ID == $criterion->ID) {
+				$valuedTerms->Add($this->criteriaValues->Get($i));
+			}
+		}
+		return $valuedTerms;
 	}
 }
