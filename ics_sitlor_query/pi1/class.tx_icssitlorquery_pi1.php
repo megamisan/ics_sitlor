@@ -151,7 +151,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			try {
 				$content = $this->displayList();
 				
-				
+				// TODO : delete test
 				$content_test = '<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 	<channel>

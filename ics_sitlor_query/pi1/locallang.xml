@@ -79,6 +79,7 @@
 			<label index="longitude">Longitude</label>
 			<label index="from_date">Du</label>
 			<label index="to_date">Au</label>
+			<label index="from_date_the">Le</label>
 			<label index="morning">Morning</label>
 			<label index="afternoon">Afternoon</label>
 			<label index="currency">Eur</label>
@@ -209,6 +210,7 @@
 			<label index="longitude">Longitude</label>
 			<label index="from_date">Du</label>
 			<label index="to_date">Au</label>
+			<label index="from_date_the">Le</label>
 			<label index="morning">Matin</label>
 			<label index="afternoon">Après-midi</label>
 			<label index="currency">Eur</label>
@@ -232,7 +234,7 @@
 			<label index="artsAndCrafts_email">Email</label>
 			<label index="artsAndCrafts_metal">Métal</label>
 			<label index="artsAndCrafts_mosaic">Mosaique</label>
-			<label index="artsAndCrafts_paint">Paint</label>
+			<label index="artsAndCrafts_paint">Peinture</label>
 			<label index="artsAndCrafts_sculpture">Sculpture</label>
 			<label index="artsAndCrafts_glass">Verre</label>
 			<label index="artsAndCrafts_stained_glass">Vitrail</label>

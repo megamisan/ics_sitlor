@@ -1,3 +1,8 @@
+2012-07-03 Tsi Yang <tsi@in-cite.net>
+	* Feature: Improved date Typoscript configuration.
+	* Feature: Optimized plugin code.
+	* Fix: Missed loccalang translation
+
 2012-07-05 Pierrick Caillon <pierrick@in-cite.net>
 	* Feature: Retrieve specific ValuedTerms in GenericRecord.
 	* Feature: Request additional criteria in GenericRecord.

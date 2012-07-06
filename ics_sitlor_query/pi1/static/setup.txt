@@ -336,23 +336,42 @@ plugin.tx_icssitlorquery_pi1 {
 		}
 		date.cObject = COA
 		date.cObject {
-			10 = TEXT
-			10 {
-				prepend = TEXT
-				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:from_date
-				field = start
-				stdWrap.strftime = %d/%m/%Y
-				noTrimWrap = | ||
+			5 = COA 
+			5 {
+				10 = TEXT
+				10 {
+					prepend = TEXT
+					prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:from_date
+					field = start
+					stdWrap.strftime = %d/%m/%Y
+					noTrimWrap = | ||
+				}
+				15 = TEXT
+				15.value = &nbsp;
+				20 = TEXT
+				20 {
+					prepend = TEXT
+					prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:to_date
+					field = end
+					stdWrap.strftime = %d/%m/%Y
+					noTrimWrap = | ||
+				}
+				if.equals.field = start
+				if.value.field = end
+				if.negate = 1
 			}
-			15 = TEXT
-			15.value = &nbsp;
-			20 = TEXT
-			20 {
-				prepend = TEXT
-				prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:to_date
-				field = end
-				stdWrap.strftime = %d/%m/%Y
-				noTrimWrap = | ||
+			10 = COA 
+			10 {
+				10 = TEXT
+				10 {
+					prepend = TEXT
+					prepend.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:from_date_the
+					field = start
+					stdWrap.strftime = %d/%m/%Y
+					noTrimWrap = | ||
+				}
+				if.equals.field = start
+				if.value.field = end
 			}
 		}
 		openCloseDay.cObject = TEXT
