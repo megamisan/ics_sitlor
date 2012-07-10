@@ -63,10 +63,17 @@ class tx_icssitlorquery_SingleRenderer {
 	function render($element) {
 		if (!($element instanceof tx_icssitquery_AbstractData))
 			return '';
+		$dataArray = array(
+			'ID' => $element->ID,
+			'Name' => $element->Name,
+			'Description' => $element->Description,
+		);
+		tx_icssitlorquery_getDataHook::pushContext($dataArray);
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_DETAIL###');
 		$markers = array();
 		$locMarkers['GENERIC'] = $this->renderGeneric($element, $markers);
 		$locMarkers['SPECIFIC'] = $this->renderSpecific($element, $markers);
+		tx_icssitlorquery_getDataHook::popContext();
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->pi->extKey]['singleRenderer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->pi->extKey]['singleRenderer'] as $class) {
 				$procObj = & t3lib_div::getUserObj($class);

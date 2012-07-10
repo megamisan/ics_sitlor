@@ -102,12 +102,19 @@
 		$subparts = array();
 		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
 		foreach ($elements as $element) {
+			$dataArray = array(
+				'ID' => $element->ID,
+				'Name' => $element->Name,
+				'Description' => $element->Description,
+			);
+			tx_icssitlorquery_getDataHook::pushContext($dataArray);
 			$markers = array();
 			$locMarkers = array();
 			$locMarkers['GENERIC'] = $this->renderListItemGeneric($element, $markers);
 			$locMarkers['SPECIFIC'] = $this->renderListItemSpecific($element, $markers);
 			$itemContent = $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
 			$subparts['###ITEM###'] .= $this->cObj->substituteMarkerArray($itemContent, $markers, '###|###');
+			tx_icssitlorquery_getDataHook::popContext();
 		}
 		$markers = array(
 			'PREFIXID' => $this->prefixId,

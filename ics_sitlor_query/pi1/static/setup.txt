@@ -117,22 +117,24 @@ plugin.tx_icssitlorquery_pi1 {
 					addParams {
 						src =
 						src.field = url
-						title = illustration
+						title = 
+						title = TEXT
+						title.data = context:2,Name
 						title.append = CASE
 						title.append {
 							key.data = context:criterionId
 							736000294 = TEXT
-							736000294.value = 1
+							736000294.value = &nbsp;1
 							736001142 = TEXT
-							736001142.value = 2
+							736001142.value = &nbsp;2
 							736001115 = TEXT
-							736001115.value = 3
+							736001115.value = &nbsp;3
 							736001116 = TEXT
-							736001116.value = 4
+							736001116.value = &nbsp;4
 							4000060 = TEXT
-							4000060.value = 5
+							4000060.value = &nbsp;5
 							4000061 = TEXT
-							4000061.value = 6
+							4000061.value = &nbsp;6
 						}
 					}
 				}
