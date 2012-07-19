@@ -219,6 +219,7 @@ class tx_icssitlorquery_SingleRenderer {
 				// Price
 			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 			'SINGLE_CLIENT_PRICE' => $element->CurrentSingleClientsRate,
+			'WEEKRATE' => $element->CurrentWeekRate,
 				// Comfort room
 			'COMFORTROOM_LABEL' =>  $this->pi->pi_getLL('comfort_room', 'Comfort room', true),
 			'COMFORT_ROOM' => $element->ComfortRoom,
@@ -232,6 +233,10 @@ class tx_icssitlorquery_SingleRenderer {
 
 		$markers = array_merge($markers, $locMarkers);
 
+		if ($element->CurrentSingleClientsRate->Count()<=0)
+			$subparts['###SUBPART_SINGLE_CLIENT_PRICE###'] = '';
+		if ($element->CurrentWeekRate->Count()<=0)
+			$subparts['###SUBPART_WEEKRATE###'] = '';
 		if ($element->ReceptionLanguage->Count()<=0)
 			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
 		if ($element->ReservationLanguage->Count()<=0)

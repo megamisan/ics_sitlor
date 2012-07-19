@@ -188,6 +188,8 @@ plugin.tx_icssitlorquery_pi1 {
 				736000142 < .labelValue
 				# Hotel price
 				4000010 < .labelValue
+				# Furnished price
+				4000006 < .labelValue
 				# Allowed group number
 				736000409 < .labelValue
 				# Restaurant capacity
@@ -335,6 +337,14 @@ plugin.tx_icssitlorquery_pi1 {
 				field = value
 				noTrimWrap = || |
 			}
+		}
+		hotelPrice < plugin.tx_icssitlorquery_pi1.renderConf.price
+		hotelPrice {
+			10.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:hotelPrice
+		}
+		furnishedPrice < plugin.tx_icssitlorquery_pi1.renderConf.price
+		furnishedPrice {
+			10.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:furnishedPrice
 		}
 		date.cObject = COA
 		date.cObject {

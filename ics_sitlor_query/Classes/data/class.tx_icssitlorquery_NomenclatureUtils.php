@@ -55,6 +55,7 @@ class tx_icssitlorquery_NomenclatureUtils {
 		self::FARM_CAMPING,
 	);
 	const GUESTHOUSE = 4000001;	// Category "Chambres d'hôtes"
+	const GUESTHOUSE_TYPE = 4000001;	// Type "Chambres d'hôtes"
 	const HOLLIDAY_COTTAGE = 4000005; // Category "Meublé "
 	const RESIDENCE = 4000004; // Category "Résidence "
 

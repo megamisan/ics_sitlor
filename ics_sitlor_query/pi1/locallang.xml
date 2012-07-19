@@ -40,6 +40,8 @@
 			<label index="empty_map">There is no item to display or no item can be placed on the map.</label>
 			<label index="noPrice">No price</label>
 			<label index="price">Price</label>
+			<label index="hotelPrice">Price</label>
+			<label index="furnishedPrice">Price</label>
 			<label index="noDate">No date</label>
 			<label index="identity">Identity</label>
 			<label index="description">Description</label>
@@ -171,6 +173,8 @@
 			<label index="empty_map">Il n'y a pas de résultat ou aucun résultat ne peut être placé sur la carte.</label>
 			<label index="noPrice">N.C.</label>
 			<label index="price">Tarif</label>
+			<label index="hotelPrice">Tarif</label>
+			<label index="furnishedPrice">Tarif</label>
 			<label index="noDate">N.C.</label>
 			<label index="identity">Informations principales</label>
 			<label index="description">Description</label>

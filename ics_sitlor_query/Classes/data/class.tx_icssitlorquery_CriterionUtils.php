@@ -179,6 +179,9 @@ class tx_icssitlorquery_CriterionUtils {
 	const CURRENT_MENU_PRICE_CHILD = 4000089;
 	const CURRENT_MENU_PRICE_ADULT = 4000090;
 	const CURRENT_MENU_PRICE_GROUP = 4000091;
+	
+	const CURRENT_WEEKRATE = 4000006;	// Tarifs à la semaine (année en cours)
+	const CURRENT_WEEKRATE_LOW_SEASON = 4000029;	// Basse saison
 
 	/*******************************************************
 	 *

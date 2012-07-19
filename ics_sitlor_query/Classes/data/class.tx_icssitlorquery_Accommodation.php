@@ -41,6 +41,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	private $phones = null;
 
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
+	private $currentWeekRate;	// tx_icssitlorquery_ValuedTermList
 	private $mobilityImpaired;
 
 	private $coordinates = null;
@@ -56,6 +57,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		$this->phones = array();
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentWeekRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -70,6 +72,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				return $this->phones;
 			case 'CurrentSingleClientsRate':
 				return $this->currentSingleClientsRate;
+			case 'CurrentWeekRate':
+				return $this->currentWeekRate;
 			case 'MobilityImpaired':
 				return $this->mobilityImpaired;
 
@@ -102,7 +106,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired');
+		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired', 'CurrentWeekRate');
 	}
 
 	/**
@@ -273,6 +277,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		}
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
 			$this->currentSingleClientsRate->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE)
+			$this->currentWeekRate->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED)
 			$this->mobilityImpaired = $valuedTerm;
 	}
@@ -304,6 +310,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		$criteria = array(
 			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
+			tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE,
 			tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED,
 		);
 		return array_merge($criteriaPhotos, $criteria);

@@ -161,9 +161,20 @@
 		if ($element instanceof tx_icssitlorquery_Accomodation) {
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_ACCOMODATION###');
 			$price = $this->pi->pi_getLL('noPrice', 'No price', true);
+			
 			$valudeTerm = $element->CurrentSingleClientsRate->Get(0);
 			if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE_DOUBLEROOM_MIN)
-				$price = $this->pi->renderData('price', $valudeTerm);
+				$price = $this->pi->renderData('hotelPrice', $valudeTerm);
+			if ($element->Type->ID == tx_icssitlorquery_NomenclatureUtils::FURNISHED || $element->Type->ID == tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE_TYPE) {
+				for ($i=0; $i<$element->CurrentWeekRate->Count(); $i++) {
+					$valudeTerm = $element->CurrentWeekRate->Get($i);
+					if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE_LOW_SEASON) {
+						$price = $this->pi->renderData('furnishedPrice', $valudeTerm);
+						break;
+					}
+				}
+			}
+				
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $this->pi->renderSingleLink('title', $element),
