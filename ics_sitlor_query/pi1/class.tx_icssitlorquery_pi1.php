@@ -401,6 +401,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			if ($dataGroup == 'FREETIME') {
 				$sortName = 'ALPHA';
 			}
+			if ($dataGroup == 'SUBSCRIBER') {
+				$sortName = 'RANDOM';
+			}
 		}
 		$this->conf['sort.']['name'] = $sortName ? $sortName : $this->conf['sort.']['name'];
 
@@ -452,15 +455,13 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->FormFilter['culinarySpeciality'] = $params['culinarySpeciality'];
 			$this->conf['filter.']['foreignFoods'] = implode(',', $params['culinarySpeciality']);
 		}
-		if ($this->piVars['btn_eventDate']) {
+		if ($this->piVars['btn_eventDate'] || $this->piVars['btn_noFee']) {
 			$this->FormFilter['startDate'] = $params['startDate'];
 			$this->FormFilter['endDate'] = $params['endDate'];
 			if ($params['startDate'])
 				$this->conf['filter.']['startDate'] = $params['startDate'];
 			if ($params['endDate'])
 				$this->conf['filter.']['endDate'] = $params['endDate'];
-		}
-		if ($this->piVars['btn_noFee']) {
 			$this->FormFilter['noFee'] = $params['noFee'];
 			$this->conf['filter.']['noFeeEvent'] = $params['noFee'];
 		}
@@ -955,6 +956,12 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		switch ($this->conf['sort.']['name']) {
 			case 'ALPHA':
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
+				break;
+			case 'RANDOM':
+				if ($this->conf['sort.']['extra'])
+					$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'random', $this->conf['sort.']['extra']);
+				else
+					$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'random', 'start');
 				break;
 			default:
 				$sorting = null;

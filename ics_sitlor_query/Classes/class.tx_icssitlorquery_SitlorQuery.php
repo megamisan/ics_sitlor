@@ -542,7 +542,7 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	 * @return	void
 	 */
 	private function putSorting(array &$params, array &$pnames, array &$pvalues) {
-		if (!in_array($this->sorting[0], array('accomodationSorting', 'restaurantSorting', 'eventSorting')))
+		if (!in_array($this->sorting[0], array('accomodationSorting', 'restaurantSorting', 'eventSorting', 'GenericSorting')))
 			return;
 
 		switch ($this->sorting[1]) {

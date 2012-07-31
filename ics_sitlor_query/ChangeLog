@@ -1,3 +1,7 @@
+2012-07-31 Tsi Yang <tsi@in-cite.net>
+	* Feature: Added subscriber random sorting.
+	* Refactor: Combined event search on date and noFee.
+
 2012-07-19 Tsi Yang <tsi@in-cite.net>
 	* Feature: Added furnished current week rate.
 

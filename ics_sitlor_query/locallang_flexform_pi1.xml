@@ -210,7 +210,7 @@
 			<label index="artsAndCrafts_email">Email</label>
 			<label index="artsAndCrafts_metal">Métal</label>
 			<label index="artsAndCrafts_mosaic">Mosaique</label>
-			<label index="artsAndCrafts_paint">Paint</label>
+			<label index="artsAndCrafts_paint">Peinture</label>
 			<label index="artsAndCrafts_sculpture">Sculpture</label>
 			<label index="artsAndCrafts_glass">Verre</label>
 			<label index="artsAndCrafts_stained_glass">Vitrail</label>
