@@ -395,11 +395,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			if ($dataGroup == 'RESTAURANT') {
 				$sortName = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restaurant_sortName', 'paramSorting');
 			}
-			if ($dataGroup == 'EVENT') {
+			if ($dataGroup == 'EVENT' || $dataGroup == 'FREETIME') {
 				$sortName = 'DATE';
-			}
-			if ($dataGroup == 'FREETIME') {
-				$sortName = 'ALPHA';
 			}
 			if ($dataGroup == 'SUBSCRIBER') {
 				$sortName = 'RANDOM';
@@ -530,6 +527,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				$elements = $this->queryService->getRestaurants();
 				break;
 			case 'EVENT':
+			case 'FREETIME':
 				$elements = $this->queryService->getEvents();
 				break;
 			default:
@@ -897,6 +895,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 			$this->queryService->addFilter(tx_icssitlorquery_CriterionUtils::getCriterionFilter(tx_icssitlorquery_CriterionUtils::FREETIME));
 		}
 		switch ($this->conf['sort.']['name']) {
+			case 'DATE':
+				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_EventSortingProvider', 'endDate', strtoupper($this->conf['sort.']['extra']));
+				break;
 			case 'ALPHA':
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_GenericSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));
 				break;
@@ -913,7 +914,8 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				return $result;
 			}
 		}
-		return $this->queryService->getRecords($sorting);
+		// return $this->queryService->getRecords($sorting);
+		return $this->queryService->getEvents($sorting);
 	}
 
 	/**

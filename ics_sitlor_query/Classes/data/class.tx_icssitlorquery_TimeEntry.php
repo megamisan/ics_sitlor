@@ -178,8 +178,8 @@ class tx_icssitlorquery_TimeEntry implements tx_icssitquery_IToStringObjConf {
 		$dayDiff = ($this->dayOfWeek % 7) - $today['wday'];
 		$data = array(
 			'empty' => (!$this->start || !$this->end) ? 1 : 0,
-			'open' => mktime($start['hours'], $start['minutes'], $start['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']),
-			'close' => mktime($end['hours'], $end['minutes'], $end['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']),
+			'open' => ($this->start!=-1)? mktime($start['hours'], $start['minutes'], $start['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']): '',
+			'close' => ($this->end!=-1)? mktime($end['hours'], $end['minutes'], $end['seconds'], $today['mon'], $today['mday'] + $dayDiff, $today['year']): '',
 			'isPM' => $this->isPM ? 1 : 0,
 		);
 		$local_cObj->start($data, 'TimeEntry');

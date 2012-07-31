@@ -156,6 +156,12 @@ class tx_icssitlorquery_TimeTable implements tx_icssitquery_IToStringObjConf {
 			}
 			$reader->read();
 		}
+		foreach ($timeEntryCache as $entryId => $entryValue) {
+			$idParts = explode('_', $entryId);
+			$start = ($idParts[2] == 1) ? -1 : $entryValue;
+			$end = ($idParts[2] == 1) ? $entryValue : -1;
+			$timeTable->timeEntries[] = t3lib_div::makeInstance('tx_icssitlorquery_TimeEntry', intval($idParts[0]), $start, $end, (bool)intval($idParts[1]));
+		}
 		return $timeTable;
 	}
 
