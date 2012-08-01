@@ -14,7 +14,7 @@ ics.geoloc.prototype.initMap = function(myOptions) {
 		'mapTypeId': mapTypeId,
 		'mapTypeControl': false,
 		'streetViewControl': false,
-	}
+	};
 	map = new google.maps.Map(document.getElementById("map_canvas"), options);
 	marker = new google.maps.Marker({
 		'map': map,
