@@ -150,21 +150,6 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		elseif (in_array('RSS', $this->codes)) {
 			try {
 				$content = $this->displayList();
-				
-				// TODO : delete test
-				$content_test = '<?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-	<channel>
-		
-		<title>Idee temps libre</title>
-		<link>http://nancy.ic-s.org/</link>
-		<description>Nancy Tourisme</description>
-
-		
-		
-
-	</channel>
-</rss>';				
 				return $content;
 			} catch (Exception $e) {
 				tx_icssitquery_Debug::error('Retrieves data list failed: ' . $e);
@@ -1091,6 +1076,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$data = array(
 			'id' => $element->ID,
 			'title' => $element->Name,
+			'PIDitemDisplay' => $this->conf['PIDitemDisplay'],
 		);
 		$cObj = t3lib_div::makeInstance('tslib_cObj');
 		$cObj->start($data, 'Sitlor');

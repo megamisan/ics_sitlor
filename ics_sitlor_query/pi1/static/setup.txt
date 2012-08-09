@@ -405,6 +405,7 @@ plugin.tx_icssitlorquery_pi1 {
 			}
 			typolink {
 				parameter.data = tsfe:id
+				parameter.override.field = PIDitemDisplay
 				additionalParams=&tx_icssitlorquery_pi1[showUid]={field:id}
 				additionalParams.insertData = 1
 			}
@@ -417,6 +418,7 @@ plugin.tx_icssitlorquery_pi1 {
 			}
 			typolink {
 				parameter.data = tsfe:id
+				parameter.override.field = PIDitemDisplay
 				additionalParams=&tx_icssitlorquery_pi1[showUid]={field:id}
 				additionalParams.insertData = 1
 			}
