@@ -321,4 +321,8 @@ class tx_icssitlorquery_CriterionUtils {
 
 	const OTNANCY2011 = 737000028;
 	const OTNANCY2012 = 737000029;
+	
+	const ONLINE_BOOKING = 737000020;	// Adhérent centrale de réservation
+	const ONLINE_BOOKING_NO = 737000198;
+	const ONLINE_BOOKING_YES = 737000197;
 }
