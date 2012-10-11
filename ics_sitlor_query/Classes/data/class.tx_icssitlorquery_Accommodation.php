@@ -49,6 +49,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	private $longitude = 0;
 	
 	private $onlineBooking;
+	private $codeBooking;
 
 	/**
 	 * Constructor
@@ -86,6 +87,9 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			case 'OnlineBooking':
 				return $this->onlineBooking;
 			
+			case 'CodeBooking':
+				return $this->codeBooking;
+			
 			default:
 				return parent::__get($name);
 		}
@@ -112,7 +116,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired', 'CurrentWeekRate', 'OnlineBooking');
+		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired', 'CurrentWeekRate', 'OnlineBooking', 'CodeBooking');
 	}
 
 	/**
@@ -289,6 +293,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->mobilityImpaired = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ONLINE_BOOKING)
 			$this->onlineBooking = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CODE_BOOKING)
+			$this->codeBooking = $valuedTerm;
 	}
 
 	/**
@@ -321,6 +327,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE,
 			tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED,
 			tx_icssitlorquery_CriterionUtils::ONLINE_BOOKING,
+			tx_icssitlorquery_CriterionUtils::CODE_BOOKING,
 		);
 		return array_merge($criteriaPhotos, $criteria);
 	}

@@ -202,6 +202,8 @@ class tx_icssitlorquery_SingleRenderer {
 			'RECEPTION_LANGUAGE' => $element->ReceptionLanguage,
 			'RESERVATION_LANGUAGE_LABEL' => $this->pi->pi_getLL('reservation_language', 'Reservation language', true),
 			'RESERVATION_LANGUAGE' => $element->ReservationLanguage,
+			'DOCUMENTATION_LANGUAGE_LABEL' => $this->pi->pi_getLL('documentaion_language', 'Documentation language', true),
+			'DOCUMENTATION_LANGUAGE' => $element->DocumentationLanguage,
 			'MOBILITY_IMPAIRED_LABEL' => $this->pi->pi_getLL('mobility_impaired', 'Mobility impaired', true),
 			'MOBILITY_IMPAIRED' => $element->MobilityImpaired,
 			'PETS_LABEL' => $this->pi->pi_getLL('pets', 'Pets', true),
@@ -229,6 +231,44 @@ class tx_icssitlorquery_SingleRenderer {
 				// Hotel service
 			'HOTEL_SERVICE_LABEL' => $this->pi->pi_getLL('hotel_service', 'Hotel service', true),
 			'HOTEL_SERVICE' => $element->HotelService,
+				// Capacity
+			'CAPACITY_LABEL' => $this->pi->pi_getLL('capacity', 'Capacity', true),
+			'CAMPING_CAPACITY_LABEL' => $this->pi->pi_getLL('camping_capacity', 'Camping capacity', true),
+			'CAMPING_CAPACITY' => $element->CampingCapacity,
+			'CAMPING_AREA_LABEL' => $this->pi->pi_getLL('camping_area', 'Camping area', true),
+			'CAMPING_AREA' => $element->CampingArea,
+				// Camping comfort
+			'COMFORT_LABEL' => $this->pi->pi_getLL('comfort', 'Comfort', true),
+			'CAMPING_EQUIPMENT_LABEL' => $this->pi->pi_getLL('camping_equipment', 'Camping equipment', true),
+			'CAMPING_EQUIPMENT' => $element->CampingEquipment,
+			'CAMPING_SERVICE_LABEL' => $this->pi->pi_getLL('camping_service', 'Camping service', true),
+			'CAMPING_SERVICE' => $element->CampingService,
+			'CAMPINGCAR_EQUIPMENT_SERVICE_LABEL' => $this->pi->pi_getLL('campingcar_equipment_service', 'Camping car equipments and services', true),
+			'CAMPINGCAR_EQUIPMENT_SERVICE' => $element->CampingCar_equipment_service,
+				// Guesthouse comfort
+			'GUESTHOUSE_DESCRIPTION_LABEL' => $this->pi->pi_getLL('guesthouseDescription', 'Guesthouse description', true),
+			'GUESTHOUSE_DESCRIPTION' => $element->GuesthouseDescription,
+			'GUESTHOUSE_COMFORT_LABEL' => $this->pi->pi_getLL('guesthouseComfort', 'Guesthouse comfort', true),
+			'GUESTHOUSE_COMFORT' => $element->GuesthouseComfort,
+			'GUESTHOUSE_SERVICE_LABEL' => $this->pi->pi_getLL('guesthouseService', 'Guesthouse service', true),
+			'GUESTHOUSE_SERVICE' => $element->GuesthouseService,
+			'OUTSIDE_EQUIPMENT_LABEL' => $this->pi->pi_getLL('outsideEquipment', 'Outside equipment', true),
+			'OUTSIDE_EQUIPMENT' => $element->OutsideEquipment,
+				// Furnished comfort
+			'FURNISHED_TYPE_LABEL' => $this->pi->pi_getLL('furnishedType', 'Furnished Type', true),
+			'FURNISHED_TYPE' => $element->FurnishedType,
+			'FURNISHED_DESCRIPTION_LABEL' => $this->pi->pi_getLL('furnishedDDescription', 'Furnished description', true),
+			'FURNISHED_DESCRIPTION' => $element->FurnishedDescription,
+			'FURNISHED_COMFORT_LABEL' => $this->pi->pi_getLL('furnishedComfort', 'Furnished comfort', true),
+			'FURNISHED_COMFORT' => $element->FurnishedComfort,
+			'FURNISHED_SERVICE_LABEL' => $this->pi->pi_getLL('furnishedService', 'Furnished service', true),
+			'FURNISHED_SERVICE' => $element->FurnishedService,
+			'FURNISHED_HEATING_LABEL' => $this->pi->pi_getLL('furnishedHeating', 'Furnished heating', true),
+			'FURNISHED_HEATING' => $element->FurnishedHEATING,
+			'FURNISHED_SMOKER_LABEL' => $this->pi->pi_getLL('furnishedSmoker', 'Furnished smoker', true),
+			'FURNISHED_SMOKER' => $element->FurnishedSmoker,
+				// onlineBooking
+			'CODE_BOOKING' => $this->pi->renderData('onlineBooking', $element->CodeBooking),
 		);
 
 		$markers = array_merge($markers, $locMarkers);
@@ -255,6 +295,68 @@ class tx_icssitlorquery_SingleRenderer {
 			$subparts['###SUBPART_MOTORCOACH_PARK###'] = '';
 		if (!$element->Opening24_24)
 			$subparts['###SUBPART_OPENING24_24###'] = '';
+		if ($element->OnlineBooking->Term->ID != tx_icssitlorquery_CriterionUtils::ONLINE_BOOKING_YES)
+			$subparts['###SUBPART_ONLINEBOOKING###'] = '';
+
+		// Hotel display
+		if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::HOTEL && $element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT) {
+			$subparts['###SUBPART_HOTELCOMFORT###'] = '';
+			if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::FURNISHED)
+				$subparts['###SUBPART_PRICE###'] = '';
+		}
+		if ($element->ComfortRoom->Count()<=0)
+			$subparts['###SUBPART_COMFORTROOM###'] = '';
+		if ($element->HotelEquipement->Count()<=0)
+			$subparts['###SUBPART_HOTELEQUIPMENT###'] = '';
+		if ($element->HotelService->Count()<=0)
+			$subparts['###SUBPART_HOTELSERVICE###'] = '';
+		
+		// Camping display
+		if (!in_array($element->Type->ID, tx_icssitlorquery_NomenclatureUtils::$camping)) {
+			$subparts['###SUBPART_CAPACITY###'] = '';
+			$subparts['###SUBPART_CAMPINGCOMFORT###'] = '';
+		}
+		if ($element->DocumentationLanguage->Count()<=0)
+			$subparts['###SUBPART_DOCUMENTATION_LANGUAGE###'] = '';
+		if ($element->CampingCapacity->Count()<=0)
+			$subparts['###SUBPART_CAMPING_CAPACITY###'] = '';
+		if (!$element->CampingArea)
+			$subparts['###SUBPART_CAMPING_AREA###'] = '';
+		if ($element->CampingEquipment->Count()<=0)
+			$subparts['###SUBPART_CAMPING_EQUIPMENT###'] = '';
+		if ($element->CampingService->Count()<=0)
+			$subparts['###SUBPART_CAMPING_SERVICE###'] = '';
+		if ($element->CampingCar_equipment_service->Count()<=0)
+			$subparts['###SUBPART_CAMPINGCAR_EQUIPMENT_SERVICE###'] = '';
+		
+		// GuestHouse display
+		if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE_TYPE)
+			$subparts['###SUBPART_GUESTHOUSECOMFORT###'] = '';
+		if ($element->GuesthouseDescription->Count()<=0)
+			$subparts['###SUBPART_GUESTHOUSE_DESCRIPTION###'] = '';
+		if ($element->GuesthouseComfort->Count()<=0)
+			$subparts['###SUBPART_GUESTHOUSE_COMFORT###'] = '';
+		if ($element->GuesthouseService->Count()<=0)
+			$subparts['###SUBPART_GUESTHOUSE_SERVICE###'] = '';
+		if ($element->OutsideEquipment->Count()<=0)
+			$subparts['###SUBPART_OUTSIDE_EQUIPMENT###'] = '';
+			
+		// Furnished display
+		if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::FURNISHED)
+			$subparts['###SUBPART_FURNISHEDCOMFORT###'] = '';
+		if (!$element->FurnishedType)
+			$subparts['###SUBPART_FURNISHED_TYPE###'] = '';
+		if ($element->FurnishedDescription->Count()<=0)
+			$subparts['###SUBPART_FURNISHED_DESCRIPTION###'] = '';
+		if ($element->FurnishedComfort->Count()<=0)
+			$subparts['###SUBPART_FURNISHED_COMFORT###'] = '';
+		if ($element->FurnishedService->Count()<=0)
+			$subparts['###SUBPART_FURNISHED_SERVICE###'] = '';
+		if ($element->FurnishedService->Count()<=0)
+			$subparts['###SUBPART_FURNISHED_HEATING###'] = '';
+		if (!$element->FurnishedSmoker)
+			$subparts['###SUBPART_FURNISHED_SMOKER###'] = '';
+			
 	}
 
 	/**

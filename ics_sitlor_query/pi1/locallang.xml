@@ -51,7 +51,8 @@
 			<label index="rating_star">Rating star</label>
 			<label index="reception">Reception</label>
 			<label index="reception_language">Reception language</label>
-			<label index="reservation_language">Reservationlanguage</label>
+			<label index="reservation_language">Reservation language</label>
+			<label index="documentaion_language">Documentation language</label>
 			<label index="mobility_impaired">Mobility impaired</label>
 			<label index="pets">Pets</label>
 			<label index="allowed_pets">Allowed pets</label>
@@ -137,6 +138,23 @@
 			<label index="subscriber_category_other">Other category</label>
 			<label index="results_list">Results</label>
 			<label index="results_map">Map</label>
+			<label index="capacity">Capacity</label>
+			<label index="camping_capacity">Camping capacity</label>
+			<label index="camping_area">Camping area</label>
+			<label index="comfort">Comfort</label>
+			<label index="camping_equipment">Camping equipment</label>
+			<label index="camping_service">Camping service</label>
+			<label index="campingcar_equipment_service">Camping car equipments and services</label>
+			<label index="guesthouseDescription">Guesthouse description</label>
+			<label index="guesthouseComfort">Guesthouse comfort</label>
+			<label index="guesthouseService">Guesthouse service</label>
+			<label index="outsideEquipment">Outside equipment</label>
+			<label index="furnishedType">Furnished Type</label>
+			<label index="furnishedDDescription">Furnished description</label>
+			<label index="furnishedComfort">Furnished comfort</label>
+			<label index="furnishedService">Furnished service</label>
+			<label index="furnishedHeating">Furnished heating</label>
+			<label index="furnishedSmoker">Furnished smoker</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="data_not_available">Paramètres de service invalides.</label>
@@ -185,6 +203,7 @@
 			<label index="reception">Accueil</label>
 			<label index="reception_language">Langues parlées à l'accueil</label>
 			<label index="reservation_language">Langues parlées - réservation</label>
+			<label index="documentaion_language">Langues documentations</label>
 			<label index="mobility_impaired">Accessible aux pers. à mobilité réduite</label>
 			<label index="pets">Animaux</label>
 			<label index="allowed_pets">Animaux acceptés</label>
@@ -270,6 +289,23 @@
 			<label index="subscriber_category_other">Autres</label>
 			<label index="results_list">Résultats</label>
 			<label index="results_map">Carte</label>
+			<label index="capacity">Capacité</label>
+			<label index="camping_capacity">Capacité du camping</label>
+			<label index="camping_area">Superficie du camping</label>
+			<label index="comfort">Confort</label>
+			<label index="camping_equipment">Equipements du camping</label>
+			<label index="camping_service">Services du camping</label>
+			<label index="campingcar_equipment_service">Camping-car (équipement et services)</label>
+			<label index="guesthouseDescription">Descriptif de la chambre d'hôtes</label>
+			<label index="guesthouseComfort">Confort - chambre d'hôtes</label>
+			<label index="guesthouseService">Services de la chambre d'hôtes</label>
+			<label index="outsideEquipment">Equipement de plein-air</label>
+			<label index="furnishedType">Type d'habitat - Indépendance</label>
+			<label index="furnishedDDescription">Descriptif de l'hébergement</label>
+			<label index="furnishedComfort">Confort de l'hébergement</label>
+			<label index="furnishedService">Services de l'hébergement</label>
+			<label index="furnishedHeating">Type de chauffage</label>
+			<label index="furnishedSmoker">Hébergement non fumeur</label>
 		</languageKey>
 	</data>
 </T3locallang>

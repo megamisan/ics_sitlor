@@ -67,17 +67,11 @@ class tx_icssitlorquery_CriterionFactory {
 	 * @return	boolean
 	 */
 	private static function FetchValues() {
-		$params = array(
-			'user' => utf8_decode(self::$login),
-			'pwkey' => utf8_decode(self::$password),
-			'SCHEMA' => 'LEI',
-		);
-		$url = self::$url . '?' . http_build_query($params);
-		t3lib_div::devLog('Url criterion', 'ics_sitlor_query', 0, array(urldecode($url)));
+		t3lib_div::devLog('Url criterion', 'ics_sitlor_query', 0, array(urldecode(self::$url)));
 
-		$xmlContent = tx_icssitlorquery_XMLTools::getXMLDocument($url);
+		$xmlContent = tx_icssitlorquery_XMLTools::getXMLDocument(self::$url);
 		if (!$xmlContent) {
-			tx_icssitquery_Debug::error('Unable to read criteria XML document at ' . $url);
+			tx_icssitquery_Debug::error('Unable to read criteria XML document at ' . self::$url);
 			return false;
 		}
 
@@ -265,6 +259,29 @@ class tx_icssitlorquery_CriterionFactory {
 
 		self::$login = $login;
 		self::$password = $password;
-		self::$url = $url;
+
+		$params = array(
+			'user' => utf8_decode(self::$login),
+			'pwkey' => utf8_decode(self::$password),
+			'SCHEMA' => 'LEI',
+		);
+		switch ($GLOBALS['TSFE']->config['config']['language']) {
+			case 'fr':
+				$sheme = 'LEI';
+				break;
+			case 'en':
+				$sheme = 'WEBACCESS_EN';
+				break;
+			case 'de':
+				$sheme = 'WEBACCESS_DE';
+				break;
+			case 'nl':
+				$sheme = 'WEBACCESS_NL';
+				break;
+			default:
+				$sheme = 'LEI';
+		}		
+		$params['SCHEMA'] = $sheme;
+		self::$url = $url . '?' . http_build_query($params);
 	}
 }

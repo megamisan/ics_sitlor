@@ -1012,6 +1012,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$params['templateFile'] = $this->templateFile;
 		$params['filter'] = implode('', $this->conf['filter.']);
 		$params['sorting'] = implode('', $this->conf['sort.']);
+		$params['sitlor_uid'] = $this->sitlor_uid;
 
 		$this->hash = md5(implode(';', $params));
 

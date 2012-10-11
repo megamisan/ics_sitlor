@@ -77,15 +77,9 @@ class tx_icssitlorquery_NomenclatureFactory {
 	 * @return	mixed
 	 */
 	private static function FetchValues() {
-		$params = array(
-			'user' => utf8_decode(self::$login),
-			'pwkey' => utf8_decode(self::$password),
-		);
-		$url = self::$url . '?' . http_build_query($params);
-
-		$xmlContent = tx_icssitlorquery_XMLTools::getXMLDocument($url);
+		$xmlContent = tx_icssitlorquery_XMLTools::getXMLDocument(self::$url);
 		if (!$xmlContent) {
-			tx_icssitquery_Debug::error('Unable to read nomenclature XML document at ' . $url);
+			tx_icssitquery_Debug::error('Unable to read nomenclature XML document at ' . self::$url);
 			return false;
 		}
 
@@ -423,6 +417,29 @@ class tx_icssitlorquery_NomenclatureFactory {
 
 		self::$login = $login;
 		self::$password = $password;
-		self::$url = $url;
+		
+		$params = array(
+			'user' => utf8_decode(self::$login),
+			'pwkey' => utf8_decode(self::$password),
+		);
+		switch ($GLOBALS['TSFE']->config['config']['language']) {
+			case 'fr':
+				$sheme = 'LEI';
+				break;
+			case 'en':
+				$sheme = 'WEBACCESS_EN';
+				break;
+			case 'de':
+				$sheme = 'WEBACCESS_DE';
+				break;
+			case 'nl':
+				$sheme = 'WEBACCESS_NL';
+				break;
+			default:
+				$sheme = 'LEI';
+		}		
+		$params['SCHEMA'] = $sheme;
+		self::$url = $url . '?' . http_build_query($params);
+		
 	}
 }

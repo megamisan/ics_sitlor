@@ -68,6 +68,25 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 	private $hotelEquipement;		// tx_icssitlorquery_ValuedTermList
 	private $hotelService;			// tx_icssitlorquery_ValuedTermList
 
+	private $documentationLanguage;	// tx_icssitlorquery_ValuedTermList
+	private $campingCapacity;		// tx_icssitlorquery_ValuedTermList
+	private $campingArea;
+	private $campingEquipment;		// tx_icssitlorquery_ValuedTermList
+	private $campingService;		// tx_icssitlorquery_ValuedTermList
+	private $campingCar_equipment_service;	// tx_icssitlorquery_ValuedTermList
+	
+	private $guesthouseDescription;	// tx_icssitlorquery_ValuedTermList
+	private $guesthouseComfort;		// tx_icssitlorquery_ValuedTermList
+	private $guesthouseService;		// tx_icssitlorquery_ValuedTermList
+	private $outsideEquipment;		// tx_icssitlorquery_ValuedTermList
+	
+	private $furnishedType;
+	private $furnishedDescription;	// tx_icssitlorquery_ValuedTermList
+	private $furnishedComfort;		// tx_icssitlorquery_ValuedTermList
+	private $furnishedService;		// tx_icssitlorquery_ValuedTermList
+	private $furnishedHeating;		// tx_icssitlorquery_ValuedTermList
+	private $furnishedSmoker;
+	
 	/**
 	 * Constructor
 	 *
@@ -84,6 +103,19 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 		$this->comfortRoom = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->hotelEquipement = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->hotelService = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->documentationLanguage = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->campingCapacity = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->campingEquipment = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->campingService = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->campingCar_equipment_service = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->guesthouseDescription = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->guesthouseComfort = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->guesthouseService = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->outsideEquipment = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->furnishedDescription = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->furnishedComfort = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->furnishedService = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->furnishedHeating = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -145,6 +177,41 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			case 'HotelService':
 				return $this->hotelService;
 
+			case 'DocumentationLanguage':
+				return $this->documentationLanguage;
+			case 'CampingCapacity':
+				return $this->campingCapacity;
+			case 'CampingEquipment':
+				return $this->campingEquipment;
+			case 'CampingService':
+				return $this->campingService;
+			case 'CampingCar_equipment_service':
+				return $this->campingCar_equipment_service;
+			case 'CampingArea':
+				return $this->campingArea;
+				
+			case 'GuesthouseDescription':
+				return $this->guesthouseDescription;
+			case 'GuesthouseComfort':
+				return $this->guesthouseComfort;
+			case 'GuesthouseService':
+				return $this->guesthouseService;
+			case 'OutsideEquipment':
+				return $this->outsideEquipment;
+
+			case 'FurnishedType':
+				return $this->furnishedType;
+			case 'FurnishedDescription':
+				return $this->furnishedDescription;
+			case 'FurnishedComfort':
+				return $this->furnishedComfort;
+			case 'FurnishedService':
+				return $this->furnishedService;
+			case 'FurnishedHeating':
+				return $this->furnishedHeating;
+			case 'FurnishedSmoker':
+				return $this->furnishedSmoker;
+				
 			default:
 				return parent::__get($name);
 		}
@@ -162,7 +229,11 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			'ProviderFax', 'ProviderEmail', 'ProviderWebSite', 'TimeTable', 
 			'ReceptionLanguage', 'ReservationLanguage', 'Pets', 
 			'AllowedPets', 'AllowedGroup', 'ReceptionGroup', 'MotorCoachPark', 
-			'Opening24_24', 'ComfortRoom', 'HotelEquipement', 'HotelService');
+			'Opening24_24', 'ComfortRoom', 'HotelEquipement', 'HotelService',
+			'DocumentationLanguage', 'CampingCapacity', 'CampingEquipment',
+			'CampingService', 'CampingCar_equipment_service', 'CampingArea',
+			'GuesthouseDescription', 'GuesthouseComfort', 'GuesthouseService', 'OutsideEquipment',
+			'FurnishedType','FurnishedDescription','FurnishedComfort','FurnishedService','FurnishedHeating','FurnishedSmoker');
 	}
 
 	/**
@@ -339,6 +410,40 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			$this->hotelEquipement->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::HOTEL_SERVICE)
 			$this->hotelService->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::DOCUMENTATION_LANGUAGE)
+			$this->documentationLanguage->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CAMPING_CAPACITY)
+			$this->campingCapacity->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CAMPING_EQUIPMENT)
+			$this->campingEquipment->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CAMPING_SERVICE)
+			$this->campingService->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CAMPINGCAR_EQUIPMENT_SERVICE)
+			$this->campingCar_equipment_service->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CAMPING_AREA)
+			$this->campingArea = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::GUESTHOUSE_DESCRIPTION)
+			$this->guesthouseDescription->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::GUESTHOUSE_COMFORT)
+			$this->guesthouseComfort->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::GUESTHOUSE_SERVICE)
+			$this->guesthouseService->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::OUTSIDE_EQUIPMENT)
+			$this->outsideEquipment->Add($valuedTerm);
+
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::FURNISHED_TYPE)
+			$this->furnishedType = $valuedTerm;
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::FURNISHED_DESCRIPTION)
+			$this->furnishedDescription->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::FURNISHED_COMFORT)
+			$this->furnishedComfort->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::FURNISHED_SERVICE)
+			$this->furnishedService->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::FURNISHED_HEATING)
+			$this->furnishedHeating->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::FURNISHED_SMOKER)
+			$this->furnishedSmoker = $valuedTerm;
+				
 	}
 
 	/**
@@ -382,6 +487,22 @@ class tx_icssitlorquery_FullAccomodation extends tx_icssitlorquery_Accomodation 
 			tx_icssitlorquery_CriterionUtils::COMFORT_ROOM,
 			tx_icssitlorquery_CriterionUtils::HOTEL_EQUIPMENT,
 			tx_icssitlorquery_CriterionUtils::HOTEL_SERVICE,
+			tx_icssitlorquery_CriterionUtils::DOCUMENTATION_LANGUAGE,
+			tx_icssitlorquery_CriterionUtils::CAMPING_CAPACITY,
+			tx_icssitlorquery_CriterionUtils::CAMPING_AREA,
+			tx_icssitlorquery_CriterionUtils::CAMPING_EQUIPMENT,
+			tx_icssitlorquery_CriterionUtils::CAMPING_SERVICE,
+			tx_icssitlorquery_CriterionUtils::CAMPINGCAR_EQUIPMENT_SERVICE,
+			tx_icssitlorquery_CriterionUtils::GUESTHOUSE_DESCRIPTION,
+			tx_icssitlorquery_CriterionUtils::GUESTHOUSE_COMFORT,
+			tx_icssitlorquery_CriterionUtils::GUESTHOUSE_SERVICE,
+			tx_icssitlorquery_CriterionUtils::OUTSIDE_EQUIPMENT,
+			tx_icssitlorquery_CriterionUtils::FURNISHED_TYPE,
+			tx_icssitlorquery_CriterionUtils::FURNISHED_DESCRIPTION,
+			tx_icssitlorquery_CriterionUtils::FURNISHED_COMFORT,
+			tx_icssitlorquery_CriterionUtils::FURNISHED_SERVICE,
+			tx_icssitlorquery_CriterionUtils::FURNISHED_HEATING,
+			tx_icssitlorquery_CriterionUtils::FURNISHED_SMOKER,
 		);
 		return array_merge(parent::getRequiredCriteria(), $criteria);
 	}

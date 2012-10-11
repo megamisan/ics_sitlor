@@ -165,6 +165,7 @@ class tx_icssitlorquery_CriterionUtils {
 	const SERVICEOPEN = 736000146;
 	const SERVICEOPEN_CLOSEDAY = 7;
 	const OPENDAY = 736001020;
+	const DOCUMENTATION_LANGUAGE = 736000078;  	// Langues documentations (camping)
 
 	/*******************************************************
 	 *
@@ -194,7 +195,40 @@ class tx_icssitlorquery_CriterionUtils {
 	const HOTEL_SERVICE = 736000020;
 	const STRANGE_ACCOMODATION = 4000099;
 	const STRANGE_ACCOMODATION_YES = 4000396;
-
+	
+	/*******************************************************
+	 *
+	 * Camping
+	 *
+	 *******************************************************/
+	const CAMPING_CAPACITY = 736000149;		// Capacité du camping
+	const CAMPING_AREA = 736000148;			// Superficie du camping (en hectare)
+	const CAMPING_EQUIPMENT = 736000048;	// Equipements du camping
+	const CAMPING_SERVICE = 736000052;		// Services du camping
+	const CAMPINGCAR_EQUIPMENT_SERVICE = 736001243;	// Camping-car :équipement et services
+	
+	/*******************************************************
+	 *
+	 * Guesthouse
+	 *
+	 *******************************************************/
+	const GUESTHOUSE_DESCRIPTION = 736001110;	// Descriptif de la chambre d'hôtes
+	const GUESTHOUSE_COMFORT = 736001112;		// Confort - chambre d'hôtes
+	const GUESTHOUSE_SERVICE = 736001111;		// Services de la chambre d'hôtes
+	const OUTSIDE_EQUIPMENT = 736001113;		// Equipements de plein-air	 
+	 
+	/*******************************************************
+	 *
+	 * Furnished
+	 *
+	 *******************************************************/
+	const FURNISHED_TYPE = 736001133;		// Type d'habitat - Indépendance
+	const FURNISHED_DESCRIPTION = 736000094;	// Descriptif de l'hébergement
+	const FURNISHED_COMFORT = 736000095;	// Confort de l'hébergement
+	const FURNISHED_SERVICE = 736000097;	// Services de l'hébergement
+	const FURNISHED_HEATING = 736001134;	// Type de chauffage
+	const FURNISHED_SMOKER = 4000069;		// Hébergement non fumeur
+	 
 	/*******************************************************
 	 *
 	 * Restaurant
@@ -325,4 +359,5 @@ class tx_icssitlorquery_CriterionUtils {
 	const ONLINE_BOOKING = 737000020;	// Adhérent centrale de réservation
 	const ONLINE_BOOKING_NO = 737000198;
 	const ONLINE_BOOKING_YES = 737000197;
+	const CODE_BOOKING = 737000025;		// Code Centrale Réservation
 }
