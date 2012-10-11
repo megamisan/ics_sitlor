@@ -1,4 +1,5 @@
 2012-10-11 Tsi Yang <tsi@in-cite.net>
+	* Fix: Retrived wrong property.
 	* Feature: Retrieved criterion and nomenclature switch language.
 	* Feature: Added camping, guesthouse, furnished, informations data.
 

@@ -264,7 +264,7 @@ class tx_icssitlorquery_SingleRenderer {
 			'FURNISHED_SERVICE_LABEL' => $this->pi->pi_getLL('furnishedService', 'Furnished service', true),
 			'FURNISHED_SERVICE' => $element->FurnishedService,
 			'FURNISHED_HEATING_LABEL' => $this->pi->pi_getLL('furnishedHeating', 'Furnished heating', true),
-			'FURNISHED_HEATING' => $element->FurnishedHEATING,
+			'FURNISHED_HEATING' => $element->FurnishedHeating,
 			'FURNISHED_SMOKER_LABEL' => $this->pi->pi_getLL('furnishedSmoker', 'Furnished smoker', true),
 			'FURNISHED_SMOKER' => $element->FurnishedSmoker,
 				// onlineBooking
@@ -352,7 +352,7 @@ class tx_icssitlorquery_SingleRenderer {
 			$subparts['###SUBPART_FURNISHED_COMFORT###'] = '';
 		if ($element->FurnishedService->Count()<=0)
 			$subparts['###SUBPART_FURNISHED_SERVICE###'] = '';
-		if ($element->FurnishedService->Count()<=0)
+		if ($element->FurnishedHeating->Count()<=0)
 			$subparts['###SUBPART_FURNISHED_HEATING###'] = '';
 		if (!$element->FurnishedSmoker)
 			$subparts['###SUBPART_FURNISHED_SMOKER###'] = '';
