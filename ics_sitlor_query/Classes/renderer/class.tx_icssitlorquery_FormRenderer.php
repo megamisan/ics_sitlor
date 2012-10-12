@@ -27,20 +27,22 @@
  *
  *
  *
- *   56: class tx_icssitlorquery_FormRenderer
- *   71:     function __construct($pi, $cObj, $lConf)
- *   87:     private function setDataForm()
- *  148:     function render()
- *  194:     private function renderGeneric(&$markers)
- *  207:     private function renderSpecific(&$markers)
- *  232:     function renderSpecific_Accomodation(&$markers)
- *  265:     function renderSpecific_Restaurant(&$markers)
- *  310:     function renderSpecific_Event(&$markers)
- *  326:     private function renderMore(&$markers)
- *  357:     function renderMore_Accomodation(&$markers)
- *  391:     function renderMore_Event(&$markers)
+ *   58: class tx_icssitlorquery_FormRenderer
+ *   80:     function __construct($pi, $cObj, $lConf)
+ *   97:     private function setDataForm()
+ *  184:     function render()
+ *  234:     private function renderGeneric(&$markers)
+ *  247:     private function renderSpecific(&$markers)
+ *  275:     function renderSpecific_Accomodation(&$markers)
+ *  332:     function renderSpecific_Restaurant(&$markers)
+ *  377:     function renderSpecific_Event(&$markers)
+ *  392:     function renderSpecific_Subscriber(&$markers)
+ *  411:     function renderSpecific_Subscriber_types(array $types)
+ *  434:     private function renderMore(&$markers)
+ *  465:     function renderMore_Accomodation(&$markers)
+ *  499:     function renderMore_Event(&$markers)
  *
- * TOTAL FUNCTIONS: 11
+ * TOTAL FUNCTIONS: 13
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
@@ -60,11 +62,11 @@
 	private static $foreignFood = array();
 	private static $hotelEquipment = array();
 	private static $dayOfWeek = array(1,2,3,4,5,6,7);	// int : ISO-8601 numeric representation of the day of the week, 1 (for Monday) through 7 (for Sunday)
-	
+
 	private static $subscriber_types_artsAndCrafts = array();
 	private static $subscriber_types_commerce = array();
 	private static $subscriber_types_other = array();
-	
+
 	public $addViewTab = false;
 
 	/**
@@ -152,26 +154,45 @@
 			),
 		);
 
-		
+		// Get subscribers type | artsAndCrafts 
 		self::$subscriber_types_artsAndCrafts = array();
-		foreach (tx_icssitlorquery_CriterionUtils::$artsAndCrafts as $label=>$artCraft) {
-			self::$subscriber_types_artsAndCrafts['artsAndCrafts_'.$label] = 'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $artCraft;
+		$termList = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS));
+		for ($i=0; $i<$termList->Count(); $i++) {
+			$term = $termList->Get($i);
+			$label = $this->pi->pi_getLL('criterionTerm_' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . '_' . $term->ID,$term->Name, true);
+			$value =  'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $term->ID;
+			self::$subscriber_types_artsAndCrafts[$label] = $value;
 		}
-		
+		ksort(self::$subscriber_types_artsAndCrafts);
+
+		// Get subscribers type | commerce 
 		self::$subscriber_types_commerce = array();
-		foreach (tx_icssitlorquery_CriterionUtils::$commerces as $label=>$commerce) {
-			self::$subscriber_types_commerce['commerces_'.$label] = 'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $commerce;
+		$termList = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::COMMERCE));
+		for ($i=0; $i<$termList->Count(); $i++) {
+			$term = $termList->Get($i);
+			$label = $this->pi->pi_getLL('criterionTerm_' . tx_icssitlorquery_CriterionUtils::COMMERCE . '_' . $term->ID,$term->Name, true);
+			$value = 'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $term->ID;
+			self::$subscriber_types_commerce[$label] = $value;
 		}
-		
+		ksort(self::$subscriber_types_commerce);
+
+		// Get subscribers type | other 
+		$type_hotel = tx_icssitlorquery_NomenclatureFactory::GetType(tx_icssitlorquery_NomenclatureUtils::HOTEL);
+		$cat_hollidayCottage = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE);
+		$cat_residence = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESIDENCE);
+		$cat_guestHouse = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE);
+		$cat_restaurant = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESTAURANT);
+		$cat_association = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::ASSOCIATION);
 		self::$subscriber_types_other = array(
-			'subscriber_typeHotel' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOTEL,
-			'subscriber_typeFurnishedHotel' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE,
-			'subscriber_typeResidence' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESIDENCE,
-			'subscriber_typehollidayCottage_guesthouse' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE,
-			'subscriber_typeRestaurant' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESTAURANT,
-			'subscriber_typeAssociation' => 'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::ASSOCIATION,
+			$this->pi->pi_getLL('hotel', $type_hotel->Name, true) => $type_hotel->ID,
+			$this->pi->pi_getLL('hollidayCottage', $cat_hollidayCottage->Name, true) => $cat_hollidayCottage->ID,
+			$this->pi->pi_getLL('residence', $cat_residence->Name, true) => $cat_residence->ID,
+			$this->pi->pi_getLL('guesthouse', $cat_guestHouse->Name, true) => $cat_guestHouse->ID,
+			$this->pi->pi_getLL('restaurant', $cat_restaurant->Name, true) => $cat_restaurant->ID,
+			$this->pi->pi_getLL('association', $cat_association->Name, true) => $cat_association->ID,
 		);
-		
+		ksort(self::$subscriber_types_other);
+
 	}
 
 	/**
@@ -282,15 +303,15 @@
 				'HOTEL_LABEL' => $this->pi->pi_getLL('hotel', 'Hotel', true),
 				'HOTEL_VALUE' => self::$subAccomodations['hotel'],
 				'SELECTED_HOTEL' => in_array(self::$subAccomodations['hotel'], $this->search['subDataGroups'])? 'checked="checked"': '',
-				
+
 				'CAMPING_YOUTHHOSTEL_LABEL' => $this->pi->pi_getLL('camping_youthHostel', 'Camping and youth hostel', true),
 				'CAMPING_YOUTHHOSTEL_VALUE' => self::$subAccomodations['camping_youthHostel'],
 				'SELECTED_CAMPING_YOUTHHOSTEL' => in_array(self::$subAccomodations['camping_youthHostel'], $this->search['subDataGroups'])? 'checked="checked"': '',
-				
+
 				'STRANGE_LABEL' => $this->pi->pi_getLL('strange', 'Strange', true),
 				'STRANGE_VALUE' => self::$subAccomodations['strange'],
 				'SELECTED_STRANGE' => in_array(self::$subAccomodations['strange'], $this->search['subDataGroups'])? 'checked="checked"': '',
-				
+
 				'HOLLIDAY_COTTAGE_GUESTHOUSE_LABEL' => $this->pi->pi_getLL('hollidayCottage_guesthouse', 'Holliday cottage and guesthouse', true),
 				'HOLLIDAY_COTTAGE_GUESTHOUSE_VALUE' => self::$subAccomodations['hollidayCottage_guesthouse'],
 				'SELECTED_HOLLIDAY_COTTAGE_GUESTHOUSE' => in_array(self::$subAccomodations['hollidayCottage_guesthouse'], $this->search['subDataGroups'])? 'checked="checked"': '',
@@ -298,7 +319,7 @@
 			$markers = array_merge($locMarkers, $markers);
 			$subparts['###SUBPART_ANY_SUBDATAGROUP###'] = $this->cObj->getSubpart($template, '###SUBPART_ANY_SUBDATAGROUP###');
 		}
-		
+
 		// Hotel
 		$subparts['###SUBPART_HOTEL###'] = '';
 		if (in_array('HOTEL', $subDataGroups)) {
@@ -385,12 +406,12 @@
 	 * Render Subscribers search form specific
 	 *
 	 * @param	array&		$markers: Markers array
-	 * @return	string	HTML content
+	 * @return	string		HTML content
 	 */
 	function renderSpecific_Subscriber(&$markers) {
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_SUBSCRIBER###');
 		$locMarkers = array(
-			'ANY_TYPE' => $this->renderSpecific_Subscriber_types(array('subscriber_types_anyType' => '')),
+			'ANY_TYPE' => $this->renderSpecific_Subscriber_types(array( $this->pi->pi_getLL('subscriber_types_anyType', 'subscriber_types_anyType', true) => '')),
 			'ARTS_CRAFTS_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_artsAndCrafts),
 			'COMMERCE_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_commerce),
 			'OTHER_TYPE' => $this->renderSpecific_Subscriber_types(self::$subscriber_types_other),
@@ -401,13 +422,10 @@
 		);
 		return $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
 	}
-	
+
 	/**
-	 *
-	 *
-	 * @param	array	$types: Array of subscribers types
-	 *
-	 * @return	string	HTML content
+	 * @param	array		$types: Array of subscribers types
+	 * @return	string		HTML content
 	 */
 	function renderSpecific_Subscriber_types(array $types) {
 		$itemTemplate = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_FORM_SUBSCRIBER_TYPE###');
@@ -417,7 +435,7 @@
 				'UNIQID' => $uniqId,
 				'SUBSCRIBER_TYPE_VALUE' => $type,
 				'CHECKED' => ($this->search['subscriber_type']==$type)? 'checked="checked"': '',
-				'SUBSCRIBER_TYPE_LABEL' => $this->pi->pi_getLL($label, $label, true),
+				'SUBSCRIBER_TYPE_LABEL' => $label,
 			);
 			$itemContent .= $this->cObj->substituteMarkerArray($itemTemplate, $locMarkers, '###|###');
 		}

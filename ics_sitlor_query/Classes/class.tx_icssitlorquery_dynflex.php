@@ -348,43 +348,91 @@ class tx_icssitlorquery_dynflex {
 		$xmlFlexPart = '';
 		$flexArray = array();
 				
+		// $subscriber_types = array(
+			// array($llang_ffds . ':subscriber_types_anyType', ''),
+		// );
+		// foreach (tx_icssitlorquery_CriterionUtils::$artsAndCrafts as $key=>$artCraft) {
+			// $subscriber_types[] = array(
+				// $llang_ffds . ':artsAndCrafts_' . $key, 
+				// 'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $artCraft
+			// );
+		// }
+
+		$pagesTSC = t3lib_BEfunc::getPagesTSconfig($this->id);
+		$conf = $pagesTSC['tx_icssitlorquery.']['sitlor.'];
+		// Check login, password, urls
+		if (!$conf['login']) {
+			tx_icssitquery_Debug::error('Login is required.');
+			return;
+		}
+		if (!$conf['password']) {
+			tx_icssitquery_Debug::error('Password is required.');
+			return;
+		}
+		if (!$conf['url']) {
+			tx_icssitquery_Debug::error('Url is required.');
+			return;
+		}
+		if (!$conf['nomenclatureUrl']) {
+			tx_icssitquery_Debug::error('Nomenclature url is required.');
+			return;
+		}
+		if (!$conf['criterionUrl']) {
+			tx_icssitquery_Debug::error('Criterion url is required.');
+			return;
+		}
+		tx_icssitlorquery_Configurator::setConnection($conf['login'], $conf['password'], $conf['nomenclatureUrl'], $conf['criterionUrl']);		
+
 		$subscriber_types = array(
 			array($llang_ffds . ':subscriber_types_anyType', ''),
 		);
-		foreach (tx_icssitlorquery_CriterionUtils::$artsAndCrafts as $key=>$artCraft) {
-			$subscriber_types[] = array(
-				$llang_ffds . ':artsAndCrafts_' . $key, 
-				'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $artCraft
-			);
+		$subscriber_artsAndCrafts = array();
+		$termList = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS));
+		for ($i=0; $i<$termList->Count(); $i++) {
+			$term = $termList->Get($i);
+			$subscriber_artsAndCrafts[$term->Name] = array($term->Name, 'CRITERION,' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ',' . tx_icssitlorquery_CriterionUtils::ARTS_CRAFTS . ':' . $term->ID);
 		}
-		foreach (tx_icssitlorquery_CriterionUtils::$commerces as $key=>$com) {
-			$subscriber_types[] = array(
-				$llang_ffds . ':commerces_' . $key, 
-				'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $com
-			);
+		ksort($subscriber_artsAndCrafts);		
+		$subscriber_types = array_merge($subscriber_types, $subscriber_artsAndCrafts);
+
+		// foreach (tx_icssitlorquery_CriterionUtils::$commerces as $key=>$com) {
+			// $subscriber_types[] = array(
+				// $llang_ffds . ':commerces_' . $key, 
+				// 'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $com
+			// );
+		// }
+		
+		$subscriber_commerce = array();
+		$termList = tx_icssitlorquery_CriterionFactory::GetCriterionTerms(tx_icssitlorquery_CriterionFactory::GetCriterion(tx_icssitlorquery_CriterionUtils::COMMERCE));
+		for ($i=0; $i<$termList->Count(); $i++) {
+			$term = $termList->Get($i);
+			$subscriber_commerce[$term->Name] = array($term->Name, 'CRITERION,' . tx_icssitlorquery_CriterionUtils::COMMERCE . ',' . tx_icssitlorquery_CriterionUtils::COMMERCE . ':' . $term->ID);
 		}
+		ksort($subscriber_commerce);		
+		$subscriber_types = array_merge($subscriber_types, $subscriber_commerce);
+		
 		$subscriber_types[] = array(
-			$llang_ffds . ':subscriber_typeHotel',
+			$llang_ffds . ':hotel',
 			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOTEL
 		);
 		$subscriber_types[] = array(
-			$llang_ffds . ':subscriber_typeFurnishedHotel',
+			$llang_ffds . ':hollidayCottage',
 			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::HOLLIDAY_COTTAGE
 		);
 		$subscriber_types[] = array(
-			$llang_ffds . ':subscriber_typeResidence',
+			$llang_ffds . ':residence',
 			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESIDENCE
 		);
 		$subscriber_types[] = array(
-			$llang_ffds . ':subscriber_typehollidayCottage_guesthouse',
+			$llang_ffds . ':guesthouse',
 			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::GUESTHOUSE
 		);
 		$subscriber_types[] = array(
-			$llang_ffds . ':subscriber_typeRestaurant',
+			$llang_ffds . ':restaurant',
 			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::RESTAURANT
 		);
 		$subscriber_types[] = array(
-			$llang_ffds . ':subscriber_typeAssociation',
+			$llang_ffds . ':association',
 			'NOMENCLATURE,CATEGORY,' . tx_icssitlorquery_NomenclatureUtils::ASSOCIATION
 		);
 		
