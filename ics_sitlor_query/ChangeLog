@@ -1,5 +1,8 @@
+2012-10-12 Tsi Yang <tsi@in-cite.net>
+	* Fix: Wrong parameter for cache.
+	
 2012-10-11 Tsi Yang <tsi@in-cite.net>
-	* Fix: Retrived wrong property.
+	* Fix: Retrieved wrong property.
 	* Feature: Retrieved criterion and nomenclature switch language.
 	* Feature: Added camping, guesthouse, furnished, informations data.
 

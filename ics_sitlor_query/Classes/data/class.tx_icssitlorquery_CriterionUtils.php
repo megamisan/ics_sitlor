@@ -282,7 +282,7 @@ class tx_icssitlorquery_CriterionUtils {
 	 * Subscriber
 	 *
 	 *******************************************************/
-	const ARTS_CRAFTS = 737000002;
+	const ARTS_CRAFTS = 737000002;		// Domaine d'activité d'artisans (local)
 	const SUBSCRIBER_JEWELS = 737000004;		// Term "Bijoux - Accessoires" of ARTS_CRAFTS
 	const SUBSCRIBER_WOOD = 737000005;			// Term "Bois" of ARTS_CRAFTS
 	const SUBSCRIBER_EMBROIDERY = 737000006;	// Term "Broderie" of ARTS_CRAFTS
@@ -316,7 +316,7 @@ class tx_icssitlorquery_CriterionUtils {
 		'stained_glass' => self::SUBSCRIBER_STAINED_GLASS,
 	);
 	
-	const COMMERCE = 737000009;
+	const COMMERCE = 737000009;		// Domaine d'activité
 	const SUBSCRIBER_FOOD = 737000051;	// Alimentation
 	const SUBSCRIBER_ART_AND_CRATF = 737000052;	// Art - Création
 	const SUBSCRIBER_OTHER_COMMERCE = 737000063;	// Autres
