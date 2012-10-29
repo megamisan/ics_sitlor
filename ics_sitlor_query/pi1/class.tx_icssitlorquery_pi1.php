@@ -1006,13 +1006,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
         }
 
 		$params['connection'] = $this->conf['url'] . $this->conf['login'] . $this->conf['password'];
-		$params['view'] = implode('', $this->conf['view.']);
+		$params['view'] = serialize($this->conf['view.']);
 		$params['page'] = $this->conf['page'];
 		$params['code'] = $mode;
 		$params['templateFile'] = $this->templateFile;
 		$params['filter'] = serialize($this->conf['filter.']);
 		$params['sorting'] = implode('', $this->conf['sort.']);
 		$params['sitlor_uid'] = $this->sitlor_uid;
+		$params['language'] = $GLOBALS['TSFE']->config['config']['language'];
 
 		$this->hash = md5(implode(';', $params));
 

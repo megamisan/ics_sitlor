@@ -101,6 +101,7 @@
 		$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULTS_LIST###');
 		$subparts = array();
 		$itemTemplate = $this->cObj->getSubpart($template, '###ITEM###');
+		$this->countIdenticalEvents = array();
 		foreach ($elements as $element) {
 			$dataArray = array(
 				'ID' => $element->ID,
@@ -213,12 +214,23 @@
 		}
 		// Render Events
 		elseif ($element instanceof tx_icssitlorquery_Event) {
+			if(!in_array($element->ID, array_keys($this->countIdenticalEvents)))
+				$this->countIdenticalEvents[$element->ID] = 0;
+			else
+				$this->countIdenticalEvents[$element->ID] = $this->countIdenticalEvents[$element->ID] +1;
+				
+			if ($element->TimeTable->Count()> $this->countIdenticalEvents[$element->ID])
+				$date = $this->pi->renderData('date', $element->TimeTable->Get($this->countIdenticalEvents[$element->ID]));
+			else 
+				$date = $this->pi->pi_getLL('noDate', 'No date', true);
+			
 			$template = $this->cObj->getSubpart($this->templateCode, '###TEMPLATE_RESULT_ITEM_EVENT###');
 			$locMarkers = array(
 				'KIND_EVENT' => $element->KindOfEvent,
 				'TITLE' => $this->pi->renderSingleLink('title', $element),
 				'DESCRIPTION' => $this->pi->renderData('description', $element->Description),
-				'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
+				// 'DATE' => ($element->TimeTable->Count()>0? $this->pi->renderData('date', $element->TimeTable->Get(0)): $this->pi->pi_getLL('noDate', 'No date', true)),
+				'DATE' => $date,
 				'LINK_MORE' => $this->pi->renderSingleLink('more', $element),
 			);
 		}

@@ -302,19 +302,19 @@
 			$locMarkers = array(
 				'HOTEL_LABEL' => $this->pi->pi_getLL('hotel', 'Hotel', true),
 				'HOTEL_VALUE' => self::$subAccomodations['hotel'],
-				'SELECTED_HOTEL' => in_array(self::$subAccomodations['hotel'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				'SELECTED_HOTEL' => (is_array($this->search['subDataGroups']) && in_array(self::$subAccomodations['hotel'], $this->search['subDataGroups']))? 'checked="checked"': '',
 
 				'CAMPING_YOUTHHOSTEL_LABEL' => $this->pi->pi_getLL('camping_youthHostel', 'Camping and youth hostel', true),
 				'CAMPING_YOUTHHOSTEL_VALUE' => self::$subAccomodations['camping_youthHostel'],
-				'SELECTED_CAMPING_YOUTHHOSTEL' => in_array(self::$subAccomodations['camping_youthHostel'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				'SELECTED_CAMPING_YOUTHHOSTEL' => (is_array($this->search['subDataGroups']) &&in_array(self::$subAccomodations['camping_youthHostel'], $this->search['subDataGroups']))? 'checked="checked"': '',
 
 				'STRANGE_LABEL' => $this->pi->pi_getLL('strange', 'Strange', true),
 				'STRANGE_VALUE' => self::$subAccomodations['strange'],
-				'SELECTED_STRANGE' => in_array(self::$subAccomodations['strange'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				'SELECTED_STRANGE' => (is_array($this->search['subDataGroups']) && in_array(self::$subAccomodations['strange'], $this->search['subDataGroups']))? 'checked="checked"': '',
 
 				'HOLLIDAY_COTTAGE_GUESTHOUSE_LABEL' => $this->pi->pi_getLL('hollidayCottage_guesthouse', 'Holliday cottage and guesthouse', true),
 				'HOLLIDAY_COTTAGE_GUESTHOUSE_VALUE' => self::$subAccomodations['hollidayCottage_guesthouse'],
-				'SELECTED_HOLLIDAY_COTTAGE_GUESTHOUSE' => in_array(self::$subAccomodations['hollidayCottage_guesthouse'], $this->search['subDataGroups'])? 'checked="checked"': '',
+				'SELECTED_HOLLIDAY_COTTAGE_GUESTHOUSE' => (is_array($this->search['subDataGroups']) && in_array(self::$subAccomodations['hollidayCottage_guesthouse'], $this->search['subDataGroups']))? 'checked="checked"': '',
 			);
 			$markers = array_merge($locMarkers, $markers);
 			$subparts['###SUBPART_ANY_SUBDATAGROUP###'] = $this->cObj->getSubpart($template, '###SUBPART_ANY_SUBDATAGROUP###');

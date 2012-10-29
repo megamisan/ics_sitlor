@@ -1,3 +1,7 @@
+2012-10-29 Tsi Yang <tsi@in-cite.net>
+	* Fix: Retrieved event dates on several dates for list view.
+	* Fix: Wrong parameter for cache.
+
 2012-10-12 Tsi Yang <tsi@in-cite.net>
 	* Fix: Undefined subscriber type in search engine. Subscriber types are now dynamic.
 	* Fix: Wrong parameter for cache.
