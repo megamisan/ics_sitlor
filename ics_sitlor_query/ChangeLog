@@ -1,3 +1,6 @@
+2012-12-28 Tsi Yang <tsi.yang@plna-net.fr>
+	* Comments: Added manual.
+
 2012-10-29 Tsi Yang <tsi@in-cite.net>
 	* Fix: Retrieved event dates on several dates for list view.
 	* Fix: Wrong parameter for cache.
