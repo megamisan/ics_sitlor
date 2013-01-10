@@ -1,4 +1,7 @@
-2012-12-28 Tsi Yang <tsi.yang@plna-net.fr>
+2013-01-10 Tsi Yang <tsi.yang@plan-net.fr>
+	* Fix: Subscriber filter on "Other" is now fixed.
+
+2012-12-28 Tsi Yang <tsi.yang@plan-net.fr>
 	* Comments: Added manual.
 
 2012-10-29 Tsi Yang <tsi@in-cite.net>
