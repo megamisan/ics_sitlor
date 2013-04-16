@@ -68,7 +68,7 @@
 			<label index="ft_weekend">Week end</label>
 			<label index="OTNancySubscriber">OT Nancy subscriber code</label>
 			<label index="OTNancyFilter">Filter on OT Nancy</label>
-			<label index="entity_737">Filter on entity "737 - OT Nancy"</label>
+			<label index="entity_737">Filter on entity &quot;737 - OT Nancy&quot;</label>
 			<label index="paramSorting">Param sorting</label>
 			<label index="sortName">Sort name</label>
 			<label index="sortName_random">Random</label>
@@ -150,9 +150,9 @@
 			<label index="ft_outdoor">Plain air</label>
 			<label index="fr_rain">Météo</label>
 			<label index="ft_weekend">Week-end</label>
-			<label index="OTNancySubscriber">Adhérent OT Nancy "OUI" (ex: 737000029:737000238)</label>
-			<label index="OTNancyFilter">Filtrer sur Adhérent OT Nancy "OUI"</label>
-			<label index="entity_737">Filtrer sur l'entité "737 - OT Nancy"</label>
+			<label index="OTNancySubscriber">Adhérent OT Nancy &quot;OUI&quot; (ex: 737000029:737000238)</label>
+			<label index="OTNancyFilter">Filtrer sur Adhérent OT Nancy &quot;OUI&quot;</label>
+			<label index="entity_737">Filtrer sur l'entité &quot;737 - OT Nancy&quot;</label>
 			<label index="paramSorting">Paramètre de tri</label>
 			<label index="sortName">Tri</label>
 			<label index="sortName_random">Aléatoire</label>
@@ -174,4 +174,8 @@
 			<label index="association">Association</label>
 		</languageKey>
 	</data>
+	<orig_hash type="array">
+	</orig_hash>
+	<orig_text type="array">
+	</orig_text>
 </T3locallang>

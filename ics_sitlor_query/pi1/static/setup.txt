@@ -190,6 +190,8 @@ plugin.tx_icssitlorquery_pi1 {
 				4000010 < .labelValue
 				# Furnished price
 				4000006 < .labelValue
+				# Guestroom price
+				4000008 < .labelValue
 				# Allowed group number
 				736000409 < .labelValue
 				# Restaurant capacity
@@ -345,6 +347,10 @@ plugin.tx_icssitlorquery_pi1 {
 		furnishedPrice < plugin.tx_icssitlorquery_pi1.renderConf.price
 		furnishedPrice {
 			10.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:furnishedPrice
+		}
+		guestRoomPrice < plugin.tx_icssitlorquery_pi1.renderConf.price
+		guestRoomPrice {
+			10.data = LLL:EXT:ics_sitlor_query/pi1/locallang.xml:guestRoomPrice
 		}
 		date.cObject = COA
 		date.cObject {

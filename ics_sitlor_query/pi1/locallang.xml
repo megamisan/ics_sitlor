@@ -42,6 +42,7 @@
 			<label index="price">Price</label>
 			<label index="hotelPrice">Price</label>
 			<label index="furnishedPrice">Price</label>
+			<label index="guestRoomPrice">Price</label>
 			<label index="noDate">No date</label>
 			<label index="identity">Identity</label>
 			<label index="description">Description</label>
@@ -157,6 +158,7 @@
 			<label index="price">Tarif</label>
 			<label index="hotelPrice">Tarif</label>
 			<label index="furnishedPrice">Tarif</label>
+			<label index="guestRoomPrice">Tarif</label>
 			<label index="noDate">N.C.</label>
 			<label index="identity">Informations principales</label>
 			<label index="description">Description</label>
@@ -236,7 +238,7 @@
 			<label index="furnishedSmoker">Hébergement non fumeur</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<!--<label index="data_not_available">Paramètres de service invalides.</label>-->
+			<label index="data_not_available">Servicehinweise sind ungültig</label>
 			<label index="search_accomodation">Unterkunft suchen</label>
 			<label index="search_restaurant">Restaurantsuche</label>
 			<label index="search_event">Veranstaltungsuche</label>
@@ -258,7 +260,7 @@
 			<label index="fastfood">Fastfood</label>
 			<label index="icecream_theahouse">Les glaciers et salon de thé</label>
 			<label index="culinarySpeciality">Ausländische Küche</label>
-			<!--<label index="creperie">Les crêperies</label>-->
+			<label index="creperie">Crêperies</label>
 			<label index="asian_food">Asiatique</label>
 			<label index="sa_food">Südamerikanisch</label>
 			<label index="oriental_food">Orientalisch</label>
@@ -330,25 +332,25 @@
 			<label index="subscriber_category_artsAndCrafts">Kunst-Handwerk/Hobby</label>
 			<label index="subscriber_category_commerce">Geschäfte</label>
 			<label index="subscriber_category_other">weitere</label>
-			<!--<label index="results_list">Résultats</label>-->
-			<!--<label index="results_map">Carte</label>-->
-			<!--<label index="capacity">Capacité</label>-->
-			<!--<label index="camping_capacity">Capacité du camping</label>-->
-			<!--<label index="camping_area">Superficie du camping</label>-->
-			<!--<label index="comfort">Confort</label>-->
-			<!--<label index="camping_equipment">Equipements du camping</label>-->
-			<!--<label index="camping_service">Services du camping</label>-->
-			<!--<label index="campingcar_equipment_service">Camping-car (équipement et services)</label>-->
-			<!--<label index="guesthouseDescription">Descriptif de la chambre d'hôtes</label>-->
-			<!--<label index="guesthouseComfort">Confort - chambre d'hôtes</label>-->
-			<!--<label index="guesthouseService">Services de la chambre d'hôtes</label>-->
-			<!--<label index="outsideEquipment">Equipement de plein-air</label>-->
-			<!--<label index="furnishedType">Type d'habitat - Indépendance</label>-->
-			<!--<label index="furnishedDDescription">Descriptif de l'hébergement</label>-->
-			<!--<label index="furnishedComfort">Confort de l'hébergement</label>-->
-			<!--<label index="furnishedService">Services de l'hébergement</label>-->
-			<!--<label index="furnishedHeating">Type de chauffage</label>-->
-			<!--<label index="furnishedSmoker">Hébergement non fumeur</label>-->
+			<label index="results_list">Ergebnisse</label>
+			<label index="results_map">Karte</label>-->
+			<label index="capacity">Kapazität</label>-->
+			<label index="camping_capacity">Kapazität des Campingplatzes</label>
+			<label index="camping_area">Oberfläche des Campingplatzes</label>
+			<label index="comfort">Komfort</label>
+			<label index="camping_equipment">Ausstattung des Campingplatzes</label>
+			<label index="camping_service">Serviceleistungen des Campingplatzes</label>
+			<label index="campingcar_equipment_service">Wohnmobilstellplatz (Ausstattung und Serviceleistungen)</label>
+			<label index="guesthouseDescription">Beschreibung des Gästezimmers</label>
+			<label index="guesthouseComfort">Komfort des Gästezimmers</label>
+			<label index="guesthouseService">Serviceleistungen des Gästezimmers</label>
+			<label index="outsideEquipment">Aussenausstattung</label>
+			<label index="furnishedType">Unabhängigkeitsgrad der Unterkunft</label>
+			<label index="furnishedDDescription">Beschreibung der Unterkunf</label>
+			<label index="furnishedComfort">Komfort der Unterkunft</label>
+			<label index="furnishedService">Serviceleistungen der Unterkunft</label>
+			<label index="furnishedHeating">Heizungstyp</label>
+			<label index="furnishedSmoker">Nichtraucherunterkunft</label>
 		</languageKey>
 	</data>
 </T3locallang>

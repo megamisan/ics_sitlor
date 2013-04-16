@@ -301,6 +301,14 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 
 		// Select params Hotel
 		$hotelTypes =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hotelTypes', 'paramSelect');
+		// Fetches types
+		$types = t3lib_div::trimExplode(',', $hotelTypes, true);
+		if (in_array(tx_icssitlorquery_NomenclatureUtils::RESIDENCE, $types)) {
+			$types = array_diff($types, array(tx_icssitlorquery_NomenclatureUtils::RESIDENCE));
+			$types[] = tx_icssitlorquery_NomenclatureUtils::TOURIST_RESIDENCE;
+			$types[] = tx_icssitlorquery_NomenclatureUtils::HOTEL_RESIDENCE;
+		}
+		$hotelTypes = implode(',', $types);
 		$this->conf['filter.']['hotelTypes'] = $hotelTypes? $hotelTypes : $this->conf['filter.']['hotelType'];
 		$hotelEquipments =  $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'hotelEquipments', 'paramSelect');
 		$this->conf['filter.']['hotelEquipments'] = $hotelEquipments? $hotelEquipments : $this->conf['filter.']['hotelEquipment'];
@@ -423,7 +431,15 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		$this->FormFilter = array();
 		if ($this->piVars['btn_hotelType']) {
 			$this->FormFilter['hotelType'] = $params['hotelType'];
-			$this->conf['filter.']['hotelTypes'] = implode(',', $params['hotelType']);
+			// Fetches types
+			$types = $params['hotelType'];
+			if (in_array(tx_icssitlorquery_NomenclatureUtils::RESIDENCE, $types)) {
+				$types = array_diff($types, array(tx_icssitlorquery_NomenclatureUtils::RESIDENCE));
+				$types[] = tx_icssitlorquery_NomenclatureUtils::TOURIST_RESIDENCE;
+				$types[] = tx_icssitlorquery_NomenclatureUtils::HOTEL_RESIDENCE;
+			}
+			$hotelTypes = implode(',', $types);
+			$this->conf['filter.']['hotelTypes'] = $hotelTypes;
 		}
 		if ($this->piVars['btn_hotelEquipment']) {
 			$this->FormFilter['hotelEquipment'] = $params['hotelEquipment'];

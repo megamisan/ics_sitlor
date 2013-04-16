@@ -108,7 +108,8 @@
 			),
 			'furnished' => array(
 				'label' =>  $this->pi->pi_getLL('furnished', 'Furnished', true),
-				'value' => tx_icssitlorquery_NomenclatureUtils::FURNISHED
+				// 'value' => tx_icssitlorquery_NomenclatureUtils::FURNISHED
+				'value' => tx_icssitlorquery_NomenclatureUtils::RESIDENCE
 			),
 		);
 		self::$hotelEquipment = array(

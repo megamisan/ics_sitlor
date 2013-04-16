@@ -222,6 +222,7 @@ class tx_icssitlorquery_SingleRenderer {
 			'PRICE_LABEL' => $this->pi->pi_getLL('price', 'Price', true),
 			'SINGLE_CLIENT_PRICE' => $element->CurrentSingleClientsRate,
 			'WEEKRATE' => $element->CurrentWeekRate,
+			'BEDANDLUNCH' => $element->CurrentBedAndLunchRate,
 				// Comfort room
 			'COMFORTROOM_LABEL' =>  $this->pi->pi_getLL('comfort_room', 'Comfort room', true),
 			'COMFORT_ROOM' => $element->ComfortRoom,
@@ -277,6 +278,8 @@ class tx_icssitlorquery_SingleRenderer {
 			$subparts['###SUBPART_SINGLE_CLIENT_PRICE###'] = '';
 		if ($element->CurrentWeekRate->Count()<=0)
 			$subparts['###SUBPART_WEEKRATE###'] = '';
+		if ($element->CurrentBedAndLunchRate->Count()<=0)
+			$subparts['###SUBPART_BEDANDLUNCH###'] = '';
 		if ($element->ReceptionLanguage->Count()<=0)
 			$subparts['###SUBPART_RECEPTION_LANGUAGE###'] = '';
 		if ($element->ReservationLanguage->Count()<=0)
@@ -298,11 +301,16 @@ class tx_icssitlorquery_SingleRenderer {
 		if ($element->OnlineBooking->Term->ID != tx_icssitlorquery_CriterionUtils::ONLINE_BOOKING_YES)
 			$subparts['###SUBPART_ONLINEBOOKING###'] = '';
 
+		// Price display
+		if (in_array($element->Type->ID, tx_icssitlorquery_NomenclatureUtils::$camping)) {
+			$subparts['###SUBPART_PRICE###'] = '';
+		}
+			
 		// Hotel display
 		if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::HOTEL && $element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT) {
 			$subparts['###SUBPART_HOTELCOMFORT###'] = '';
-			if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::FURNISHED)
-				$subparts['###SUBPART_PRICE###'] = '';
+			// if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::FURNISHED)
+				// $subparts['###SUBPART_PRICE###'] = '';
 		}
 		if ($element->ComfortRoom->Count()<=0)
 			$subparts['###SUBPART_COMFORTROOM###'] = '';

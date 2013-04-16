@@ -42,6 +42,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 
 	private $currentSingleClientsRate;	// tx_icssitlorquery_ValuedTermList
 	private $currentWeekRate;	// tx_icssitlorquery_ValuedTermList
+	private $currentBedAndLunchRate;
 	private $mobilityImpaired;
 
 	private $coordinates = null;
@@ -61,6 +62,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		$this->Illustration = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermTupleList');
 		$this->currentSingleClientsRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 		$this->currentWeekRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
+		$this->currentBedAndLunchRate = t3lib_div::makeInstance('tx_icssitlorquery_ValuedTermList');
 	}
 
 	/**
@@ -77,6 +79,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 				return $this->currentSingleClientsRate;
 			case 'CurrentWeekRate':
 				return $this->currentWeekRate;
+			case 'CurrentBedAndLunchRate':
+				return $this->currentBedAndLunchRate;
 			case 'MobilityImpaired':
 				return $this->mobilityImpaired;
 
@@ -116,7 +120,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 	 * @return	array		The list of exisiting properties.
 	 */
 	public function getProperties() {
-		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired', 'CurrentWeekRate', 'OnlineBooking', 'CodeBooking');
+		return parent::getProperties() + array('Coordinates', 'Phones', 'CurrentSingleClientsRate', 'MobilityImpaired', 'CurrentWeekRate', 'CurrentBedAndLunchRate', 'OnlineBooking', 'CodeBooking');
 	}
 
 	/**
@@ -289,6 +293,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->currentSingleClientsRate->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE)
 			$this->currentWeekRate->Add($valuedTerm);
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_BEDANDLUNCH)
+			$this->currentBedAndLunchRate->Add($valuedTerm);
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED)
 			$this->mobilityImpaired = $valuedTerm;
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::ONLINE_BOOKING)
@@ -325,6 +331,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
 			tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE,
+			tx_icssitlorquery_CriterionUtils::CURRENT_BEDANDLUNCH,
 			tx_icssitlorquery_CriterionUtils::MOBILITY_IMPAIRED,
 			tx_icssitlorquery_CriterionUtils::ONLINE_BOOKING,
 			tx_icssitlorquery_CriterionUtils::CODE_BOOKING,

@@ -39,10 +39,15 @@ class tx_icssitlorquery_NomenclatureUtils {
 	const HOTEL = 4000002;				// Type "Hôtel"
 	const HOTEL_RESTAURANT = 4000003;	// Type "Hôtel - hôtel restaurant"
 	const FURNISHED = 4000012;			// Type "Meublé"
+	const RESIDENCE = 4000004; 			// Category "Résidence "
+	const TOURIST_RESIDENCE = 4000010;	// Type "Résidences de tourisme"
+	const HOTEL_RESIDENCE = 4000011;	// Type "Résidences hôtelière"
 	static $hotel = array(
 		self::HOTEL,
 		self::HOTEL_RESTAURANT,
-		self::FURNISHED,
+		// self::FURNISHED,
+		self::TOURIST_RESIDENCE,
+		self::HOTEL_RESIDENCE,
 	);
 
 	const HOLLIDAY_CAMPSITE = 4000007;	// Type "Terrain de Camping saisonnie"
@@ -57,7 +62,6 @@ class tx_icssitlorquery_NomenclatureUtils {
 	const GUESTHOUSE = 4000001;	// Category "Chambres d'hôtes"
 	const GUESTHOUSE_TYPE = 4000001;	// Type "Chambres d'hôtes"
 	const HOLLIDAY_COTTAGE = 4000005; // Category "Meublé "
-	const RESIDENCE = 4000004; // Category "Résidence "
 
 
 	/*******************************************************
