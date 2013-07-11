@@ -244,7 +244,8 @@ plugin.tx_icssitlorquery_pi1 {
 					}
 					20 = TEXT
 					20.override {
-						if.isFalse.field = empty
+						#if.isFalse.field = empty
+						if.isTrue.field = close
 						field = open
 						strftime = %R
 					}
@@ -262,8 +263,31 @@ plugin.tx_icssitlorquery_pi1 {
 							20.wrap = day|
 						}
 					}
+					/*
 					30 < .20
 					30.override.field = close
+					*/
+					30 = TEXT
+					30.override {
+						#if.isFalse.field = empty
+						if.isTrue.field = close
+						field = close
+						strftime = %R
+					}
+					30.innerWrap = <td class="timeCell">|</td>
+					30.addParams {
+						headers =
+						headers.cObject = COA
+						headers.cObject {
+							10 = TEXT
+							10.value = morning
+							10.noTrimWrap = || |
+							20 = TEXT
+							20.field = open
+							20.strftime = %u
+							20.wrap = day|
+						}
+					}
 				}
 				rowPM < .rowAM
 				rowPM.cObject.10 >

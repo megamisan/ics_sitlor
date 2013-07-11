@@ -1,3 +1,6 @@
+2013-07-11 Tsi Yang <tsi.yang@plan-net.fr>
+	* Fix: Added process to order illustration.
+
 2013-04-16 Tsi Yang <tsi.yang@plan-net.fr>
 	* Refactor: Added residence to hotel and removed furnished.
 	* Feature: Added guestroom price
