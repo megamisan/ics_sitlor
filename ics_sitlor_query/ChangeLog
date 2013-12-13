@@ -1,3 +1,6 @@
+2013-12-13 Pierrick Caillon <pcaillon@plan-net.fr>
+	* Update: Added one day caching on query results.
+
 2013-07-11 Tsi Yang <tsi.yang@plan-net.fr>
 	* Fix: Added process to order illustration.
 

@@ -105,6 +105,21 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 	private $entity = '737';
 	static private $startDate;
 	static private $endDate = '01/01/2100 23:59:59';
+	static private $cacheInstance = null;
+	
+	protected static function initCaching() {
+		t3lib_cache::initializeCachingFramework();
+        try {
+            self::$cacheInstance = $GLOBALS['typo3CacheManager']->getCache('icssitlorquery_cache');
+        } catch (t3lib_cache_exception_NoSuchCache $e) {
+            self::$cacheInstance = $GLOBALS['typo3CacheFactory']->create(
+                'icssitlorquery_cache',
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['icssitlorquery_cache']['frontend'],
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['icssitlorquery_cache']['backend'],
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['icssitlorquery_cache']['options']
+            );
+        }
+	}
 
 	/**
 	 * Initializes service access.
@@ -217,8 +232,23 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		$params['PVALUES'] = utf8_decode(implode(',', $pvalues));
 
 		$urlQuery = $this->url . '?' . http_build_query($params);
+		self::initCaching();
 		t3lib_div::devLog('Url', 'ics_sitlor_query', 0, array(urldecode($urlQuery)));
-		return tx_icssitlorquery_XMLTools::getXMLDocument($urlQuery);
+		$output = false;
+		$hash = sha1($urlQuery);
+		if (!self::$cacheInstance->has($hash)) {
+			try {
+				$output = tx_icssitlorquery_XMLTools::getXMLDocument($urlQuery);
+				self::$cacheInstance->set($hash, $output, array(), 86400);
+			}
+			catch (Exception $e) {
+				return false;
+			}
+		}
+		else {
+			$output = self::$cacheInstance->get($hash);
+		}
+		return $output;
 	}
 
 	/**
