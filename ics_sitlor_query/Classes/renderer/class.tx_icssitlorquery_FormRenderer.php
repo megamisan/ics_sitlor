@@ -185,12 +185,12 @@
 		$cat_restaurant = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::RESTAURANT);
 		$cat_association = tx_icssitlorquery_NomenclatureFactory::GetCategory(tx_icssitlorquery_NomenclatureUtils::ASSOCIATION);
 		self::$subscriber_types_other = array(
-			$this->pi->pi_getLL('hotel', $type_hotel->Name, true) => 'NOMENCLATURE,CATEGORY,' . $type_hotel->ID,
-			$this->pi->pi_getLL('hollidayCottage', $cat_hollidayCottage->Name, true) => 'NOMENCLATURE,CATEGORY,' . $cat_hollidayCottage->ID,
-			$this->pi->pi_getLL('residence', $cat_residence->Name, true) => 'NOMENCLATURE,CATEGORY,' . $cat_residence->ID,
-			$this->pi->pi_getLL('guesthouse', $cat_guestHouse->Name, true) => 'NOMENCLATURE,CATEGORY,' . $cat_guestHouse->ID,
-			$this->pi->pi_getLL('restaurant', $cat_restaurant->Name, true) => 'NOMENCLATURE,CATEGORY,' . $cat_restaurant->ID,
-			$this->pi->pi_getLL('association', $cat_association->Name, true) => 'NOMENCLATURE,CATEGORY,' . $cat_association->ID,
+			$this->pi->pi_getLL('hotel', $type_hotel->Name, true) => $type_hotel->ID,
+			$this->pi->pi_getLL('hollidayCottage', $cat_hollidayCottage->Name, true) => $cat_hollidayCottage->ID,
+			$this->pi->pi_getLL('residence', $cat_residence->Name, true) => $cat_residence->ID,
+			$this->pi->pi_getLL('guesthouse', $cat_guestHouse->Name, true) => $cat_guestHouse->ID,
+			$this->pi->pi_getLL('restaurant', $cat_restaurant->Name, true) => $cat_restaurant->ID,
+			$this->pi->pi_getLL('association', $cat_association->Name, true) => $cat_association->ID,
 		);
 		ksort(self::$subscriber_types_other);
 

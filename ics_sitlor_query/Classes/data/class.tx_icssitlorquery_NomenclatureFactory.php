@@ -187,8 +187,12 @@ class tx_icssitlorquery_NomenclatureFactory {
 
 		if (isset(self::$categories))
 			return;
-
-		self::LoadFromCache();
+		try {
+			self::LoadFromCache();
+		}
+		catch(Exception $e) {
+			tx_icssitquery_Debug::error('Nomenclature initialization error: ' . $e);
+		}
 	}
 
 	/**

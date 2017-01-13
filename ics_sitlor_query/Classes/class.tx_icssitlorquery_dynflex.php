@@ -156,7 +156,8 @@ class tx_icssitlorquery_dynflex {
 		// Hotel types
 		$hotelType_options = array(
 			array($llang_ffds . ':hotelType_hotel_restaurant',tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT),
-			array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
+			// array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::FURNISHED),
+			array($llang_ffds . ':hotelType_furnished', tx_icssitlorquery_NomenclatureUtils::RESIDENCE),
 		);
 		$flexArray['TCEforms'] = array(
 			'label' => $llang_ffds . ':hotelType',

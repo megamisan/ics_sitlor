@@ -135,6 +135,7 @@ class tx_icssitlorquery_CriterionUtils {
 	 *
 	 *******************************************************/
 	const RATINGSTAR = 736000015;
+	const RATINGSTAR_RESIDENCE = 736001128;
 
 	/*******************************************************
 	 *
@@ -183,8 +184,8 @@ class tx_icssitlorquery_CriterionUtils {
 	
 	const CURRENT_WEEKRATE = 4000006;	// Tarifs à la semaine (année en cours)
 	const CURRENT_WEEKRATE_LOW_SEASON = 4000029;	// Basse saison
-	
-	const CURRENT_BEDANDLUNCH = 4000008;	// Tarifs année en cours nuitée + petit déjeuner (à partir de)
+
+	const CURRENT_BEDANDLUNCH = 4000008;	// Tarifs année en cours nuitée + petit déjeuner (à partir de)	
 	const CURRENT_BEDANDLUNCH_ONE_PERSON = 4000037;	// Tarifs année en cours nuitée + petit déjeuner (à partir de) - 1 personne
 
 	/*******************************************************

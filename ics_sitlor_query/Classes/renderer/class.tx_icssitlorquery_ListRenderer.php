@@ -179,7 +179,7 @@
 			if ($valudeTerm->Term->ID == tx_icssitlorquery_CriterionUtils::CURRENT_BEDANDLUNCH_ONE_PERSON) {
 				$price = $this->pi->renderData('guestRoomPrice', $valudeTerm);
 			}
-				
+			
 			$locMarkers = array(
 				'TYPE' => $element->Type,
 				'TITLE' => $this->pi->renderSingleLink('title', $element),

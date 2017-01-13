@@ -73,7 +73,6 @@ class tx_icssitlorquery_SingleRenderer {
 		$markers = array();
 		$locMarkers['GENERIC'] = $this->renderGeneric($element, $markers);
 		$locMarkers['SPECIFIC'] = $this->renderSpecific($element, $markers);
-		tx_icssitlorquery_getDataHook::popContext();
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->pi->extKey]['singleRenderer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF'][$this->pi->extKey]['singleRenderer'] as $class) {
 				$procObj = & t3lib_div::getUserObj($class);
@@ -82,7 +81,7 @@ class tx_icssitlorquery_SingleRenderer {
 		}
 		$template = $this->cObj->substituteMarkerArray($template, $locMarkers, '###|###');
 		$template = $this->cObj->substituteMarkerArray($template, $markers, '###|###');
-
+		tx_icssitlorquery_getDataHook::popContext();
 
 		$markers = array(
 			'PREFIXID' => $this->prefixId,
@@ -309,8 +308,6 @@ class tx_icssitlorquery_SingleRenderer {
 		// Hotel display
 		if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::HOTEL && $element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::HOTEL_RESTAURANT) {
 			$subparts['###SUBPART_HOTELCOMFORT###'] = '';
-			// if ($element->Type->ID!=tx_icssitlorquery_NomenclatureUtils::FURNISHED)
-				// $subparts['###SUBPART_PRICE###'] = '';
 		}
 		if ($element->ComfortRoom->Count()<=0)
 			$subparts['###SUBPART_COMFORTROOM###'] = '';

@@ -88,7 +88,7 @@ class tx_icssitlorquery_XMLTools {
 	 * @param	int		$timeout Maximum time to wait for the answer.
 	 * @return	string		Content of the document.
 	 */
-	public static function getXMLDocument($url, $timeout=5) {
+	public static function getXMLDocument($url, $timeout=30) {
 		$old_timeout = ini_set('default_socket_timeout', $timeout);
 		$handle = fopen($url, 'r');
 		if (!$handle)

@@ -239,7 +239,9 @@ class tx_icssitlorquery_SitlorQuery implements tx_icssitquery_IQuery {
 		if (!self::$cacheInstance->has($hash)) {
 			try {
 				$output = tx_icssitlorquery_XMLTools::getXMLDocument($urlQuery);
-				self::$cacheInstance->set($hash, $output, array(), 86400);
+				$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
+				$lifetime = intval($extConf['cacheTime']);
+				self::$cacheInstance->set($hash, $output, array(), $lifetime);
 			}
 			catch (Exception $e) {
 				return false;

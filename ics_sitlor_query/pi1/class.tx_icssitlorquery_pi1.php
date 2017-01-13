@@ -81,9 +81,9 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	var $defaultPage = 1;
 	var $defaultSize = 20;
 
-	private static $default_startDate = '01/01/2000';
-	private static $geoc_zoom = 12;
-	private static $geoc_canvas = array('340px', '200px');
+	protected static $default_startDate = null;
+	protected static $geoc_zoom = 12;
+	protected static $geoc_canvas = array('340px', '200px');
 
 	/**
 	 * The main method of the PlugIn
@@ -99,6 +99,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
         $this->pi_USER_INT_obj = 1;    // Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
 		$this->pi_initPIflexForm();
 
+		self::$default_startDate = date('d/m/Y');
 		// Initialize the plugin
 		$this->init();
 
@@ -129,6 +130,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 		// Set typoscript defaultConf
 		tx_icssitlorquery_Configurator::setDefaultConf($this->conf['defaultConf.']);
 		tx_icssitlorquery_Configurator::setDefaultSeparator($this->conf['defaultSeparator.']);
+
 		// Set search params
 		if (isset($this->piVars['search']))
 			$this->setPIVars_searchParams();
@@ -421,9 +423,20 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	void
 	 */
-	private function setPIVars_searchParams() {
+	protected function setPIVars_searchParams() {
 		$params = $this->piVars['search'];
+        
+        //sur mobile ou tablette, quand on selectionne une date, il y a des - a la place des /
+        $params['startDate'] = str_replace('-', '/',  $params['startDate']);
+        $params['endDate'] = str_replace('-', '/', $params['endDate']);
 
+		/* Debug Christian - 18/03/2016 */
+		//t3lib_utility_Debug::debug($params);
+
+        // 18.03.2016 - Ajout d'une fonction de conversion des dates au format EN > FR
+        // Ticket Redmine 42189
+        $params = $this->convertUkToFrDate($params);
+        
 		$this->sword = '';
 		if ($this->piVars['btn_sword'])
 			$this->sword = $params['sword'];
@@ -482,6 +495,60 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	}
 
 	/**
+     * Convert a date format from UK to FR.
+     *
+     * @param  array $params The piVars
+     * @return array $params
+     */
+	function convertUkToFrDate($params) {
+
+		// $params['startDate'] - start date
+		// $params['endDate'] - end date
+		// 1. Test the date format - start date
+		if(!empty($params['startDate'])) {
+
+			if($this->isUk($params['startDate'])) {
+				$dateFr = ''; // init
+				$arr = t3lib_div::trimExplode('/', $params['startDate']);
+				$dateFr = $arr[2] . '/' . $arr[1] . '/' . $arr[0];
+				$params['startDate'] = $dateFr;
+			}
+		}
+
+		// 2. Doing the same with the end date
+		if(!empty($params['endDate'])) {
+
+			if($this->isUk($params['endDate'])) {
+				$dateFr = ''; // init
+				$arr = t3lib_div::trimExplode('/', $params['endDate']);
+				$dateFr = $arr[2] . '/' . $arr[1] . '/' . $arr[0];
+				$params['endDate'] = $dateFr;
+			}
+		}
+
+		// Return the same array
+		return $params;
+	}
+
+	/**
+     * Date in UK format?
+     *
+     * @param  string $str The date to be examined
+     * @return bool $isUk
+     */
+	function isUk($str) {
+		
+		$isUk = FALSE;
+
+		$arr = t3lib_div::trimExplode('/', $str);
+		if(strlen($arr[0]) == 4)
+			$isUk = TRUE;
+
+		return $isUk;
+	}
+
+
+	/**
 	 * Retrieves subscriber filter
 	 *
 	 * @param	array		$subscriberDataArray
@@ -512,7 +579,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 	 *
 	 * @return	string		HTML content for single view.
 	 */
-	private function displaySingle() {
+	protected function displaySingle() {
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
 		if (!$extConf['no_cache'] && ($content = $this->renderCachedContent('SINGLE')))
 			return $content;
@@ -759,6 +826,7 @@ class tx_icssitlorquery_pi1 extends tslib_pibase {
 				$this->queryService->addFilter($filter);
 			}
 		}
+
 		switch ($this->conf['sort.']['name']) {
 			case 'ALPHA':
 				$sorting = t3lib_div::makeInstance('tx_icssitlorquery_AccomodationSortingProvider', 'alpha', strtoupper($this->conf['sort.']['extra']));

@@ -274,7 +274,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->creditPhotos[$index] = $valuedTerm;
 		}
 		
-		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR) {
+		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR || $valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::RATINGSTAR_RESIDENCE ) {	// Logiquement 1 seul de ces critères est fourni, on ne peut avoir les 2 critères renseignés pour 1 enregistrement
 			$this->RatingStar = $valuedTerm;
 		}
 		if ($valuedTerm->Criterion->ID == tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE)
@@ -306,9 +306,8 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 			$this->tmpAddress['city']
 		);
 		$this->coordinates = t3lib_div::makeInstance('tx_icssitquery_Coordinates', $this->latitude, $this->longitude);
-		
 		ksort($this->photos);
-		
+
 		foreach ($this->photos as $index=>$valuedTerm) {
 			$valuedTerm->Value = t3lib_div::makeInstance('tx_icssitquery_Picture', $valuedTerm->Value);
 			tx_icssitlorquery_CriterionUtils::addToTupleList(
@@ -341,6 +340,7 @@ class tx_icssitlorquery_Accomodation extends tx_icssitquery_AbstractAccomodation
 		$criteriaPhotos = array_merge(tx_icssitlorquery_CriterionUtils::$photos, tx_icssitlorquery_CriterionUtils::$creditPhotos);
 		$criteria = array(
 			tx_icssitlorquery_CriterionUtils::RATINGSTAR,
+			tx_icssitlorquery_CriterionUtils::RATINGSTAR_RESIDENCE,
 			tx_icssitlorquery_CriterionUtils::CURRENT_SINGLE_CLIENTS_RATE,
 			tx_icssitlorquery_CriterionUtils::CURRENT_WEEKRATE,
 			tx_icssitlorquery_CriterionUtils::CURRENT_BEDANDLUNCH,

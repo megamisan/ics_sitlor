@@ -30,4 +30,16 @@ if (t3lib_div::int_from_ver(TYPO3_version) < '4006000') {
         $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['icssitlorquery_cache']['options']['tagsTable'] = 'tx_icssitlorquery_cache_tags';
     }
 }
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icssitlorquery_product_task'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Clean SITLOR products cache',
+    'description'      => 'Clean SITLOR products cache',
+);
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icssitlorquery_cleanAll_task'] = array(
+    'extension'        => $_EXTKEY,
+    'title'            => 'Clean all SITLOR cache',
+    'description'      => 'Clean all SITLOR cache',
+);
+
 ?>

@@ -31,7 +31,7 @@ plugin.tx_icssitlorquery_pi1 {
 	# Select
 	filter {
 		OTNancy = 
-		startDate = 01/01/2000
+		startDate =
 	}
 	
 	# Sorting
@@ -50,6 +50,7 @@ plugin.tx_icssitlorquery_pi1 {
 	# Default primitive rendering
 	defaultConf {
 		Phone.field = phone
+
 		Address.cObject = COA
 		Address.cObject {
 			10 = TEXT
@@ -184,6 +185,8 @@ plugin.tx_icssitlorquery_pi1 {
 				# Rating star
 				736000015 = TEXT
 				736000015.field = term
+				736001128 = TEXT
+				736001128.field = term
 				# Reception group
 				736000142 < .labelValue
 				# Hotel price
@@ -244,8 +247,8 @@ plugin.tx_icssitlorquery_pi1 {
 					}
 					20 = TEXT
 					20.override {
-						#if.isFalse.field = empty
-						if.isTrue.field = close
+						if.isFalse.field = empty
+						if.isTrue.field = open
 						field = open
 						strftime = %R
 					}
@@ -269,7 +272,7 @@ plugin.tx_icssitlorquery_pi1 {
 					*/
 					30 = TEXT
 					30.override {
-						#if.isFalse.field = empty
+						if.isFalse.field = empty
 						if.isTrue.field = close
 						field = close
 						strftime = %R
