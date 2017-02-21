@@ -56,12 +56,12 @@ class tx_icssitlorquery_XMLTools {
 	 */
 	public static function SkipChildren(XMLReader $reader) {
 		if (!$reader->isEmptyElement) {
-			$reader->read();
+			@$reader->read();
 			while (($reader->nodeType != XMLReader::END_ELEMENT) && ($reader->nodeType != XMLReader::NONE)) {
 				if ($reader->nodeType == XMLReader::ELEMENT) {
 					self::SkipChildren($reader);
 				}
-				$reader->read();
+				@$reader->read();
 			}
 		}
 	}

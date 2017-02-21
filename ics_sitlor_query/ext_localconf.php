@@ -41,5 +41,4 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_icssitlorque
     'title'            => 'Clean all SITLOR cache',
     'description'      => 'Clean all SITLOR cache',
 );
-
 ?>

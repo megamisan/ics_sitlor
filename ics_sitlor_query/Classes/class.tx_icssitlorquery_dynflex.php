@@ -222,7 +222,7 @@ class tx_icssitlorquery_dynflex {
 		);
 		$xmlFlexPart = t3lib_div::array2xml($flexArray, '', 0, 'restaurantCategories');
 
-		// Restaurant spéciality
+		// Restaurant spï¿½ciality
 		$foreignFood_options = array(
 			array($llang_ffds . ':foreignFood_asian', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_ASIAN),
 			array($llang_ffds . ':foreignFood_sa', tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD.':'.tx_icssitlorquery_CriterionUtils::FOREIGN_FOOD_SA),
