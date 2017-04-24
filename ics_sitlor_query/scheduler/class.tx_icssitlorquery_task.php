@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 In Cité Solution <technique@in-cite.net>
+*  (c) 2012 In CitÃ© Solution <technique@in-cite.net>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -29,7 +29,7 @@ class tx_icssitlorquery_product_task  extends tx_scheduler_Task {
 		$cacheTime = intval($extConf['cacheTime']);
 		$time = $_SERVER['REQUEST_TIME'];
 		
-		// Nettoie les requêtes de récupérations de "produits"
+		// Nettoie les requÃªtes de rÃ©cupÃ©rations de "produits"
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
 			'tx_icssitlorquery_cache',
 			'('.$time.'-crdate)>'.$cacheTime.' AND lifetime>0 OR (lifetime>0 AND lifetime<='.$cacheTime.')'

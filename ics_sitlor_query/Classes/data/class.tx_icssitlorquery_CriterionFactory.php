@@ -60,18 +60,34 @@ class tx_icssitlorquery_CriterionFactory {
 
 	private static $hash;
 	private static $cacheInstance;
-	
+
 	/**
 	 * Fetch values
 	 *
-	 * @return	boolean
+	 * @param $backup
+	 * @return bool
 	 */
-	private static function FetchValues() {
+	private static function FetchValues($backup) {
 		t3lib_div::devLog('Url criterion', 'ics_sitlor_query', 0, array(urldecode(self::$url)));
 
-		$xmlContent = tx_icssitlorquery_XMLTools::getXMLDocument(self::$url);
+		try {
+			$xmlContent = tx_icssitlorquery_XMLTools::getXMLDocument(self::$url);
+		} catch (\Exception $e) {
+			$message = $e->getMessage();
+			if ((strpos($message, 'Unable to open') === FALSE) &&
+				(strpos($message, 'Connection timed out on') === FALSE)
+			) {
+				throw $e;
+			}
+		}
 		if (!$xmlContent) {
 			tx_icssitquery_Debug::error('Unable to read criteria XML document at ' . self::$url);
+			if ($backup) {
+				$backup = unserialize($backup);
+				if ($backup) {
+					return $backup;
+				}
+			}
 			return false;
 		}
 
@@ -114,6 +130,7 @@ class tx_icssitlorquery_CriterionFactory {
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ics_sitlor_query']);
 		$lifetime = intval($extConf['criterion_cacheTime']);
 		self::$cacheInstance->set(self::$hash, serialize($elements), array(), $lifetime);
+		self::$cacheInstance->set(self::$hash . '_backup', serialize($elements), array(), 0);
 
 		return $elements;
 	}
@@ -140,7 +157,7 @@ class tx_icssitlorquery_CriterionFactory {
 
 		self::$hash = md5(self::$url . self::$login . self::$password);
 		if (!self::$cacheInstance->has(self::$hash))
-			self::FetchValues();
+			self::FetchValues(self::$cacheInstance->get(self::$hash . '_backup'));
 		$all = unserialize(self::$cacheInstance->get(self::$hash));
 		if ($all === false) {
 			throw new Exception('Criteria on cache is broken.');
